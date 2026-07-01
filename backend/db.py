@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS player (
     save_id                  INTEGER PRIMARY KEY REFERENCES save(id) ON DELETE CASCADE,
     species                  TEXT    NOT NULL DEFAULT 'human',
     attributes               TEXT    NOT NULL,          -- JSON map
+    preferences              TEXT    NOT NULL DEFAULT '{}',  -- JSON map
     energy                   INTEGER NOT NULL DEFAULT 100,
     created_identity         TEXT    NOT NULL,          -- JSON, immutable snapshot
     current_identity         TEXT    NOT NULL,          -- JSON
@@ -32,10 +33,13 @@ CREATE TABLE IF NOT EXISTS player (
 );
 
 CREATE TABLE IF NOT EXISTS relationships (
-    save_id         INTEGER NOT NULL REFERENCES save(id) ON DELETE CASCADE,
-    npc_id          TEXT    NOT NULL,
-    affection       INTEGER NOT NULL DEFAULT 0,
-    last_talked_day INTEGER NOT NULL DEFAULT 0,   -- absolute day index; 0 = never
+    save_id              INTEGER NOT NULL REFERENCES save(id) ON DELETE CASCADE,
+    npc_id               TEXT    NOT NULL,
+    starting_disposition INTEGER NOT NULL DEFAULT 0,   -- signed baseline; 0 = neutral
+    last_talked_day      INTEGER NOT NULL DEFAULT 0,   -- absolute day index; 0 = never
+    known_npc_topics     TEXT    NOT NULL DEFAULT '[]', -- topics the player learned about the NPC
+    known_player_topics  TEXT    NOT NULL DEFAULT '[]', -- topics the NPC learned about the player
+    memories             TEXT    NOT NULL DEFAULT '[]', -- affection event log (derives affection)
     PRIMARY KEY (save_id, npc_id)
 );
 """

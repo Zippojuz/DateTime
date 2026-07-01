@@ -9,7 +9,9 @@ import json
 
 from db import get_connection
 
+from game import social
 from game.calendar import GameClock
+from game.npc import NPC
 from game.player import Player
 
 
@@ -19,9 +21,14 @@ def create_new_game(identity):
     clock = GameClock()
     with get_connection() as conn:
         conn.execute("DELETE FROM player")
-        conn.execute("DELETE FROM save")
+        conn.execute("DELETE FROM save")  # cascades to relationships
         cur = conn.execute("INSERT INTO save DEFAULT VALUES")
-        _insert_player(conn, cur.lastrowid, player, clock)
+        save_id = cur.lastrowid
+        _insert_player(conn, save_id, player, clock)
+        # Seed each relationship at the NPC's starting disposition (neutral by
+        # default), so affection begins neutral rather than empty.
+        for cid, npc in NPC.load_all().items():
+            social.seed_relationship(conn, save_id, cid, npc.starting_disposition)
     return state_dict(player, clock)
 
 
@@ -38,6 +45,7 @@ def load_models():
         energy=row["energy"],
         created_identity=json.loads(row["created_identity"]),
         unlocked_transformations=json.loads(row["unlocked_transformations"]),
+        preferences=json.loads(row["preferences"]),
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -60,13 +68,14 @@ def save_models(save_id, player, clock):
     with get_connection() as conn:
         conn.execute(
             """UPDATE player SET
-                   species=?, attributes=?, energy=?,
+                   species=?, attributes=?, preferences=?, energy=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
             (
                 player.species,
                 json.dumps(player.attributes),
+                json.dumps(player.preferences),
                 player.energy,
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
@@ -86,14 +95,15 @@ def state_dict(player, clock):
 def _insert_player(conn, save_id, player, clock):
     conn.execute(
         """INSERT INTO player (
-               save_id, species, attributes, energy,
+               save_id, species, attributes, preferences, energy,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
             json.dumps(player.attributes),
+            json.dumps(player.preferences),
             player.energy,
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),

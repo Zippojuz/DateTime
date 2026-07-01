@@ -15,6 +15,7 @@ export const useGameStore = create((set, get) => ({
   // Reference data (rendered generically).
   attributes: null, // registry: { id: {name, description, ...} }
   actions: null, // { id: {label, minutes, energy, ...} }
+  topics: null, // registry: { id: {name, changeable} }
 
   // Current game state from the server: { player, clock }
   state: null,
@@ -32,11 +33,12 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions] = await Promise.all([
+      const [attributes, actions, topics] = await Promise.all([
         api.attributes(),
         api.actions(),
+        api.topics(),
       ])
-      set({ attributes, actions, connection: 'ok' })
+      set({ attributes, actions, topics, connection: 'ok' })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return

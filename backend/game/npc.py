@@ -27,8 +27,10 @@ class NPC(Character):
         romanceable=True,
         schedule=None,
         attributes=None,
+        preferences=None,
+        starting_disposition=0,
     ):
-        super().__init__(name, attributes)
+        super().__init__(name, attributes, preferences)
         self.id = id
         self.pronouns = pronouns
         self.species = species
@@ -36,6 +38,9 @@ class NPC(Character):
         self.district = district
         self.arc_theme = arc_theme
         self.romanceable = romanceable
+        # Where affection starts when the relationship is first seeded (0 =
+        # neutral). Most NPCs start neutral; some may lean warm/cold.
+        self.starting_disposition = starting_disposition
         # List of availability windows; each: {start, end, location, activity,
         # available}. Resolved against district hours in later milestones.
         self.schedule = schedule or []
@@ -55,6 +60,8 @@ class NPC(Character):
             romanceable=entry.get("romanceable", True),
             schedule=entry.get("schedule", []),
             attributes=entry.get("attributes"),
+            preferences=entry.get("preferences"),
+            starting_disposition=entry.get("starting_disposition", 0),
         )
 
     @classmethod

@@ -8,7 +8,7 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from game import data, dialogue, save, social, world
+from game import data, dialogue, preferences, save, social, world
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError
 from game.npc import NPC
@@ -39,6 +39,10 @@ def create_app():
     @app.get("/api/actions")
     def actions():
         return jsonify(ACTIONS)
+
+    @app.get("/api/topics")
+    def topics():
+        return jsonify(data.load("topics"))
 
     # --- Game state ---
 
@@ -98,13 +102,19 @@ def create_app():
             return jsonify(error="No game in progress."), 404
         save_id, _player, clock = models
         day = _day_index(clock)
-        rels = social.all_relationships(save_id)
+        rels = social.all_relationships(save_id, day)
         result = []
         for cid, npc in NPC.load_all().items():
             rel = rels.get(cid, {})
+            known = set(rel.get("known_npc_topics", []))
+            payload = npc.to_dict()
+            # Redact undiscovered preferences — you only see what you've learned.
+            payload["preferences"] = {
+                t: pref for t, pref in payload["preferences"].items() if t in known
+            }
             result.append(
                 {
-                    **npc.to_dict(),
+                    **payload,
                     "availability": world.availability(npc, clock),
                     "affection": rel.get("affection", 0),
                     "talked_today": rel.get("last_talked_day") == day,
@@ -142,7 +152,7 @@ def create_app():
                 "npc_name": npc.name,
                 "dialogue_id": tree["id"],
                 "tier": avail["tier"],
-                "affection": social.get_affection(save_id, npc.id),
+                "affection": social.get_affection(save_id, npc.id, _day_index(clock)),
                 "node": dialogue.node_view(tree, tree["start"], player),
             }
         )
@@ -165,22 +175,45 @@ def create_app():
 
         # Clock is paused during dialogue, so the arrival tier is stable.
         tier = world.availability(npc, clock)["tier"]
+        day = _day_index(clock)
         try:
-            next_id, base_affection = dialogue.resolve_choice(
+            next_id, choice = dialogue.resolve_choice(
                 tree, body.get("node_id"), body.get("choice_index"), player
             )
         except GameError as err:
             return jsonify(error=str(err)), 400
 
-        gained = round(base_affection * world.TIER_MULTIPLIER.get(tier, 0))
-        if gained:
-            social.add_affection(save_id, npc.id, gained)
+        before = social.get_affection(save_id, npc.id, day)
 
-        payload = {
-            "ended": next_id is None,
-            "gained": gained,
-            "affection": social.get_affection(save_id, npc.id),
-        }
+        # Base affection from the choice, scaled by how late you arrived.
+        base = round(choice.get("affection", 0) * world.TIER_MULTIPLIER.get(tier, 0))
+        if base:
+            social.add_opinion(save_id, npc.id, base, day)
+
+        # Compatibility: the NPC learns the player's stance and reacts (asymmetric).
+        topic = choice.get("express")
+        if topic:
+            social.reveal_player_topic(save_id, npc.id, topic)
+            comp = preferences.compatibility_delta(
+                preferences.sentiment_of(npc.preferences, topic),
+                preferences.sentiment_of(player.preferences, topic),
+            )
+            if comp:
+                social.add_opinion(save_id, npc.id, comp, day)
+
+        # Discovery: the player learns the NPC's stance on a topic.
+        if choice.get("reveal_npc"):
+            social.discover_npc_topic(save_id, npc.id, choice["reveal_npc"])
+
+        # An offence: amplified when the bond is weak, decays by severity.
+        offense = choice.get("offense")
+        if offense:
+            social.record_offense(
+                save_id, npc.id, offense.get("delta", 0), day, offense.get("severity", "minor")
+            )
+
+        after = social.get_affection(save_id, npc.id, day)
+        payload = {"ended": next_id is None, "gained": after - before, "affection": after}
         if next_id is not None:
             payload["node"] = dialogue.node_view(tree, next_id, player)
         return jsonify(payload)

@@ -89,7 +89,11 @@ def node_view(tree, node_id, player):
 
 
 def resolve_choice(tree, node_id, choice_index, player):
-    """Validate a chosen option. Returns (next_node_id_or_None, affection_delta)."""
+    """Validate a chosen option. Returns (next_node_id_or_None, choice_dict).
+
+    The caller reads the choice's `affection`, `express`, `reveal_npc`, and
+    `offense` fields to apply effects.
+    """
     node = tree["nodes"].get(node_id)
     if node is None:
         raise GameError("That conversation thread no longer exists.")
@@ -99,4 +103,4 @@ def resolve_choice(tree, node_id, choice_index, player):
     requires = choice.get("requires")
     if requires and not _meets(player, requires):
         raise GameError("You don't meet the requirement for that option.")
-    return choice.get("next"), choice.get("affection", 0)
+    return choice.get("next"), choice

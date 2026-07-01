@@ -25,6 +25,13 @@ MUTABLE_IDENTITY_ASPECTS = ("appearance", "pronouns", "body")
 DEFAULT_SPECIES = "human"
 MAX_ENERGY = 100
 
+# A small starting opinion set (expandable). Changeable later via the (future)
+# difficult preference-change mechanic.
+DEFAULT_PREFERENCES = {
+    "books": {"sentiment": "love"},
+    "nightlife": {"sentiment": "dislike"},
+}
+
 
 class Player(Character):
     def __init__(
@@ -35,10 +42,11 @@ class Player(Character):
         energy=MAX_ENERGY,
         created_identity=None,
         unlocked_transformations=None,
+        preferences=None,
     ):
-        # Character base handles name + registry attributes. The player's name
-        # is their identity name (never changeable via transform).
-        super().__init__(identity.get("name", ""), attributes)
+        # Character base handles name + registry attributes + preferences. The
+        # player's name is their identity name (never changeable via transform).
+        super().__init__(identity.get("name", ""), attributes, preferences)
         self.species = species
         self.energy = energy
         self.current_identity = dict(identity)
@@ -50,7 +58,7 @@ class Player(Character):
     def create(cls, identity):
         """Fresh player. Identity is locked: current == created."""
         clean = {field: identity.get(field, "") for field in IDENTITY_FIELDS}
-        return cls(identity=clean, created_identity=clean)
+        return cls(identity=clean, created_identity=clean, preferences=DEFAULT_PREFERENCES)
 
     def transform(self, changes):
         """Apply identity changes. Rejects immutable or still-locked aspects."""

@@ -196,6 +196,29 @@ affection gained → per-day gate → persists).
 
 ---
 
+## Preferences, Compatibility & Memory ✅ DONE (added mid-M2)
+
+- [x] `data/topics.json` — small, expandable opinion registry (books, sports,
+      music, nightlife, fitness).
+- [x] Preferences on the shared `Character` base: `topic → {sentiment,
+      changeable}` (love/like/neutral/dislike/hate). Player seeded a default set;
+      Vael's from `characters.json`; some marked `changeable: false` (core).
+- [x] **Neutral affection** — recentered to a signed scale (−100…+100, 0 =
+      neutral) with per-NPC `starting_disposition`; relationships seeded neutral.
+- [x] **Hidden knowledge** — per-relationship discovery of NPC prefs (player
+      side) and player prefs (NPC side); API redacts undiscovered NPC prefs.
+- [x] **Asymmetric compatibility** — opposition penalized, shared-strong-feeling
+      small bond, mere alignment neutral (`preferences.compatibility_delta`).
+- [x] **Event-sourced memory** — affection derived from a memory log; offenses
+      amplified when the bond is weak (up to 2×), decay by severity (minor 7d,
+      moderate 30d, severe never); positives permanent.
+- [x] Dialogue choices carry `reveal_npc` / `express` / `offense`; frontend shows
+      the player's own opinions + discovered NPC opinions + a signed affection meter.
+
+**Deferred:** the difficult *preference-change* mechanic (change your/their
+likes; some unchangeable) — data models `changeable`, mechanic itself is next.
+Schema migrations (new columns need a fresh DB today) also still open.
+
 ## Milestone 3 — Breadth (Design Phase 3)
 
 - [ ] Stub all 5 romanceable characters in `characters.json`.

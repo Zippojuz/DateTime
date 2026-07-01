@@ -1,0 +1,7 @@
+{
+  "books": { "name": "Books", "changeable": true },
+  "sports": { "name": "Sports", "changeable": true },
+  "music": { "name": "Music", "changeable": true },
+  "nightlife": { "name": "Nightlife", "changeable": true },
+  "fitness": { "name": "Fitness", "changeable": true }
+}

@@ -8,6 +8,12 @@
     "district": "citadel_ring",
     "arc_theme": "Learning to trust again",
     "romanceable": true,
+    "starting_disposition": 0,
+    "preferences": {
+      "books": { "sentiment": "love" },
+      "nightlife": { "sentiment": "hate" },
+      "fitness": { "sentiment": "like", "changeable": false }
+    },
     "schedule": [
       { "start": "06:00", "end": "08:00", "location": "citadel_ring_gym", "activity": "Morning training", "available": true },
       { "start": "08:00", "end": "17:00", "location": "citadel_offices", "activity": "On duty", "available": false },

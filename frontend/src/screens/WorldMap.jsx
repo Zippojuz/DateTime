@@ -3,6 +3,7 @@ import { useGameStore } from '../state/gameStore'
 import StatBar from '../components/StatBar.jsx'
 import PeoplePanel from '../components/PeoplePanel.jsx'
 import RelationshipPanel from '../components/RelationshipPanel.jsx'
+import PlayerProfile from '../components/PlayerProfile.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -39,6 +40,7 @@ export default function WorldMap() {
       </header>
 
       <StatBar />
+      <PlayerProfile />
 
       <section className="placeholder-world">
         <p>Nexus City stretches out around you. (Districts arrive in Milestone 3.)</p>

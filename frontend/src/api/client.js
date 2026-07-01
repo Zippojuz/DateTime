@@ -23,6 +23,7 @@ export const api = {
   health: () => request('/health'),
   attributes: () => request('/attributes'),
   actions: () => request('/actions'),
+  topics: () => request('/topics'),
   getState: () => request('/game/state'),
   newGame: (identity) =>
     request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),

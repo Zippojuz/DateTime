@@ -9,15 +9,28 @@
         "choices": [
           { "text": "Maybe I'm not most people.", "next": "n2", "affection": 2 },
           { "text": "[Charm] The company here beats the bars.", "next": "n3", "affection": 3, "requires": { "charm": 6 } },
-          { "text": "Just getting my bearings.", "next": "n4", "affection": 1 }
+          { "text": "Just getting my bearings.", "next": "n4", "affection": 1 },
+          { "text": "Nice glow-stick act. Do it on command?", "next": "n_cold", "offense": { "delta": -4, "severity": "moderate" } }
         ]
       },
       "n2": {
         "text": "\"No. You're not.\" A flicker of blue crosses her skin before she stills it. \"Sit, if you're going to hover.\"",
         "choices": [
           { "text": "Sit down beside her.", "next": "n5", "affection": 2 },
-          { "text": "[Wit] Your glow gave you away — that was almost a smile.", "next": "n5", "affection": 3, "requires": { "wit": 6 } }
+          { "text": "[Wit] Your glow gave you away — that was almost a smile.", "next": "n5", "affection": 3, "requires": { "wit": 6 } },
+          { "text": "Wait — is that a paper book on your lap?", "next": "n6", "reveal_npc": "books" }
         ]
+      },
+      "n6": {
+        "text": "\"Paper. Ink. Something you can actually hold.\" For once she meets your eyes. \"Most people don't understand why that matters.\"",
+        "choices": [
+          { "text": "Tell her where you stand on books.", "next": "n5", "affection": 1, "express": "books" },
+          { "text": "Change the subject.", "next": "n5" }
+        ]
+      },
+      "n_cold": {
+        "text": "The glow under her skin goes dark. \"...We're done here.\"",
+        "choices": [{ "text": "Leave.", "next": null }]
       },
       "n3": {
         "text": "She snorts. \"Flattery. From a drifter.\" But she doesn't tell you to leave.",

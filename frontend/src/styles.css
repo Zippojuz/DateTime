@@ -349,13 +349,18 @@ body {
 
 .relationship {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.4rem;
   font-size: 0.9rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
 }
 
-.relationship-name {
-  min-width: 90px;
+.relationship-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .relationship-sub {
@@ -363,25 +368,96 @@ body {
   font-size: 0.75rem;
 }
 
+.relationship-mood {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+
 .relationship-meter {
-  flex: 1;
+  position: relative;
   height: 8px;
   background: #26304a;
   border-radius: 999px;
-  overflow: hidden;
+}
+
+.relationship-centre {
+  position: absolute;
+  left: 50%;
+  top: -2px;
+  bottom: -2px;
+  width: 1px;
+  background: var(--text-dim);
 }
 
 .relationship-fill {
-  display: block;
+  position: absolute;
+  top: 0;
   height: 100%;
-  background: var(--accent);
 }
 
-.relationship-value {
+.relationship-fill.is-pos {
+  background: var(--neon);
+  border-radius: 0 999px 999px 0;
+}
+
+.relationship-fill.is-neg {
+  background: var(--error);
+  border-radius: 999px 0 0 999px;
+}
+
+.relationship-prefs {
   color: var(--text-dim);
-  font-variant-numeric: tabular-nums;
-  min-width: 2ch;
-  text-align: right;
+  font-size: 0.8rem;
+}
+
+/* --- Preference tags --- */
+
+.player-profile h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.pref-tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pref {
+  font-size: 0.8rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid #26304a;
+}
+
+.pref--love {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.pref--like {
+  color: var(--accent);
+}
+
+.pref--dislike {
+  color: var(--text-dim);
+}
+
+.pref--hate {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.pref-core {
+  color: var(--text-dim);
+  font-size: 0.7rem;
+}
+
+.pref-empty {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 /* --- Dialogue overlay --- */

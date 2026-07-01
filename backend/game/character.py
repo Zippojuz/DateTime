@@ -7,6 +7,7 @@ one-line registry entry — no code or schema change.
 """
 
 from game import data
+from game.preferences import build_preferences
 
 
 def _clamp(value, low, high):
@@ -30,14 +31,20 @@ def build_attributes(overrides=None):
 
 
 class Character:
-    """A named entity with attributes drawn from the shared registry.
+    """A named entity with attributes and preferences from the shared registries.
 
-    Base class for both the player and NPCs, so they share one attribute model.
+    Base class for both the player and NPCs, so they share one model for stats
+    (attributes) and opinions (preferences).
     """
 
-    def __init__(self, name, attributes=None):
+    def __init__(self, name, attributes=None, preferences=None):
         self.name = name
         self.attributes = build_attributes(attributes)
+        self.preferences = build_preferences(preferences)
 
     def to_dict(self):
-        return {"name": self.name, "attributes": dict(self.attributes)}
+        return {
+            "name": self.name,
+            "attributes": dict(self.attributes),
+            "preferences": {k: dict(v) for k, v in self.preferences.items()},
+        }
