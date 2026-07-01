@@ -21,6 +21,16 @@ in place so systems can be layered in per the design doc's Build Phases.
 - **Python deps:** `venv` + `requirements.txt`.
 - **Tooling:** `ruff` + `black` (Python), `eslint` + `prettier` (JS).
 - **Tests:** `pytest` (backend) + `vitest` (frontend), one smoke test each in M0.
+- **Attributes are data-driven + extensible.** Character stats/attributes are
+  NOT fixed DB columns. They are defined in a registry (`data/attributes.json`)
+  and stored as a keyed map on the character, so adding an attribute later is a
+  one-line JSON entry — no schema migration. Charm/Wit/Courage/Empathy + Energy
+  are just the first entries.
+- **One shared Character model for player + NPCs.** Both use the *same* attribute
+  set from the registry (NPCs mirror the player), with optional per-character
+  overrides in `characters.json` (merge: registry defaults + overrides).
+- **Player starts as `human`.** No species picker at creation for now; the alien
+  species catalog and selection land in a later milestone.
 
 ## Guiding Principles
 
@@ -117,10 +127,19 @@ clean; production build succeeds.
 
 ## Milestone 1 — Player Creation & Daily Loop (Design Phase 1)
 
-- [ ] `player.py`: stats (Charm/Wit/Courage/Empathy), Energy (0–100),
-      name/pronouns/species/appearance/body. Identity fields (gender,
-      orientation, pronouns) are **free-form data, never gating flags** — no code
-      path may branch on them to restrict content.
+- [ ] **`data/attributes.json`**: the extensible attribute registry. Each entry
+      = id, display name, description, default, min/max, category. Seed with
+      Charm/Wit/Courage/Empathy + Energy; designed so adding attributes later is
+      a one-line addition (no schema change).
+- [ ] **`game/character.py`**: shared `Character` model backing BOTH player and
+      NPCs. Holds `attributes` as a keyed map validated against the registry.
+      NPCs mirror the player's attribute set; per-character overrides in
+      `characters.json` merge over registry defaults.
+- [ ] `player.py`: build on `Character` — Energy, identity fields
+      (name/pronouns/appearance/body), and `species` defaulting to **`human`**
+      (no species picker yet). Identity fields (gender, orientation, pronouns)
+      are **free-form data, never gating flags** — no code path may branch on
+      them to restrict content.
 - [ ] **Locked initial state:** on creation the player commits name, pronouns,
       appearance, and body. Persist an immutable `created_identity` snapshot plus
       a mutable `current_identity` that starts equal to it.
@@ -129,14 +148,21 @@ clean; production build succeeds.
       day-one menu). Track unlocked transformation capabilities on the save.
       Endpoint: `POST /api/player/transform` (rejects changes to still-locked
       aspects). Pronoun changes propagate to how NPCs and text refer to you.
+- [ ] DB: store attributes and identity as JSON blobs (not per-stat columns) so
+      the schema stays stable as attributes grow.
 - [ ] `POST /api/game/new` → create save + player; `GET /api/game/state`.
-- [ ] `CreationScreen.jsx`: form for name, pronouns, species, appearance, body.
+- [ ] `CreationScreen.jsx`: form for name, pronouns, appearance, body. (Species
+      fixed to human for now — no picker.)
 - [ ] `calendar.py`: clock that only advances on committed actions; day/time,
       week counter toward the 52-week year.
 - [ ] `POST /api/action` — advance time, apply energy cost, return new state.
-- [ ] `WorldMap` + `StatBar` showing time, energy, stats.
+      Start with a minimal action set (Rest, Explore, Train, Wait) just to
+      exercise time + energy; real activities layer in later milestones.
+- [ ] `WorldMap` + `StatBar` showing time, energy, and attributes (rendered
+      generically from the registry, so new attributes appear automatically).
 
-**Done when:** create a character, take an action, watch the clock and energy move.
+**Done when:** create a character (human), take an action, watch the clock and
+energy move, and see it persist across save/load.
 
 ---
 
@@ -183,14 +209,20 @@ gain affection, see it persist across save/load.
 - Which "Weird Ideas" (city-as-organism, unreliable memory, the debt) are
   in-scope for v1 vs. stretch?
 
-**Resolved:** Gender/orientation are fluid, non-mechanical, and never gate
-content — surfaced narratively only where relevant (see design doc → Identity
-Philosophy). Player identity is locked at creation, then appearance/pronouns/body
-become changeable through a story-gated transformation arc.
+**Resolved:**
+- Gender/orientation are fluid, non-mechanical, and never gate content —
+  surfaced narratively only where relevant (see design doc → Identity
+  Philosophy). Player identity is locked at creation, then
+  appearance/pronouns/body become changeable through a story-gated
+  transformation arc.
+- Attributes are data-driven and extensible (registry + keyed map), shared
+  between player and NPCs. Player starts as `human`; species selection and the
+  alien catalog are deferred to a later milestone.
 
 ---
 
 ## Immediate Next Step
 
-Execute **Milestone 0** — scaffold `backend/` and `frontend/` with running
-servers and a health-check handshake. Everything else builds on that skeleton.
+Execute **Milestone 1** — the attribute registry + shared `Character` model,
+player creation (human), the daily action loop (clock + energy), and save/load
+persistence. Milestone 0 (scaffolding) and the Docker dev container are done.
