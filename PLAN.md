@@ -217,7 +217,16 @@ affection gained → per-day gate → persists).
 
 **Deferred:** the difficult *preference-change* mechanic (change your/their
 likes; some unchangeable) — data models `changeable`, mechanic itself is next.
-Schema migrations (new columns need a fresh DB today) also still open.
+
+## Schema Migrations ✅ DONE
+
+- [x] Versioned migration runner in `db.py` using `PRAGMA user_version`; only
+      migrations newer than the DB's version run on boot. Existing save files
+      upgrade in place (columns added, data preserved) — no wipe needed.
+- [x] `_add_column` helper (add-if-missing) for safe `ALTER TABLE`s; append-only
+      `MIGRATIONS` list.
+- [x] Tests: real pre-migration DB upgrades in place, fresh DB gets full schema,
+      `init_db` idempotent. Verified against a live legacy DB.
 
 ## Milestone 3 — Breadth (Design Phase 3)
 

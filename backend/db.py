@@ -1,37 +1,50 @@
-"""SQLite access + schema initialisation.
+"""SQLite access + schema migrations.
 
-Milestone 0 keeps the schema intentionally minimal — just enough to prove the
-save layer wires up. It expands in Milestone 1 (player, identity) and beyond.
+Schema changes are applied through an ordered list of migrations, versioned via
+SQLite's ``PRAGMA user_version``. On every boot we run only the migrations newer
+than the DB's recorded version, so an existing save file is upgraded in place
+(new columns added, data preserved) rather than needing a wipe.
+
+To evolve the schema: append a new migration function to ``MIGRATIONS`` — never
+edit or reorder an existing one (that would desync already-migrated DBs).
+
+Attributes, identity, preferences, and the affection memory log are stored as
+JSON blobs (not per-field columns) so most content changes need no migration at
+all — see PLAN.md.
 """
 
 import sqlite3
 
 import config
 
-# Attributes and identity are stored as JSON blobs (not per-stat columns) so the
-# schema stays stable as attributes grow — see PLAN.md.
-SCHEMA = """
+# --- Table definitions (current/final shape) --------------------------------
+
+_SAVE = """
 CREATE TABLE IF NOT EXISTS save (
-    id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    created_at    TEXT NOT NULL DEFAULT (datetime('now')),
-    updated_at    TEXT NOT NULL DEFAULT (datetime('now')),
+    id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    created_at     TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at     TEXT NOT NULL DEFAULT (datetime('now')),
     schema_version INTEGER NOT NULL DEFAULT 1
 );
+"""
 
+_PLAYER = """
 CREATE TABLE IF NOT EXISTS player (
     save_id                  INTEGER PRIMARY KEY REFERENCES save(id) ON DELETE CASCADE,
     species                  TEXT    NOT NULL DEFAULT 'human',
-    attributes               TEXT    NOT NULL,          -- JSON map
+    attributes               TEXT    NOT NULL,               -- JSON map
     preferences              TEXT    NOT NULL DEFAULT '{}',  -- JSON map
     energy                   INTEGER NOT NULL DEFAULT 100,
-    created_identity         TEXT    NOT NULL,          -- JSON, immutable snapshot
-    current_identity         TEXT    NOT NULL,          -- JSON
+    created_identity         TEXT    NOT NULL,               -- JSON, immutable snapshot
+    current_identity         TEXT    NOT NULL,               -- JSON
     unlocked_transformations TEXT    NOT NULL DEFAULT '[]',  -- JSON list
     clock_week               INTEGER NOT NULL DEFAULT 1,
     clock_day                INTEGER NOT NULL DEFAULT 1,
     clock_minute             INTEGER NOT NULL DEFAULT 480
 );
+"""
 
+_RELATIONSHIPS = """
 CREATE TABLE IF NOT EXISTS relationships (
     save_id              INTEGER NOT NULL REFERENCES save(id) ON DELETE CASCADE,
     npc_id               TEXT    NOT NULL,
@@ -45,6 +58,50 @@ CREATE TABLE IF NOT EXISTS relationships (
 """
 
 
+# --- Migration helpers ------------------------------------------------------
+
+
+def _column_exists(conn, table, column):
+    return any(row["name"] == column for row in conn.execute(f"PRAGMA table_info({table})"))
+
+
+def _add_column(conn, table, column, decl):
+    """ALTER TABLE ADD COLUMN, but only if the column is missing (so it's safe on
+    DBs that already have it)."""
+    if not _column_exists(conn, table, column):
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {decl}")
+
+
+# --- Migrations (append-only; order matters) --------------------------------
+
+
+def _m1_base_schema(conn):
+    """The three core tables in their current shape (Milestones 0–2)."""
+    conn.executescript(_SAVE + _PLAYER + _RELATIONSHIPS)
+
+
+def _m2_preferences_and_memory(conn):
+    """Add preference + memory columns to DBs created before they existed.
+
+    No-op on fresh DBs (the base-schema tables already include these). Upgrades
+    older save files in place, defaulting the new columns for existing rows.
+    """
+    _add_column(conn, "player", "preferences", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "relationships", "starting_disposition", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "relationships", "known_npc_topics", "TEXT NOT NULL DEFAULT '[]'")
+    _add_column(conn, "relationships", "known_player_topics", "TEXT NOT NULL DEFAULT '[]'")
+    _add_column(conn, "relationships", "memories", "TEXT NOT NULL DEFAULT '[]'")
+
+
+MIGRATIONS = [
+    _m1_base_schema,
+    _m2_preferences_and_memory,
+]
+
+
+# --- Connection + init ------------------------------------------------------
+
+
 def get_connection():
     """Open a SQLite connection with row access by column name."""
     conn = sqlite3.connect(config.DB_PATH)
@@ -54,6 +111,11 @@ def get_connection():
 
 
 def init_db():
-    """Create tables if they don't already exist. Safe to call on every boot."""
+    """Bring the DB up to the latest schema version. Safe to call on every boot;
+    runs only the migrations newer than the DB's recorded ``user_version``."""
     with get_connection() as conn:
-        conn.executescript(SCHEMA)
+        version = conn.execute("PRAGMA user_version").fetchone()[0]
+        for migration in MIGRATIONS[version:]:
+            migration(conn)
+        # user_version can't be parameterised; len(MIGRATIONS) is a trusted int.
+        conn.execute(f"PRAGMA user_version = {len(MIGRATIONS)}")

@@ -1,7 +1,8 @@
 """Test setup: point the DB at a fresh throwaway temp file before app import.
 
-The file is removed at collection time so each run starts on the current schema
-(CREATE TABLE IF NOT EXISTS does not migrate columns onto an existing DB).
+The file is removed at collection time for deterministic test isolation (no
+stale data between runs). Schema upgrades themselves are handled by migrations
+(see db.py) and covered by test_migrations.py.
 """
 
 import os
