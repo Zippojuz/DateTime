@@ -1,0 +1,39 @@
+{
+  "vael_intro": {
+    "id": "vael_intro",
+    "npc": "vael",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "Vael doesn't look up from the plaza lights. \"You again. Most people give the Citadel Ring a wide berth after dark.\"",
+        "choices": [
+          { "text": "Maybe I'm not most people.", "next": "n2", "affection": 2 },
+          { "text": "[Charm] The company here beats the bars.", "next": "n3", "affection": 3, "requires": { "charm": 6 } },
+          { "text": "Just getting my bearings.", "next": "n4", "affection": 1 }
+        ]
+      },
+      "n2": {
+        "text": "\"No. You're not.\" A flicker of blue crosses her skin before she stills it. \"Sit, if you're going to hover.\"",
+        "choices": [
+          { "text": "Sit down beside her.", "next": "n5", "affection": 2 },
+          { "text": "[Wit] Your glow gave you away — that was almost a smile.", "next": "n5", "affection": 3, "requires": { "wit": 6 } }
+        ]
+      },
+      "n3": {
+        "text": "She snorts. \"Flattery. From a drifter.\" But she doesn't tell you to leave.",
+        "choices": [{ "text": "Sit down beside her.", "next": "n5", "affection": 1 }]
+      },
+      "n4": {
+        "text": "\"Bearings.\" She nods slowly. \"The plaza's as good a place as any to find them.\"",
+        "choices": [{ "text": "Sit down beside her.", "next": "n5", "affection": 1 }]
+      },
+      "n5": {
+        "text": "You sit. For a while neither of you says anything, and the quiet is comfortable. \"...Come back sometime,\" she says finally. \"If you want.\"",
+        "choices": [
+          { "text": "I will.", "next": null, "affection": 2 },
+          { "text": "Goodnight, Vael.", "next": null, "affection": 1 }
+        ]
+      }
+    }
+  }
+}

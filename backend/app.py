@@ -8,10 +8,16 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from game import data, save
+from game import data, dialogue, save, social, world
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError
+from game.npc import NPC
 from game.player import DEFAULT_SPECIES, IDENTITY_FIELDS
+
+
+def _day_index(clock):
+    """Absolute in-game day number, used to gate one conversation per day."""
+    return (clock.week - 1) * 7 + clock.day
 
 
 def create_app():
@@ -82,6 +88,102 @@ def create_app():
             return jsonify(error=str(err)), 400
         save.save_models(save_id, player, clock)
         return jsonify(save.state_dict(player, clock))
+
+    # --- Characters, availability, and dialogue (Milestone 2) ---
+
+    @app.get("/api/characters")
+    def characters():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, _player, clock = models
+        day = _day_index(clock)
+        rels = social.all_relationships(save_id)
+        result = []
+        for cid, npc in NPC.load_all().items():
+            rel = rels.get(cid, {})
+            result.append(
+                {
+                    **npc.to_dict(),
+                    "availability": world.availability(npc, clock),
+                    "affection": rel.get("affection", 0),
+                    "talked_today": rel.get("last_talked_day") == day,
+                }
+            )
+        return jsonify(result)
+
+    @app.post("/api/dialogue/start")
+    def dialogue_start():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            npc = NPC.load(body.get("npc_id"))
+        except KeyError:
+            return jsonify(error="No such character."), 404
+
+        avail = world.availability(npc, clock)
+        if not avail["available"]:
+            return jsonify(error=f"{npc.name} isn't available right now."), 400
+        if social.has_talked_today(save_id, npc.id, _day_index(clock)):
+            return jsonify(error=f"You've already spent real time with {npc.name} today."), 400
+
+        tree = dialogue.tree_for_npc(npc.id)
+        if tree is None:
+            return jsonify(error=f"{npc.name} has nothing to say yet."), 404
+
+        # Gate at start so an abandoned conversation still counts for the day.
+        social.mark_talked(save_id, npc.id, _day_index(clock))
+        return jsonify(
+            {
+                "npc_id": npc.id,
+                "npc_name": npc.name,
+                "dialogue_id": tree["id"],
+                "tier": avail["tier"],
+                "affection": social.get_affection(save_id, npc.id),
+                "node": dialogue.node_view(tree, tree["start"], player),
+            }
+        )
+
+    @app.post("/api/dialogue/choose")
+    def dialogue_choose():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            npc = NPC.load(body.get("npc_id"))
+        except KeyError:
+            return jsonify(error="No such character."), 404
+
+        tree = dialogue.tree_for_npc(npc.id)
+        if tree is None:
+            return jsonify(error="No dialogue in progress."), 404
+
+        # Clock is paused during dialogue, so the arrival tier is stable.
+        tier = world.availability(npc, clock)["tier"]
+        try:
+            next_id, base_affection = dialogue.resolve_choice(
+                tree, body.get("node_id"), body.get("choice_index"), player
+            )
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+
+        gained = round(base_affection * world.TIER_MULTIPLIER.get(tier, 0))
+        if gained:
+            social.add_affection(save_id, npc.id, gained)
+
+        payload = {
+            "ended": next_id is None,
+            "gained": gained,
+            "affection": social.get_affection(save_id, npc.id),
+        }
+        if next_id is not None:
+            payload["node"] = dialogue.node_view(tree, next_id, player)
+        return jsonify(payload)
 
     return app
 

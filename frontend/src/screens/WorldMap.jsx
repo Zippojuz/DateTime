@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useGameStore } from '../state/gameStore'
 import StatBar from '../components/StatBar.jsx'
+import PeoplePanel from '../components/PeoplePanel.jsx'
+import RelationshipPanel from '../components/RelationshipPanel.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -41,6 +43,9 @@ export default function WorldMap() {
       <section className="placeholder-world">
         <p>Nexus City stretches out around you. (Districts arrive in Milestone 3.)</p>
       </section>
+
+      <PeoplePanel />
+      <RelationshipPanel />
 
       <section className="action-panel">
         <h2>What do you do?</h2>

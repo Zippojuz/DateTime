@@ -20,6 +20,12 @@ export const useGameStore = create((set, get) => ({
   state: null,
   hasSave: false,
 
+  // Characters with availability + affection, refreshed as the clock moves.
+  characters: [],
+
+  // Active dialogue: null | { npcId, npcName, tier, node, lastGained }
+  dialogue: null,
+
   busy: false,
   error: null,
 
@@ -50,7 +56,10 @@ export const useGameStore = create((set, get) => ({
 
   startCreation: () => set({ screen: 'creation', error: null }),
   continueGame: () => {
-    if (get().state) set({ screen: 'play' })
+    if (get().state) {
+      set({ screen: 'play' })
+      get().loadCharacters()
+    }
   },
 
   newGame: async (identity) => {
@@ -58,8 +67,18 @@ export const useGameStore = create((set, get) => ({
     try {
       const state = await api.newGame(identity)
       set({ state, hasSave: true, screen: 'play', busy: false })
+      get().loadCharacters()
     } catch (err) {
       set({ error: err.message, busy: false })
+    }
+  },
+
+  loadCharacters: async () => {
+    try {
+      const characters = await api.characters()
+      set({ characters })
+    } catch {
+      // Non-fatal — the daily loop still works without the People panel.
     }
   },
 
@@ -68,8 +87,44 @@ export const useGameStore = create((set, get) => ({
     try {
       const state = await api.action({ action, attribute })
       set({ state, busy: false })
+      get().loadCharacters() // availability changes as the clock advances
     } catch (err) {
       set({ error: err.message, busy: false })
     }
   },
+
+  startDialogue: async (npcId) => {
+    set({ busy: true, error: null })
+    try {
+      const d = await api.dialogueStart(npcId)
+      set({
+        dialogue: { npcId, npcName: d.npc_name, tier: d.tier, node: d.node, lastGained: 0 },
+        busy: false,
+      })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  chooseDialogue: async (choiceIndex) => {
+    const dlg = get().dialogue
+    if (!dlg) return
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dialogueChoose(dlg.npcId, dlg.node.node_id, choiceIndex)
+      if (res.ended) {
+        set({ dialogue: null, busy: false })
+        get().loadCharacters() // affection updated
+      } else {
+        set({
+          dialogue: { ...dlg, node: res.node, lastGained: res.gained },
+          busy: false,
+        })
+      }
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  closeDialogue: () => set({ dialogue: null }),
 }))

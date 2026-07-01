@@ -174,20 +174,25 @@ energy move, and see it persist across save/load.
 
 ---
 
-## Milestone 2 — One Character, Full Vertical Slice (Design Phase 2)
+## Milestone 2 — One Character, Full Vertical Slice (Design Phase 2) ✅ DONE
 
-- [ ] Implement **Vael** fully from `characters.json` (pronouns, schedule,
-      availability windows, arc theme). Dialogue text uses a pronoun helper so
-      NPC and narration text renders correct pronouns for both the character and
-      the (possibly changed) player.
-- [ ] `social.py`: affection track + gain/loss rules.
-- [ ] `world.py`: district hours + character schedules → is-available check,
-      including the "Arriving Late" tiers.
-- [ ] `dialogue.py`: run a branching dialogue tree from JSON.
-- [ ] `DialogueScreen` + `RelationshipPanel`.
+- [x] Implement **Vael** via `NPC` + `characters.json` (pronouns, schedule,
+      availability windows). Dialogue text runs through a pronoun helper.
+- [x] `social.py`: affection (0–100), scaled by arrival tier; one meaningful
+      conversation per NPC per in-game day (gate, since dialogue is free).
+- [x] `world.py`: schedule → availability with the "Arriving Late" tiers
+      (full/shortened/brief/missed/unavailable), incl. midnight-crossing windows.
+- [x] `dialogue.py`: branching tree from `data/dialogues.json` with light
+      Charm/Wit stat gates + pronoun rendering.
+- [x] `PeoplePanel`, `DialogueScreen`, `RelationshipPanel`.
 
-**Done when:** travel to Vael during an availability window, hold a dialogue,
-gain affection, see it persist across save/load.
+**Decisions:** schedule-only reach (no travel yet — that's M3); branching +
+stat-gated dialogue; conversations are free (no time/energy cost) with a
+per-day gate to keep affection meaningful.
+
+**Status:** Complete. Backend 37 pytest, frontend 9 vitest, lint clean, build
+passes, verified end-to-end (unavailable → full tier → locked Charm choice →
+affection gained → per-day gate → persists).
 
 ---
 

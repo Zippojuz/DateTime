@@ -33,4 +33,12 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ changes }),
     }),
+  characters: () => request('/characters'),
+  dialogueStart: (npcId) =>
+    request('/dialogue/start', { method: 'POST', body: JSON.stringify({ npc_id: npcId }) }),
+  dialogueChoose: (npcId, nodeId, choiceIndex) =>
+    request('/dialogue/choose', {
+      method: 'POST',
+      body: JSON.stringify({ npc_id: npcId, node_id: nodeId, choice_index: choiceIndex }),
+    }),
 }

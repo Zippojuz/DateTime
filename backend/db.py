@@ -30,6 +30,14 @@ CREATE TABLE IF NOT EXISTS player (
     clock_day                INTEGER NOT NULL DEFAULT 1,
     clock_minute             INTEGER NOT NULL DEFAULT 480
 );
+
+CREATE TABLE IF NOT EXISTS relationships (
+    save_id         INTEGER NOT NULL REFERENCES save(id) ON DELETE CASCADE,
+    npc_id          TEXT    NOT NULL,
+    affection       INTEGER NOT NULL DEFAULT 0,
+    last_talked_day INTEGER NOT NULL DEFAULT 0,   -- absolute day index; 0 = never
+    PRIMARY KEY (save_id, npc_id)
+);
 """
 
 

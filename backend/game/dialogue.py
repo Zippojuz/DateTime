@@ -1,21 +1,102 @@
-"""Dialogue tree runner. (Milestone 2)
+"""Dialogue tree runner + pronoun helper. (Milestone 2)
 
-Runs branching dialogue loaded from data. Text is rendered through a pronoun
-helper so both character and (possibly transformed) player pronouns resolve
-correctly.
+Trees are authored in data/dialogues.json, keyed by dialogue id. A node has
+`text` and `choices`; a choice has `text`, `next` (node id or null to end),
+optional `affection`, and optional `requires` (attribute thresholds — a light
+stat gate). Choice text is rendered through the pronoun helper so player (and
+NPC) references resolve correctly, respecting the player's *current* pronouns.
 """
 
+from game import data
+from game.errors import GameError
 
-def render_pronouns(text, subject):
-    """Stub. Substitute pronoun tokens for ``subject`` into ``text``.
+# Full grammatical forms for the presets; graceful fallback for custom sets.
+PRONOUN_SETS = {
+    "she/her": {
+        "subj": "she", "obj": "her", "pos": "her", "pos_pron": "hers", "reflex": "herself",
+    },
+    "he/him": {
+        "subj": "he", "obj": "him", "pos": "his", "pos_pron": "his", "reflex": "himself",
+    },
+    "they/them": {
+        "subj": "they", "obj": "them", "pos": "their", "pos_pron": "theirs", "reflex": "themself",
+    },
+}
 
-    Full implementation (subject/object/possessive forms, custom pronoun sets)
-    lands in M2.
-    """
+
+def pronouns_for(pronoun_str):
+    if pronoun_str in PRONOUN_SETS:
+        return PRONOUN_SETS[pronoun_str]
+    parts = [p.strip() for p in (pronoun_str or "").split("/")]
+    subj = parts[0] if parts and parts[0] else "they"
+    obj = parts[1] if len(parts) > 1 and parts[1] else subj
+    return {"subj": subj, "obj": obj, "pos": obj, "pos_pron": obj, "reflex": f"{subj}self"}
+
+
+def render_pronouns(text, name="", pronouns="they/them"):
+    """Substitute {name} and pronoun tokens ({subj}/{obj}/{pos}/{pos_pron}/
+    {reflex}, plus capitalized variants) into `text`."""
+    p = pronouns_for(pronouns)
+    mapping = {
+        "{name}": name,
+        "{subj}": p["subj"],
+        "{obj}": p["obj"],
+        "{pos}": p["pos"],
+        "{pos_pron}": p["pos_pron"],
+        "{reflex}": p["reflex"],
+        "{Subj}": p["subj"].capitalize(),
+        "{Obj}": p["obj"].capitalize(),
+        "{Pos}": p["pos"].capitalize(),
+    }
+    for token, value in mapping.items():
+        text = text.replace(token, value)
     return text
 
 
-class DialogueRunner:
-    """Stub. Branching dialogue evaluation lands in M2."""
+def tree_for_npc(npc_id):
+    """Return the first dialogue tree whose `npc` matches, or None."""
+    for tree in data.load("dialogues").values():
+        if tree.get("npc") == npc_id:
+            return tree
+    return None
 
-    pass
+
+def _meets(player, requires):
+    return all(player.attributes.get(attr, 0) >= threshold for attr, threshold in requires.items())
+
+
+def node_view(tree, node_id, player):
+    """A render-ready node: resolved text + choices with lock state."""
+    node = tree["nodes"][node_id]
+    name = player.current_identity.get("name", "")
+    pronouns = player.current_identity.get("pronouns", "they/them")
+    choices = []
+    for index, choice in enumerate(node["choices"]):
+        requires = choice.get("requires")
+        choices.append(
+            {
+                "index": index,
+                "text": render_pronouns(choice["text"], name, pronouns),
+                "locked": bool(requires) and not _meets(player, requires),
+                "requires": requires,
+            }
+        )
+    return {
+        "node_id": node_id,
+        "text": render_pronouns(node["text"], name, pronouns),
+        "choices": choices,
+    }
+
+
+def resolve_choice(tree, node_id, choice_index, player):
+    """Validate a chosen option. Returns (next_node_id_or_None, affection_delta)."""
+    node = tree["nodes"].get(node_id)
+    if node is None:
+        raise GameError("That conversation thread no longer exists.")
+    if not isinstance(choice_index, int) or not (0 <= choice_index < len(node["choices"])):
+        raise GameError("Invalid choice.")
+    choice = node["choices"][choice_index]
+    requires = choice.get("requires")
+    if requires and not _meets(player, requires):
+        raise GameError("You don't meet the requirement for that option.")
+    return choice.get("next"), choice.get("affection", 0)
