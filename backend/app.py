@@ -4,11 +4,10 @@ The backend is server-authoritative (see PLAN.md -> Architecture Decisions):
 all game state and rules live here; the React frontend is a thin view.
 """
 
-from flask import Flask, jsonify, request
-from flask_cors import CORS
-
 import config
 from db import init_db
+from flask import Flask, jsonify, request
+from flask_cors import CORS
 from game import data, save
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError

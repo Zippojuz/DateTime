@@ -8,6 +8,7 @@ so the schema is stable as attributes grow. Multi-slot saves are deferred
 import json
 
 from db import get_connection
+
 from game.calendar import GameClock
 from game.player import Player
 

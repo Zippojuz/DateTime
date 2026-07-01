@@ -1,11 +1,9 @@
 """Milestone 1: player creation, the daily loop, transformation locks."""
 
 import pytest
-
 from app import create_app
-from game import save
 from game.calendar import GameClock
-from game.character import Character
+from game.npc import NPC
 from game.player import Player
 
 
@@ -149,15 +147,37 @@ def test_transform_works_once_unlocked():
     assert player.created_identity["pronouns"] == "they/them"
 
 
-# --- Shared Character model (NPCs mirror the player) ------------------------
+# --- NPC model (subclasses Character; mirrors the player's attributes) -------
 
 
 def test_npc_attributes_mirror_the_registry():
-    npc = Character.from_npc({"name": "Vael"})  # no overrides
+    npc = NPC.from_data({"id": "x", "name": "Vael"})  # no overrides
     assert npc.attributes == {"charm": 5, "wit": 5, "courage": 5, "empathy": 5}
 
 
 def test_npc_overrides_merge_over_defaults():
-    npc = Character.from_npc({"name": "Vael", "attributes": {"courage": 12}})
+    npc = NPC.from_data({"id": "x", "name": "Vael", "attributes": {"courage": 12}})
     assert npc.attributes["courage"] == 12
     assert npc.attributes["charm"] == 5  # untouched default
+
+
+def test_npc_loads_from_characters_json():
+    vael = NPC.load("vael")
+    assert vael.name == "Vael"
+    assert vael.pronouns == "she/her"
+    assert vael.species == "Bioluminescent tall being"
+    assert vael.romanceable is True
+    assert len(vael.schedule) > 0
+    # Mirrors the registry attribute set since Vael has no overrides.
+    assert set(vael.attributes) == {"charm", "wit", "courage", "empathy"}
+
+
+def test_npc_load_unknown_raises():
+    with pytest.raises(KeyError):
+        NPC.load("nobody")
+
+
+def test_load_all_npcs():
+    npcs = NPC.load_all()
+    assert "vael" in npcs
+    assert all(isinstance(n, NPC) for n in npcs.values())

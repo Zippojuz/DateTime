@@ -30,18 +30,14 @@ def build_attributes(overrides=None):
 
 
 class Character:
-    """A named entity with attributes drawn from the shared registry."""
+    """A named entity with attributes drawn from the shared registry.
+
+    Base class for both the player and NPCs, so they share one attribute model.
+    """
 
     def __init__(self, name, attributes=None):
         self.name = name
         self.attributes = build_attributes(attributes)
-
-    @classmethod
-    def from_npc(cls, entry):
-        """Build an NPC from a characters.json entry. NPC attributes mirror the
-        player's set; the entry may override individual values via `attributes`.
-        """
-        return cls(entry["name"], entry.get("attributes"))
 
     def to_dict(self):
         return {"name": self.name, "attributes": dict(self.attributes)}
