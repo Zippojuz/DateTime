@@ -1,0 +1,10 @@
+{
+  "star_ration": {
+    "id": "star_ration",
+    "name": "Star Ration",
+    "type": "food",
+    "description": "A dense nutrient bar from a dockside stall. Tastes of nothing and everything.",
+    "effects": { "energy": 20 },
+    "value": 5
+  }
+}

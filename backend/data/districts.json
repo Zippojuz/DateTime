@@ -1,0 +1,12 @@
+{
+  "citadel_ring": {
+    "id": "citadel_ring",
+    "name": "The Citadel Ring",
+    "vibe": "Government, military, bureaucrats",
+    "hours": {
+      "offices": { "open": "08:00", "close": "17:00" },
+      "plaza": "24h"
+    },
+    "adjacent": ["bloom_district", "the_grid"]
+  }
+}

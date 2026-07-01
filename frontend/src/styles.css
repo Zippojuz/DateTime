@@ -1,0 +1,99 @@
+/* Placeholder sci-fi theme: dark backgrounds, neon accents, clean type.
+   Per the design doc's art strategy — no image assets, pure CSS for now. */
+
+:root {
+  --bg: #0a0e1a;
+  --bg-panel: #121a2e;
+  --neon: #21e6c1;
+  --neon-dim: #157a6e;
+  --accent: #ff5da2;
+  --text: #e6ecff;
+  --text-dim: #7d88a8;
+  --error: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: radial-gradient(circle at 50% 0%, #14203a 0%, var(--bg) 60%);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title-logo {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  letter-spacing: 0.4rem;
+  margin: 0;
+  color: var(--neon);
+  text-shadow: 0 0 12px var(--neon-dim), 0 0 32px var(--neon-dim);
+}
+
+.title-tagline {
+  color: var(--text-dim);
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.server-status {
+  font-size: 0.9rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--text-dim);
+}
+
+.server-status--ok {
+  color: var(--neon);
+  border-color: var(--neon-dim);
+}
+
+.server-status--error {
+  color: var(--error);
+  border-color: var(--error);
+}
+
+.server-status--unknown {
+  color: var(--text-dim);
+}
+
+.btn-primary {
+  background: transparent;
+  color: var(--neon);
+  border: 1px solid var(--neon);
+  padding: 0.75rem 2rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--neon);
+  color: var(--bg);
+  box-shadow: 0 0 16px var(--neon-dim);
+}
+
+.btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-hint {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+}

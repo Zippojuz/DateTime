@@ -1,0 +1,8 @@
+{
+  "dock_tough": {
+    "id": "dock_tough",
+    "name": "Dock Tough",
+    "description": "Muscle-for-hire who works the seedy end of the Docking Quarter.",
+    "stats": { "hp": 20, "attack": 5, "defense": 2 }
+  }
+}

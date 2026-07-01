@@ -81,10 +81,14 @@ my_jrpg/
 
 ---
 
-## Milestone 0 — Scaffolding (do this first)
+## Milestone 0 — Scaffolding ✅ DONE
 
 Goal: `flask run` serves a JSON API, `npm run dev` serves the React app, and the
 two talk to each other with placeholder data.
+
+**Status:** Complete. Backend boots and serves `/api/health`; frontend title
+screen confirms the connection; `pytest` (3) and `vitest` (2) green; ESLint
+clean; production build succeeds.
 
 ### Backend
 - [ ] Create `backend/` with `app.py`, `config.py`, `db.py`, `requirements.txt`

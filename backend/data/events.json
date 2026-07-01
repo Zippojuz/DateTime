@@ -1,0 +1,10 @@
+{
+  "arrival": {
+    "id": "arrival",
+    "name": "Arrival at Nexus City",
+    "type": "story",
+    "week": 1,
+    "description": "Your ship docks in the Docking Quarter. The debt clock starts now.",
+    "district": "docking_quarter"
+  }
+}
