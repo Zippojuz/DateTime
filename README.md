@@ -16,12 +16,28 @@ backend/    Flask API, game logic (stubs), SQLite, JSON data
 frontend/   React + Vite, Zustand store
 ```
 
-## Prerequisites
+## Run with Docker (one command)
+
+The whole app runs in a single dev container (Flask + Vite, hot reload) — no
+local Python or Node needed, just Docker.
+
+```bash
+bash scripts/docker-dev.sh
+```
+
+Then open http://localhost:5173 — the title screen should read **"Connected to
+Nexus core"**. Editing files under `backend/` or `frontend/` hot-reloads live
+(source is bind-mounted). Ctrl-C stops the container.
+
+> This is a development image, not a production build. See `PLAN.md` for the
+> (out-of-scope-for-now) production path.
+
+## Run locally (two terminals)
+
+Prefer running on the host directly? You'll need:
 
 - Python 3.11+
 - Node 20+ / npm
-
-## Run it (two terminals)
 
 ### Backend
 

@@ -6,8 +6,19 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    // Listen on all interfaces so the mapped port is reachable from the host
+    // when running inside Docker.
+    host: true,
     port: 5173,
+    // inotify events don't cross the bind mount on macOS/Windows Docker; the
+    // container sets VITE_USE_POLLING so file changes are still detected.
+    // Left off for native local dev to avoid the extra CPU cost.
+    watch: {
+      usePolling: !!process.env.VITE_USE_POLLING,
+    },
     proxy: {
+      // Both processes share localhost inside the single container, so this
+      // target works unchanged in Docker and in local dev.
       '/api': 'http://localhost:5000',
     },
   },

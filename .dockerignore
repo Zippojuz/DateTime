@@ -1,0 +1,14 @@
+# Keep host build artifacts out of the image and build context. Without this,
+# COPY . . would bake in this machine's (Linux-only) .venv / node_modules.
+**/node_modules
+**/.venv
+venv
+.git
+.gitignore
+**/dist
+**/__pycache__
+**/*.pyc
+*.db
+.DS_Store
+.env
+.env.local
