@@ -1,0 +1,30 @@
+{
+  "charm": {
+    "name": "Charm",
+    "description": "Dialogue options and affection gains.",
+    "default": 5,
+    "min": 0,
+    "max": 20
+  },
+  "wit": {
+    "name": "Wit",
+    "description": "Puzzle and hacking outcomes, and certain dialogue.",
+    "default": 5,
+    "min": 0,
+    "max": 20
+  },
+  "courage": {
+    "name": "Courage",
+    "description": "Combat and risky dialogue choices.",
+    "default": 5,
+    "min": 0,
+    "max": 20
+  },
+  "empathy": {
+    "name": "Empathy",
+    "description": "Unlocking deeper character routes.",
+    "default": 5,
+    "min": 0,
+    "max": 20
+  }
+}

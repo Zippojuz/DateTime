@@ -8,14 +8,27 @@ import sqlite3
 
 import config
 
-# Minimal starter schema. Columns are added as milestones land; for now this
-# only proves the DB initialises and is reachable.
+# Attributes and identity are stored as JSON blobs (not per-stat columns) so the
+# schema stays stable as attributes grow — see PLAN.md.
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS save (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     created_at    TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at    TEXT NOT NULL DEFAULT (datetime('now')),
     schema_version INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS player (
+    save_id                  INTEGER PRIMARY KEY REFERENCES save(id) ON DELETE CASCADE,
+    species                  TEXT    NOT NULL DEFAULT 'human',
+    attributes               TEXT    NOT NULL,          -- JSON map
+    energy                   INTEGER NOT NULL DEFAULT 100,
+    created_identity         TEXT    NOT NULL,          -- JSON, immutable snapshot
+    current_identity         TEXT    NOT NULL,          -- JSON
+    unlocked_transformations TEXT    NOT NULL DEFAULT '[]',  -- JSON list
+    clock_week               INTEGER NOT NULL DEFAULT 1,
+    clock_day                INTEGER NOT NULL DEFAULT 1,
+    clock_minute             INTEGER NOT NULL DEFAULT 480
 );
 """
 

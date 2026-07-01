@@ -125,12 +125,20 @@ clean; production build succeeds.
 
 ---
 
-## Milestone 1 — Player Creation & Daily Loop (Design Phase 1)
+## Milestone 1 — Player Creation & Daily Loop (Design Phase 1) ✅ DONE
 
-- [ ] **`data/attributes.json`**: the extensible attribute registry. Each entry
-      = id, display name, description, default, min/max, category. Seed with
-      Charm/Wit/Courage/Empathy + Energy; designed so adding attributes later is
-      a one-line addition (no schema change).
+**Status:** Complete. Human player creation with the registry-backed shared
+Character model, the daily action loop (rest/nap/explore/train/wait exercising
+clock + energy), story-locked transformation, and single-save persistence.
+Backend: 19 pytest. Frontend: 6 vitest, lint clean, build passes. Verified
+end-to-end against a running server.
+
+
+- [x] **`data/attributes.json`**: the extensible attribute registry. Each entry
+      = id, display name, description, default, min/max (no grouping/category).
+      Seeded with Charm/Wit/Courage/Empathy; designed so adding attributes later
+      is a one-line addition (no schema change). Energy is a separate *player
+      resource* (0–100 with regen), not a shared attribute.
 - [ ] **`game/character.py`**: shared `Character` model backing BOTH player and
       NPCs. Holds `attributes` as a keyed map validated against the registry.
       NPCs mirror the player's attribute set; per-character overrides in

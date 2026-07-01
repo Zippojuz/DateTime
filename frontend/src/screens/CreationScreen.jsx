@@ -1,0 +1,97 @@
+import { useState } from 'react'
+import { useGameStore } from '../state/gameStore'
+
+const PRONOUN_PRESETS = ['she/her', 'he/him', 'they/them']
+
+// Character creation. Identity is locked once you begin (see Identity
+// Philosophy) — appearance/pronouns/body can change later only through the
+// story-gated transformation system. Species is fixed to human for now.
+export default function CreationScreen() {
+  const newGame = useGameStore((s) => s.newGame)
+  const busy = useGameStore((s) => s.busy)
+  const error = useGameStore((s) => s.error)
+
+  const [name, setName] = useState('')
+  const [pronouns, setPronouns] = useState('they/them')
+  const [appearance, setAppearance] = useState('')
+  const [body, setBody] = useState('')
+
+  const submit = (e) => {
+    e.preventDefault()
+    if (!name.trim()) return
+    newGame({ name, pronouns, appearance, body })
+  }
+
+  return (
+    <main className="creation-screen">
+      <h1 className="creation-title">Who are you?</h1>
+      <p className="creation-note">
+        Your starting self is locked in. You can change who you become later —
+        that&apos;s a story you&apos;ll have to earn.
+      </p>
+
+      <form className="creation-form" onSubmit={submit}>
+        <label>
+          Name
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="What do they call you?"
+            autoFocus
+          />
+        </label>
+
+        <label>
+          Pronouns
+          <div className="pronoun-presets">
+            {PRONOUN_PRESETS.map((p) => (
+              <button
+                type="button"
+                key={p}
+                className={`chip ${pronouns === p ? 'chip--active' : ''}`}
+                onClick={() => setPronouns(p)}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+          <input
+            value={pronouns}
+            onChange={(e) => setPronouns(e.target.value)}
+            placeholder="Or type your own"
+          />
+        </label>
+
+        <label>
+          Species
+          <input value="Human" disabled title="Other species come later" />
+        </label>
+
+        <label>
+          Appearance
+          <textarea
+            value={appearance}
+            onChange={(e) => setAppearance(e.target.value)}
+            placeholder="Describe how you look."
+            rows={2}
+          />
+        </label>
+
+        <label>
+          Body
+          <input
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+            placeholder="However you'd describe it."
+          />
+        </label>
+
+        {error && <p className="form-error">{error}</p>}
+
+        <button className="btn-primary" type="submit" disabled={busy || !name.trim()}>
+          {busy ? 'Arriving…' : 'Arrive in Nexus City'}
+        </button>
+      </form>
+    </main>
+  )
+}

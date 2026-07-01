@@ -1,16 +1,15 @@
-import { useEffect } from 'react'
 import { useGameStore } from '../state/gameStore'
 
-// Milestone 0 deliverable: the title screen confirms it reached the backend's
-// /api/health endpoint.
+// Landing screen. Confirms the backend connection and offers New Game /
+// Continue depending on whether a save exists.
 export default function TitleScreen() {
   const connection = useGameStore((s) => s.connection)
   const connectionError = useGameStore((s) => s.connectionError)
-  const checkConnection = useGameStore((s) => s.checkConnection)
+  const hasSave = useGameStore((s) => s.hasSave)
+  const startCreation = useGameStore((s) => s.startCreation)
+  const continueGame = useGameStore((s) => s.continueGame)
 
-  useEffect(() => {
-    checkConnection()
-  }, [checkConnection])
+  const ready = connection === 'ok'
 
   return (
     <main className="title-screen">
@@ -23,9 +22,16 @@ export default function TitleScreen() {
         {connection === 'error' && `Offline — ${connectionError}`}
       </div>
 
-      <button className="btn-primary" disabled>
-        New Game <span className="btn-hint">(Milestone 1)</span>
-      </button>
+      <div className="title-actions">
+        {hasSave && (
+          <button className="btn-primary" onClick={continueGame} disabled={!ready}>
+            Continue
+          </button>
+        )}
+        <button className="btn-primary" onClick={startCreation} disabled={!ready}>
+          New Game
+        </button>
+      </div>
     </main>
   )
 }

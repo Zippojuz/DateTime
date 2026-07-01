@@ -11,7 +11,9 @@ async function request(path, options = {}) {
   const data = await res.json().catch(() => ({}))
 
   if (!res.ok) {
-    throw new Error(data.error || `Request failed (${res.status})`)
+    const err = new Error(data.error || `Request failed (${res.status})`)
+    err.status = res.status
+    throw err
   }
 
   return data
@@ -19,4 +21,16 @@ async function request(path, options = {}) {
 
 export const api = {
   health: () => request('/health'),
+  attributes: () => request('/attributes'),
+  actions: () => request('/actions'),
+  getState: () => request('/game/state'),
+  newGame: (identity) =>
+    request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),
+  action: (payload) =>
+    request('/action', { method: 'POST', body: JSON.stringify(payload) }),
+  transform: (changes) =>
+    request('/player/transform', {
+      method: 'POST',
+      body: JSON.stringify({ changes }),
+    }),
 }

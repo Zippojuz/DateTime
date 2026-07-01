@@ -1,31 +1,39 @@
-import { render, screen, waitFor } from '@testing-library/react'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it } from 'vitest'
 import TitleScreen from './TitleScreen'
+import { useGameStore } from '../state/gameStore'
 
 beforeEach(() => {
-  global.fetch = vi.fn(() =>
-    Promise.resolve({
-      ok: true,
-      json: () => Promise.resolve({ status: 'ok', game: 'nexus-city' }),
-    }),
-  )
+  // Reset to a connected 'title' state without a save.
+  useGameStore.setState({
+    connection: 'ok',
+    connectionError: null,
+    screen: 'title',
+    hasSave: false,
+  })
 })
 
 describe('TitleScreen', () => {
-  it('renders the logo and tagline', async () => {
+  it('renders the logo and tagline', () => {
     render(<TitleScreen />)
     expect(screen.getByText('NEXUS CITY')).toBeInTheDocument()
     expect(screen.getByText(/never sleeps/)).toBeInTheDocument()
-    // Let the health check settle so the async state update stays inside act().
-    await waitFor(() =>
-      expect(screen.getByText(/Connected to Nexus core/)).toBeInTheDocument(),
-    )
   })
 
-  it('confirms the backend connection after the health check', async () => {
+  it('shows the connected status and an enabled New Game button', () => {
     render(<TitleScreen />)
-    await waitFor(() =>
-      expect(screen.getByText(/Connected to Nexus core/)).toBeInTheDocument(),
-    )
+    expect(screen.getByText(/Connected to Nexus core/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'New Game' })).toBeEnabled()
+  })
+
+  it('offers Continue only when a save exists', () => {
+    const { unmount } = render(<TitleScreen />)
+    expect(screen.queryByRole('button', { name: 'Continue' })).toBeNull()
+    unmount()
+
+    // Flip state while nothing is mounted, then render fresh.
+    useGameStore.setState({ hasSave: true })
+    render(<TitleScreen />)
+    expect(screen.getByRole('button', { name: 'Continue' })).toBeInTheDocument()
   })
 })
