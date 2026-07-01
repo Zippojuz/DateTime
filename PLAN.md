@@ -78,7 +78,7 @@ two talk to each other with placeholder data.
 - [ ] Stub `game/` modules with empty classes/functions and docstrings so the
       import graph is real.
 - [ ] Seed `data/*.json` with 1–2 example entries each (one district, one
-      character = Vael, one item).
+      character = Vael with a `pronouns` field, one item).
 - [ ] Health route `GET /api/health` → `{"status": "ok"}`.
 
 ### Frontend
@@ -98,9 +98,19 @@ two talk to each other with placeholder data.
 ## Milestone 1 — Player Creation & Daily Loop (Design Phase 1)
 
 - [ ] `player.py`: stats (Charm/Wit/Courage/Empathy), Energy (0–100),
-      name/pronouns/species.
+      name/pronouns/species/appearance/body. Identity fields (gender,
+      orientation, pronouns) are **free-form data, never gating flags** — no code
+      path may branch on them to restrict content.
+- [ ] **Locked initial state:** on creation the player commits name, pronouns,
+      appearance, and body. Persist an immutable `created_identity` snapshot plus
+      a mutable `current_identity` that starts equal to it.
+- [ ] **Transformation unlock:** appearance / pronouns / genitals become editable
+      only after story milestones grant the ability (a diegetic arc, not a
+      day-one menu). Track unlocked transformation capabilities on the save.
+      Endpoint: `POST /api/player/transform` (rejects changes to still-locked
+      aspects). Pronoun changes propagate to how NPCs and text refer to you.
 - [ ] `POST /api/game/new` → create save + player; `GET /api/game/state`.
-- [ ] `CreationScreen.jsx`: form for name, pronouns, species, appearance.
+- [ ] `CreationScreen.jsx`: form for name, pronouns, species, appearance, body.
 - [ ] `calendar.py`: clock that only advances on committed actions; day/time,
       week counter toward the 52-week year.
 - [ ] `POST /api/action` — advance time, apply energy cost, return new state.
@@ -112,8 +122,10 @@ two talk to each other with placeholder data.
 
 ## Milestone 2 — One Character, Full Vertical Slice (Design Phase 2)
 
-- [ ] Implement **Vael** fully from `characters.json` (schedule, availability
-      windows, arc theme).
+- [ ] Implement **Vael** fully from `characters.json` (pronouns, schedule,
+      availability windows, arc theme). Dialogue text uses a pronoun helper so
+      NPC and narration text renders correct pronouns for both the character and
+      the (possibly changed) player.
 - [ ] `social.py`: affection track + gain/loss rules.
 - [ ] `world.py`: district hours + character schedules → is-available check,
       including the "Arriving Late" tiers.
@@ -150,6 +162,11 @@ gain affection, see it persist across save/load.
 - Does combat integrate into the dating-sim loop, or sit beside it?
 - Which "Weird Ideas" (city-as-organism, unreliable memory, the debt) are
   in-scope for v1 vs. stretch?
+
+**Resolved:** Gender/orientation are fluid, non-mechanical, and never gate
+content — surfaced narratively only where relevant (see design doc → Identity
+Philosophy). Player identity is locked at creation, then appearance/pronouns/body
+become changeable through a story-gated transformation arc.
 
 ---
 

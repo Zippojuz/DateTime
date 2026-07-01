@@ -30,8 +30,33 @@ A massive interstellar hub city built on (or possibly *as*) a space station the 
  
 ## Player Character
  
-Fully customizable: name, pronouns, species, appearance.
- 
+At creation you set: name, pronouns, species, appearance (including body/genitals).
+
+### Identity Philosophy
+
+Gender and orientation are **fluid, never locked in, and never mechanical.**
+
+- Neither gender nor orientation (gay/straight/anything between) is a stat, a
+  flag that gates content, or a fixed category. No route, scene, or dialogue is
+  ever restricted by player identity — everyone is romanceable, always.
+- Identity is **only surfaced narratively when it's actually relevant** — a
+  pro-LGBT beat, a character's personal story, a scene where it genuinely
+  matters. It is never constantly foregrounded, quizzed, or treated as a
+  gimmick. Most of the time it simply *is*, unremarked.
+- The same applies to the cast: characters have pronouns and their own
+  identities, mentioned only where they're meaningful to who they are.
+
+### Player Transformation (locked at creation → fluid over the story)
+
+- Your **initial state is locked in** at character creation — you commit to a
+  starting name, pronouns, appearance, and body.
+- As the story progresses you **earn the ability to change** appearance,
+  pronouns, and even genitals through in-world means (self-discovery,
+  technology, species abilities, story milestones). Transformation is a *narrative
+  arc*, not a menu toggle available from day one.
+- Changes are diegetic and can carry story weight — characters may notice,
+  react, and (positively) engage with your evolution.
+
 ### Player Stats
  
 | Stat | Affects |
@@ -84,15 +109,17 @@ Fully customizable: name, pronouns, species, appearance.
  
 ## The Cast — Romanceable Characters
  
-All characters are romanceable regardless of player identity.
- 
-| Name | Species | Personality | District | Arc Theme |
-|---|---|---|---|---|
-| **Vael** | Bioluminescent tall being | Stoic soldier, guarded | Citadel Ring | Learning to trust again |
-| **Zix** | Hivemind colony | Chaotic hacker, witty | The Grid | Running from their past |
-| **Sora** | Plant-fungal hybrid | Gentle botanist, wise | Bloom District | Belonging vs. duty |
-| **Carro** | Reptilian cold-blood | Slick merchant, morally grey | Docking Quarter | Redemption |
-| **Miko** | Feathered avian | Rebel musician, passionate | The Shallows | Finding their voice |
+All characters are romanceable regardless of player identity. Pronouns below
+are each character's own; like the player's, identity is theirs and surfaces
+only where it's meaningful.
+
+| Name | Pronouns | Species | Personality | District | Arc Theme |
+|---|---|---|---|---|---|
+| **Vael** | she/her | Bioluminescent tall being | Stoic soldier, guarded | Citadel Ring | Learning to trust again |
+| **Zix** | they/them | Hivemind colony | Chaotic hacker, witty | The Grid | Running from their past |
+| **Sora** | she/they | Plant-fungal hybrid | Gentle botanist, wise | Bloom District | Belonging vs. duty |
+| **Carro** | he/him | Reptilian cold-blood | Slick merchant, morally grey | Docking Quarter | Redemption |
+| **Miko** | he/they | Feathered avian | Rebel musician, passionate | The Shallows | Finding their voice |
  
 ### Why These Species Fit
 - **Vael** — glow patterns betray emotions, making their "stoic soldier" persona dramatically ironic
