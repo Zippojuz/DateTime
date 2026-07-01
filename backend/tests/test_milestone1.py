@@ -3,6 +3,7 @@
 import pytest
 from app import create_app
 from game.calendar import GameClock
+from game.character import Character
 from game.npc import NPC
 from game.player import Player
 
@@ -145,6 +146,16 @@ def test_transform_works_once_unlocked():
     assert player.current_identity["pronouns"] == "she/her"
     # The locked snapshot is untouched.
     assert player.created_identity["pronouns"] == "they/them"
+
+
+# --- Shared model hierarchy -------------------------------------------------
+
+
+def test_player_and_npc_are_characters():
+    player = Player.create({"name": "Kai"})
+    assert isinstance(player, Character)
+    assert player.name == "Kai"
+    assert isinstance(NPC.load("vael"), Character)
 
 
 # --- NPC model (subclasses Character; mirrors the player's attributes) -------

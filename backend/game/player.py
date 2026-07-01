@@ -12,7 +12,7 @@ the story-gated transformation system (``transform``), which requires the
 matching aspect to have been unlocked.
 """
 
-from game.character import build_attributes
+from game.character import Character
 from game.errors import GameError
 
 # Identity fields captured at creation.
@@ -26,7 +26,7 @@ DEFAULT_SPECIES = "human"
 MAX_ENERGY = 100
 
 
-class Player:
+class Player(Character):
     def __init__(
         self,
         identity,
@@ -36,8 +36,10 @@ class Player:
         created_identity=None,
         unlocked_transformations=None,
     ):
+        # Character base handles name + registry attributes. The player's name
+        # is their identity name (never changeable via transform).
+        super().__init__(identity.get("name", ""), attributes)
         self.species = species
-        self.attributes = build_attributes(attributes)
         self.energy = energy
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
@@ -60,11 +62,14 @@ class Player:
             self.current_identity[aspect] = str(value)
 
     def to_dict(self):
-        return {
-            "species": self.species,
-            "attributes": dict(self.attributes),
-            "energy": self.energy,
-            "identity": dict(self.current_identity),
-            "created_identity": dict(self.created_identity),
-            "unlocked_transformations": list(self.unlocked_transformations),
-        }
+        base = super().to_dict()  # {name, attributes}
+        base.update(
+            {
+                "species": self.species,
+                "energy": self.energy,
+                "identity": dict(self.current_identity),
+                "created_identity": dict(self.created_identity),
+                "unlocked_transformations": list(self.unlocked_transformations),
+            }
+        )
+        return base
