@@ -6,6 +6,22 @@ in place so systems can be layered in per the design doc's Build Phases.
 
 ---
 
+## Architecture Decisions (locked)
+
+- **Stack:** Flask (Python) backend + React (Vite) frontend + SQLite saves.
+- **Logic authority:** **Flask is server-authoritative.** Python owns all game
+  state, rules, and the identity-gating guarantees; React is a thin view that
+  calls the API. One source of truth.
+- **Repo layout:** `backend/` and `frontend/` live at the **repo root** (this
+  repo *is* the game — no `my_jrpg/` wrapper).
+- **Frontend state:** **Zustand** — one authoritative game-state store synced
+  from the API.
+- **API:** REST, JSON, all routes under `/api`, consistent `{error, ...}` shape.
+- **Saves:** single autosave slot for now; multi-slot deferred to Phase 7.
+- **Python deps:** `venv` + `requirements.txt`.
+- **Tooling:** `ruff` + `black` (Python), `eslint` + `prettier` (JS).
+- **Tests:** `pytest` (backend) + `vitest` (frontend), one smoke test each in M0.
+
 ## Guiding Principles
 
 - **Scaffold first, features second.** Stand up the folder structure, a running
