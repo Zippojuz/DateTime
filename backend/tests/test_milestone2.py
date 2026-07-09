@@ -85,9 +85,13 @@ def test_render_pronouns_custom_fallback():
 
 
 def _make_available(client):
-    """Advance the in-game clock to 17:00 (Vael at the plaza, full tier)."""
-    # New game starts at 08:00; wait 9 hours (1h per wait).
-    for _ in range(9):
+    """Get the player to Vael: travel to the Citadel Ring, then advance to her
+    plaza window (17:00–19:00, full tier)."""
+    client.post("/api/travel", json={"to": "citadel_ring", "mode": "walk"})
+    for _ in range(12):
+        clock = client.get("/api/game/state").get_json()["clock"]
+        if 17 * 60 <= clock["minute_of_day"] < 18 * 60:
+            break
         client.post("/api/action", json={"action": "wait"})
 
 

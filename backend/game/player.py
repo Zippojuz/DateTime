@@ -24,6 +24,8 @@ MUTABLE_IDENTITY_ASPECTS = ("appearance", "pronouns", "body")
 
 DEFAULT_SPECIES = "human"
 MAX_ENERGY = 100
+STARTING_LOCATION = "docking_quarter"  # your ship docks here
+STARTING_CREDITS = 50
 
 # A small starting opinion set (expandable). Changeable later via the (future)
 # difficult preference-change mechanic.
@@ -43,12 +45,16 @@ class Player(Character):
         created_identity=None,
         unlocked_transformations=None,
         preferences=None,
+        location=STARTING_LOCATION,
+        credits=STARTING_CREDITS,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
         super().__init__(identity.get("name", ""), attributes, preferences)
         self.species = species
         self.energy = energy
+        self.location = location
+        self.credits = credits
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -75,6 +81,8 @@ class Player(Character):
             {
                 "species": self.species,
                 "energy": self.energy,
+                "location": self.location,
+                "credits": self.credits,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

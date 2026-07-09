@@ -15,7 +15,12 @@ def client():
 
 
 def _make_available(client):
-    for _ in range(9):  # 08:00 -> 17:00
+    # Travel to Vael's district, then advance to her plaza window (full tier).
+    client.post("/api/travel", json={"to": "citadel_ring", "mode": "walk"})
+    for _ in range(12):
+        clock = client.get("/api/game/state").get_json()["clock"]
+        if 17 * 60 <= clock["minute_of_day"] < 18 * 60:
+            break
         client.post("/api/action", json={"action": "wait"})
 
 

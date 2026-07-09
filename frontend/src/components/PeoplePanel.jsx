@@ -9,14 +9,17 @@ const TIER_LABEL = {
   unavailable: 'Not around',
 }
 
-// Schedule-based "who can I talk to right now" list. Real district travel and
-// the map arrive in Milestone 3.
+// Who you can reach right now. You must be in the same district as an NPC to
+// talk to them; otherwise the panel tells you where to go.
 export default function PeoplePanel() {
   const characters = useGameStore((s) => s.characters)
+  const districts = useGameStore((s) => s.districts)
   const startDialogue = useGameStore((s) => s.startDialogue)
   const busy = useGameStore((s) => s.busy)
 
   if (!characters.length) return null
+
+  const districtName = (id) => districts?.[id]?.name ?? id
 
   return (
     <section className="people-panel">
@@ -24,15 +27,18 @@ export default function PeoplePanel() {
       <ul className="people-list">
         {characters.map((c) => {
           const av = c.availability
-          const canTalk = av.available && !c.talked_today
+          const canTalk = c.reachable && !c.talked_today
+          let status
+          if (c.talked_today && c.reachable) status = 'already talked today'
+          else if (c.reachable) status = TIER_LABEL[av.tier]
+          else if (av.available && av.district) status = `in ${districtName(av.district)}`
+          else status = `${TIER_LABEL[av.tier] ?? 'Not around'} · ${districtName(c.district)}`
+
           return (
             <li key={c.id} className="person">
               <div className="person-info">
                 <strong>{c.name}</strong>
-                <span className="person-sub">
-                  {TIER_LABEL[av.tier] ?? 'Not around'}
-                  {c.talked_today && av.available ? ' · already talked today' : ''}
-                </span>
+                <span className="person-sub">{status}</span>
               </div>
               <button
                 className="btn-action"

@@ -1,0 +1,21 @@
+{
+  "flavor": [
+    "A hover-tram sighs past, its windows full of tired faces.",
+    "Steam vents from a grille, carrying the smell of someone's dinner.",
+    "Two Grid kids race drones overhead, laughing in a language you don't know.",
+    "A street preacher warns that Nexus City is dreaming, and you're all inside the dream.",
+    "Neon rain slicks the walkway; your reflection stretches long beneath you."
+  ],
+  "merchant": [
+    "A traveling merchant has set up under an awning, wares glinting. (Another time.)",
+    "A hooded vendor waves you over to a cart of odd salvage. (Not today.)"
+  ],
+  "trouble": [
+    "Someone's being cornered in an alley. You could step in — or keep walking. (You walk on.)",
+    "A pickpocket's hand brushes your coat and thinks better of it."
+  ],
+  "sighting": [
+    "You catch a glimpse of {name} across the way before the crowd swallows them.",
+    "{name} passes close enough to nod at you, already somewhere else in their head."
+  ]
+}

@@ -1,8 +1,60 @@
-"""District hours, NPC availability, and travel. (Milestone 2 / 3)
+"""Districts, travel, and NPC availability. (Milestone 2 / 3)
 
-Milestone 2 uses the schedule-based availability resolver so the player can talk
-to whoever is currently around. District travel + the map arrive in Milestone 3.
+The city is a ring of five districts. Travel between them costs time and energy
+(and credits for fast transit); adjacent hops are cheaper than cross-city. NPC
+availability is resolved from schedules, and — as of Milestone 3 — you must be
+in the same district as an NPC to reach them.
 """
+
+from game import data
+from game.errors import GameError
+
+# Travel cost by (distance, mode): distance is "adjacent" or "cross".
+TRAVEL_COST = {
+    ("adjacent", "walk"): {"minutes": 20, "energy": -8, "credits": 0},
+    ("adjacent", "transit"): {"minutes": 8, "energy": -3, "credits": 8},
+    ("cross", "walk"): {"minutes": 40, "energy": -15, "credits": 0},
+    ("cross", "transit"): {"minutes": 18, "energy": -6, "credits": 18},
+}
+
+
+def districts():
+    return data.load("districts")
+
+
+def are_adjacent(a, b):
+    d = districts()
+    return b in d.get(a, {}).get("adjacent", [])
+
+
+def travel_cost(from_id, to_id, mode):
+    distance = "adjacent" if are_adjacent(from_id, to_id) else "cross"
+    cost = TRAVEL_COST.get((distance, mode))
+    if cost is None:
+        raise GameError(f"Unknown travel mode: {mode!r}")
+    return {"distance": distance, **cost}
+
+
+def travel(player, clock, to_id, mode):
+    """Move the player to another district in place. Raises GameError on invalid
+    destinations, insufficient credits, or exhaustion. Returns the cost applied."""
+    if to_id not in districts():
+        raise GameError("There's no such district.")
+    if to_id == player.location:
+        raise GameError("You're already there.")
+
+    cost = travel_cost(player.location, to_id, mode)
+    if player.credits < cost["credits"]:
+        raise GameError("Not enough credits for transit.")
+    if player.energy + cost["energy"] < 0:
+        raise GameError("Too tired to travel — rest first.")
+
+    player.credits -= cost["credits"]
+    player.energy = max(0, player.energy + cost["energy"])
+    player.location = to_id
+    clock.advance(cost["minutes"])
+    return cost
+
 
 # Arriving-late tiers, by minutes remaining in the current availability window.
 TIER_FULL = "full"
@@ -66,11 +118,13 @@ def availability(npc, clock):
         end = _to_minutes(window["end"])
         if not _in_window(now, start, end):
             continue
+        district = window.get("district")
         if not window.get("available", True):
             return {
                 "available": False,
                 "tier": TIER_UNAVAILABLE,
                 "location": window.get("location"),
+                "district": district,
                 "minutes_left": 0,
             }
         left = _minutes_left(now, end)
@@ -79,11 +133,13 @@ def availability(npc, clock):
             "available": tier != TIER_MISSED,
             "tier": tier,
             "location": window.get("location"),
+            "district": district,
             "minutes_left": left,
         }
     return {
         "available": False,
         "tier": TIER_UNAVAILABLE,
         "location": None,
+        "district": None,
         "minutes_left": 0,
     }

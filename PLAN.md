@@ -228,11 +228,26 @@ likes; some unchangeable) — data models `changeable`, mechanic itself is next.
 - [x] Tests: real pre-migration DB upgrades in place, fresh DB gets full schema,
       `init_db` idempotent. Verified against a live legacy DB.
 
-## Milestone 3 — Breadth (Design Phase 3)
+## Milestone 3 — Breadth (Design Phase 3) ✅ DONE
 
-- [ ] Stub all 5 romanceable characters in `characters.json`.
-- [ ] All 5 districts explorable with hours and travel time/costs.
-- [ ] Travel system with time cost + placeholder random-encounter hook.
+- [x] All 5 romanceable characters in `characters.json` (Zix, Sora, Carro, Miko
+      added) with schedules (district-tagged), preferences, starting
+      dispositions, and short intro dialogue trees.
+- [x] All 5 districts (`districts.json`) as a ring with adjacency + vibes.
+- [x] Travel system (`world.travel`): walk (free, slower) vs transit (credits,
+      faster); adjacent vs cross-city costs; time + energy + credits applied.
+      Player gains `location` + `credits` (migration 3).
+- [x] **Co-location** — talking now requires being in the NPC's current district
+      (supersedes M2's talk-from-anywhere); `/api/characters` reports `reachable`.
+- [x] Random street encounters (`encounters.py` + `encounters.json`): flavor /
+      merchant / trouble / sighting (tiny affection for someone you've met).
+- [x] Frontend: TravelPanel, EncounterCard, district+credits HUD, PeoplePanel
+      co-location ("in The Grid").
+
+**Decisions:** credits system in now; talking requires physical co-location;
+4 new characters get short stub intros; encounters are a basic data-driven pass.
+**Status:** Backend 66 pytest, frontend green, lint clean, build passes.
+Verified end-to-end (travel costs, co-location gate, reach Carro, encounter).
 
 ---
 

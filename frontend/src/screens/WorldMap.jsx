@@ -4,15 +4,17 @@ import StatBar from '../components/StatBar.jsx'
 import PeoplePanel from '../components/PeoplePanel.jsx'
 import RelationshipPanel from '../components/RelationshipPanel.jsx'
 import PlayerProfile from '../components/PlayerProfile.jsx'
+import TravelPanel from '../components/TravelPanel.jsx'
+import EncounterCard from '../components/EncounterCard.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
-// The daily action loop (Milestone 1). Placeholder world — districts and travel
-// arrive in Milestone 3. For now it exercises the clock + energy systems.
+// The daily loop: check the clock/energy, travel the city, and reach people.
 export default function WorldMap() {
   const state = useGameStore((s) => s.state)
   const actions = useGameStore((s) => s.actions)
   const registry = useGameStore((s) => s.attributes)
+  const districts = useGameStore((s) => s.districts)
   const doAction = useGameStore((s) => s.doAction)
   const busy = useGameStore((s) => s.busy)
   const error = useGameStore((s) => s.error)
@@ -21,6 +23,7 @@ export default function WorldMap() {
 
   if (!state) return null
   const { player, clock } = state
+  const here = districts?.[player.location]
 
   return (
     <main className="world-map">
@@ -31,6 +34,10 @@ export default function WorldMap() {
             Week {clock.week} · {DAY_NAMES[clock.day] ?? `Day ${clock.day}`}
           </span>
         </div>
+        <div className="hud-place">
+          <span className="hud-district">{here?.name ?? player.location}</span>
+          <span className="hud-sub">{player.credits} cr</span>
+        </div>
         <div className="hud-identity">
           <strong>{player.identity.name}</strong>
           <span className="hud-sub">
@@ -39,13 +46,17 @@ export default function WorldMap() {
         </div>
       </header>
 
+      <EncounterCard />
       <StatBar />
       <PlayerProfile />
 
-      <section className="placeholder-world">
-        <p>Nexus City stretches out around you. (Districts arrive in Milestone 3.)</p>
-      </section>
+      {here && (
+        <section className="placeholder-world">
+          <p>{here.vibe}</p>
+        </section>
+      )}
 
+      <TravelPanel />
       <PeoplePanel />
       <RelationshipPanel />
 

@@ -15,11 +15,99 @@
       "fitness": { "sentiment": "like", "changeable": false }
     },
     "schedule": [
-      { "start": "06:00", "end": "08:00", "location": "citadel_ring_gym", "activity": "Morning training", "available": true },
-      { "start": "08:00", "end": "17:00", "location": "citadel_offices", "activity": "On duty", "available": false },
-      { "start": "17:00", "end": "19:00", "location": "citadel_plaza", "activity": "Decompressing", "available": true },
-      { "start": "19:00", "end": "22:00", "location": "quiet_restaurant", "activity": "Dinner alone", "available": true },
-      { "start": "22:00", "end": "06:00", "location": "home", "activity": "Home", "available": false }
+      { "start": "06:00", "end": "08:00", "district": "citadel_ring", "location": "citadel_ring_gym", "activity": "Morning training", "available": true },
+      { "start": "08:00", "end": "17:00", "district": "citadel_ring", "location": "citadel_offices", "activity": "On duty", "available": false },
+      { "start": "17:00", "end": "19:00", "district": "citadel_ring", "location": "citadel_plaza", "activity": "Decompressing", "available": true },
+      { "start": "19:00", "end": "22:00", "district": "citadel_ring", "location": "quiet_restaurant", "activity": "Dinner alone", "available": true },
+      { "start": "22:00", "end": "06:00", "district": "citadel_ring", "location": "home", "activity": "Home", "available": false }
+    ]
+  },
+  "zix": {
+    "id": "zix",
+    "name": "Zix",
+    "pronouns": "they/them",
+    "species": "Hivemind colony",
+    "personality": "Chaotic hacker, witty",
+    "district": "the_grid",
+    "arc_theme": "Running from their past",
+    "romanceable": true,
+    "starting_disposition": 0,
+    "preferences": {
+      "nightlife": { "sentiment": "love" },
+      "music": { "sentiment": "love" },
+      "fitness": { "sentiment": "dislike" }
+    },
+    "schedule": [
+      { "start": "03:00", "end": "11:00", "district": "the_grid", "location": "home", "activity": "Asleep", "available": false },
+      { "start": "11:00", "end": "14:00", "district": "the_grid", "location": "grid_market", "activity": "Wandering, grabbing food", "available": true },
+      { "start": "14:00", "end": "19:00", "district": "the_grid", "location": "zix_hideout", "activity": "Working from the hideout", "available": true },
+      { "start": "19:00", "end": "03:00", "district": "the_grid", "location": "grid_clubs", "activity": "At the clubs", "available": true }
+    ]
+  },
+  "sora": {
+    "id": "sora",
+    "name": "Sora",
+    "pronouns": "she/they",
+    "species": "Plant-fungal hybrid",
+    "personality": "Gentle botanist, wise",
+    "district": "bloom_district",
+    "arc_theme": "Belonging vs. duty",
+    "romanceable": true,
+    "starting_disposition": 5,
+    "preferences": {
+      "books": { "sentiment": "love" },
+      "fitness": { "sentiment": "like" },
+      "nightlife": { "sentiment": "dislike" }
+    },
+    "schedule": [
+      { "start": "06:00", "end": "09:00", "district": "bloom_district", "location": "bloom_gardens", "activity": "Tending the gardens", "available": true },
+      { "start": "09:00", "end": "17:00", "district": "bloom_district", "location": "conservatory", "activity": "At the conservatory", "available": true },
+      { "start": "17:00", "end": "21:00", "district": "bloom_district", "location": "bloom_gardens", "activity": "Evening walk", "available": true },
+      { "start": "21:00", "end": "06:00", "district": "bloom_district", "location": "home", "activity": "Home", "available": false }
+    ]
+  },
+  "carro": {
+    "id": "carro",
+    "name": "Carro",
+    "pronouns": "he/him",
+    "species": "Reptilian cold-blood",
+    "personality": "Slick merchant, morally grey",
+    "district": "docking_quarter",
+    "arc_theme": "Redemption",
+    "romanceable": true,
+    "starting_disposition": -5,
+    "preferences": {
+      "nightlife": { "sentiment": "love" },
+      "sports": { "sentiment": "like" },
+      "fitness": { "sentiment": "dislike" }
+    },
+    "schedule": [
+      { "start": "10:00", "end": "14:00", "district": "docking_quarter", "location": "carro_stall", "activity": "Running the stall", "available": true },
+      { "start": "14:00", "end": "18:00", "district": "docking_quarter", "location": "docks", "activity": "Meetings", "available": true },
+      { "start": "18:00", "end": "02:00", "district": "docking_quarter", "location": "dockside_bar", "activity": "At the bars", "available": true },
+      { "start": "02:00", "end": "10:00", "district": "docking_quarter", "location": "home", "activity": "Home", "available": false }
+    ]
+  },
+  "miko": {
+    "id": "miko",
+    "name": "Miko",
+    "pronouns": "he/they",
+    "species": "Feathered avian",
+    "personality": "Rebel musician, passionate",
+    "district": "the_shallows",
+    "arc_theme": "Finding their voice",
+    "romanceable": true,
+    "starting_disposition": 5,
+    "preferences": {
+      "music": { "sentiment": "love" },
+      "nightlife": { "sentiment": "like" },
+      "books": { "sentiment": "dislike" }
+    },
+    "schedule": [
+      { "start": "12:00", "end": "16:00", "district": "the_shallows", "location": "rehearsal_space", "activity": "Rehearsing", "available": true },
+      { "start": "16:00", "end": "19:00", "district": "the_shallows", "location": "shallows_market", "activity": "At the markets", "available": true },
+      { "start": "19:00", "end": "02:00", "district": "the_shallows", "location": "music_venue", "activity": "Playing the venue", "available": true },
+      { "start": "02:00", "end": "12:00", "district": "the_shallows", "location": "home", "activity": "Home", "available": false }
     ]
   }
 }

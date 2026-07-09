@@ -8,7 +8,7 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from game import data, dialogue, preferences, save, social, world
+from game import data, dialogue, encounters, preferences, save, social, world
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError
 from game.npc import NPC
@@ -43,6 +43,10 @@ def create_app():
     @app.get("/api/topics")
     def topics():
         return jsonify(data.load("topics"))
+
+    @app.get("/api/districts")
+    def districts():
+        return jsonify(data.load("districts"))
 
     # --- Game state ---
 
@@ -100,7 +104,7 @@ def create_app():
         models = save.load_models()
         if models is None:
             return jsonify(error="No game in progress."), 404
-        save_id, _player, clock = models
+        save_id, player, clock = models
         day = _day_index(clock)
         rels = social.all_relationships(save_id, day)
         result = []
@@ -112,15 +116,46 @@ def create_app():
             payload["preferences"] = {
                 t: pref for t, pref in payload["preferences"].items() if t in known
             }
+            avail = world.availability(npc, clock)
             result.append(
                 {
                     **payload,
-                    "availability": world.availability(npc, clock),
+                    "availability": avail,
+                    # Reachable only if available AND in your current district.
+                    "reachable": avail["available"] and avail.get("district") == player.location,
                     "affection": rel.get("affection", 0),
                     "talked_today": rel.get("last_talked_day") == day,
                 }
             )
         return jsonify(result)
+
+    @app.post("/api/travel")
+    def travel():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            world.travel(player, clock, body.get("to"), body.get("mode", "walk"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+
+        day = _day_index(clock)
+        rels = social.all_relationships(save_id, day)
+        met_ids = {cid for cid, rel in rels.items() if rel.get("last_talked_day", 0) > 0}
+        present = {
+            cid: npc.name
+            for cid, npc in NPC.load_all().items()
+            if (a := world.availability(npc, clock))["available"]
+            and a.get("district") == player.location
+        }
+        encounter = encounters.roll_encounter(present, met_ids)
+        if encounter and encounter.get("affection"):
+            social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
+
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "encounter": encounter})
 
     @app.post("/api/dialogue/start")
     def dialogue_start():
@@ -137,6 +172,10 @@ def create_app():
         avail = world.availability(npc, clock)
         if not avail["available"]:
             return jsonify(error=f"{npc.name} isn't available right now."), 400
+        if avail.get("district") != player.location:
+            districts = data.load("districts")
+            where = districts.get(avail.get("district"), {}).get("name", "another district")
+            return jsonify(error=f"You need to be in {where} to reach {npc.name}."), 400
         if social.has_talked_today(save_id, npc.id, _day_index(clock)):
             return jsonify(error=f"You've already spent real time with {npc.name} today."), 400
 

@@ -46,6 +46,8 @@ def load_models():
         created_identity=json.loads(row["created_identity"]),
         unlocked_transformations=json.loads(row["unlocked_transformations"]),
         preferences=json.loads(row["preferences"]),
+        location=row["location"],
+        credits=row["credits"],
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -69,6 +71,7 @@ def save_models(save_id, player, clock):
         conn.execute(
             """UPDATE player SET
                    species=?, attributes=?, preferences=?, energy=?,
+                   location=?, credits=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
@@ -77,6 +80,8 @@ def save_models(save_id, player, clock):
                 json.dumps(player.attributes),
                 json.dumps(player.preferences),
                 player.energy,
+                player.location,
+                player.credits,
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
                 json.dumps(player.unlocked_transformations),
@@ -96,15 +101,18 @@ def _insert_player(conn, save_id, player, clock):
     conn.execute(
         """INSERT INTO player (
                save_id, species, attributes, preferences, energy,
+               location, credits,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
             json.dumps(player.attributes),
             json.dumps(player.preferences),
             player.energy,
+            player.location,
+            player.credits,
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),
             json.dumps(player.unlocked_transformations),

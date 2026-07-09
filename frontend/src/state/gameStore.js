@@ -16,6 +16,10 @@ export const useGameStore = create((set, get) => ({
   attributes: null, // registry: { id: {name, description, ...} }
   actions: null, // { id: {label, minutes, energy, ...} }
   topics: null, // registry: { id: {name, changeable} }
+  districts: null, // registry: { id: {name, vibe, adjacent} }
+
+  // The most recent travel encounter, shown then dismissed.
+  lastEncounter: null,
 
   // Current game state from the server: { player, clock }
   state: null,
@@ -33,12 +37,13 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics] = await Promise.all([
+      const [attributes, actions, topics, districts] = await Promise.all([
         api.attributes(),
         api.actions(),
         api.topics(),
+        api.districts(),
       ])
-      set({ attributes, actions, topics, connection: 'ok' })
+      set({ attributes, actions, topics, districts, connection: 'ok' })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return
@@ -94,6 +99,19 @@ export const useGameStore = create((set, get) => ({
       set({ error: err.message, busy: false })
     }
   },
+
+  travel: async (to, mode) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.travel(to, mode)
+      set({ state: res.state, lastEncounter: res.encounter, busy: false })
+      get().loadCharacters() // reachability changes with location + time
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  dismissEncounter: () => set({ lastEncounter: null }),
 
   startDialogue: async (npcId) => {
     set({ busy: true, error: null })

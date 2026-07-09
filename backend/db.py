@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS player (
     created_identity         TEXT    NOT NULL,               -- JSON, immutable snapshot
     current_identity         TEXT    NOT NULL,               -- JSON
     unlocked_transformations TEXT    NOT NULL DEFAULT '[]',  -- JSON list
+    location                 TEXT    NOT NULL DEFAULT 'docking_quarter',
+    credits                  INTEGER NOT NULL DEFAULT 50,
     clock_week               INTEGER NOT NULL DEFAULT 1,
     clock_day                INTEGER NOT NULL DEFAULT 1,
     clock_minute             INTEGER NOT NULL DEFAULT 480
@@ -93,9 +95,16 @@ def _m2_preferences_and_memory(conn):
     _add_column(conn, "relationships", "memories", "TEXT NOT NULL DEFAULT '[]'")
 
 
+def _m3_location_and_credits(conn):
+    """Add player location + credits (Milestone 3: travel)."""
+    _add_column(conn, "player", "location", "TEXT NOT NULL DEFAULT 'docking_quarter'")
+    _add_column(conn, "player", "credits", "INTEGER NOT NULL DEFAULT 50")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
+    _m3_location_and_credits,
 ]
 
 

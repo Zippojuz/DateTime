@@ -1,12 +1,32 @@
 {
+  "docking_quarter": {
+    "id": "docking_quarter",
+    "name": "The Docking Quarter",
+    "vibe": "Seedy bars, shady merchants, the docks never close.",
+    "adjacent": ["the_shallows", "the_grid"]
+  },
+  "the_grid": {
+    "id": "the_grid",
+    "name": "The Grid",
+    "vibe": "Tech and hacker district — neon, underground clubs.",
+    "adjacent": ["docking_quarter", "citadel_ring"]
+  },
   "citadel_ring": {
     "id": "citadel_ring",
     "name": "The Citadel Ring",
-    "vibe": "Government, military, bureaucrats",
-    "hours": {
-      "offices": { "open": "08:00", "close": "17:00" },
-      "plaza": "24h"
-    },
-    "adjacent": ["bloom_district", "the_grid"]
+    "vibe": "Government, military, bureaucrats.",
+    "adjacent": ["the_grid", "bloom_district"]
+  },
+  "bloom_district": {
+    "id": "bloom_district",
+    "name": "The Bloom District",
+    "vibe": "Alien flora, upscale, diplomatic types.",
+    "adjacent": ["citadel_ring", "the_shallows"]
+  },
+  "the_shallows": {
+    "id": "the_shallows",
+    "name": "The Shallows",
+    "vibe": "Lower city — working class, markets, danger.",
+    "adjacent": ["bloom_district", "docking_quarter"]
   }
 }

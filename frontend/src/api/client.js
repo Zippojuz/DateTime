@@ -24,6 +24,9 @@ export const api = {
   attributes: () => request('/attributes'),
   actions: () => request('/actions'),
   topics: () => request('/topics'),
+  districts: () => request('/districts'),
+  travel: (to, mode) =>
+    request('/travel', { method: 'POST', body: JSON.stringify({ to, mode }) }),
   getState: () => request('/game/state'),
   newGame: (identity) =>
     request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),

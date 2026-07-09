@@ -48,5 +48,78 @@
         ]
       }
     }
+  },
+  "zix_intro": {
+    "id": "zix_intro",
+    "npc": "zix",
+    "start": "z1",
+    "nodes": {
+      "z1": {
+        "text": "Three of the little bodies turn toward you at once; the rest keep working. \"Fresh face. You buying, selling, or lost?\"",
+        "choices": [
+          { "text": "Just curious about the Grid.", "next": "z2", "affection": 2 },
+          { "text": "[Wit] Depends which of you I'm asking.", "next": "z2", "affection": 3, "requires": { "wit": 6 } },
+          { "text": "Lost, mostly.", "next": "z2", "affection": 1 }
+        ]
+      },
+      "z2": {
+        "text": "A grin ripples across the colony in sequence. \"Honest. I like honest — it's rare down here. Stick around, drifter.\"",
+        "choices": [{ "text": "Maybe I will.", "next": null, "affection": 2 }]
+      }
+    }
+  },
+  "sora_intro": {
+    "id": "sora_intro",
+    "npc": "sora",
+    "start": "s1",
+    "nodes": {
+      "s1": {
+        "text": "Sora looks up from a bed of luminous vines, spores drifting faintly around them. \"Oh — a visitor. The garden doesn't get many.\"",
+        "choices": [
+          { "text": "It's beautiful in here.", "next": "s2", "affection": 3 },
+          { "text": "Sorry, am I intruding?", "next": "s2", "affection": 1 }
+        ]
+      },
+      "s2": {
+        "text": "The spores warm to a soft gold. \"Not at all. Stay as long as you like. Growing things are patient with company.\"",
+        "choices": [{ "text": "Thank you, Sora.", "next": null, "affection": 2 }]
+      }
+    }
+  },
+  "carro_intro": {
+    "id": "carro_intro",
+    "npc": "carro",
+    "start": "c1",
+    "nodes": {
+      "c1": {
+        "text": "Carro's nictitating eyes flick over you once, pricing you out. \"New in the Quarter. Everyone here wants something. What's your poison?\"",
+        "choices": [
+          { "text": "Just looking around.", "next": "c2", "affection": 1 },
+          { "text": "[Charm] Maybe I'm just enjoying the view.", "next": "c2", "affection": 3, "requires": { "charm": 6 } }
+        ]
+      },
+      "c2": {
+        "text": "A slow, unhurried smile. \"Cheap answer. But I'll remember you gave it.\" He always remembers.",
+        "choices": [{ "text": "I'll be back.", "next": null, "affection": 1 }]
+      }
+    }
+  },
+  "miko_intro": {
+    "id": "miko_intro",
+    "npc": "miko",
+    "start": "m1",
+    "nodes": {
+      "m1": {
+        "text": "Miko's plumage flares bright as they hit the last chord, then notices you watching. \"...Oh. How much of that did you catch?\"",
+        "choices": [
+          { "text": "Enough to want more.", "next": "m2", "affection": 3 },
+          { "text": "All of it. You're good.", "next": "m2", "affection": 2 }
+        ]
+      },
+      "m2": {
+        "text": "The feathers can't lie — they ripple gold with pleasure before Miko can play it cool. \"Yeah? Then come to the venue tonight. Really hear it.\"",
+        "choices": [{ "text": "I'll be there.", "next": null, "affection": 2 }]
+      }
+    }
   }
 }
