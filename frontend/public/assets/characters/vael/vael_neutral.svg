@@ -1,0 +1,151 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 760" width="600" height="760" role="img" aria-label="Vael — bioluminescent soldier, neutral expression">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#132444"/>
+      <stop offset="55%" stop-color="#0b1428"/>
+      <stop offset="100%" stop-color="#070b16"/>
+    </radialGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7fd8ea"/>
+      <stop offset="45%" stop-color="#4b9fbf"/>
+      <stop offset="100%" stop-color="#20516e"/>
+    </linearGradient>
+    <linearGradient id="skinShadow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2f6a86"/>
+      <stop offset="100%" stop-color="#173b53"/>
+    </linearGradient>
+    <linearGradient id="armor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#26324e"/>
+      <stop offset="100%" stop-color="#101728"/>
+    </linearGradient>
+    <linearGradient id="armorLip" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3a4a70"/>
+      <stop offset="100%" stop-color="#1b2740"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#12203a"/>
+      <stop offset="100%" stop-color="#0a1120"/>
+    </linearGradient>
+    <radialGradient id="eye" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ccfbff"/>
+      <stop offset="55%" stop-color="#43e4ff"/>
+      <stop offset="100%" stop-color="#1596c8"/>
+    </radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+
+  <!-- Background: Citadel Ring at night -->
+  <rect width="600" height="760" fill="url(#bg)"/>
+  <g fill="#2ee0ff" opacity="0.16" filter="url(#softGlow)">
+    <circle cx="86" cy="150" r="5"/>
+    <circle cx="520" cy="120" r="6"/>
+    <circle cx="70" cy="470" r="4"/>
+    <circle cx="545" cy="430" r="5"/>
+    <circle cx="150" cy="620" r="4"/>
+    <circle cx="470" cy="640" r="4"/>
+  </g>
+  <g stroke="#1f8bd0" stroke-width="1" opacity="0.10">
+    <line x1="0" y1="560" x2="600" y2="560"/>
+    <line x1="0" y1="600" x2="600" y2="600"/>
+    <line x1="130" y1="520" x2="130" y2="760"/>
+    <line x1="470" y1="520" x2="470" y2="760"/>
+  </g>
+
+  <!-- Ambient halo behind the figure -->
+  <ellipse cx="300" cy="330" rx="180" ry="220" fill="#1a6f9c" opacity="0.28" filter="url(#softGlow)"/>
+
+  <!-- Shoulders / pauldron armor -->
+  <g>
+    <path d="M120,760 L120,600 C120,548 168,512 232,506 L300,502 L368,506 C432,512 480,548 480,600 L480,760 Z" fill="url(#armor)"/>
+    <!-- Left pauldron -->
+    <path d="M112,612 C110,560 150,520 214,512 C206,548 200,584 208,624 C176,648 140,656 112,648 Z" fill="url(#armor)" stroke="#3fe3ff" stroke-width="2" stroke-opacity="0.55"/>
+    <!-- Right pauldron -->
+    <path d="M488,612 C490,560 450,520 386,512 C394,548 400,584 392,624 C424,648 460,656 488,648 Z" fill="url(#armor)" stroke="#3fe3ff" stroke-width="2" stroke-opacity="0.55"/>
+    <!-- Collar accents -->
+    <path d="M236,560 L300,548 L364,560" fill="none" stroke="#48e6ff" stroke-width="3" stroke-linecap="round" filter="url(#glow)" opacity="0.9"/>
+    <!-- Chest emblem -->
+    <path d="M300,590 l16,26 -16,26 -16,-26 Z" fill="none" stroke="#5cecff" stroke-width="2.5" filter="url(#glow)"/>
+  </g>
+
+  <!-- Neck -->
+  <path d="M270,432 C270,470 272,488 276,504 L324,504 C328,488 330,470 330,432 Z" fill="url(#skinShadow)"/>
+  <!-- Neck bioluminescent lines -->
+  <g stroke="#5cecff" stroke-width="2" fill="none" filter="url(#glow)" opacity="0.85" stroke-linecap="round">
+    <path d="M286,438 C284,462 286,482 292,500"/>
+    <path d="M314,438 C316,462 314,482 308,500"/>
+  </g>
+
+  <!-- Back hair / head crest behind face -->
+  <path d="M212,150 C226,96 372,96 388,150 C404,206 400,300 372,352 C388,270 384,182 356,150 C330,124 270,124 244,150 C216,182 212,270 228,352 C200,300 196,206 212,150 Z" fill="url(#hair)"/>
+
+  <!-- Face -->
+  <path d="M300,112
+           C250,112 219,152 217,212
+           C215,262 226,304 248,344
+           C264,376 282,402 300,414
+           C318,402 336,376 352,344
+           C374,304 385,262 383,212
+           C381,152 350,112 300,112 Z" fill="url(#skin)"/>
+  <!-- Cheek / jaw shading -->
+  <path d="M300,414 C282,402 264,376 248,344 C238,324 231,302 226,280 C240,330 264,384 300,410 Z" fill="#1c4761" opacity="0.5"/>
+  <path d="M300,414 C318,402 336,376 352,344 C362,324 369,302 374,280 C360,330 336,384 300,410 Z" fill="#8fe3f2" opacity="0.18"/>
+
+  <!-- Pointed alien ears -->
+  <path d="M214,244 C198,236 190,214 198,196 C210,206 218,224 220,248 Z" fill="url(#skinShadow)"/>
+  <path d="M386,244 C402,236 410,214 402,196 C390,206 382,224 380,248 Z" fill="url(#skinShadow)"/>
+
+  <!-- Front hair sweep -->
+  <path d="M300,112 C256,112 224,144 219,198 C244,168 268,152 300,150 C332,152 356,168 381,198 C376,144 344,112 300,112 Z" fill="url(#hair)"/>
+  <path d="M219,198 C226,180 236,166 250,156 C240,176 236,196 238,214 C230,210 223,205 219,198 Z" fill="#14243f"/>
+
+  <!-- Brows -->
+  <path d="M244,236 C258,228 278,228 290,234" fill="none" stroke="#153244" stroke-width="4" stroke-linecap="round"/>
+  <path d="M356,236 C342,228 322,228 310,234" fill="none" stroke="#153244" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- Eyes -->
+  <g>
+    <path d="M250,258 C262,246 286,246 296,258 C286,270 262,270 250,258 Z" fill="#0b1f2c"/>
+    <path d="M304,258 C314,246 338,246 350,258 C338,270 314,270 304,258 Z" fill="#0b1f2c"/>
+    <ellipse cx="273" cy="258" rx="12" ry="9" fill="url(#eye)" filter="url(#glow)"/>
+    <ellipse cx="327" cy="258" rx="12" ry="9" fill="url(#eye)" filter="url(#glow)"/>
+    <circle cx="270" cy="256" r="2.6" fill="#eafeff"/>
+    <circle cx="324" cy="256" r="2.6" fill="#eafeff"/>
+  </g>
+
+  <!-- Nose ridge -->
+  <path d="M300,262 C296,286 294,306 300,322 C304,318 308,314 310,308" fill="none" stroke="#1a4258" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Mouth: composed, guarded — a calm level line -->
+  <path d="M280,353 C292,351 308,351 320,353" fill="none" stroke="#123141" stroke-width="4" stroke-linecap="round"/>
+  <path d="M285,358 C294,359 306,359 315,358" fill="none" stroke="#3a7f97" stroke-width="1.8" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- Bioluminescent facial markings (involuntary glow — steady blue = calm) -->
+  <g stroke="#63eeff" stroke-width="2.2" fill="none" filter="url(#glow)" stroke-linecap="round">
+    <!-- Forehead crest -->
+    <path d="M300,150 L300,206"/>
+    <path d="M300,168 l14,10 M300,168 l-14,10"/>
+    <path d="M300,150 l9,-14 -9,-10 -9,10 Z" fill="#63eeff" fill-opacity="0.85"/>
+    <!-- Left cheek sweep -->
+    <path d="M256,286 C250,308 254,330 268,348"/>
+    <!-- Right cheek sweep -->
+    <path d="M344,286 C350,308 346,330 332,348"/>
+    <!-- Temple ticks -->
+    <path d="M232,232 l14,6 M368,232 l-14,6"/>
+  </g>
+  <g fill="#9df6ff" filter="url(#glow)">
+    <circle cx="256" cy="286" r="2.6"/>
+    <circle cx="344" cy="286" r="2.6"/>
+    <circle cx="268" cy="348" r="2.4"/>
+    <circle cx="332" cy="348" r="2.4"/>
+    <circle cx="300" cy="206" r="2.6"/>
+  </g>
+</svg>
