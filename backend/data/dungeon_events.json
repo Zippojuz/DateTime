@@ -1,0 +1,50 @@
+{
+  "derelict_terminal": {
+    "id": "derelict_terminal",
+    "text": "A derelict terminal still glows in the dark, cursor blinking like it's been waiting for you.",
+    "choices": [
+      { "text": "[Wit] Hack it.", "stat": "wit", "dc": 7, "success": { "type": "credits", "amount": 25, "text": "Old crypto-wallets crack open. Someone's rainy-day fund is now yours." }, "failure": { "type": "damage", "amount": 8, "text": "Counter-intrusion bites back — feedback arcs up your arm." } },
+      { "text": "Leave it alone.", "outcome": { "type": "nothing", "text": "You step past. The cursor blinks on behind you, patient as ever." } }
+    ]
+  },
+  "healing_pod": {
+    "id": "healing_pod",
+    "text": "A medical pod hums in an alcove, its glass fogged, its systems miraculously intact.",
+    "choices": [
+      { "text": "Climb in.", "outcome": { "type": "heal", "amount": 999, "text": "Warm gel, soft light, a chime like a hotel bell. You step out whole." } },
+      { "text": "Keep moving.", "outcome": { "type": "nothing", "text": "No time to nap in strange machinery." } }
+    ]
+  },
+  "vending_machine": {
+    "id": "vending_machine",
+    "text": "A vending machine flickers to life as you pass, playing a jingle from a company that no longer exists.",
+    "choices": [
+      { "text": "Pay 10 cr for a mystery can.", "cost": 10, "outcome": { "type": "item", "item": "stim_tea", "text": "It dispenses a warm can of Stim Tea and thanks you in three dead languages." } },
+      { "text": "Walk on.", "outcome": { "type": "nothing", "text": "The jingle loops sadly behind you." } }
+    ]
+  },
+  "glitch_shrine": {
+    "id": "glitch_shrine",
+    "text": "A knot of corrupted holograms has arranged itself into something like a shrine. It radiates... goodwill?",
+    "choices": [
+      { "text": "Offer a moment of respect.", "outcome": { "type": "buff", "amount": 3, "text": "The glitch settles over your shoulders like a mantle. Your strikes feel guided. (+3 attack this run)" } },
+      { "text": "Ask it for mending.", "outcome": { "type": "heal", "amount": 30, "text": "Pixel-light knits across your bruises." } }
+    ]
+  },
+  "trapped_crate": {
+    "id": "trapped_crate",
+    "text": "A supply crate sits in the open, suspiciously pristine, practically gift-wrapped.",
+    "choices": [
+      { "text": "[Courage] Pry it open.", "stat": "courage", "dc": 7, "success": { "type": "credits", "amount": 35, "text": "Inside: hard currency and no regrets." }, "failure": { "type": "damage", "amount": 12, "text": "The lid was the trap. The blast leaves your ears ringing." } },
+      { "text": "Too obvious. Skip it.", "outcome": { "type": "nothing", "text": "You've seen this trick before." } }
+    ]
+  },
+  "flirt_hologram": {
+    "id": "flirt_hologram",
+    "text": "A hostess hologram sparks awake — gorgeous, glitching, delighted to see a guest after all these years. She blows you a pixelated kiss.",
+    "choices": [
+      { "text": "Flirt back.", "outcome": { "type": "heal", "amount": 15, "text": "She laughs, dips you in a dance hold that isn't there, and somehow you leave lighter on your feet." } },
+      { "text": "Politely decline.", "outcome": { "type": "nothing", "text": "She curtsies, unbothered. \"The Substrate keeps all its beautiful things. You'll be back.\"" } }
+    ]
+  }
+}

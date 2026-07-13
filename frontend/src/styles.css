@@ -806,6 +806,250 @@ body {
   color: var(--error);
 }
 
+/* --- The Substrate (dungeon) --- */
+
+.substrate-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+  color: var(--accent);
+}
+
+.substrate-blurb {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.substrate-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.substrate-controls select {
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 4px;
+  color: var(--text);
+  padding: 0.5rem 0.6rem;
+  font-family: inherit;
+}
+
+.dungeon-screen {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.dungeon-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px solid #26304a;
+  padding-bottom: 1rem;
+}
+
+.dungeon-title {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.2rem;
+  color: var(--accent);
+}
+
+.dungeon-floor {
+  color: var(--text-dim);
+}
+
+.dungeon-player {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  font-variant-numeric: tabular-nums;
+}
+
+.dungeon-xp {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.dungeon-rooms {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.droom {
+  width: 2rem;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #26304a;
+  border-radius: 4px;
+  color: var(--text-dim);
+}
+
+.droom--here {
+  border-color: var(--neon);
+  color: var(--neon);
+  box-shadow: 0 0 8px var(--neon-dim);
+}
+
+.droom--done {
+  opacity: 0.45;
+}
+
+.dungeon-card {
+  background: var(--bg-panel);
+  border-radius: 8px;
+  padding: 1.25rem;
+}
+
+.dungeon-text {
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+.dungeon-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dungeon-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* --- Battle --- */
+
+.battle {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.battle-enemy {
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.battle-enemy--boss {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px rgba(255, 93, 162, 0.25);
+}
+
+.battle-enemy-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.battle-role {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--accent);
+}
+
+.battle-desc {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.battle-log {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.88rem;
+  min-height: 4.5rem;
+}
+
+.battle-log p {
+  margin: 0.15rem 0;
+}
+
+.battle-you {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.battle-charge {
+  color: var(--neon);
+  letter-spacing: 0.15rem;
+  white-space: nowrap;
+}
+
+.battle-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.hpbar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.hpbar-label {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.hpbar-track {
+  flex: 1;
+  height: 10px;
+  background: #26304a;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.hpbar-fill {
+  display: block;
+  height: 100%;
+  transition: width 0.25s ease;
+}
+
+.hpbar-fill--you {
+  background: var(--neon);
+}
+
+.hpbar-fill--enemy {
+  background: var(--error);
+}
+
+.hpbar-num {
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+/* --- Elements --- */
+
+.element {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 3px;
+  border: 1px solid currentColor;
+}
+
+.element--kinetic { color: #c0c8d8; }
+.element--thermal { color: #ff7a4d; }
+.element--cryo { color: #7ad9ff; }
+.element--voltaic { color: #ffe95a; }
+.element--toxin { color: #8dff7a; }
+.element--psionic { color: #d98aff; }
+
 /* --- Dialogue overlay --- */
 
 .dialogue-overlay {

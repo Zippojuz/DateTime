@@ -119,12 +119,23 @@ def _m5_inventory_and_gifts(conn):
     _add_column(conn, "relationships", "last_gift_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m6_combat_and_dungeon(conn):
+    """Add combat level/XP, difficulty, and dungeon/combat run state (Milestone 5)."""
+    _add_column(conn, "player", "combat_level", "INTEGER NOT NULL DEFAULT 1")
+    _add_column(conn, "player", "combat_xp", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "player", "difficulty", "TEXT NOT NULL DEFAULT 'normal'")
+    _add_column(conn, "player", "max_floor", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "player", "dungeon", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "player", "combat", "TEXT NOT NULL DEFAULT '{}'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
     _m3_location_and_credits,
     _m4_jobs_debt_events,
     _m5_inventory_and_gifts,
+    _m6_combat_and_dungeon,
 ]
 
 

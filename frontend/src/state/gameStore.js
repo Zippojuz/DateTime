@@ -44,6 +44,12 @@ export const useGameStore = create((set, get) => ({
   // Active dialogue: null | { npcId, npcName, tier, node, lastGained }
   dialogue: null,
 
+  // The Substrate: { run, combat, stats, skills, xp_to_next } from the server,
+  // plus the last room/outcome result for display.
+  dungeon: null,
+  dungeonResult: null,
+  difficulties: null,
+
   busy: false,
   error: null,
 
@@ -82,6 +88,7 @@ export const useGameStore = create((set, get) => ({
       get().loadCharacters()
       get().loadJobs()
       get().loadShop()
+      get().loadDungeon() // resume a mid-run Substrate dive
     }
   },
 
@@ -93,6 +100,7 @@ export const useGameStore = create((set, get) => ({
       get().loadCharacters()
       get().loadJobs()
       get().loadShop()
+      get().loadDungeon()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -196,6 +204,85 @@ export const useGameStore = create((set, get) => ({
   },
 
   dismissReaction: () => set({ lastReaction: null }),
+
+  // --- The Substrate (dungeon + combat) ---
+
+  loadDungeon: async () => {
+    try {
+      const [dungeon, difficulties] = await Promise.all([
+        api.dungeonState(),
+        api.difficulties(),
+      ])
+      set({ dungeon, difficulties })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  enterDungeon: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dungeonEnter()
+      set({ dungeon: res, state: res.state, dungeonResult: null, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  advanceDungeon: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dungeonAdvance()
+      set({ dungeon: res, state: res.state, dungeonResult: res.result, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  chooseDungeonEvent: async (choiceIndex) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dungeonEvent(choiceIndex)
+      set({ dungeon: res, state: res.state, dungeonResult: res.result, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  leaveDungeon: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dungeonLeave()
+      set({ dungeon: res, state: res.state, dungeonResult: null, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  combatAct: async (action, extra = {}) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.combatAction({ action, ...extra })
+      set({
+        dungeon: res,
+        state: res.state,
+        dungeonResult: res.outcome ? { type: 'combat', ...res.outcome } : get().dungeonResult,
+        busy: false,
+      })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  setDifficulty: async (level) => {
+    set({ busy: true, error: null })
+    try {
+      const state = await api.setDifficulty(level)
+      set({ state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
 
   doAction: async (action, attribute) => {
     set({ busy: true, error: null })

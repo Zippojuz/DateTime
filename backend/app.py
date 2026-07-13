@@ -9,8 +9,10 @@ from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from game import (
+    combat,
     data,
     dialogue,
+    dungeon,
     encounters,
     events,
     gifts,
@@ -320,6 +322,146 @@ def create_app():
                 "affection": social.get_affection(save_id, npc.id, day),
             }
         )
+
+    # --- The Substrate: dungeon + combat (Milestone 5) ---
+
+    def _dungeon_payload(player):
+        run = dict(player.dungeon) if player.dungeon.get("active") else None
+        if run:
+            # Redact rooms ahead of the player — no map spoilers.
+            run["rooms"] = [
+                room if i <= run["room"] else {"type": "unknown"}
+                for i, room in enumerate(run["rooms"])
+            ]
+            run["pending_event_data"] = (
+                data.load("dungeon_events")[run["pending_event"]]
+                if run.get("pending_event")
+                else None
+            )
+        return {
+            "run": run,
+            "combat": dict(player.combat) if player.combat.get("active") else None,
+            "stats": combat.player_stats(player),
+            "skills": combat.unlocked_skills(player.combat_level),
+            "xp_to_next": combat.xp_to_next(player.combat_level),
+        }
+
+    @app.get("/api/dungeon/state")
+    def dungeon_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, _clock = models
+        return jsonify(_dungeon_payload(player))
+
+    @app.post("/api/dungeon/enter")
+    def dungeon_enter():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            dungeon.enter(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({**_dungeon_payload(player), "state": save.state_dict(player, clock)})
+
+    @app.post("/api/dungeon/advance")
+    def dungeon_advance():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = dungeon.advance(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {**_dungeon_payload(player), "result": result, "state": save.state_dict(player, clock)}
+        )
+
+    @app.post("/api/dungeon/event")
+    def dungeon_event():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = dungeon.choose_event(player, body.get("choice_index"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {**_dungeon_payload(player), "result": result, "state": save.state_dict(player, clock)}
+        )
+
+    @app.post("/api/dungeon/leave")
+    def dungeon_leave():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = dungeon.leave(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {**_dungeon_payload(player), "result": result, "state": save.state_dict(player, clock)}
+        )
+
+    @app.post("/api/combat/action")
+    def combat_action():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        if not player.combat.get("active"):
+            return jsonify(error="You're not in a fight."), 400
+        try:
+            combat.act(
+                player,
+                player.combat,
+                body.get("action"),
+                skill_id=body.get("skill_id"),
+                item_id=body.get("item_id"),
+            )
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+
+        outcome = None
+        if player.combat.get("over"):
+            outcome = dungeon.finish_combat(player)
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {
+                **_dungeon_payload(player),
+                "outcome": outcome,
+                "state": save.state_dict(player, clock),
+            }
+        )
+
+    @app.get("/api/difficulty")
+    def difficulty_options():
+        return jsonify(data.load("difficulty"))
+
+    @app.post("/api/difficulty")
+    def set_difficulty():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        level = body.get("level")
+        if level not in data.load("difficulty"):
+            return jsonify(error="Unknown difficulty."), 400
+        player.difficulty = level
+        save.save_models(save_id, player, clock)
+        return jsonify(save.state_dict(player, clock))
 
     @app.post("/api/dialogue/start")
     def dialogue_start():

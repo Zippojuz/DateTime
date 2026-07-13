@@ -1,0 +1,23 @@
+{
+  "easy": {
+    "name": "Easy",
+    "enemy_hp": 0.75,
+    "enemy_attack": 0.7,
+    "xp": 1.0,
+    "description": "For the story and the company. Enemies hit soft."
+  },
+  "normal": {
+    "name": "Normal",
+    "enemy_hp": 1.0,
+    "enemy_attack": 1.0,
+    "xp": 1.0,
+    "description": "The Substrate as intended."
+  },
+  "hard": {
+    "name": "Hard",
+    "enemy_hp": 1.35,
+    "enemy_attack": 1.25,
+    "xp": 1.2,
+    "description": "They hit harder, you learn faster."
+  }
+}

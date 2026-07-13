@@ -1,8 +1,182 @@
 {
-  "dock_tough": {
-    "id": "dock_tough",
-    "name": "Dock Tough",
-    "description": "Muscle-for-hire who works the seedy end of the Docking Quarter.",
-    "stats": { "hp": 20, "attack": 5, "defense": 2 }
+  "holo_siren": {
+    "id": "holo_siren",
+    "name": "Holo-Siren",
+    "tier": 1,
+    "role": "normal",
+    "element": "psionic",
+    "description": "A dancer of pure light, all curve and shimmer, whose looping song slides straight into your neural lace and asks you to stay.",
+    "hp": 26, "attack": 7, "defense": 2, "speed": 8,
+    "xp": 12, "credits": 6
+  },
+  "chrome_vixen": {
+    "id": "chrome_vixen",
+    "name": "Chrome Vixen",
+    "tier": 1,
+    "role": "normal",
+    "element": "kinetic",
+    "description": "A gynoid with a predator's grace and a showgirl's smile, mirror-polished and moving like she's always mid-performance.",
+    "hp": 32, "attack": 8, "defense": 3, "speed": 6,
+    "xp": 14, "credits": 8
+  },
+  "static_nymph": {
+    "id": "static_nymph",
+    "name": "Static Nymph",
+    "tier": 1,
+    "role": "normal",
+    "element": "voltaic",
+    "description": "She flickers between wall sockets in a dress of loose current, giggling in white noise, leaving lipstick burns on the conduits.",
+    "hp": 24, "attack": 9, "defense": 1, "speed": 10,
+    "xp": 13, "credits": 7
+  },
+  "vent_dryad": {
+    "id": "vent_dryad",
+    "name": "Vent Dryad",
+    "tier": 1,
+    "role": "normal",
+    "element": "toxin",
+    "description": "An androgynous spore-being grown around the air system, willowy and languid, exhaling sweetness you know better than to breathe.",
+    "hp": 30, "attack": 7, "defense": 3, "speed": 5,
+    "xp": 13, "credits": 6
+  },
+  "cryo_duelist": {
+    "id": "cryo_duelist",
+    "name": "Cryo Duelist",
+    "tier": 2,
+    "role": "normal",
+    "element": "cryo",
+    "description": "A fencer sculpted from living ice, androgynous and elegant, who salutes before every bout and means it.",
+    "hp": 44, "attack": 12, "defense": 5, "speed": 9,
+    "xp": 22, "credits": 12
+  },
+  "plasma_dancer": {
+    "id": "plasma_dancer",
+    "name": "Plasma Dancer",
+    "tier": 2,
+    "role": "normal",
+    "element": "thermal",
+    "description": "She burns in slow motion, trailing veils of fire like silk, and every step closer raises the temperature two degrees.",
+    "hp": 40, "attack": 14, "defense": 4, "speed": 8,
+    "xp": 24, "credits": 13
+  },
+  "neural_temptress": {
+    "id": "neural_temptress",
+    "name": "Neural Temptress",
+    "tier": 2,
+    "role": "normal",
+    "element": "psionic",
+    "description": "She never moves. She doesn't need to. The whisper arrives already inside your head, wearing your own voice, asking you to lower your guard.",
+    "hp": 38, "attack": 13, "defense": 4, "speed": 7,
+    "xp": 24, "credits": 14
+  },
+  "razor_doll": {
+    "id": "razor_doll",
+    "name": "Razor Doll",
+    "tier": 2,
+    "role": "normal",
+    "element": "kinetic",
+    "description": "A porcelain-faced automaton in a ballerina's frame, beautiful until the fans of blades unfold from her sleeves.",
+    "hp": 48, "attack": 13, "defense": 6, "speed": 6,
+    "xp": 23, "credits": 12
+  },
+  "ion_valkyrie": {
+    "id": "ion_valkyrie",
+    "name": "Ion Valkyrie",
+    "tier": 3,
+    "role": "normal",
+    "element": "voltaic",
+    "description": "Winged in charged plasma, tall and radiant, she descends like judgment with a smile that says she's already chosen you.",
+    "hp": 60, "attack": 18, "defense": 7, "speed": 11,
+    "xp": 36, "credits": 20
+  },
+  "synth_medusa": {
+    "id": "synth_medusa",
+    "name": "Synth Medusa",
+    "tier": 3,
+    "role": "normal",
+    "element": "toxin",
+    "description": "Fiber-optic serpents crown her like living jewelry. Meet her gaze and your HUD starts agreeing with everything she says.",
+    "hp": 64, "attack": 17, "defense": 8, "speed": 7,
+    "xp": 38, "credits": 22
+  },
+  "mirage_twins": {
+    "id": "mirage_twins",
+    "name": "Mirage Twins",
+    "tier": 3,
+    "role": "normal",
+    "element": "psionic",
+    "description": "Two identical figures sharing one shadow, finishing each other's movements, and only one of them is ever really there.",
+    "hp": 56, "attack": 19, "defense": 6, "speed": 12,
+    "xp": 38, "credits": 21
+  },
+  "inferno_diva": {
+    "id": "inferno_diva",
+    "name": "Inferno Diva",
+    "tier": 3,
+    "role": "normal",
+    "element": "thermal",
+    "description": "An opera of heat in a gown of magma-glass. Her high note melts bulkheads; her encore is worse.",
+    "hp": 66, "attack": 18, "defense": 8, "speed": 8,
+    "xp": 40, "credits": 24
+  },
+  "warden_lyss": {
+    "id": "warden_lyss",
+    "name": "Warden Lyss",
+    "tier": 1,
+    "role": "miniboss",
+    "element": "cryo",
+    "description": "The Substrate's self-appointed jailer — statuesque, frost-armored, achingly formal. She'd rather you surrendered. She always asks nicely first.",
+    "hp": 70, "attack": 11, "defense": 6, "speed": 7,
+    "xp": 40, "credits": 30
+  },
+  "overclock_queen": {
+    "id": "overclock_queen",
+    "name": "Overclock Queen",
+    "tier": 2,
+    "role": "miniboss",
+    "element": "voltaic",
+    "description": "A regal figure on a throne of stripped processors, crowned in arcing current, ruling a court of humming fans. She thinks you're a fascinating peripheral.",
+    "hp": 95, "attack": 16, "defense": 8, "speed": 9,
+    "xp": 60, "credits": 45
+  },
+  "spore_matriarch": {
+    "id": "spore_matriarch",
+    "name": "Spore Matriarch",
+    "tier": 3,
+    "role": "miniboss",
+    "element": "toxin",
+    "description": "Mother to every bloom in the deep vents — vast, serene, and terribly fond of visitors. Her garden keeps whoever falls asleep in it.",
+    "hp": 130, "attack": 20, "defense": 10, "speed": 6,
+    "xp": 85, "credits": 60
+  },
+  "chrome_contessa": {
+    "id": "chrome_contessa",
+    "name": "The Chrome Contessa",
+    "tier": 1,
+    "role": "boss",
+    "element": "kinetic",
+    "description": "Nobility of the upper Substrate: a towering gynoid aristocrat in liquid-metal couture, flanked by curtseying drones. She duels every guest personally. It would be rude not to.",
+    "hp": 120, "attack": 14, "defense": 8, "speed": 8,
+    "xp": 80, "credits": 70
+  },
+  "neon_seraph": {
+    "id": "neon_seraph",
+    "name": "Neon Seraph",
+    "tier": 2,
+    "role": "boss",
+    "element": "voltaic",
+    "description": "Six wings of pure signal, a halo of warning glyphs, and a face you're sure you've seen in an ad you can't remember. Being noticed by her feels like sunburn.",
+    "hp": 170, "attack": 20, "defense": 10, "speed": 11,
+    "xp": 130, "credits": 110
+  },
+  "substrate_empress": {
+    "id": "substrate_empress",
+    "name": "The Substrate Empress",
+    "tier": 3,
+    "role": "boss",
+    "element": "psionic",
+    "description": "The deepest dream of the machine beneath the city, wearing a crown of every lost signal Nexus ever swallowed. She has been expecting you — she says it like an old friend would.",
+    "hp": 240, "attack": 24, "defense": 12, "speed": 10,
+    "xp": 220, "credits": 200
   }
 }

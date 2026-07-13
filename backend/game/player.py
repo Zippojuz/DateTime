@@ -56,6 +56,12 @@ class Player(Character):
         debt_due_week=DEBT_DUE_WEEK,
         fired_events=None,
         inventory=None,
+        combat_level=1,
+        combat_xp=0,
+        difficulty="normal",
+        max_floor=0,
+        dungeon=None,
+        combat=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -68,6 +74,13 @@ class Player(Character):
         self.debt_due_week = debt_due_week
         self.fired_events = list(fired_events or [])
         self.inventory = dict(inventory) if inventory is not None else {}
+        # Combat progression persists across dungeon runs ("remember your level").
+        self.combat_level = combat_level
+        self.combat_xp = combat_xp
+        self.difficulty = difficulty
+        self.max_floor = max_floor
+        self.dungeon = dict(dungeon) if dungeon else {}
+        self.combat = dict(combat) if combat else {}
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -104,6 +117,10 @@ class Player(Character):
                 "debt": self.debt,
                 "debt_due_week": self.debt_due_week,
                 "inventory": dict(self.inventory),
+                "combat_level": self.combat_level,
+                "combat_xp": self.combat_xp,
+                "difficulty": self.difficulty,
+                "max_floor": self.max_floor,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

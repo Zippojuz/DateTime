@@ -40,6 +40,20 @@ export const api = {
     request('/item/use', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
   gift: (npcId, itemId) =>
     request('/gift', { method: 'POST', body: JSON.stringify({ npc_id: npcId, item_id: itemId }) }),
+  dungeonState: () => request('/dungeon/state'),
+  dungeonEnter: () => request('/dungeon/enter', { method: 'POST', body: '{}' }),
+  dungeonAdvance: () => request('/dungeon/advance', { method: 'POST', body: '{}' }),
+  dungeonEvent: (choiceIndex) =>
+    request('/dungeon/event', {
+      method: 'POST',
+      body: JSON.stringify({ choice_index: choiceIndex }),
+    }),
+  dungeonLeave: () => request('/dungeon/leave', { method: 'POST', body: '{}' }),
+  combatAction: (payload) =>
+    request('/combat/action', { method: 'POST', body: JSON.stringify(payload) }),
+  difficulties: () => request('/difficulty'),
+  setDifficulty: (level) =>
+    request('/difficulty', { method: 'POST', body: JSON.stringify({ level }) }),
   getState: () => request('/game/state'),
   newGame: (identity) =>
     request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),

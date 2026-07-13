@@ -302,12 +302,43 @@ scenes for the other four characters.
 **Status:** Backend 93 pytest, frontend green, lint clean, build passes.
 Verified end-to-end (rarity pricing, food use, preference-driven gift + reveal).
 
+## Milestone 5 — Combat & The Substrate (Design Phase 5) ✅ DONE
+
+- [x] **JRPG turn-based combat** (`combat.py`): attack / charge-cost elemental
+      skills / guard / item / flee (never vs bosses); crits, variance; battle
+      state persists on the player (survives reloads).
+- [x] **Elements** (`elements.json`): two weakness triangles — thermal>cryo>
+      voltaic>thermal, kinetic>toxin>psionic>kinetic (1.5x weak / 0.5x resist).
+- [x] **The Substrate** (`dungeon.py`): procedurally generated floors from a
+      per-run seed (deterministic resume), 9 floors; rooms = battles, events,
+      treasure, rest; minibosses cap each floor, main bosses floors 3/6/9.
+      Entrance in The Shallows.
+- [x] **Enemies** (`enemies.json`): 12 regulars across 3 tiers + 3 minibosses +
+      3 bosses — sci-fi, alluring, mostly female/androgynous (kept suggestive-
+      tasteful per the design doc's later-gating stance).
+- [x] **Dungeon events** (`dungeon_events.json`): terminals to hack (stat
+      checks), healing pods, vending machines, glitch shrines, trapped crates,
+      a flirtatious hologram.
+- [x] **Tunable difficulty** (`difficulty.json`): easy/normal/hard multipliers
+      on enemy hp/attack + xp rate; switchable any time.
+- [x] **Persistent progression**: combat level + XP live on the player across
+      runs/defeats ("remember your level"); max floor tracked. Defeat = ejected,
+      lose 15% credits, never levels. Migration 6.
+- [x] Routes: dungeon enter/state/advance/event/leave, combat action,
+      difficulty get/set. Frontend: SubstratePanel (Shallows), DungeonScreen
+      (floor map, events, treasure), BattleView (HP bars, skills, charge pips,
+      log), level in StatBar.
+
+**Status:** Backend 111 pytest, frontend green, lint clean, build passes.
+Live scripted run: 6 floors, 19 wins, level 1→8, boss kills, events/treasure/
+rest, defeat at the floor-6 boss with credits toll + level kept.
+
 ## Later Milestones (tracked, not detailed yet)
 
 | Milestone | Design Phase | Notes |
 |---|---|---|
 | Story & seasonal events, jobs | 4 | ✅ DONE — see below |
-| Combat | 5 | `battle.py` — integration approach still TBD in design doc |
+| Combat | 5 | ✅ DONE — see below |
 | Crafting, gifting, full arcs | 6 | ⚑ Gifting/inventory/shop DONE — see below; crafting deferred |
 | Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets |
 

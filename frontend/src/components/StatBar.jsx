@@ -11,6 +11,10 @@ export default function StatBar() {
   return (
     <div className="stat-bar">
       <div className="stat">
+        <span className="stat-label">Level</span>
+        <span className="stat-value">{player.combat_level}</span>
+      </div>
+      <div className="stat">
         <span className="stat-label">Energy</span>
         <span className="stat-meter">
           <span className="stat-fill" style={{ width: `${player.energy}%` }} />

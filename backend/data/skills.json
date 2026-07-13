@@ -1,0 +1,65 @@
+{
+  "pulse_rounds": {
+    "id": "pulse_rounds",
+    "name": "Pulse Rounds",
+    "element": "kinetic",
+    "power": 1.2,
+    "cost": 1,
+    "unlock_level": 1,
+    "description": "A tight burst from your sidearm."
+  },
+  "flare_burst": {
+    "id": "flare_burst",
+    "name": "Flare Burst",
+    "element": "thermal",
+    "power": 1.6,
+    "cost": 2,
+    "unlock_level": 2,
+    "description": "An incendiary charge that blooms on impact."
+  },
+  "cryo_lance": {
+    "id": "cryo_lance",
+    "name": "Cryo Lance",
+    "element": "cryo",
+    "power": 1.6,
+    "cost": 2,
+    "unlock_level": 3,
+    "description": "A spear of flash-frozen coolant."
+  },
+  "arc_bolt": {
+    "id": "arc_bolt",
+    "name": "Arc Bolt",
+    "element": "voltaic",
+    "power": 1.6,
+    "cost": 2,
+    "unlock_level": 4,
+    "description": "Chained lightning from a cracked capacitor."
+  },
+  "neuro_spike": {
+    "id": "neuro_spike",
+    "name": "Neuro Spike",
+    "element": "psionic",
+    "power": 1.6,
+    "cost": 2,
+    "unlock_level": 5,
+    "description": "A needle of thought driven straight through the target's mind."
+  },
+  "nano_swarm": {
+    "id": "nano_swarm",
+    "name": "Nano Swarm",
+    "element": "toxin",
+    "power": 1.6,
+    "cost": 2,
+    "unlock_level": 6,
+    "description": "A glittering cloud of hungry machines."
+  },
+  "overdrive": {
+    "id": "overdrive",
+    "name": "Overdrive",
+    "element": "kinetic",
+    "power": 2.4,
+    "cost": 4,
+    "unlock_level": 8,
+    "description": "Everything you have, all at once."
+  }
+}
