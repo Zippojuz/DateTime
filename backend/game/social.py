@@ -141,6 +141,35 @@ def mark_talked(save_id, npc_id, day_index):
         )
 
 
+def has_gifted_today(save_id, npc_id, day_index):
+    row = _row(save_id, npc_id)
+    return bool(row) and row["last_gift_day"] == day_index
+
+
+def mark_gifted(save_id, npc_id, day_index):
+    with get_connection() as conn:
+        conn.execute(
+            """INSERT INTO relationships (save_id, npc_id, last_gift_day)
+                   VALUES (?, ?, ?)
+               ON CONFLICT(save_id, npc_id)
+                   DO UPDATE SET last_gift_day=excluded.last_gift_day""",
+            (save_id, npc_id, day_index),
+        )
+
+
+# Coarse relationship stage from affection, for UI labels.
+def stage(affection):
+    if affection >= 50:
+        return "close"
+    if affection >= 25:
+        return "friend"
+    if affection >= 10:
+        return "acquaintance"
+    if affection <= -25:
+        return "hostile"
+    return "stranger"
+
+
 # --- Discovered knowledge ---------------------------------------------------
 
 

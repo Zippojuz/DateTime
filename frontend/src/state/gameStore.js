@@ -17,6 +17,12 @@ export const useGameStore = create((set, get) => ({
   actions: null, // { id: {label, minutes, energy, ...} }
   topics: null, // registry: { id: {name, changeable} }
   districts: null, // registry: { id: {name, vibe, adjacent} }
+  items: null, // registry: { id: {name, type, rarity, ...} }
+
+  // Shop stock for the current district; gift flow + last reaction.
+  shop: null,
+  gifting: null, // { npcId, npcName } while picking a gift
+  lastReaction: null, // last gift reaction toast
 
   // The most recent travel encounter, shown then dismissed.
   lastEncounter: null,
@@ -44,13 +50,14 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts] = await Promise.all([
+      const [attributes, actions, topics, districts, items] = await Promise.all([
         api.attributes(),
         api.actions(),
         api.topics(),
         api.districts(),
+        api.items(),
       ])
-      set({ attributes, actions, topics, districts, connection: 'ok' })
+      set({ attributes, actions, topics, districts, items, connection: 'ok' })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return
@@ -74,6 +81,7 @@ export const useGameStore = create((set, get) => ({
       set({ screen: 'play' })
       get().loadCharacters()
       get().loadJobs()
+      get().loadShop()
     }
   },
 
@@ -84,6 +92,7 @@ export const useGameStore = create((set, get) => ({
       set({ state, hasSave: true, screen: 'play', busy: false })
       get().loadCharacters()
       get().loadJobs()
+      get().loadShop()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -136,6 +145,58 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  loadShop: async () => {
+    try {
+      set({ shop: await api.shop() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  buyItem: async (itemId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.buy(itemId)
+      set({ state: res.state, busy: false })
+      get()._pushEvents(res.events)
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  useItem: async (itemId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.useItem(itemId)
+      set({ state: res.state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  startGift: (npcId, npcName) => set({ gifting: { npcId, npcName }, error: null }),
+  cancelGift: () => set({ gifting: null }),
+
+  giveGift: async (itemId) => {
+    const g = get().gifting
+    if (!g) return
+    set({ busy: true, error: null })
+    try {
+      const res = await api.gift(g.npcId, itemId)
+      set({
+        state: res.state,
+        gifting: null,
+        lastReaction: { ...res.reaction, npcName: g.npcName },
+        busy: false,
+      })
+      get().loadCharacters() // affection + discovered prefs changed
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  dismissReaction: () => set({ lastReaction: null }),
+
   doAction: async (action, attribute) => {
     set({ busy: true, error: null })
     try {
@@ -157,6 +218,7 @@ export const useGameStore = create((set, get) => ({
       get()._pushEvents(res.events)
       get().loadCharacters() // reachability changes with location + time
       get().loadJobs()
+      get().loadShop()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -169,7 +231,14 @@ export const useGameStore = create((set, get) => ({
     try {
       const d = await api.dialogueStart(npcId)
       set({
-        dialogue: { npcId, npcName: d.npc_name, tier: d.tier, node: d.node, lastGained: 0 },
+        dialogue: {
+          npcId,
+          npcName: d.npc_name,
+          dialogueId: d.dialogue_id,
+          tier: d.tier,
+          node: d.node,
+          lastGained: 0,
+        },
         busy: false,
       })
     } catch (err) {
@@ -182,7 +251,12 @@ export const useGameStore = create((set, get) => ({
     if (!dlg) return
     set({ busy: true, error: null })
     try {
-      const res = await api.dialogueChoose(dlg.npcId, dlg.node.node_id, choiceIndex)
+      const res = await api.dialogueChoose(
+        dlg.npcId,
+        dlg.dialogueId,
+        dlg.node.node_id,
+        choiceIndex,
+      )
       if (res.ended) {
         set({ dialogue: null, busy: false })
         get().loadCharacters() // affection updated

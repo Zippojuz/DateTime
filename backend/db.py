@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS player (
     debt                     INTEGER NOT NULL DEFAULT 500,
     debt_due_week            INTEGER NOT NULL DEFAULT 52,
     fired_events             TEXT    NOT NULL DEFAULT '[]',  -- JSON list of event ids
+    inventory                TEXT    NOT NULL DEFAULT '{}',  -- JSON map item_id -> qty
     clock_week               INTEGER NOT NULL DEFAULT 1,
     clock_day                INTEGER NOT NULL DEFAULT 1,
     clock_minute             INTEGER NOT NULL DEFAULT 480
@@ -58,6 +59,7 @@ CREATE TABLE IF NOT EXISTS relationships (
     known_npc_topics     TEXT    NOT NULL DEFAULT '[]', -- topics the player learned about the NPC
     known_player_topics  TEXT    NOT NULL DEFAULT '[]', -- topics the NPC learned about the player
     memories             TEXT    NOT NULL DEFAULT '[]', -- affection event log (derives affection)
+    last_gift_day        INTEGER NOT NULL DEFAULT 0,   -- one gift per NPC per day
     PRIMARY KEY (save_id, npc_id)
 );
 """
@@ -111,11 +113,18 @@ def _m4_jobs_debt_events(conn):
     _add_column(conn, "player", "fired_events", "TEXT NOT NULL DEFAULT '[]'")
 
 
+def _m5_inventory_and_gifts(conn):
+    """Add player inventory + per-day gift gate (Milestone 6)."""
+    _add_column(conn, "player", "inventory", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "relationships", "last_gift_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
     _m3_location_and_credits,
     _m4_jobs_debt_events,
+    _m5_inventory_and_gifts,
 ]
 
 

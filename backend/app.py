@@ -8,7 +8,20 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from game import data, dialogue, encounters, events, jobs, preferences, save, social, world
+from game import (
+    data,
+    dialogue,
+    encounters,
+    events,
+    gifts,
+    inventory,
+    jobs,
+    preferences,
+    save,
+    shop,
+    social,
+    world,
+)
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError
 from game.npc import NPC
@@ -119,13 +132,15 @@ def create_app():
                 t: pref for t, pref in payload["preferences"].items() if t in known
             }
             avail = world.availability(npc, clock)
+            affection = rel.get("affection", 0)
             result.append(
                 {
                     **payload,
                     "availability": avail,
                     # Reachable only if available AND in your current district.
                     "reachable": avail["available"] and avail.get("district") == player.location,
-                    "affection": rel.get("affection", 0),
+                    "affection": affection,
+                    "stage": social.stage(affection),
                     "talked_today": rel.get("last_talked_day") == day,
                 }
             )
@@ -213,6 +228,103 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({"state": save.state_dict(player, clock), "paid": paid})
 
+    # --- Items, shop, and gifting (Milestone 6) ---
+
+    @app.get("/api/items")
+    def items_list():
+        return jsonify(data.load("items"))
+
+    @app.get("/api/shop")
+    def shop_stock():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, _clock = models
+        shops = data.load("shops")
+        here = shops.get(player.location)
+        return jsonify(
+            {
+                "district": player.location,
+                "name": here["name"] if here else None,
+                "stock": shop.stock(player.location),
+            }
+        )
+
+    @app.post("/api/shop/buy")
+    def shop_buy():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = shop.buy(player, clock, body.get("item_id"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        fired = events.fire_due(player, clock)
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {"state": save.state_dict(player, clock), "bought": result, "events": fired}
+        )
+
+    @app.post("/api/item/use")
+    def item_use():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = inventory.use_item(player, body.get("item_id"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "used": result})
+
+    @app.post("/api/gift")
+    def gift():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            npc = NPC.load(body.get("npc_id"))
+        except KeyError:
+            return jsonify(error="No such character."), 404
+
+        avail = world.availability(npc, clock)
+        if not (avail["available"] and avail.get("district") == player.location):
+            return jsonify(error=f"You need to be with {npc.name} to give a gift."), 400
+        day = _day_index(clock)
+        if social.has_gifted_today(save_id, npc.id, day):
+            return jsonify(error=f"You've already given {npc.name} something today."), 400
+
+        item_id = body.get("item_id")
+        try:
+            item = inventory.get_item(item_id)
+            inventory.remove_item(player, item_id, 1)  # consumes the gift
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+
+        react = gifts.reaction(item, npc)
+        if react["delta"] >= 0:
+            social.add_opinion(save_id, npc.id, react["delta"], day)
+        else:
+            social.record_offense(save_id, npc.id, react["delta"], day, "minor")
+        if react["topic"]:
+            social.discover_npc_topic(save_id, npc.id, react["topic"])
+        social.mark_gifted(save_id, npc.id, day)
+
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {
+                "state": save.state_dict(player, clock),
+                "reaction": {**react, "item": item["name"]},
+                "affection": social.get_affection(save_id, npc.id, day),
+            }
+        )
+
     @app.post("/api/dialogue/start")
     def dialogue_start():
         body = request.get_json(silent=True) or {}
@@ -235,7 +347,8 @@ def create_app():
         if social.has_talked_today(save_id, npc.id, _day_index(clock)):
             return jsonify(error=f"You've already spent real time with {npc.name} today."), 400
 
-        tree = dialogue.tree_for_npc(npc.id)
+        affection = social.get_affection(save_id, npc.id, _day_index(clock))
+        tree = dialogue.tree_for_npc(npc.id, affection)
         if tree is None:
             return jsonify(error=f"{npc.name} has nothing to say yet."), 404
 
@@ -264,7 +377,9 @@ def create_app():
         except KeyError:
             return jsonify(error="No such character."), 404
 
-        tree = dialogue.tree_for_npc(npc.id)
+        # Use the tree the conversation started with (locked via dialogue_id) so
+        # crossing an affection threshold mid-conversation can't switch trees.
+        tree = dialogue.tree_by_id(body.get("dialogue_id")) or dialogue.tree_for_npc(npc.id)
         if tree is None:
             return jsonify(error="No dialogue in progress."), 404
 

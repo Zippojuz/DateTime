@@ -53,12 +53,26 @@ def render_pronouns(text, name="", pronouns="they/them"):
     return text
 
 
-def tree_for_npc(npc_id):
-    """Return the first dialogue tree whose `npc` matches, or None."""
+def tree_by_id(dialogue_id):
+    """Return a dialogue tree by its id, or None."""
+    return data.load("dialogues").get(dialogue_id)
+
+
+def tree_for_npc(npc_id, affection=0):
+    """Return the best dialogue tree for an NPC given the current affection.
+
+    Among the NPC's trees, pick the highest `requires_affection` that the player
+    qualifies for (default requirement 0). This is how relationship arcs unlock:
+    a deeper scene supersedes the intro once you're close enough.
+    """
+    best = None
     for tree in data.load("dialogues").values():
-        if tree.get("npc") == npc_id:
-            return tree
-    return None
+        if tree.get("npc") != npc_id:
+            continue
+        needed = tree.get("requires_affection", 0)
+        if affection >= needed and (best is None or needed > best.get("requires_affection", 0)):
+            best = tree
+    return best
 
 
 def _meets(player, requires):

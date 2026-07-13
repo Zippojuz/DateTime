@@ -270,13 +270,38 @@ Verified end-to-end (job pay + stat bonus, co-location gate, debt paydown,
 arrival event firing). Events are notifications for now — deeper event scenes
 (choices, dedicated dialogue) come with later story work.
 
+## Milestone 6 — Inventory, Shop, Rarity & Gifting (Design Phase 6) ✅ MOSTLY DONE
+
+- [x] **Inventory** (`inventory.py`, migration 5): `player.inventory` JSON blob;
+      use food to restore energy (consumed).
+- [x] **Items with rarity** (`items.json`): common/uncommon/rare/legendary across
+      food + topic-tagged gifts.
+- [x] **Shop** (`shop.py`, `shops.json`): per-district stock; price scales with
+      rarity (`RARITY_PRICE_MULT`) × district modifier; browsing costs 30 min.
+- [x] **Gifting** (`gifts.py`): reaction driven by the NPC's preference for the
+      gift's topic (love +6 … hate −4), + a rarity effort bonus that softens but
+      never flips a bad gift; routed through the memory system (offense on
+      negatives); reveals the NPC's stance (discovery by action); one gift per
+      NPC per day; co-location enforced.
+- [x] **Relationship arcs (start)**: affection-threshold dialogue —
+      `requires_affection` on trees; `tree_for_npc` picks the deepest qualifying
+      one (Vael's tier-2 scene unlocks at 15). `/api/characters` exposes a stage
+      label (stranger→acquaintance→friend→close/hostile).
+- [x] Frontend: ShopPanel, InventoryPanel, GiftPicker, GiftReactionCard, rarity
+      chips, Gift button + stage labels.
+
+**Deferred:** crafting (recipes/materials — gifting doesn't need it); tier-2
+scenes for the other four characters.
+**Status:** Backend 93 pytest, frontend green, lint clean, build passes.
+Verified end-to-end (rarity pricing, food use, preference-driven gift + reveal).
+
 ## Later Milestones (tracked, not detailed yet)
 
 | Milestone | Design Phase | Notes |
 |---|---|---|
 | Story & seasonal events, jobs | 4 | ✅ DONE — see below |
 | Combat | 5 | `battle.py` — integration approach still TBD in design doc |
-| Crafting, gifting, full arcs | 6 | `crafting.py`, `items.json` |
+| Crafting, gifting, full arcs | 6 | ⚑ Gifting/inventory/shop DONE — see below; crafting deferred |
 | Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets |
 
 ---

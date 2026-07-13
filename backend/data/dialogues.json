@@ -49,6 +49,29 @@
       }
     }
   },
+  "vael_close": {
+    "id": "vael_close",
+    "npc": "vael",
+    "requires_affection": 15,
+    "start": "vc1",
+    "nodes": {
+      "vc1": {
+        "text": "Vael is already at the plaza rail when you arrive, as if she'd been waiting. The glow along her jaw is soft, unguarded. \"You keep coming back,\" she says. \"People don't, with me.\"",
+        "choices": [
+          { "text": "I'm not people, remember?", "next": "vc2", "affection": 3 },
+          { "text": "Maybe you're worth coming back for.", "next": "vc2", "affection": 4, "requires": { "charm": 7 } },
+          { "text": "You make it easy.", "next": "vc2", "affection": 2 }
+        ]
+      },
+      "vc2": {
+        "text": "For a long moment the glow flares — bright, involuntary, honest — before she can school it back down. She doesn't apologize for it this time. \"...Stay a while,\" she says quietly.",
+        "choices": [
+          { "text": "As long as you'll have me.", "next": null, "affection": 4 },
+          { "text": "I'm not going anywhere.", "next": null, "affection": 3 }
+        ]
+      }
+    }
+  },
   "zix_intro": {
     "id": "zix_intro",
     "npc": "zix",

@@ -9,6 +9,10 @@ import EncounterCard from '../components/EncounterCard.jsx'
 import JobPanel from '../components/JobPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
+import ShopPanel from '../components/ShopPanel.jsx'
+import InventoryPanel from '../components/InventoryPanel.jsx'
+import GiftPicker from '../components/GiftPicker.jsx'
+import GiftReactionCard from '../components/GiftReactionCard.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -51,6 +55,7 @@ export default function WorldMap() {
 
       <EventLog />
       <EncounterCard />
+      <GiftReactionCard />
       <StatBar />
       <PlayerProfile />
 
@@ -62,9 +67,13 @@ export default function WorldMap() {
 
       <TravelPanel />
       <JobPanel />
+      <ShopPanel />
+      <InventoryPanel />
       <PeoplePanel />
       <DebtPanel />
       <RelationshipPanel />
+
+      <GiftPicker />
 
       <section className="action-panel">
         <h2>What do you do?</h2>

@@ -1,0 +1,27 @@
+{
+  "docking_quarter": {
+    "name": "Dockside Stalls",
+    "price_mod": 0.8,
+    "stock": ["protein_cube", "star_ration", "club_pass", "match_ticket"]
+  },
+  "the_grid": {
+    "name": "Grid Night Market",
+    "price_mod": 1.0,
+    "stock": ["stim_tea", "sheet_music", "rare_vinyl", "club_pass"]
+  },
+  "citadel_ring": {
+    "name": "Citadel Provisions",
+    "price_mod": 1.1,
+    "stock": ["paper_book", "first_edition", "protein_cube"]
+  },
+  "bloom_district": {
+    "name": "The Bloom Bazaar",
+    "price_mod": 1.3,
+    "stock": ["paper_book", "training_band", "stim_tea", "aurora_pendant"]
+  },
+  "the_shallows": {
+    "name": "Shallows Market",
+    "price_mod": 0.9,
+    "stock": ["sheet_music", "match_ticket", "training_band", "club_pass"]
+  }
+}

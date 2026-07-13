@@ -1,10 +1,100 @@
 {
+  "protein_cube": {
+    "id": "protein_cube",
+    "name": "Protein Cube",
+    "type": "food",
+    "rarity": "common",
+    "description": "Ship rations. Chewy, grey, keeps you upright.",
+    "effects": { "energy": 15 },
+    "value": 3
+  },
   "star_ration": {
     "id": "star_ration",
     "name": "Star Ration",
     "type": "food",
+    "rarity": "common",
     "description": "A dense nutrient bar from a dockside stall. Tastes of nothing and everything.",
     "effects": { "energy": 20 },
+    "value": 4
+  },
+  "stim_tea": {
+    "id": "stim_tea",
+    "name": "Stim Tea",
+    "type": "food",
+    "rarity": "uncommon",
+    "description": "Grid-brewed and faintly luminous. Snaps you wide awake.",
+    "effects": { "energy": 35 },
     "value": 5
+  },
+  "club_pass": {
+    "id": "club_pass",
+    "name": "Club Pass",
+    "type": "gift",
+    "rarity": "common",
+    "description": "A night's entry to a Grid underground club.",
+    "topic": "nightlife",
+    "value": 3
+  },
+  "training_band": {
+    "id": "training_band",
+    "name": "Training Band",
+    "type": "gift",
+    "rarity": "common",
+    "description": "A resistance band for keeping in fighting shape.",
+    "topic": "fitness",
+    "value": 4
+  },
+  "match_ticket": {
+    "id": "match_ticket",
+    "name": "Match Ticket",
+    "type": "gift",
+    "rarity": "uncommon",
+    "description": "Front-row seat to a grav-ball derby.",
+    "topic": "sports",
+    "value": 5
+  },
+  "sheet_music": {
+    "id": "sheet_music",
+    "name": "Sheet Music",
+    "type": "gift",
+    "rarity": "uncommon",
+    "description": "Hand-scored, from a Shallows street composer.",
+    "topic": "music",
+    "value": 5
+  },
+  "paper_book": {
+    "id": "paper_book",
+    "name": "Paper Book",
+    "type": "gift",
+    "rarity": "uncommon",
+    "description": "Actual paper. Actual ink. Increasingly rare.",
+    "topic": "books",
+    "value": 5
+  },
+  "rare_vinyl": {
+    "id": "rare_vinyl",
+    "name": "Pressed Vinyl",
+    "type": "gift",
+    "rarity": "rare",
+    "description": "An original pressing, warm and imperfect. Collectors weep.",
+    "topic": "music",
+    "value": 6
+  },
+  "first_edition": {
+    "id": "first_edition",
+    "name": "First Edition",
+    "type": "gift",
+    "rarity": "rare",
+    "description": "A first-edition novel, spine barely cracked.",
+    "topic": "books",
+    "value": 6
+  },
+  "aurora_pendant": {
+    "id": "aurora_pendant",
+    "name": "Aurora Pendant",
+    "type": "gift",
+    "rarity": "legendary",
+    "description": "A shard of contained aurora that shifts to the wearer's mood. One of a kind.",
+    "value": 6
   }
 }

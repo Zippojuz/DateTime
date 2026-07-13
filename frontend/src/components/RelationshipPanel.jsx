@@ -2,15 +2,8 @@ import { useGameStore } from '../state/gameStore'
 import PreferenceTags from './PreferenceTags.jsx'
 
 // Affection is signed (−100…+100, 0 = neutral). The meter fills from the centre:
-// left of centre = negative, right = positive.
-function affectionLabel(value) {
-  if (value <= -60) return 'Hostile'
-  if (value < -15) return 'Cold'
-  if (value <= 15) return 'Neutral'
-  if (value < 60) return 'Warm'
-  return 'Close'
-}
-
+// left of centre = negative, right = positive. The stage label comes from the
+// backend (stranger → acquaintance → friend → close).
 export default function RelationshipPanel() {
   const characters = useGameStore((s) => s.characters)
 
@@ -30,7 +23,7 @@ export default function RelationshipPanel() {
                   {c.name} <span className="relationship-sub">{c.pronouns}</span>
                 </span>
                 <span className="relationship-mood">
-                  {affectionLabel(c.affection)} ({c.affection})
+                  {c.stage} ({c.affection})
                 </span>
               </div>
               <div className="relationship-meter">

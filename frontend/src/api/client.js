@@ -32,6 +32,14 @@ export const api = {
     request('/job', { method: 'POST', body: JSON.stringify({ job_id: jobId }) }),
   payDebt: (amount) =>
     request('/debt/pay', { method: 'POST', body: JSON.stringify({ amount }) }),
+  items: () => request('/items'),
+  shop: () => request('/shop'),
+  buy: (itemId) =>
+    request('/shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  useItem: (itemId) =>
+    request('/item/use', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  gift: (npcId, itemId) =>
+    request('/gift', { method: 'POST', body: JSON.stringify({ npc_id: npcId, item_id: itemId }) }),
   getState: () => request('/game/state'),
   newGame: (identity) =>
     request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),
@@ -45,9 +53,14 @@ export const api = {
   characters: () => request('/characters'),
   dialogueStart: (npcId) =>
     request('/dialogue/start', { method: 'POST', body: JSON.stringify({ npc_id: npcId }) }),
-  dialogueChoose: (npcId, nodeId, choiceIndex) =>
+  dialogueChoose: (npcId, dialogueId, nodeId, choiceIndex) =>
     request('/dialogue/choose', {
       method: 'POST',
-      body: JSON.stringify({ npc_id: npcId, node_id: nodeId, choice_index: choiceIndex }),
+      body: JSON.stringify({
+        npc_id: npcId,
+        dialogue_id: dialogueId,
+        node_id: nodeId,
+        choice_index: choiceIndex,
+      }),
     }),
 }

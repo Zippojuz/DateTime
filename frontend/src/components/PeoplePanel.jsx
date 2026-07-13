@@ -15,6 +15,7 @@ export default function PeoplePanel() {
   const characters = useGameStore((s) => s.characters)
   const districts = useGameStore((s) => s.districts)
   const startDialogue = useGameStore((s) => s.startDialogue)
+  const startGift = useGameStore((s) => s.startGift)
   const busy = useGameStore((s) => s.busy)
 
   if (!characters.length) return null
@@ -40,13 +41,22 @@ export default function PeoplePanel() {
                 <strong>{c.name}</strong>
                 <span className="person-sub">{status}</span>
               </div>
-              <button
-                className="btn-action"
-                disabled={!canTalk || busy}
-                onClick={() => startDialogue(c.id)}
-              >
-                Talk
-              </button>
+              <div className="person-actions">
+                <button
+                  className="btn-action"
+                  disabled={!canTalk || busy}
+                  onClick={() => startDialogue(c.id)}
+                >
+                  Talk
+                </button>
+                <button
+                  className="btn-action"
+                  disabled={!c.reachable || busy}
+                  onClick={() => startGift(c.id, c.name)}
+                >
+                  Gift
+                </button>
+              </div>
             </li>
           )
         })}
