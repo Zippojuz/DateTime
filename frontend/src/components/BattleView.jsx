@@ -14,7 +14,9 @@ export default function BattleView() {
   if (!combat) return null
 
   const enemy = combat.enemy
-  const foods = Object.entries(inventory).filter(([id]) => items?.[id]?.type === 'food')
+  const usable = Object.entries(inventory).filter(([id]) =>
+    ['food', 'booster'].includes(items?.[id]?.type),
+  )
   const isBoss = enemy.role === 'boss'
 
   return (
@@ -60,11 +62,12 @@ export default function BattleView() {
         <button className="btn-action" disabled={busy} onClick={() => act('guard')}>
           Guard
         </button>
-        {foods.map(([id, qty]) => (
+        {usable.map(([id, qty]) => (
           <button
             key={id}
             className="btn-action"
             disabled={busy}
+            title={items[id].description}
             onClick={() => act('item', { item_id: id })}
           >
             {items[id].name} ×{qty}

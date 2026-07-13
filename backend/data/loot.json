@@ -1,0 +1,17 @@
+{
+  "normal": {
+    "1": { "chance": 0.25, "rolls": 1, "items": ["protein_cube", "star_ration"] },
+    "2": { "chance": 0.3, "rolls": 1, "items": ["star_ration", "stim_tea", "charge_cell"] },
+    "3": { "chance": 0.35, "rolls": 1, "items": ["stim_tea", "charge_cell", "nano_patch"] }
+  },
+  "miniboss": {
+    "chance": 1.0,
+    "rolls": 1,
+    "items": ["nano_patch", "charge_cell", "singing_crystal"]
+  },
+  "boss": {
+    "chance": 1.0,
+    "rolls": 2,
+    "items": ["nano_patch", "singing_crystal", "voidglass_rose"]
+  }
+}

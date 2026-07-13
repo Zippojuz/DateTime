@@ -131,16 +131,38 @@ def _enemy_turn(state, pstats, rng):
         state["log"].append("You go down. The Substrate spits you back out.")
 
 
-def _win(state, player):
+def roll_drops(enemy, rng):
+    """Roll the enemy's loot table (data/loot.json). Normals roll by tier with a
+    drop chance; minibosses always drop; bosses roll twice, guaranteed."""
+    tables = data.load("loot")
+    role = enemy.get("role", "normal")
+    table = tables[role] if role != "normal" else tables["normal"][str(enemy["tier"])]
+    drops = []
+    for _ in range(table.get("rolls", 1)):
+        if rng.random() < table["chance"]:
+            drops.append(rng.choice(table["items"]))
+    return drops
+
+
+def _win(state, player, rng):
     enemy = state["enemy"]
     diff = data.load("difficulty")[player.difficulty]
     xp = round(enemy["xp"] * diff["xp"])
+    credits = round(enemy["credits"] * rng.uniform(0.85, 1.15))
     state["over"] = True
     state["victory"] = True
     ups = grant_xp(player, xp)
-    player.credits += enemy["credits"]
-    state["rewards"] = {"xp": xp, "credits": enemy["credits"], "level_ups": ups}
-    state["log"].append(f"{enemy['name']} falls. +{xp} XP, +{enemy['credits']} cr.")
+    player.credits += credits
+
+    drops = roll_drops(enemy, rng)
+    for item_id in drops:
+        inventory.add_item(player, item_id, 1)
+    drop_names = [inventory.get_item(i)["name"] for i in drops]
+
+    state["rewards"] = {"xp": xp, "credits": credits, "level_ups": ups, "drops": drop_names}
+    state["log"].append(f"{enemy['name']} falls. +{xp} XP, +{credits} cr.")
+    for name in drop_names:
+        state["log"].append(f"They drop: {name}.")
     if ups:
         state["log"].append(f"Level up! You're now level {player.combat_level}.")
         # A level-up brings a rush of strength: fully restored.
@@ -185,10 +207,18 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         state["log"].append("You brace and bank a charge.")
 
     elif action == "item":
-        result = inventory.use_item(player, item_id)  # validates + consumes
-        heal = result["energy"]
-        state["player_hp"] = min(pstats["max_hp"], state["player_hp"] + heal)
-        state["log"].append(f"You use {result['item']} — +{heal} HP.")
+        item = inventory.get_item(item_id)
+        if item.get("type") == "booster":
+            # Combat-only consumable: dumps charge into your systems.
+            inventory.remove_item(player, item_id, 1)
+            gain = item.get("effects", {}).get("charge", 0)
+            state["charge"] = min(CHARGE_MAX, state["charge"] + gain)
+            state["log"].append(f"You slot a {item['name']} — +{gain} charge.")
+        else:
+            result = inventory.use_item(player, item_id)  # validates + consumes
+            heal = result["energy"]
+            state["player_hp"] = min(pstats["max_hp"], state["player_hp"] + heal)
+            state["log"].append(f"You use {result['item']} — +{heal} HP.")
 
     elif action == "flee":
         if enemy.get("role") == "boss":
@@ -204,7 +234,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         raise GameError(f"Unknown combat action: {action!r}")
 
     if state["enemy_hp"] <= 0:
-        _win(state, player)
+        _win(state, player, rng)
         return state
 
     _enemy_turn(state, pstats, rng)

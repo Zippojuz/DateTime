@@ -96,5 +96,44 @@
     "rarity": "legendary",
     "description": "A shard of contained aurora that shifts to the wearer's mood. One of a kind.",
     "value": 6
+  },
+  "nano_patch": {
+    "id": "nano_patch",
+    "name": "Nano Patch",
+    "type": "food",
+    "rarity": "uncommon",
+    "dungeon_only": true,
+    "description": "Military-grade trauma gel that knits you back together fast. Not sold topside.",
+    "effects": { "energy": 50 },
+    "value": 6
+  },
+  "charge_cell": {
+    "id": "charge_cell",
+    "name": "Charge Cell",
+    "type": "booster",
+    "rarity": "uncommon",
+    "dungeon_only": true,
+    "description": "A humming capacitor that dumps straight into your weapon systems. Combat use only.",
+    "effects": { "charge": 3 },
+    "value": 5
+  },
+  "singing_crystal": {
+    "id": "singing_crystal",
+    "name": "Singing Crystal",
+    "type": "gift",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "topic": "music",
+    "description": "A shard from the deep vents that hums the last song it heard. It's still singing.",
+    "value": 6
+  },
+  "voidglass_rose": {
+    "id": "voidglass_rose",
+    "name": "Voidglass Rose",
+    "type": "gift",
+    "rarity": "legendary",
+    "dungeon_only": true,
+    "description": "A rose blown from voidglass on the lowest floors. It drinks the light and gives it back slowly, like it's savoring.",
+    "value": 8
   }
 }

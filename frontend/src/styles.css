@@ -1043,6 +1043,17 @@ body {
   border: 1px solid currentColor;
 }
 
+.inv-substrate {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  margin-left: 0.3rem;
+}
+
 .element--kinetic { color: #c0c8d8; }
 .element--thermal { color: #ff7a4d; }
 .element--cryo { color: #7ad9ff; }

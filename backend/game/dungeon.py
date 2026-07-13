@@ -146,7 +146,12 @@ def advance(player, clock, rng=None):
             amount = rng.randint(8, 20) * run["floor"]
             player.credits += amount
             return {"type": "treasure", "text": f"A cache of hard currency: +{amount} cr."}
-        item_id = rng.choice(["stim_tea", "protein_cube", "star_ration"])
+        pool = ["stim_tea", "protein_cube", "star_ration"]
+        if run["floor"] >= 4:  # deeper caches hold Substrate-only gear
+            pool += ["charge_cell", "nano_patch"]
+        if run["floor"] >= 7:
+            pool += ["singing_crystal"]
+        item_id = rng.choice(pool)
         inventory.add_item(player, item_id, 1)
         name = inventory.get_item(item_id)["name"]
         return {"type": "treasure", "text": f"Supplies, still sealed: 1x {name}."}

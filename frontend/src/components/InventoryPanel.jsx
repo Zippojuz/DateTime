@@ -27,6 +27,7 @@ export default function InventoryPanel() {
                 <div className="inv-info">
                   <span className="inv-name">
                     {item.name} ×{qty} <RarityTag rarity={item.rarity} />
+                    {item.dungeon_only && <span className="inv-substrate">substrate</span>}
                   </span>
                   <span className="inv-sub">{item.description}</span>
                 </div>
