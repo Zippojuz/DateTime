@@ -1,0 +1,52 @@
+{
+  "dock_hauling": {
+    "id": "dock_hauling",
+    "name": "Dock Hauling",
+    "district": "docking_quarter",
+    "description": "Move cargo crates off a freighter. Honest, aching work.",
+    "minutes": 120,
+    "energy": -15,
+    "pay": 18,
+    "stat": "courage"
+  },
+  "grid_gig": {
+    "id": "grid_gig",
+    "name": "Data-Runner Gig",
+    "district": "the_grid",
+    "description": "Ferry an encrypted packet across the Grid. No questions asked.",
+    "minutes": 120,
+    "energy": -15,
+    "pay": 22,
+    "stat": "wit"
+  },
+  "bloom_tending": {
+    "id": "bloom_tending",
+    "name": "Garden Tending",
+    "district": "bloom_district",
+    "description": "Help coax the conservatory's more temperamental flora into bloom.",
+    "minutes": 240,
+    "energy": -30,
+    "pay": 45,
+    "stat": "empathy"
+  },
+  "shallows_set": {
+    "id": "shallows_set",
+    "name": "Play a Set",
+    "district": "the_shallows",
+    "description": "Fill in for a no-show act at a Shallows music venue.",
+    "minutes": 240,
+    "energy": -30,
+    "pay": 40,
+    "stat": "charm"
+  },
+  "citadel_clerk": {
+    "id": "citadel_clerk",
+    "name": "Records Clerk",
+    "district": "citadel_ring",
+    "description": "Sort Citadel bureaucracy for a shift. Mind-numbing, but it pays.",
+    "minutes": 360,
+    "energy": -30,
+    "pay": 55,
+    "stat": "wit"
+  }
+}

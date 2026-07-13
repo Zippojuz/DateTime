@@ -8,7 +8,7 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from game import data, dialogue, encounters, preferences, save, social, world
+from game import data, dialogue, encounters, events, jobs, preferences, save, social, world
 from game.actions import ACTIONS, apply_action
 from game.errors import GameError
 from game.npc import NPC
@@ -80,8 +80,10 @@ def create_app():
             apply_action(player, clock, body.get("action"), body.get("attribute"))
         except GameError as err:
             return jsonify(error=str(err)), 400
+        fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
-        return jsonify(save.state_dict(player, clock))
+        # Keep player/clock at top level (backward-compatible), add events.
+        return jsonify({**save.state_dict(player, clock), "events": fired})
 
     @app.post("/api/player/transform")
     def transform():
@@ -154,8 +156,62 @@ def create_app():
         if encounter and encounter.get("affection"):
             social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
 
+        fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
-        return jsonify({"state": save.state_dict(player, clock), "encounter": encounter})
+        return jsonify(
+            {"state": save.state_dict(player, clock), "encounter": encounter, "events": fired}
+        )
+
+    # --- Jobs, debt, and events (Milestone 4) ---
+
+    @app.get("/api/jobs")
+    def jobs_list():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, _clock = models
+        return jsonify(
+            [
+                {**job, "reachable": job["district"] == player.location}
+                for job in jobs.all_jobs().values()
+            ]
+        )
+
+    @app.post("/api/job")
+    def work_job():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = jobs.work(player, clock, body.get("job_id"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        fired = events.fire_due(player, clock)
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {"state": save.state_dict(player, clock), "result": result, "events": fired}
+        )
+
+    @app.post("/api/debt/pay")
+    def pay_debt():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            amount = int(body.get("amount", 0))
+        except (TypeError, ValueError):
+            return jsonify(error="Enter a valid amount."), 400
+        paid = min(amount, player.credits, player.debt)
+        if paid <= 0:
+            return jsonify(error="Nothing to pay, or not enough credits."), 400
+        player.credits -= paid
+        player.debt -= paid
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "paid": paid})
 
     @app.post("/api/dialogue/start")
     def dialogue_start():

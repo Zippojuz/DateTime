@@ -565,6 +565,151 @@ body {
   cursor: pointer;
 }
 
+/* --- Jobs --- */
+
+.job-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.job-result {
+  color: var(--neon);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.job-none {
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.job-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.job {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+
+.job-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.job-sub {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.job-meta {
+  color: var(--neon-dim);
+  font-size: 0.75rem;
+}
+
+/* --- Debt --- */
+
+.debt-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.debt-status {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+}
+
+.debt-status strong {
+  color: var(--accent);
+}
+
+.debt-form {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.debt-form input {
+  width: 8rem;
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 4px;
+  color: var(--text);
+  padding: 0.5rem 0.6rem;
+  font-family: inherit;
+}
+
+/* --- Events --- */
+
+.event-log {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.event-card {
+  position: relative;
+  background: var(--bg-panel);
+  border: 1px solid var(--neon-dim);
+  border-left-width: 3px;
+  border-radius: 6px;
+  padding: 0.75rem 2.2rem 0.85rem 0.9rem;
+}
+
+.event-card--festival {
+  border-left-color: var(--accent);
+}
+
+.event-card--birthday {
+  border-left-color: var(--accent);
+}
+
+.event-card--story {
+  border-left-color: var(--neon);
+}
+
+.event-type {
+  display: inline-block;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--text-dim);
+}
+
+.event-title {
+  margin: 0.15rem 0 0.35rem;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.event-text {
+  margin: 0;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.event-dismiss {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.6rem;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+
 /* --- Dialogue overlay --- */
 
 .dialogue-overlay {

@@ -27,6 +27,11 @@ export const api = {
   districts: () => request('/districts'),
   travel: (to, mode) =>
     request('/travel', { method: 'POST', body: JSON.stringify({ to, mode }) }),
+  jobs: () => request('/jobs'),
+  work: (jobId) =>
+    request('/job', { method: 'POST', body: JSON.stringify({ job_id: jobId }) }),
+  payDebt: (amount) =>
+    request('/debt/pay', { method: 'POST', body: JSON.stringify({ amount }) }),
   getState: () => request('/game/state'),
   newGame: (identity) =>
     request('/game/new', { method: 'POST', body: JSON.stringify(identity) }),

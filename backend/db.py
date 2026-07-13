@@ -40,6 +40,9 @@ CREATE TABLE IF NOT EXISTS player (
     unlocked_transformations TEXT    NOT NULL DEFAULT '[]',  -- JSON list
     location                 TEXT    NOT NULL DEFAULT 'docking_quarter',
     credits                  INTEGER NOT NULL DEFAULT 50,
+    debt                     INTEGER NOT NULL DEFAULT 500,
+    debt_due_week            INTEGER NOT NULL DEFAULT 52,
+    fired_events             TEXT    NOT NULL DEFAULT '[]',  -- JSON list of event ids
     clock_week               INTEGER NOT NULL DEFAULT 1,
     clock_day                INTEGER NOT NULL DEFAULT 1,
     clock_minute             INTEGER NOT NULL DEFAULT 480
@@ -101,10 +104,18 @@ def _m3_location_and_credits(conn):
     _add_column(conn, "player", "credits", "INTEGER NOT NULL DEFAULT 50")
 
 
+def _m4_jobs_debt_events(conn):
+    """Add debt tracking + fired-event log (Milestone 4: jobs & events)."""
+    _add_column(conn, "player", "debt", "INTEGER NOT NULL DEFAULT 500")
+    _add_column(conn, "player", "debt_due_week", "INTEGER NOT NULL DEFAULT 52")
+    _add_column(conn, "player", "fired_events", "TEXT NOT NULL DEFAULT '[]'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
     _m3_location_and_credits,
+    _m4_jobs_debt_events,
 ]
 
 

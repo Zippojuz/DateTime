@@ -6,6 +6,9 @@ import RelationshipPanel from '../components/RelationshipPanel.jsx'
 import PlayerProfile from '../components/PlayerProfile.jsx'
 import TravelPanel from '../components/TravelPanel.jsx'
 import EncounterCard from '../components/EncounterCard.jsx'
+import JobPanel from '../components/JobPanel.jsx'
+import DebtPanel from '../components/DebtPanel.jsx'
+import EventLog from '../components/EventLog.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -46,6 +49,7 @@ export default function WorldMap() {
         </div>
       </header>
 
+      <EventLog />
       <EncounterCard />
       <StatBar />
       <PlayerProfile />
@@ -57,7 +61,9 @@ export default function WorldMap() {
       )}
 
       <TravelPanel />
+      <JobPanel />
       <PeoplePanel />
+      <DebtPanel />
       <RelationshipPanel />
 
       <section className="action-panel">

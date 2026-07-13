@@ -26,6 +26,8 @@ DEFAULT_SPECIES = "human"
 MAX_ENERGY = 100
 STARTING_LOCATION = "docking_quarter"  # your ship docks here
 STARTING_CREDITS = 50
+STARTING_DEBT = 500  # the debt that brought you here
+DEBT_DUE_WEEK = 52  # due by the end of the in-game year
 
 # A small starting opinion set (expandable). Changeable later via the (future)
 # difficult preference-change mechanic.
@@ -47,6 +49,9 @@ class Player(Character):
         preferences=None,
         location=STARTING_LOCATION,
         credits=STARTING_CREDITS,
+        debt=STARTING_DEBT,
+        debt_due_week=DEBT_DUE_WEEK,
+        fired_events=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -55,6 +60,9 @@ class Player(Character):
         self.energy = energy
         self.location = location
         self.credits = credits
+        self.debt = debt
+        self.debt_due_week = debt_due_week
+        self.fired_events = list(fired_events or [])
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -83,6 +91,8 @@ class Player(Character):
                 "energy": self.energy,
                 "location": self.location,
                 "credits": self.credits,
+                "debt": self.debt,
+                "debt_due_week": self.debt_due_week,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

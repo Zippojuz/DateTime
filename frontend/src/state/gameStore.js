@@ -28,6 +28,13 @@ export const useGameStore = create((set, get) => ({
   // Characters with availability + affection, refreshed as the clock moves.
   characters: [],
 
+  // Jobs (with reachability), refreshed as location changes.
+  jobs: [],
+  lastJob: null, // last job result: { job, pay, bonus }
+
+  // Seasonal events waiting to be acknowledged.
+  pendingEvents: [],
+
   // Active dialogue: null | { npcId, npcName, tier, node, lastGained }
   dialogue: null,
 
@@ -66,6 +73,7 @@ export const useGameStore = create((set, get) => ({
     if (get().state) {
       set({ screen: 'play' })
       get().loadCharacters()
+      get().loadJobs()
     }
   },
 
@@ -75,6 +83,7 @@ export const useGameStore = create((set, get) => ({
       const state = await api.newGame(identity)
       set({ state, hasSave: true, screen: 'play', busy: false })
       get().loadCharacters()
+      get().loadJobs()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -89,11 +98,51 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  loadJobs: async () => {
+    try {
+      set({ jobs: await api.jobs() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  _pushEvents: (evs) => {
+    if (evs && evs.length) {
+      set((s) => ({ pendingEvents: [...s.pendingEvents, ...evs] }))
+    }
+  },
+  dismissEvent: (id) =>
+    set((s) => ({ pendingEvents: s.pendingEvents.filter((e) => e.id !== id) })),
+
+  workJob: async (jobId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.work(jobId)
+      set({ state: res.state, lastJob: res.result, busy: false })
+      get()._pushEvents(res.events)
+      get().loadCharacters()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  payDebt: async (amount) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.payDebt(amount)
+      set({ state: res.state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
   doAction: async (action, attribute) => {
     set({ busy: true, error: null })
     try {
-      const state = await api.action({ action, attribute })
+      // Response is {player, clock, events} (events kept separate from state).
+      const { events, ...state } = await api.action({ action, attribute })
       set({ state, busy: false })
+      get()._pushEvents(events)
       get().loadCharacters() // availability changes as the clock advances
     } catch (err) {
       set({ error: err.message, busy: false })
@@ -105,7 +154,9 @@ export const useGameStore = create((set, get) => ({
     try {
       const res = await api.travel(to, mode)
       set({ state: res.state, lastEncounter: res.encounter, busy: false })
+      get()._pushEvents(res.events)
       get().loadCharacters() // reachability changes with location + time
+      get().loadJobs()
     } catch (err) {
       set({ error: err.message, busy: false })
     }

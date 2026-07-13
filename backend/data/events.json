@@ -1,10 +1,36 @@
 {
   "arrival": {
     "id": "arrival",
-    "name": "Arrival at Nexus City",
-    "type": "story",
     "week": 1,
-    "description": "Your ship docks in the Docking Quarter. The debt clock starts now.",
-    "district": "docking_quarter"
+    "day": 1,
+    "type": "story",
+    "title": "Arrival at Nexus City",
+    "text": "Your ship settles into the Docking Quarter with a tired groan. Whatever you were running from, it's behind you now. The debt, though — that came with you."
+  },
+  "lumen_festival": {
+    "id": "lumen_festival",
+    "week": 4,
+    "day": 6,
+    "type": "festival",
+    "title": "The Lumen Festival",
+    "text": "The Bloom District ignites for the Lumen Festival. For one night the whole city drifts toward the gardens and the dark feels a little further off.",
+    "district": "bloom_district"
+  },
+  "vael_naming_day": {
+    "id": "vael_naming_day",
+    "week": 8,
+    "day": 3,
+    "type": "birthday",
+    "title": "Vael's Naming Day",
+    "text": "You overhear it's Vael's naming day. \"Soldiers don't mark the years,\" she'd say — but she'd remember who did.",
+    "npc": "vael"
+  },
+  "debt_reminder": {
+    "id": "debt_reminder",
+    "week": 13,
+    "day": 1,
+    "type": "story",
+    "title": "A Reminder",
+    "text": "A courier drone finds you in a crowd and won't leave until you take the message. No words — just a number, and how much of the year is already gone."
   }
 }

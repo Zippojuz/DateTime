@@ -48,6 +48,9 @@ def load_models():
         preferences=json.loads(row["preferences"]),
         location=row["location"],
         credits=row["credits"],
+        debt=row["debt"],
+        debt_due_week=row["debt_due_week"],
+        fired_events=json.loads(row["fired_events"]),
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -71,7 +74,7 @@ def save_models(save_id, player, clock):
         conn.execute(
             """UPDATE player SET
                    species=?, attributes=?, preferences=?, energy=?,
-                   location=?, credits=?,
+                   location=?, credits=?, debt=?, debt_due_week=?, fired_events=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
@@ -82,6 +85,9 @@ def save_models(save_id, player, clock):
                 player.energy,
                 player.location,
                 player.credits,
+                player.debt,
+                player.debt_due_week,
+                json.dumps(player.fired_events),
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
                 json.dumps(player.unlocked_transformations),
@@ -101,10 +107,10 @@ def _insert_player(conn, save_id, player, clock):
     conn.execute(
         """INSERT INTO player (
                save_id, species, attributes, preferences, energy,
-               location, credits,
+               location, credits, debt, debt_due_week, fired_events,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
@@ -113,6 +119,9 @@ def _insert_player(conn, save_id, player, clock):
             player.energy,
             player.location,
             player.credits,
+            player.debt,
+            player.debt_due_week,
+            json.dumps(player.fired_events),
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),
             json.dumps(player.unlocked_transformations),

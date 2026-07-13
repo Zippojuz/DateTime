@@ -251,11 +251,30 @@ Verified end-to-end (travel costs, co-location gate, reach Carro, encounter).
 
 ---
 
+## Milestone 4 — Jobs, Debt & Seasonal Events (Design Phase 4) ✅ DONE
+
+- [x] **Jobs** (`jobs.json`, `jobs.py`): district-based work; pay = base + a
+      bonus from the job's stat; costs time + energy; co-location enforced.
+- [x] **Debt** (`player.debt` + `debt_due_week`, migration 4): the debt that
+      brought you here; `POST /api/debt/pay` to pay it down with credits — gives
+      jobs/credits real purpose.
+- [x] **Seasonal events** (`events.json`, `events.py`): date-gated calendar
+      events that fire once when the clock reaches their (week, day) and surface
+      as notifications; fired state on `player.fired_events`, threaded through
+      the action/travel/job responses.
+- [x] Routes: `/api/jobs`, `/api/job`, `/api/debt/pay`. Frontend: JobPanel,
+      DebtPanel, EventLog.
+
+**Status:** Backend 78 pytest, frontend green, lint clean, build passes.
+Verified end-to-end (job pay + stat bonus, co-location gate, debt paydown,
+arrival event firing). Events are notifications for now — deeper event scenes
+(choices, dedicated dialogue) come with later story work.
+
 ## Later Milestones (tracked, not detailed yet)
 
 | Milestone | Design Phase | Notes |
 |---|---|---|
-| Story & seasonal events, jobs | 4 | `events.json` + calendar triggers |
+| Story & seasonal events, jobs | 4 | ✅ DONE — see below |
 | Combat | 5 | `battle.py` — integration approach still TBD in design doc |
 | Crafting, gifting, full arcs | 6 | `crafting.py`, `items.json` |
 | Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets |
