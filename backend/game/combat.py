@@ -12,7 +12,7 @@ hit, banks +1 charge), item (food heals HP in combat), flee (never from bosses).
 
 import random as _random
 
-from game import data, inventory
+from game import data, equipment, inventory
 from game.errors import GameError
 
 CHARGE_START = 2
@@ -48,17 +48,42 @@ def element_multiplier(attack_elem, defend_elem):
 
 
 def player_stats(player):
-    """Combat stats derived from persistent level + attributes."""
+    """Combat stats derived from persistent level + attributes + equipment."""
     level = player.combat_level
     courage = player.attributes.get("courage", 5)
     wit = player.attributes.get("wit", 5)
+    eq = equipment.bonuses(player)
     return {
         "level": level,
-        "max_hp": 30 + level * 10 + courage * 2,
-        "attack": 6 + level * 2 + courage,
-        "defense": 2 + level + wit // 2,
-        "speed": 5 + level + wit,
+        "max_hp": 30 + level * 10 + courage * 2 + eq["max_hp"],
+        "attack": 6 + level * 2 + courage + eq["attack"],
+        "defense": 2 + level + wit // 2 + eq["defense"],
+        "speed": 5 + level + wit + eq["speed"],
     }
+
+
+def _best_element_against(defend_elem):
+    """The element the defender is weak to (for the Prisma Gem's auto-target)."""
+    for elem, spec in data.load("elements").items():
+        if defend_elem in spec.get("strong_vs", []):
+            return elem
+    return "kinetic"
+
+
+def attack_element(player, enemy_element):
+    """What element your basic attack carries, given your weapon's gems."""
+    eq = equipment.bonuses(player)
+    if eq["auto_weakness"]:
+        return _best_element_against(enemy_element)
+    return eq["weapon_element"] or "kinetic"
+
+
+def incoming_resist(player, attack_elem):
+    """0.5 if your armor gems resist the incoming element, else 1.0."""
+    eq = equipment.bonuses(player)
+    if eq["resist_all"] or attack_elem in eq["resists"]:
+        return 0.5
+    return 1.0
 
 
 def xp_to_next(level):
@@ -106,12 +131,15 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0):
     """Begin a battle. Returns the new combat state dict."""
     enemy = scaled_enemy(enemy_id, floor, player.difficulty)
     stats = player_stats(player)
+    eq = equipment.bonuses(player)
+    charge_max = CHARGE_MAX + eq["charge_max"]
     return {
         "active": True,
         "enemy": enemy,
         "enemy_hp": enemy["hp"],
         "player_hp": min(player_hp, stats["max_hp"]),
-        "charge": CHARGE_START,
+        "charge": min(charge_max, CHARGE_START + eq["charge_start"]),
+        "charge_max": charge_max,
         "guarding": False,
         "attack_buff": attack_buff,
         "turn": 1,
@@ -175,18 +203,20 @@ def _tick_effects(state):
                 del effects[name]
 
 
-def _enemy_turn(state, pstats, rng):
+def _enemy_turn(player, state, pstats, rng):
     enemy = state["enemy"]
     log = state["log"]
     pe = state["player_effects"]
     # Corrode on you halves your effective defense.
     defense = pstats["defense"] * (0.5 if "corrode" in pe else 1.0)
+    # Armor gems (or a prisma) blunt the enemy's element.
+    resist = incoming_resist(player, enemy["element"])
 
     if state.get("charging"):
         # Unleash the telegraphed signature move.
         move = state["charging"]
         state["charging"] = None
-        dmg, _crit = _damage(enemy["attack"], move["power"], defense, 1.0, rng)
+        dmg, _crit = _damage(enemy["attack"], move["power"], defense, resist, rng)
         if state["guarding"]:
             dmg = max(1, dmg // TELEGRAPH_GUARD_DIVISOR)
             state["guarding"] = False
@@ -207,7 +237,7 @@ def _enemy_turn(state, pstats, rng):
         else:
             use_skill = not moves and rng.random() < ENEMY_SKILL_CHANCE
             power = ENEMY_SKILL_POWER if use_skill else BASIC_POWER
-            dmg, crit = _damage(enemy["attack"], power, defense, 1.0, rng)
+            dmg, crit = _damage(enemy["attack"], power, defense, resist, rng)
             if state["guarding"]:
                 dmg = max(1, dmg // 2)
                 state["guarding"] = False
@@ -228,7 +258,8 @@ def _enemy_turn(state, pstats, rng):
 
 def roll_drops(enemy, rng):
     """Roll the enemy's loot table (data/loot.json). Normals roll by tier with a
-    drop chance; minibosses always drop; bosses roll twice, guaranteed."""
+    drop chance; minibosses always drop; bosses roll twice, guaranteed — plus a
+    slim jackpot roll for the super-rare gems."""
     tables = data.load("loot")
     role = enemy.get("role", "normal")
     table = tables[role] if role != "normal" else tables["normal"][str(enemy["tier"])]
@@ -236,14 +267,18 @@ def roll_drops(enemy, rng):
     for _ in range(table.get("rolls", 1)):
         if rng.random() < table["chance"]:
             drops.append(rng.choice(table["items"]))
+    bonus = table.get("bonus")
+    if bonus and rng.random() < bonus["chance"]:
+        drops.append(rng.choice(bonus["items"]))
     return drops
 
 
 def _win(state, player, rng):
     enemy = state["enemy"]
     diff = data.load("difficulty")[player.difficulty]
-    xp = round(enemy["xp"] * diff["xp"])
-    credits = round(enemy["credits"] * rng.uniform(0.85, 1.15))
+    eq = equipment.bonuses(player)
+    xp = round(enemy["xp"] * diff["xp"] * eq["xp_mult"])
+    credits = round(enemy["credits"] * rng.uniform(0.85, 1.15) * eq["credit_mult"])
     state["over"] = True
     state["victory"] = True
     ups = grant_xp(player, xp)
@@ -279,13 +314,16 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
     charmed = "charm" in state["player_effects"]
 
     if action == "attack":
-        mult = element_multiplier("kinetic", enemy["element"])
+        elem = attack_element(player, enemy["element"])  # weapon gems can change this
+        mult = element_multiplier(elem, enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
         dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng)
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
-        note = " (charmed — your heart isn't in it)" if charmed else ""
+        note = " It hits a weakness!" if mult > 1 else (" Resisted." if mult < 1 else "")
+        if charmed:
+            note += " (charmed — your heart isn't in it)"
         state["log"].append(f"You attack — {dmg} damage{' (crit!)' if crit else ''}.{note}")
 
     elif action == "skill":
@@ -315,7 +353,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
 
     elif action == "guard":
         state["guarding"] = True
-        state["charge"] = min(CHARGE_MAX, state["charge"] + 1)
+        state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + 1)
         state["log"].append("You brace and bank a charge.")
 
     elif action == "item":
@@ -324,7 +362,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
             # Combat-only consumable: dumps charge into your systems.
             inventory.remove_item(player, item_id, 1)
             gain = item.get("effects", {}).get("charge", 0)
-            state["charge"] = min(CHARGE_MAX, state["charge"] + gain)
+            state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + gain)
             state["log"].append(f"You slot a {item['name']} — +{gain} charge.")
         else:
             result = inventory.use_item(player, item_id)  # validates + consumes
@@ -350,7 +388,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         return state
 
     _check_phases(state)
-    _enemy_turn(state, pstats, rng)
+    _enemy_turn(player, state, pstats, rng)
     if not state["over"]:
         _tick_effects(state)
         if state["player_hp"] <= 0:
@@ -362,6 +400,8 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
             _win(state, player, rng)
         else:
             if "slow" not in state["player_effects"]:
-                state["charge"] = min(CHARGE_MAX, state["charge"] + CHARGE_PER_TURN)
+                state["charge"] = min(
+                    state.get("charge_max", CHARGE_MAX), state["charge"] + CHARGE_PER_TURN
+                )
             state["turn"] += 1
     return state

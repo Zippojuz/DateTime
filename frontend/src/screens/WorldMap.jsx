@@ -14,6 +14,7 @@ import InventoryPanel from '../components/InventoryPanel.jsx'
 import GiftPicker from '../components/GiftPicker.jsx'
 import GiftReactionCard from '../components/GiftReactionCard.jsx'
 import SubstratePanel from '../components/SubstratePanel.jsx'
+import EquipmentPanel from '../components/EquipmentPanel.jsx'
 
 const DAY_NAMES = ['', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 
@@ -71,6 +72,7 @@ export default function WorldMap() {
       <JobPanel />
       <ShopPanel />
       <InventoryPanel />
+      <EquipmentPanel />
       <PeoplePanel />
       <DebtPanel />
       <RelationshipPanel />

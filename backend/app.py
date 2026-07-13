@@ -14,6 +14,7 @@ from game import (
     dialogue,
     dungeon,
     encounters,
+    equipment,
     events,
     gifts,
     inventory,
@@ -443,6 +444,64 @@ def create_app():
                 "outcome": outcome,
                 "state": save.state_dict(player, clock),
             }
+        )
+
+    # --- Equipment & gems ---
+
+    def _equipment_payload(player):
+        return {
+            "slots": {k: dict(v) for k, v in player.equipment.items()},
+            "slot_order": list(equipment.SLOTS),
+            "bonuses": equipment.bonuses(player),
+            "stats": combat.player_stats(player),
+        }
+
+    @app.get("/api/equipment")
+    def equipment_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, _clock = models
+        return jsonify(_equipment_payload(player))
+
+    def _equipment_action(fn):
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            fn(player)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({**_equipment_payload(player), "state": save.state_dict(player, clock)})
+
+    @app.post("/api/equipment/equip")
+    def equipment_equip():
+        body = request.get_json(silent=True) or {}
+        return _equipment_action(
+            lambda p: equipment.equip(p, body.get("item_id"), body.get("slot"))
+        )
+
+    @app.post("/api/equipment/unequip")
+    def equipment_unequip():
+        body = request.get_json(silent=True) or {}
+        return _equipment_action(lambda p: equipment.unequip(p, body.get("slot")))
+
+    @app.post("/api/equipment/socket")
+    def equipment_socket():
+        body = request.get_json(silent=True) or {}
+        return _equipment_action(
+            lambda p: equipment.socket_gem(
+                p, body.get("slot"), body.get("gem_id"), body.get("index")
+            )
+        )
+
+    @app.post("/api/equipment/unsocket")
+    def equipment_unsocket():
+        body = request.get_json(silent=True) or {}
+        return _equipment_action(
+            lambda p: equipment.unsocket_gem(p, body.get("slot"), body.get("index"))
         )
 
     @app.get("/api/difficulty")

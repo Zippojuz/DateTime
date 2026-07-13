@@ -129,6 +129,11 @@ def _m6_combat_and_dungeon(conn):
     _add_column(conn, "player", "combat", "TEXT NOT NULL DEFAULT '{}'")
 
 
+def _m7_equipment(conn):
+    """Add equipment loadout: gear slots with socketed gems."""
+    _add_column(conn, "player", "equipment", "TEXT NOT NULL DEFAULT '{}'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -136,6 +141,7 @@ MIGRATIONS = [
     _m4_jobs_debt_events,
     _m5_inventory_and_gifts,
     _m6_combat_and_dungeon,
+    _m7_equipment,
 ]
 
 

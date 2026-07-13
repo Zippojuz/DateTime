@@ -51,6 +51,24 @@ export const api = {
   dungeonLeave: () => request('/dungeon/leave', { method: 'POST', body: '{}' }),
   combatAction: (payload) =>
     request('/combat/action', { method: 'POST', body: JSON.stringify(payload) }),
+  equipment: () => request('/equipment'),
+  equip: (itemId, slot) =>
+    request('/equipment/equip', {
+      method: 'POST',
+      body: JSON.stringify({ item_id: itemId, slot }),
+    }),
+  unequip: (slot) =>
+    request('/equipment/unequip', { method: 'POST', body: JSON.stringify({ slot }) }),
+  socketGem: (slot, gemId, index) =>
+    request('/equipment/socket', {
+      method: 'POST',
+      body: JSON.stringify({ slot, gem_id: gemId, index }),
+    }),
+  unsocketGem: (slot, index) =>
+    request('/equipment/unsocket', {
+      method: 'POST',
+      body: JSON.stringify({ slot, index }),
+    }),
   difficulties: () => request('/difficulty'),
   setDifficulty: (level) =>
     request('/difficulty', { method: 'POST', body: JSON.stringify({ level }) }),

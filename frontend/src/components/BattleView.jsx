@@ -69,7 +69,7 @@ export default function BattleView() {
         <HpBar label="You" value={combat.player_hp} max={stats.max_hp} kind="you" />
         <StatusChips effects={combat.player_effects} />
         <span className="battle-charge" title="Charge powers skills">
-          Charge: {'●'.repeat(combat.charge)}{'○'.repeat(Math.max(0, 5 - combat.charge))}
+          Charge: {'●'.repeat(combat.charge)}{'○'.repeat(Math.max(0, (combat.charge_max ?? 5) - combat.charge))}
         </span>
       </div>
 

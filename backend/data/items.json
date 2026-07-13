@@ -5,7 +5,9 @@
     "type": "food",
     "rarity": "common",
     "description": "Ship rations. Chewy, grey, keeps you upright.",
-    "effects": { "energy": 15 },
+    "effects": {
+      "energy": 15
+    },
     "value": 3
   },
   "star_ration": {
@@ -14,7 +16,9 @@
     "type": "food",
     "rarity": "common",
     "description": "A dense nutrient bar from a dockside stall. Tastes of nothing and everything.",
-    "effects": { "energy": 20 },
+    "effects": {
+      "energy": 20
+    },
     "value": 4
   },
   "stim_tea": {
@@ -23,7 +27,9 @@
     "type": "food",
     "rarity": "uncommon",
     "description": "Grid-brewed and faintly luminous. Snaps you wide awake.",
-    "effects": { "energy": 35 },
+    "effects": {
+      "energy": 35
+    },
     "value": 5
   },
   "club_pass": {
@@ -104,7 +110,9 @@
     "rarity": "uncommon",
     "dungeon_only": true,
     "description": "Military-grade trauma gel that knits you back together fast. Not sold topside.",
-    "effects": { "energy": 50 },
+    "effects": {
+      "energy": 50
+    },
     "value": 6
   },
   "charge_cell": {
@@ -114,7 +122,9 @@
     "rarity": "uncommon",
     "dungeon_only": true,
     "description": "A humming capacitor that dumps straight into your weapon systems. Combat use only.",
-    "effects": { "charge": 3 },
+    "effects": {
+      "charge": 3
+    },
     "value": 5
   },
   "singing_crystal": {
@@ -135,5 +145,396 @@
     "dungeon_only": true,
     "description": "A rose blown from voidglass on the lowest floors. It drinks the light and gives it back slowly, like it's savoring.",
     "value": 8
+  },
+  "pulse_pistol": {
+    "id": "pulse_pistol",
+    "name": "Pulse Pistol",
+    "type": "equipment",
+    "slot": "weapon",
+    "rarity": "common",
+    "description": "A dockworker's sidearm. Honest iron.",
+    "bonuses": {
+      "attack": 2
+    },
+    "sockets": 0,
+    "value": 5
+  },
+  "arc_blade": {
+    "id": "arc_blade",
+    "name": "Arc Blade",
+    "type": "equipment",
+    "slot": "weapon",
+    "rarity": "uncommon",
+    "description": "A Grid duelist's edge, humming faintly. One gem socket.",
+    "bonuses": {
+      "attack": 4
+    },
+    "sockets": 1,
+    "value": 6
+  },
+  "voidglass_edge": {
+    "id": "voidglass_edge",
+    "name": "Voidglass Edge",
+    "type": "equipment",
+    "slot": "weapon",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "Cut from the Substrate's own dark glass. It remembers being part of something bigger.",
+    "bonuses": {
+      "attack": 7
+    },
+    "sockets": 2,
+    "value": 7
+  },
+  "visor": {
+    "id": "visor",
+    "name": "Targeting Visor",
+    "type": "equipment",
+    "slot": "head",
+    "rarity": "common",
+    "description": "Off-the-shelf HUD glass.",
+    "bonuses": {
+      "defense": 1
+    },
+    "sockets": 0,
+    "value": 4
+  },
+  "neural_crown": {
+    "id": "neural_crown",
+    "name": "Neural Crown",
+    "type": "equipment",
+    "slot": "head",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "A circlet of dead processors that still dream a little. Two sockets.",
+    "bonuses": {
+      "defense": 2,
+      "max_hp": 10
+    },
+    "sockets": 2,
+    "value": 6
+  },
+  "flak_vest": {
+    "id": "flak_vest",
+    "name": "Flak Vest",
+    "type": "equipment",
+    "slot": "torso",
+    "rarity": "common",
+    "description": "Citadel surplus. Smells like bureaucracy.",
+    "bonuses": {
+      "defense": 3
+    },
+    "sockets": 0,
+    "value": 5
+  },
+  "substrate_weave": {
+    "id": "substrate_weave",
+    "name": "Substrate Weave",
+    "type": "equipment",
+    "slot": "torso",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "Cloth that shouldn't exist, woven somewhere below floor six. Two sockets.",
+    "bonuses": {
+      "defense": 5,
+      "max_hp": 10
+    },
+    "sockets": 2,
+    "value": 7
+  },
+  "grip_gloves": {
+    "id": "grip_gloves",
+    "name": "Grip Gloves",
+    "type": "equipment",
+    "slot": "hands",
+    "rarity": "common",
+    "description": "Docker's gloves, palm-textured.",
+    "bonuses": {
+      "attack": 1
+    },
+    "sockets": 0,
+    "value": 4
+  },
+  "duelist_gauntlets": {
+    "id": "duelist_gauntlets",
+    "name": "Duelist Gauntlets",
+    "type": "equipment",
+    "slot": "hands",
+    "rarity": "uncommon",
+    "description": "Fitted, elegant, quietly armored. One socket.",
+    "bonuses": {
+      "attack": 2,
+      "defense": 1
+    },
+    "sockets": 1,
+    "value": 5
+  },
+  "mag_boots": {
+    "id": "mag_boots",
+    "name": "Mag Boots",
+    "type": "equipment",
+    "slot": "feet",
+    "rarity": "common",
+    "description": "They hold the deck when the deck misbehaves.",
+    "bonuses": {
+      "speed": 2
+    },
+    "sockets": 0,
+    "value": 4
+  },
+  "grav_dancers": {
+    "id": "grav_dancers",
+    "name": "Grav Dancers",
+    "type": "equipment",
+    "slot": "feet",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "Slippers that argue with gravity and usually win. One socket.",
+    "bonuses": {
+      "speed": 4,
+      "defense": 2
+    },
+    "sockets": 1,
+    "value": 6
+  },
+  "lucky_chip": {
+    "id": "lucky_chip",
+    "name": "Lucky Chip",
+    "type": "equipment",
+    "slot": "accessory",
+    "rarity": "uncommon",
+    "description": "A casino chip from a place that burned down. Pure gem housing — two sockets.",
+    "bonuses": {},
+    "sockets": 2,
+    "value": 5
+  },
+  "ember_gem": {
+    "id": "ember_gem",
+    "name": "Ember Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "In a weapon: your strikes burn thermal. In armor: resists thermal.",
+    "effect": {
+      "element": "thermal"
+    },
+    "value": 5
+  },
+  "frost_gem": {
+    "id": "frost_gem",
+    "name": "Frost Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "In a weapon: your strikes bite cryo. In armor: resists cryo.",
+    "effect": {
+      "element": "cryo"
+    },
+    "value": 5
+  },
+  "volt_gem": {
+    "id": "volt_gem",
+    "name": "Volt Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "In a weapon: your strikes arc voltaic. In armor: resists voltaic.",
+    "effect": {
+      "element": "voltaic"
+    },
+    "value": 5
+  },
+  "venom_gem": {
+    "id": "venom_gem",
+    "name": "Venom Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "In a weapon: your strikes seep toxin. In armor: resists toxin.",
+    "effect": {
+      "element": "toxin"
+    },
+    "value": 5
+  },
+  "psi_gem": {
+    "id": "psi_gem",
+    "name": "Psi Gem",
+    "type": "gem",
+    "rarity": "rare",
+    "description": "In a weapon: your strikes cut psionic. In armor: resists psionic.",
+    "effect": {
+      "element": "psionic"
+    },
+    "value": 5
+  },
+  "power_gem": {
+    "id": "power_gem",
+    "name": "Power Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "+3 attack while socketed.",
+    "effect": {
+      "attack": 3
+    },
+    "value": 5
+  },
+  "aegis_gem": {
+    "id": "aegis_gem",
+    "name": "Aegis Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "+3 defense while socketed.",
+    "effect": {
+      "defense": 3
+    },
+    "value": 5
+  },
+  "vitality_gem": {
+    "id": "vitality_gem",
+    "name": "Vitality Gem",
+    "type": "gem",
+    "rarity": "uncommon",
+    "description": "+15 max HP while socketed.",
+    "effect": {
+      "max_hp": 15
+    },
+    "value": 5
+  },
+  "surge_gem": {
+    "id": "surge_gem",
+    "name": "Surge Gem",
+    "type": "gem",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "+1 starting charge and +1 max charge while socketed.",
+    "effect": {
+      "charge_start": 1,
+      "charge_max": 1
+    },
+    "value": 6
+  },
+  "fortune_gem": {
+    "id": "fortune_gem",
+    "name": "Fortune Gem",
+    "type": "gem",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "+20% credits from victories while socketed.",
+    "effect": {
+      "credit_mult": 1.2
+    },
+    "value": 6
+  },
+  "sage_gem": {
+    "id": "sage_gem",
+    "name": "Sage Gem",
+    "type": "gem",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "+20% XP from victories while socketed.",
+    "effect": {
+      "xp_mult": 1.2
+    },
+    "value": 6
+  },
+  "prisma_gem": {
+    "id": "prisma_gem",
+    "name": "Prisma Gem",
+    "type": "gem",
+    "rarity": "legendary",
+    "dungeon_only": true,
+    "description": "All six colors at once. In a weapon: your strikes find whatever the enemy fears most. In armor: resists everything.",
+    "effect": {
+      "prisma": true
+    },
+    "value": 10
+  },
+  "empress_heart": {
+    "id": "empress_heart",
+    "name": "Empress's Heart",
+    "type": "gem",
+    "rarity": "legendary",
+    "dungeon_only": true,
+    "description": "It still beats, faintly, in time with the city. +5 attack, +5 defense, +25 max HP.",
+    "effect": {
+      "attack": 5,
+      "defense": 5,
+      "max_hp": 25
+    },
+    "value": 10
+  },
+  "arm_plating": {
+    "id": "arm_plating",
+    "name": "Arm Plating",
+    "type": "equipment",
+    "slot": "arms",
+    "rarity": "common",
+    "description": "Bolt-on forearm guards, dock-brawl tested.",
+    "bonuses": {
+      "defense": 2
+    },
+    "sockets": 0,
+    "value": 4
+  },
+  "myomer_sleeves": {
+    "id": "myomer_sleeves",
+    "name": "Myomer Sleeves",
+    "type": "equipment",
+    "slot": "arms",
+    "rarity": "uncommon",
+    "description": "Muscle-fiber weave that pulls with you. One socket.",
+    "bonuses": {
+      "attack": 3
+    },
+    "sockets": 1,
+    "value": 5
+  },
+  "plate_greaves": {
+    "id": "plate_greaves",
+    "name": "Plate Greaves",
+    "type": "equipment",
+    "slot": "legs",
+    "rarity": "common",
+    "description": "Heavy shin plating. Ugly, effective.",
+    "bonuses": {
+      "defense": 2
+    },
+    "sockets": 0,
+    "value": 4
+  },
+  "servo_legguards": {
+    "id": "servo_legguards",
+    "name": "Servo Legguards",
+    "type": "equipment",
+    "slot": "legs",
+    "rarity": "uncommon",
+    "description": "Assisted joints with a spring in the step. One socket.",
+    "bonuses": {
+      "defense": 3,
+      "speed": 1
+    },
+    "sockets": 1,
+    "value": 5
+  },
+  "signal_ring": {
+    "id": "signal_ring",
+    "name": "Signal Ring",
+    "type": "equipment",
+    "slot": "ring",
+    "rarity": "uncommon",
+    "description": "A slim band with a single gem housing. Buy two — you have two hands.",
+    "bonuses": {},
+    "sockets": 1,
+    "value": 5
+  },
+  "band_of_the_deep": {
+    "id": "band_of_the_deep",
+    "name": "Band of the Deep",
+    "type": "equipment",
+    "slot": "ring",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "Voidglass ring, warm against all reason. One socket.",
+    "bonuses": {
+      "max_hp": 5
+    },
+    "sockets": 1,
+    "value": 6
   }
 }

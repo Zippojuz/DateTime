@@ -50,6 +50,9 @@ export const useGameStore = create((set, get) => ({
   dungeonResult: null,
   difficulties: null,
 
+  // Gear loadout: { slots, slot_order, bonuses, stats } from the server.
+  equipment: null,
+
   busy: false,
   error: null,
 
@@ -89,6 +92,7 @@ export const useGameStore = create((set, get) => ({
       get().loadJobs()
       get().loadShop()
       get().loadDungeon() // resume a mid-run Substrate dive
+      get().loadEquipment()
     }
   },
 
@@ -101,6 +105,7 @@ export const useGameStore = create((set, get) => ({
       get().loadJobs()
       get().loadShop()
       get().loadDungeon()
+      get().loadEquipment()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -283,6 +288,32 @@ export const useGameStore = create((set, get) => ({
       set({ error: err.message, busy: false })
     }
   },
+
+  // --- Equipment & gems ---
+
+  loadEquipment: async () => {
+    try {
+      set({ equipment: await api.equipment() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  _equipmentAction: async (call) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await call()
+      set({ equipment: res, state: res.state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  equipItem: (itemId, slot) => get()._equipmentAction(() => api.equip(itemId, slot)),
+  unequipSlot: (slot) => get()._equipmentAction(() => api.unequip(slot)),
+  socketGem: (slot, gemId, index) =>
+    get()._equipmentAction(() => api.socketGem(slot, gemId, index)),
+  unsocketGem: (slot, index) => get()._equipmentAction(() => api.unsocketGem(slot, index)),
 
   doAction: async (action, attribute) => {
     set({ busy: true, error: null })

@@ -338,6 +338,21 @@ Per-role/tier drop tables (minibosses always drop, bosses roll twice), credit
 variance (85–115%), dungeon-only items (Nano Patch, Charge Cell booster,
 Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 
+### Follow-up: equipment & gems (materia) ✅ DONE
+- Ten JRPG gear slots: weapon, head, torso, arms, hands, legs, feet, ring1,
+  ring2, accessory (ring items fit either finger — wear two).
+- Gear gives flat stats + 0–2 gem sockets (rarer gear = more sockets); gems
+  live on the equipped slot (inventory is quantity-based), unequip returns both.
+- **Gems are materia**: element gem in the WEAPON changes your basic attack's
+  element; the same gem in ARMOR resists that element (0.5x incoming). Stat,
+  charge (start/max), XP% and credit% gems work anywhere.
+- **Super rares** (boss jackpot roll, 12%): Prisma Gem (weapon: auto-targets
+  the enemy's weakness; armor: resists everything) and the Empress's Heart.
+- Gear/gems in shops (commons), loot tables, deep treasure; dungeon-only gear
+  (Voidglass Edge, Neural Crown, Substrate Weave, Grav Dancers, Band of the
+  Deep). Migration 7; routes /api/equipment + equip/unequip/socket/unsocket;
+  EquipmentPanel UI with socket management. +16 pytest (152 total).
+
 ### Follow-up: boss mechanics & status effects ✅ DONE
 - Telegraphed signature moves on a cadence (charge turn → ⚠ banner → big hit);
   guarding a telegraphed hit cuts it to 1/3 (regular guard 1/2).

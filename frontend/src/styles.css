@@ -1080,6 +1080,88 @@ body {
 .status--charm { color: #d98aff; }
 .status--corrode { color: #8dff7a; }
 
+/* --- Equipment --- */
+
+.equipment-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.equip-stats {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+  flex-wrap: wrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.equip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.equip-slot {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+.equip-slot-name {
+  min-width: 5.5rem;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+}
+
+.equip-gear {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.equip-sockets {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.gem {
+  font-size: 0.75rem;
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #26304a;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.gem--filled {
+  color: var(--neon);
+  border-color: var(--neon-dim);
+}
+
+.gem--empty {
+  color: var(--text-dim);
+  border-style: dashed;
+}
+
+.equip-empty {
+  color: var(--text-dim);
+}
+
 .inv-substrate {
   font-size: 0.62rem;
   text-transform: uppercase;
