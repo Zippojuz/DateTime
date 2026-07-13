@@ -37,7 +37,7 @@ def test_vael_preferences_load_with_changeable_flags():
     vael = NPC.load("vael")
     assert vael.preferences["books"]["sentiment"] == "love"
     assert vael.preferences["fitness"]["changeable"] is False  # core, unchangeable
-    assert vael.preferences["books"]["changeable"] is True     # defaults from topic
+    assert vael.preferences["books"]["changeable"] is True  # defaults from topic
 
 
 def test_relationships_start_neutral(client):

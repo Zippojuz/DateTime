@@ -13,7 +13,7 @@ fi
 # shellcheck disable=SC1091
 source .venv/bin/activate
 pip install --quiet --upgrade pip
-pip install --quiet -r requirements.txt
+pip install --quiet -r requirements-dev.txt
 deactivate
 
 echo "==> Frontend: npm install"
@@ -24,5 +24,10 @@ else
   echo "    node_modules present — skipping (delete it to force reinstall)"
 fi
 
+echo "==> Pre-commit hook"
+cd "$ROOT"
+"$ROOT/backend/.venv/bin/pre-commit" install --install-hooks
+
 echo "==> Done. Run backend: (cd backend && source .venv/bin/activate && python app.py)"
 echo "         Run frontend: (cd frontend && npm run dev)"
+echo "         Pre-commit runs automatically on 'git commit' (ruff, pytest, eslint, vitest)."

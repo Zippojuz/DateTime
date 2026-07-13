@@ -1,0 +1,6 @@
+-r requirements.txt
+
+# Dev tooling — ruff formats + lints, pre-commit wires it (and pytest) into a
+# git commit gate. See ../.pre-commit-config.yaml.
+ruff==0.15.21
+pre-commit==4.6.0

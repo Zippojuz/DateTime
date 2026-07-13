@@ -1,0 +1,49 @@
+# Pre-commit gate: ruff format + ruff check + the full pytest suite (backend),
+# eslint + the full vitest suite (frontend). Every hook always runs against the
+# whole codebase, not just staged files, so a commit only succeeds when the
+# entire tree is clean.
+#
+# Setup (once): bash scripts/dev-setup.sh   (installs deps + runs `pre-commit
+# install`), or manually:
+#   pip install -r backend/requirements-dev.txt && pre-commit install
+#
+# All hooks run via `language: system` against the project's own venv /
+# node_modules, so tool versions match exactly what CI and developers use —
+# no separate pre-commit-managed environments to keep in sync.
+repos:
+  - repo: local
+    hooks:
+      - id: ruff-format
+        name: ruff format (backend)
+        entry: bash -c 'backend/.venv/bin/ruff format backend'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: ruff-check
+        name: ruff check (backend)
+        entry: bash -c 'backend/.venv/bin/ruff check backend'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: pytest-backend
+        name: pytest (backend)
+        entry: bash -c 'backend/.venv/bin/python -m pytest -q'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: eslint-frontend
+        name: eslint (frontend)
+        entry: bash -c 'cd frontend && npm run lint'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: vitest-frontend
+        name: vitest (frontend)
+        entry: bash -c 'cd frontend && npm test'
+        language: system
+        pass_filenames: false
+        always_run: true

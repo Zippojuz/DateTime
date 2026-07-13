@@ -19,7 +19,10 @@ in place so systems can be layered in per the design doc's Build Phases.
 - **API:** REST, JSON, all routes under `/api`, consistent `{error, ...}` shape.
 - **Saves:** single autosave slot for now; multi-slot deferred to Phase 7.
 - **Python deps:** `venv` + `requirements.txt`.
-- **Tooling:** `ruff` + `black` (Python), `eslint` + `prettier` (JS).
+- **Tooling:** `ruff` (format + lint, Python), `eslint` + `prettier` (JS).
+  Enforced via a `pre-commit` git hook (`.pre-commit-config.yaml`): ruff
+  format/check + full pytest suite (backend), eslint + full vitest suite
+  (frontend) — all run on every commit, whole codebase, not just staged files.
 - **Tests:** `pytest` (backend) + `vitest` (frontend), one smoke test each in M0.
 - **Attributes are data-driven + extensible.** Character stats/attributes are
   NOT fixed DB columns. They are defined in a registry (`data/attributes.json`)

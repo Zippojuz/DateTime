@@ -17,9 +17,7 @@ def due_events(clock, fired):
     """Return events whose date has arrived and that haven't fired yet, sorted
     by their scheduled date."""
     events = data.load("events")
-    pending = [
-        ev for ev in events.values() if ev["id"] not in fired and _reached(clock, ev)
-    ]
+    pending = [ev for ev in events.values() if ev["id"] not in fired and _reached(clock, ev)]
     return sorted(pending, key=lambda e: (e.get("week", 1), e.get("day", 1)))
 
 

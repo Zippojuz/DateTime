@@ -208,9 +208,7 @@ def get_known_npc_topics(save_id, npc_id):
 
 def all_relationships(save_id, today):
     with get_connection() as conn:
-        rows = conn.execute(
-            "SELECT * FROM relationships WHERE save_id=?", (save_id,)
-        ).fetchall()
+        rows = conn.execute("SELECT * FROM relationships WHERE save_id=?", (save_id,)).fetchall()
     return {
         r["npc_id"]: {
             "affection": _affection_from(

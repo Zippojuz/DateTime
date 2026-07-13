@@ -83,9 +83,7 @@ def test_rest_restores_energy_and_rolls_the_day(client):
 
 def test_train_raises_the_chosen_attribute(client):
     _new(client)
-    state = client.post(
-        "/api/action", json={"action": "train", "attribute": "wit"}
-    ).get_json()
+    state = client.post("/api/action", json={"action": "train", "attribute": "wit"}).get_json()
     assert state["player"]["attributes"]["wit"] == 6
     assert state["player"]["energy"] == 85
 
@@ -125,9 +123,7 @@ def test_day_and_week_roll_over(client):
 
 def test_transform_is_locked_at_creation(client):
     _new(client)
-    resp = client.post(
-        "/api/player/transform", json={"changes": {"pronouns": "he/him"}}
-    )
+    resp = client.post("/api/player/transform", json={"changes": {"pronouns": "he/him"}})
     assert resp.status_code == 400
     assert "unlocked" in resp.get_json()["error"].lower()
 

@@ -205,9 +205,7 @@ def create_app():
             return jsonify(error=str(err)), 400
         fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
-        return jsonify(
-            {"state": save.state_dict(player, clock), "result": result, "events": fired}
-        )
+        return jsonify({"state": save.state_dict(player, clock), "result": result, "events": fired})
 
     @app.post("/api/debt/pay")
     def pay_debt():
@@ -263,9 +261,7 @@ def create_app():
             return jsonify(error=str(err)), 400
         fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
-        return jsonify(
-            {"state": save.state_dict(player, clock), "bought": result, "events": fired}
-        )
+        return jsonify({"state": save.state_dict(player, clock), "bought": result, "events": fired})
 
     @app.post("/api/item/use")
     def item_use():

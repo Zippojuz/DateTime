@@ -6,8 +6,10 @@ SQLite saves. See [`dtDesignDoc.md`](dtDesignDoc.md) for the design and
 
 ## Status
 
-**Milestone 0 — Scaffolding.** Both servers run and the title screen confirms
-it reached the backend's health endpoint. Game systems are stubbed.
+Milestones 0–4 and most of 6 are built: player creation, the daily action loop,
+NPC relationships/dialogue/preferences with memory decay, an explorable
+5-district city, jobs/debt/seasonal events, and inventory/shop/gifting. See
+`PLAN.md` for the full milestone breakdown and what's next.
 
 ## Layout
 
@@ -67,16 +69,32 @@ so both must be running.)
 
 ```bash
 # Backend
-pip install -r backend/requirements.txt
+pip install -r backend/requirements-dev.txt
 pytest
 
 # Frontend
 cd frontend && npm test
 ```
 
+## Pre-commit hooks
+
+`bash scripts/dev-setup.sh` installs dev tooling and registers a git
+pre-commit hook (config in `.pre-commit-config.yaml`). Every commit runs, on
+the **whole codebase** (not just staged files):
+
+- `ruff format` + `ruff check` (backend)
+- the full `pytest` suite (backend)
+- `eslint` + the full `vitest` suite (frontend)
+
+A commit is blocked until all five pass. To run it manually:
+`backend/.venv/bin/pre-commit run --all-files`. To set it up by hand instead of
+via `dev-setup.sh`: `pip install -r backend/requirements-dev.txt && pre-commit
+install`.
+
 ## Conventions
 
 - Backend is **server-authoritative** — game rules and state live in Python.
 - Identity fields (pronouns/gender/orientation/appearance/body) are free-form
   data and never gate content. See `dtDesignDoc.md` → Identity Philosophy.
-- Python: `ruff` + `black`. JS: `eslint` + `prettier`.
+- Python: `ruff` (format + lint). JS: `eslint` + `prettier`.
+- Enforced on every commit — see Pre-commit hooks above.

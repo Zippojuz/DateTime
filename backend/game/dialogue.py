@@ -13,13 +13,25 @@ from game.errors import GameError
 # Full grammatical forms for the presets; graceful fallback for custom sets.
 PRONOUN_SETS = {
     "she/her": {
-        "subj": "she", "obj": "her", "pos": "her", "pos_pron": "hers", "reflex": "herself",
+        "subj": "she",
+        "obj": "her",
+        "pos": "her",
+        "pos_pron": "hers",
+        "reflex": "herself",
     },
     "he/him": {
-        "subj": "he", "obj": "him", "pos": "his", "pos_pron": "his", "reflex": "himself",
+        "subj": "he",
+        "obj": "him",
+        "pos": "his",
+        "pos_pron": "his",
+        "reflex": "himself",
     },
     "they/them": {
-        "subj": "they", "obj": "them", "pos": "their", "pos_pron": "theirs", "reflex": "themself",
+        "subj": "they",
+        "obj": "them",
+        "pos": "their",
+        "pos_pron": "theirs",
+        "reflex": "themself",
     },
 }
 
