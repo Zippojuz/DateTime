@@ -1,5 +1,7 @@
 # NEXUS CITY
 
+[![CI](https://github.com/Zippojuz/DateTime/actions/workflows/ci.yml/badge.svg)](https://github.com/Zippojuz/DateTime/actions/workflows/ci.yml)
+
 A sci-fi dating sim / JRPG. Flask (Python) backend + React (Vite) frontend,
 SQLite saves. See [`dtDesignDoc.md`](dtDesignDoc.md) for the design and
 [`PLAN.md`](PLAN.md) for the build plan and architecture decisions.
@@ -90,6 +92,15 @@ A commit is blocked until all five pass. To run it manually:
 `backend/.venv/bin/pre-commit run --all-files`. To set it up by hand instead of
 via `dev-setup.sh`: `pip install -r backend/requirements-dev.txt && pre-commit
 install`.
+
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push and PR, as three
+parallel jobs: the same `ruff format --check` / `ruff check` / `pytest` gate,
+`eslint` / `vitest` / `npm run build` for the frontend, and a `docker build` of
+the dev image (see the Docker section above) — CI has full internet access, so
+this is the first place that actually verifies the Dockerfile builds end to
+end.
 
 ## Conventions
 

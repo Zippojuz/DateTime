@@ -23,6 +23,10 @@ in place so systems can be layered in per the design doc's Build Phases.
   Enforced via a `pre-commit` git hook (`.pre-commit-config.yaml`): ruff
   format/check + full pytest suite (backend), eslint + full vitest suite
   (frontend) — all run on every commit, whole codebase, not just staged files.
+- **CI:** GitHub Actions (`.github/workflows/ci.yml`) mirrors the pre-commit
+  gate on every push/PR (backend, frontend, and a `docker build` of the dev
+  image) — the first place that verifies the Dockerfile actually builds, since
+  this sandbox's egress policy blocks Docker Hub's layer CDN.
 - **Tests:** `pytest` (backend) + `vitest` (frontend), one smoke test each in M0.
 - **Attributes are data-driven + extensible.** Character stats/attributes are
   NOT fixed DB columns. They are defined in a registry (`data/attributes.json`)
