@@ -127,7 +127,18 @@
     "element": "cryo",
     "description": "The Substrate's self-appointed jailer — statuesque, frost-armored, achingly formal. She'd rather you surrendered. She always asks nicely first.",
     "hp": 70, "attack": 11, "defense": 6, "speed": 7,
-    "xp": 40, "credits": 30
+    "xp": 40, "credits": 30,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Cryostasis Seal",
+          "power": 1.8,
+          "every_n_turns": 4,
+          "telegraph": "Frost crawls up Warden Lyss's arms as she begins drawing a sealing sigil in the air. Brace yourself.",
+          "inflicts": { "effect": "slow", "turns": 2 }
+        }
+      ]
+    }
   },
   "overclock_queen": {
     "id": "overclock_queen",
@@ -137,7 +148,18 @@
     "element": "voltaic",
     "description": "A regal figure on a throne of stripped processors, crowned in arcing current, ruling a court of humming fans. She thinks you're a fascinating peripheral.",
     "hp": 95, "attack": 16, "defense": 8, "speed": 9,
-    "xp": 60, "credits": 45
+    "xp": 60, "credits": 45,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Full Overclock",
+          "power": 1.9,
+          "every_n_turns": 4,
+          "telegraph": "The Queen's crown of current flares white — every fan in her court screams to full speed. Get ready.",
+          "inflicts": { "effect": "corrode", "turns": 3 }
+        }
+      ]
+    }
   },
   "spore_matriarch": {
     "id": "spore_matriarch",
@@ -147,7 +169,18 @@
     "element": "toxin",
     "description": "Mother to every bloom in the deep vents — vast, serene, and terribly fond of visitors. Her garden keeps whoever falls asleep in it.",
     "hp": 130, "attack": 20, "defense": 10, "speed": 6,
-    "xp": 85, "credits": 60
+    "xp": 85, "credits": 60,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Bloom Embrace",
+          "power": 1.7,
+          "every_n_turns": 4,
+          "telegraph": "The Matriarch opens her arms, and the air goes thick and sweet with spores. You know what comes next.",
+          "inflicts": { "effect": "charm", "turns": 2 }
+        }
+      ]
+    }
   },
   "chrome_contessa": {
     "id": "chrome_contessa",
@@ -157,7 +190,26 @@
     "element": "kinetic",
     "description": "Nobility of the upper Substrate: a towering gynoid aristocrat in liquid-metal couture, flanked by curtseying drones. She duels every guest personally. It would be rude not to.",
     "hp": 120, "attack": 14, "defense": 8, "speed": 8,
-    "xp": 80, "credits": 70
+    "xp": 80, "credits": 70,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Curtsy of Blades",
+          "power": 2.2,
+          "every_n_turns": 4,
+          "telegraph": "The Contessa sinks into a deep, gleaming curtsy — fans of blades unfolding from her sleeves. Guard, now.",
+          "inflicts": null
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.5,
+          "attack_mult": 1.35,
+          "defense_mult": 0.6,
+          "text": "The Contessa sheds her gown-armor in a cascade of liquid metal — faster now, and furious, and laughing."
+        }
+      ]
+    }
   },
   "neon_seraph": {
     "id": "neon_seraph",
@@ -167,7 +219,26 @@
     "element": "voltaic",
     "description": "Six wings of pure signal, a halo of warning glyphs, and a face you're sure you've seen in an ad you can't remember. Being noticed by her feels like sunburn.",
     "hp": 170, "attack": 20, "defense": 10, "speed": 11,
-    "xp": 130, "credits": 110
+    "xp": 130, "credits": 110,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Halo Cascade",
+          "power": 2.0,
+          "every_n_turns": 4,
+          "telegraph": "The Seraph's halo fractures into a ring of falling glyphs, each one brightening toward white. Cover!",
+          "inflicts": { "effect": "burn", "turns": 3, "amount": 5 }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.5,
+          "attack_mult": 1.2,
+          "element": "psionic",
+          "text": "Her halo inverts — the light goes soft and terribly intimate. The Seraph is inside your head now. (Her element has shifted!)"
+        }
+      ]
+    }
   },
   "substrate_empress": {
     "id": "substrate_empress",
@@ -177,6 +248,30 @@
     "element": "psionic",
     "description": "The deepest dream of the machine beneath the city, wearing a crown of every lost signal Nexus ever swallowed. She has been expecting you — she says it like an old friend would.",
     "hp": 240, "attack": 24, "defense": 12, "speed": 10,
-    "xp": 220, "credits": 200
+    "xp": 220, "credits": 200,
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Requiem of Signals",
+          "power": 2.4,
+          "every_n_turns": 4,
+          "telegraph": "Every lost signal the city ever swallowed rises around the Empress in a slow chorus. It is beautiful. It is aimed at you.",
+          "inflicts": { "effect": "charm", "turns": 2 }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.66,
+          "attack_mult": 1.2,
+          "text": "The crown wakes. Lights kindle across the whole floor as the Empress stops being polite."
+        },
+        {
+          "hp_below": 0.33,
+          "attack_mult": 1.15,
+          "defense_mult": 1.3,
+          "text": "The city dreams with her now — the walls themselves lean in to shield their Empress."
+        }
+      ]
+    }
   }
 }

@@ -333,6 +333,24 @@ Verified end-to-end (rarity pricing, food use, preference-driven gift + reveal).
 Live scripted run: 6 floors, 19 wins, level 1→8, boss kills, events/treasure/
 rest, defeat at the floor-6 boss with credits toll + level kept.
 
+### Follow-up: loot & drops ✅ DONE
+Per-role/tier drop tables (minibosses always drop, bosses roll twice), credit
+variance (85–115%), dungeon-only items (Nano Patch, Charge Cell booster,
+Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
+
+### Follow-up: boss mechanics & status effects ✅ DONE
+- Telegraphed signature moves on a cadence (charge turn → ⚠ banner → big hit);
+  guarding a telegraphed hit cuts it to 1/3 (regular guard 1/2).
+- Phases at HP thresholds (data-driven `mechanics` in enemies.json): Contessa
+  sheds armor (atk↑ def↓), Seraph shifts element voltaic→psionic mid-fight,
+  Empress escalates twice. Minibosses each have one signature, no phases.
+- Status effects: burn (DoT), slow (no charge regen), charm (your damage
+  halved), corrode (defense halved). Bosses inflict via signatures; regular
+  enemies via charged strikes (element-mapped); player thermal/toxin skills
+  can inflict burn/corrode back. Status chips + telegraph banner in the UI.
+- +15 pytest (136 total). Verified via full simulated boss fights (phase,
+  telegraph, guard-read, status, double-drop all firing).
+
 ## Later Milestones (tracked, not detailed yet)
 
 | Milestone | Design Phase | Notes |

@@ -1,5 +1,26 @@
 import { useGameStore } from '../state/gameStore'
 
+const STATUS_HINT = {
+  burn: 'taking damage each turn',
+  slow: 'no charge regen',
+  charm: 'your damage halved',
+  corrode: 'defense halved',
+}
+
+function StatusChips({ effects }) {
+  const entries = Object.entries(effects ?? {})
+  if (!entries.length) return null
+  return (
+    <span className="status-chips">
+      {entries.map(([name, e]) => (
+        <span key={name} className={`status status--${name}`} title={STATUS_HINT[name]}>
+          {name} {e.turns}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 // Turn-based battle UI: enemy card, HP bars, action buttons, combat log.
 export default function BattleView() {
   const dungeon = useGameStore((s) => s.dungeon)
@@ -29,7 +50,14 @@ export default function BattleView() {
         </div>
         <p className="battle-desc">{enemy.description}</p>
         <HpBar label="" value={combat.enemy_hp} max={enemy.hp} kind="enemy" />
+        <StatusChips effects={combat.enemy_effects} />
       </div>
+
+      {combat.charging && (
+        <div className="battle-telegraph" role="alert">
+          ⚠ {combat.charging.telegraph}
+        </div>
+      )}
 
       <div className="battle-log">
         {combat.log.slice(-4).map((line, i) => (
@@ -39,6 +67,7 @@ export default function BattleView() {
 
       <div className="battle-you">
         <HpBar label="You" value={combat.player_hp} max={stats.max_hp} kind="you" />
+        <StatusChips effects={combat.player_effects} />
         <span className="battle-charge" title="Charge powers skills">
           Charge: {'●'.repeat(combat.charge)}{'○'.repeat(Math.max(0, 5 - combat.charge))}
         </span>

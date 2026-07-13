@@ -1,8 +1,8 @@
 {
   "kinetic": { "name": "Kinetic", "strong_vs": ["toxin"], "color": "#c0c8d8" },
-  "thermal": { "name": "Thermal", "strong_vs": ["cryo"], "color": "#ff7a4d" },
-  "cryo": { "name": "Cryo", "strong_vs": ["voltaic"], "color": "#7ad9ff" },
+  "thermal": { "name": "Thermal", "strong_vs": ["cryo"], "color": "#ff7a4d", "status": "burn" },
+  "cryo": { "name": "Cryo", "strong_vs": ["voltaic"], "color": "#7ad9ff", "status": "slow" },
   "voltaic": { "name": "Voltaic", "strong_vs": ["thermal"], "color": "#ffe95a" },
-  "toxin": { "name": "Toxin", "strong_vs": ["psionic"], "color": "#8dff7a" },
-  "psionic": { "name": "Psionic", "strong_vs": ["kinetic"], "color": "#d98aff" }
+  "toxin": { "name": "Toxin", "strong_vs": ["psionic"], "color": "#8dff7a", "status": "corrode" },
+  "psionic": { "name": "Psionic", "strong_vs": ["kinetic"], "color": "#d98aff", "status": "charm" }
 }

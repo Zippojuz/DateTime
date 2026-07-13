@@ -25,6 +25,16 @@ BASIC_POWER = 1.0
 ENEMY_SKILL_CHANCE = 0.3
 ENEMY_SKILL_POWER = 1.4
 
+# Status effects. burn = damage over time; slow = no charge regen; charm =
+# your outgoing damage halved; corrode = defense halved. burn/corrode can also
+# afflict enemies (via thermal/toxin player skills); slow/charm are player-only.
+ENEMY_STATUSES = ("burn", "corrode")
+SKILL_INFLICT_CHANCE = 0.30  # player skills
+ENEMY_SKILL_INFLICT_CHANCE = 0.35  # enemy charged strikes
+DEFAULT_BURN = 4
+# Guarding a telegraphed signature move cuts it to a third (regular guard: half).
+TELEGRAPH_GUARD_DIVISOR = 3
+
 
 def element_multiplier(attack_elem, defend_elem):
     if not attack_elem or not defend_elem:
@@ -106,6 +116,10 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0):
         "attack_buff": attack_buff,
         "turn": 1,
         "log": [f"{enemy['name']} bars your way."],
+        "player_effects": {},  # {status: {turns, amount}}
+        "enemy_effects": {},
+        "charging": None,  # a telegraphed move waiting to be unleashed
+        "phase": 0,  # count of boss phases already triggered
         "over": False,
         "victory": False,
         "fled": False,
@@ -113,22 +127,103 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0):
     }
 
 
+def _status_for(element):
+    return data.load("elements").get(element, {}).get("status")
+
+
+def _inflict(effects, effect, turns, amount=0):
+    effects[effect] = {
+        "turns": turns,
+        "amount": amount or (DEFAULT_BURN if effect == "burn" else 0),
+    }
+
+
+def _check_phases(state):
+    """Trigger any boss phases the enemy's HP has fallen past (each fires once)."""
+    mech = state["enemy"].get("mechanics") or {}
+    phases = mech.get("phases", [])
+    max_hp = state["enemy"]["hp"]
+    while state["phase"] < len(phases):
+        phase = phases[state["phase"]]
+        if state["enemy_hp"] > max_hp * phase["hp_below"]:
+            break
+        enemy = state["enemy"]
+        enemy["attack"] = round(enemy["attack"] * phase.get("attack_mult", 1.0))
+        enemy["defense"] = round(enemy["defense"] * phase.get("defense_mult", 1.0))
+        if phase.get("element"):
+            enemy["element"] = phase["element"]
+        state["log"].append(phase["text"])
+        state["phase"] += 1
+
+
+def _tick_effects(state):
+    """End-of-round: apply burn damage and count every effect down."""
+    log = state["log"]
+    pe, ee = state["player_effects"], state["enemy_effects"]
+    if "burn" in pe:
+        dmg = pe["burn"]["amount"]
+        state["player_hp"] = max(0, state["player_hp"] - dmg)
+        log.append(f"Burn sears you — {dmg} damage.")
+    if "burn" in ee:
+        dmg = ee["burn"]["amount"]
+        state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
+        log.append(f"{state['enemy']['name']} burns — {dmg} damage.")
+    for effects in (pe, ee):
+        for name in list(effects):
+            effects[name]["turns"] -= 1
+            if effects[name]["turns"] <= 0:
+                del effects[name]
+
+
 def _enemy_turn(state, pstats, rng):
     enemy = state["enemy"]
-    use_skill = rng.random() < ENEMY_SKILL_CHANCE
-    power = ENEMY_SKILL_POWER if use_skill else BASIC_POWER
-    mult = element_multiplier(enemy["element"], None)  # player has no element
-    dmg, crit = _damage(enemy["attack"], power, pstats["defense"], mult, rng)
-    if state["guarding"]:
-        dmg = max(1, dmg // 2)
-        state["guarding"] = False
-    state["player_hp"] = max(0, state["player_hp"] - dmg)
-    verb = "unleashes a charged strike" if use_skill else "attacks"
-    state["log"].append(f"{enemy['name']} {verb} — {dmg} damage{' (crit!)' if crit else ''}.")
+    log = state["log"]
+    pe = state["player_effects"]
+    # Corrode on you halves your effective defense.
+    defense = pstats["defense"] * (0.5 if "corrode" in pe else 1.0)
+
+    if state.get("charging"):
+        # Unleash the telegraphed signature move.
+        move = state["charging"]
+        state["charging"] = None
+        dmg, _crit = _damage(enemy["attack"], move["power"], defense, 1.0, rng)
+        if state["guarding"]:
+            dmg = max(1, dmg // TELEGRAPH_GUARD_DIVISOR)
+            state["guarding"] = False
+            log.append(f"You read it perfectly and brace through {move['name']}.")
+        state["player_hp"] = max(0, state["player_hp"] - dmg)
+        log.append(f"{enemy['name']} unleashes {move['name']} — {dmg} damage!")
+        inflict = move.get("inflicts")
+        if inflict and state["player_hp"] > 0:
+            _inflict(pe, inflict["effect"], inflict["turns"], inflict.get("amount", 0))
+            log.append(f"You're afflicted: {inflict['effect']}!")
+    else:
+        moves = (enemy.get("mechanics") or {}).get("moves") or []
+        if moves and state["turn"] % moves[0].get("every_n_turns", 4) == 0:
+            # Telegraph: the boss spends this turn charging — your cue to guard.
+            move = rng.choice(moves)
+            state["charging"] = move
+            log.append(move["telegraph"])
+        else:
+            use_skill = not moves and rng.random() < ENEMY_SKILL_CHANCE
+            power = ENEMY_SKILL_POWER if use_skill else BASIC_POWER
+            dmg, crit = _damage(enemy["attack"], power, defense, 1.0, rng)
+            if state["guarding"]:
+                dmg = max(1, dmg // 2)
+                state["guarding"] = False
+            state["player_hp"] = max(0, state["player_hp"] - dmg)
+            verb = "unleashes a charged strike" if use_skill else "attacks"
+            log.append(f"{enemy['name']} {verb} — {dmg} damage{' (crit!)' if crit else ''}.")
+            if use_skill and rng.random() < ENEMY_SKILL_INFLICT_CHANCE:
+                status = _status_for(enemy["element"])
+                if status and state["player_hp"] > 0:
+                    _inflict(pe, status, 2)
+                    log.append(f"You're afflicted: {status}!")
+
     if state["player_hp"] <= 0:
         state["over"] = True
         state["victory"] = False
-        state["log"].append("You go down. The Substrate spits you back out.")
+        log.append("You go down. The Substrate spits you back out.")
 
 
 def roll_drops(enemy, rng):
@@ -179,12 +274,19 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
     enemy = state["enemy"]
     state["guarding"] = False
 
+    # Corrode on the enemy halves their defense; charm on you halves your output.
+    enemy_defense = enemy["defense"] * (0.5 if "corrode" in state["enemy_effects"] else 1.0)
+    charmed = "charm" in state["player_effects"]
+
     if action == "attack":
         mult = element_multiplier("kinetic", enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, BASIC_POWER, enemy["defense"], mult, rng)
+        dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng)
+        if charmed:
+            dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
-        state["log"].append(f"You attack — {dmg} damage{' (crit!)' if crit else ''}.")
+        note = " (charmed — your heart isn't in it)" if charmed else ""
+        state["log"].append(f"You attack — {dmg} damage{' (crit!)' if crit else ''}.{note}")
 
     elif action == "skill":
         skills = unlocked_skills(player.combat_level)
@@ -196,10 +298,20 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         state["charge"] -= skill["cost"]
         mult = element_multiplier(skill["element"], enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, skill["power"], enemy["defense"], mult, rng)
+        dmg, crit = _damage(atk, skill["power"], enemy_defense, mult, rng)
+        if charmed:
+            dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
         note = " It hits a weakness!" if mult > 1 else (" Resisted." if mult < 1 else "")
+        if charmed:
+            note += " (charmed)"
         state["log"].append(f"{skill['name']} — {dmg} damage{' (crit!)' if crit else ''}.{note}")
+        # Thermal/toxin skills can afflict the enemy (burn / corrode).
+        status = _status_for(skill["element"])
+        if status in ENEMY_STATUSES and state["enemy_hp"] > 0:
+            if rng.random() < SKILL_INFLICT_CHANCE:
+                _inflict(state["enemy_effects"], status, 3)
+                state["log"].append(f"{enemy['name']} is afflicted: {status}!")
 
     elif action == "guard":
         state["guarding"] = True
@@ -237,8 +349,19 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         _win(state, player, rng)
         return state
 
+    _check_phases(state)
     _enemy_turn(state, pstats, rng)
     if not state["over"]:
-        state["charge"] = min(CHARGE_MAX, state["charge"] + CHARGE_PER_TURN)
-        state["turn"] += 1
+        _tick_effects(state)
+        if state["player_hp"] <= 0:
+            state["over"] = True
+            state["victory"] = False
+            state["log"].append("You go down. The Substrate spits you back out.")
+        elif state["enemy_hp"] <= 0:
+            # Burn can finish an enemy between turns.
+            _win(state, player, rng)
+        else:
+            if "slow" not in state["player_effects"]:
+                state["charge"] = min(CHARGE_MAX, state["charge"] + CHARGE_PER_TURN)
+            state["turn"] += 1
     return state
