@@ -400,6 +400,23 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: FF7-style battle screen ✅ DONE
+- Combat is now a wide modal popup (min(1080px, 96vw)) over the dungeon: party
+  on the LEFT of the battlefield, enemy on the RIGHT, FF7-style message box up
+  top (last 3 log lines, newest highlighted), telegraph banner below it.
+- Battlefield: glowing circular "sprites" (player monogram, companion role
+  icon, enemy glyph tinted by element with idle float; pulses red while a
+  telegraphed move charges; guard shows a shield pip). Enemy HP bar + statuses
+  + description under the sprite.
+- Bottom HUD, FF7 menu boxes: command menu (left) with Skill ▸ / Item ▸
+  SUBMENUS (cost + element / quantity shown), and a party status strip
+  (right): name, HP bar (pulses red ≤25%), charge pips, statuses, DOWN tag.
+- Victory fanfare: `finish_combat` now carries the rewards out of the battle
+  state; a CombatOutcome modal (App-level, survives defeat ending the run)
+  shows VICTORY + XP/credits/level-ups/drops/hoard, GOT AWAY, or DEFEAT with
+  credits lost. Dungeon screen widened 720→920px. +6 vitest (15 total);
+  verified in a live browser (battle, skill submenu, victory screens).
+
 ### Follow-up: boss mechanics & status effects ✅ DONE
 - Telegraphed signature moves on a cadence (charge turn → ⚠ banner → big hit);
   guarding a telegraphed hit cuts it to 1/3 (regular guard 1/2).

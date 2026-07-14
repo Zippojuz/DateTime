@@ -294,6 +294,8 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  clearDungeonResult: () => set({ dungeonResult: null }),
+
   setDifficulty: async (level) => {
     set({ busy: true, error: null })
     try {

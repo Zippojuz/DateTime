@@ -580,7 +580,13 @@ def finish_combat(player):
         run["player_hp"] = state["player_hp"]
         if state.get("companion"):
             run["companion"] = state["companion"]
-        result = {"result": "victory"}
+        # Carry the rewards out of the (about-to-be-discarded) battle state so
+        # the client can show a victory screen.
+        result = {
+            "result": "victory",
+            "enemy": state["enemy"]["name"],
+            "rewards": state.get("rewards"),
+        }
         if content["type"] == "stairs_down":
             content["guard_cleared"] = True
         else:
@@ -610,7 +616,12 @@ def finish_combat(player):
     player.credits -= lost
     player.combat = {}
     player.dungeon = {}
-    return {"result": "defeat", "credits_lost": lost, "companion": companion_id}
+    return {
+        "result": "defeat",
+        "enemy": state["enemy"]["name"],
+        "credits_lost": lost,
+        "companion": companion_id,
+    }
 
 
 def leave(player, clock):
