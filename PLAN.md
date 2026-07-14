@@ -410,6 +410,11 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   the battle Protocol menu shows your true discounted costs.
 - Flavor overrides: Zix hacks at 12 (wit 8), Nyx at 10 (charm 8).
   +2 pytest (243 total).
+- **Augment capacity gate**: your lace syncs 1 augment + 1 per 5 hacking
+  (hacking 15 runs all four slots; default 5 = two). Installing past capacity
+  is refused with a train-it-higher error; swapping within an occupied slot
+  is always allowed. Capacity shown on the equipment panel
+  ("Augments synced: 2/2"). +3 pytest (246 total).
 
 ### Follow-up: status expansion + sexy attacks + Nyx (floor-10 NPC boss) ✅ DONE
 - **Status registry** (`statuses.json`): all 14 effects data-driven (name/side/

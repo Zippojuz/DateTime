@@ -43,7 +43,7 @@
   },
   "hacking": {
     "name": "Hacking",
-    "description": "How well your lace obeys: wetware protocol power and heat discipline.",
+    "description": "How well your lace obeys: protocol power, heat discipline, and how many augments it can sync.",
     "default": 5,
     "min": 0,
     "max": 20

@@ -41,6 +41,18 @@ STAT_KEYS = ("attack", "defense", "max_hp", "speed")
 # Extra flat bonuses gear/augments may carry (dodge is a probability add).
 EXTRA_KEYS = ("dodge", "heat_cap", "heat_vent")
 
+AUG_SLOTS = ("aug_neural", "aug_ocular", "aug_dermal", "aug_skeletal")
+
+
+def augment_capacity(player):
+    """How many augments the player's lace can keep in sync at once — gated by
+    hacking: 1 base, +1 per 5 points (hacking 15 runs all four slots)."""
+    return min(len(AUG_SLOTS), 1 + player.attributes.get("hacking", 0) // 5)
+
+
+def augments_installed(player):
+    return sum(1 for slot in AUG_SLOTS if slot in player.equipment)
+
 
 def _target_slot(player, item, requested=None):
     """Resolve which slot an item goes to. Rings fit ring1/ring2."""
@@ -67,6 +79,15 @@ def equip(player, item_id, slot=None):
     if item.get("type") not in ("equipment", "augment"):
         raise GameError("That can't be equipped.")
     target = _target_slot(player, item, slot)
+    # Hacking gates how many augments the lace can sync. Swapping within an
+    # occupied slot is fine — the count doesn't grow.
+    if item["type"] == "augment" and target not in player.equipment:
+        cap = augment_capacity(player)
+        if augments_installed(player) >= cap:
+            raise GameError(
+                f"Your lace can only sync {cap} augment{'s' if cap != 1 else ''} "
+                f"at hacking {player.attributes.get('hacking', 0)} — train it higher."
+            )
     inventory.remove_item(player, item_id, 1)
     if target in player.equipment:
         _return_to_inventory(player, target)

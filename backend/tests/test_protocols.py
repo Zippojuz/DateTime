@@ -249,3 +249,38 @@ def test_heat_augments_raise_cap_and_venting():
     stats = combat.player_stats(p)
     assert stats["heat_cap"] == base["heat_cap"] + 40
     assert stats["heat_vent"] == base["heat_vent"] + 6
+
+
+# --- Hacking gates augment capacity ---------------------------------------------------
+
+
+def test_augment_capacity_scales_with_hacking():
+    p = _adept()
+    for hacking, cap in ((0, 1), (4, 1), (5, 2), (10, 3), (15, 4), (20, 4)):
+        p.attributes["hacking"] = hacking
+        assert equipment.augment_capacity(p) == cap
+
+
+def test_lace_refuses_augments_past_capacity():
+    p = _adept()
+    p.attributes["hacking"] = 5  # capacity 2
+    for aug in ("reflex_splice", "subdermal_plating", "smartlink_eyes"):
+        inventory.add_item(p, aug, 1)
+    equipment.equip(p, "reflex_splice")  # aug_neural
+    equipment.equip(p, "subdermal_plating")  # aug_dermal
+    with pytest.raises(GameError, match="only sync 2"):
+        equipment.equip(p, "smartlink_eyes")  # a third: refused
+    # Training hacking to 10 makes room for it.
+    p.attributes["hacking"] = 10
+    assert equipment.equip(p, "smartlink_eyes") == "aug_ocular"
+
+
+def test_swapping_within_an_occupied_slot_needs_no_headroom():
+    p = _adept()
+    p.attributes["hacking"] = 0  # capacity 1
+    for aug in ("reflex_splice", "coolant_weave"):
+        inventory.add_item(p, aug, 1)
+    equipment.equip(p, "reflex_splice")  # fills aug_neural, at capacity
+    # Coolant Weave also lives in aug_neural — a swap, not an addition.
+    assert equipment.equip(p, "coolant_weave") == "aug_neural"
+    assert p.inventory["reflex_splice"] == 1  # the old one came back

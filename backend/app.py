@@ -575,6 +575,10 @@ def create_app():
             "slot_order": list(equipment.SLOTS),
             "bonuses": equipment.bonuses(player),
             "stats": combat.player_stats(player),
+            "augments": {
+                "installed": equipment.augments_installed(player),
+                "capacity": equipment.augment_capacity(player),
+            },
         }
 
     @app.get("/api/equipment")

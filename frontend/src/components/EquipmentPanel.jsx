@@ -30,7 +30,7 @@ export default function EquipmentPanel() {
   const busy = useGameStore((s) => s.busy)
 
   if (!equipment || !items) return null
-  const { slots, slot_order: order, stats, bonuses } = equipment
+  const { slots, slot_order: order, stats, bonuses, augments } = equipment
 
   const ownedGems = Object.entries(inventory).filter(
     ([id, qty]) => items[id]?.type === 'gem' && qty > 0,
@@ -50,6 +50,12 @@ export default function EquipmentPanel() {
         )}
         {bonuses.auto_weakness && <span className="element">prisma strikes</span>}
       </p>
+      {augments && (
+        <p className="equip-augcap">
+          Augments synced: {augments.installed}/{augments.capacity}
+          <span className="equip-augcap-hint"> — hacking raises capacity (+1 per 5)</span>
+        </p>
+      )}
       <ul className="equip-list">
         {order.map((slot) => {
           const entry = slots[slot]
