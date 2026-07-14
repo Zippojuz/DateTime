@@ -234,15 +234,19 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
-  advanceDungeon: async () => {
+  _dungeonAction: async (call) => {
     set({ busy: true, error: null })
     try {
-      const res = await api.dungeonAdvance()
+      const res = await call()
       set({ dungeon: res, state: res.state, dungeonResult: res.result, busy: false })
     } catch (err) {
       set({ error: err.message, busy: false })
     }
   },
+
+  moveDungeon: (dir) => get()._dungeonAction(() => api.dungeonMove(dir)),
+  searchDungeon: () => get()._dungeonAction(() => api.dungeonSearch()),
+  interactDungeon: () => get()._dungeonAction(() => api.dungeonInteract()),
 
   chooseDungeonEvent: async (choiceIndex) => {
     set({ busy: true, error: null })

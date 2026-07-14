@@ -327,13 +327,11 @@ def create_app():
     # --- The Substrate: dungeon + combat (Milestone 5) ---
 
     def _dungeon_payload(player):
-        run = dict(player.dungeon) if player.dungeon.get("active") else None
-        if run:
-            # Redact rooms ahead of the player — no map spoilers.
-            run["rooms"] = [
-                room if i <= run["room"] else {"type": "unknown"}
-                for i, room in enumerate(run["rooms"])
-            ]
+        # Fog-of-war: only what the player has explored ever leaves the server.
+        run = None
+        if player.dungeon.get("active"):
+            run = dungeon.view(player)
+            run["active"] = True
             run["pending_event_data"] = (
                 data.load("dungeon_events")[run["pending_event"]]
                 if run.get("pending_event")
@@ -368,20 +366,32 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({**_dungeon_payload(player), "state": save.state_dict(player, clock)})
 
-    @app.post("/api/dungeon/advance")
-    def dungeon_advance():
+    def _dungeon_action(fn):
         models = save.load_models()
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
         try:
-            result = dungeon.advance(player, clock)
+            result = fn(player, clock)
         except GameError as err:
             return jsonify(error=str(err)), 400
         save.save_models(save_id, player, clock)
         return jsonify(
             {**_dungeon_payload(player), "result": result, "state": save.state_dict(player, clock)}
         )
+
+    @app.post("/api/dungeon/move")
+    def dungeon_move():
+        body = request.get_json(silent=True) or {}
+        return _dungeon_action(lambda p, c: dungeon.move(p, c, body.get("dir")))
+
+    @app.post("/api/dungeon/search")
+    def dungeon_search():
+        return _dungeon_action(dungeon.search)
+
+    @app.post("/api/dungeon/interact")
+    def dungeon_interact():
+        return _dungeon_action(dungeon.interact)
 
     @app.post("/api/dungeon/event")
     def dungeon_event():

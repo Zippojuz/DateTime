@@ -2,21 +2,30 @@ import { useGameStore } from '../state/gameStore'
 import BattleView from '../components/BattleView.jsx'
 
 const ROOM_ICON = {
+  stairs_up: '▲',
+  stairs_down: '▼',
   battle: '⚔',
   miniboss: '☠',
   boss: '♛',
   event: '?',
   treasure: '◆',
+  cache: '✦',
   rest: '✚',
-  unknown: '·',
+  keycard: '⚿',
+  generator: '⚡',
+  empty: '·',
 }
 
-// The Substrate. Shows floor/room progress and the current room's content;
-// battles render the BattleView, events render their choices.
+const DIR_ARROW = { n: '↑', e: '→', s: '↓', w: '←' }
+
+// The Substrate, Zork-style: a fog-of-war map that draws itself as you explore,
+// a room description, compass exits with flavor, Search, and context actions.
 export default function DungeonScreen() {
   const dungeon = useGameStore((s) => s.dungeon)
   const result = useGameStore((s) => s.dungeonResult)
-  const advance = useGameStore((s) => s.advanceDungeon)
+  const move = useGameStore((s) => s.moveDungeon)
+  const search = useGameStore((s) => s.searchDungeon)
+  const interact = useGameStore((s) => s.interactDungeon)
   const leave = useGameStore((s) => s.leaveDungeon)
   const chooseEvent = useGameStore((s) => s.chooseDungeonEvent)
   const busy = useGameStore((s) => s.busy)
@@ -27,6 +36,7 @@ export default function DungeonScreen() {
   const stats = dungeon?.stats
   if (!run) return null
 
+  const here = run.here
   const pendingEvent = run.pending_event_data
 
   return (
@@ -46,17 +56,7 @@ export default function DungeonScreen() {
         </div>
       </header>
 
-      <div className="dungeon-rooms" aria-label="Floor progress">
-        {run.rooms.map((room, i) => (
-          <span
-            key={i}
-            className={`droom ${i === run.room ? 'droom--here' : ''} ${room.done ? 'droom--done' : ''}`}
-            title={room.type}
-          >
-            {ROOM_ICON[room.type] ?? '·'}
-          </span>
-        ))}
-      </div>
+      <FloorMap map={run.map} />
 
       {error && <p className="form-error">{error}</p>}
 
@@ -81,18 +81,44 @@ export default function DungeonScreen() {
         </section>
       ) : (
         <section className="dungeon-card">
-          {result && <p className="dungeon-text">{result.text}</p>}
-          {run.cleared ? (
+          <h2 className="room-name">{here.name}</h2>
+          <p className="dungeon-text">{here.desc}</p>
+          {result?.text && <p className="dungeon-result">{result.text}</p>}
+          {here.stairs_note && <p className="dungeon-note">{here.stairs_note}</p>}
+          {here.hints.map((hint, i) => (
+            <p key={i} className="dungeon-hint">
+              {hint}
+            </p>
+          ))}
+          {run.cleared && (
             <p className="dungeon-text">
               You've reached the bottom of the Substrate — for now.
             </p>
-          ) : null}
+          )}
+
+          <div className="dungeon-exits">
+            {here.exits.map((e) => (
+              <button
+                key={e.dir}
+                className="btn-action exit-btn"
+                disabled={busy}
+                title={e.known ? 'You know where this leads.' : 'Unexplored.'}
+                onClick={() => move(e.dir)}
+              >
+                {DIR_ARROW[e.dir]} {e.word} <span className="exit-label">{e.label}</span>
+              </button>
+            ))}
+          </div>
+
           <div className="dungeon-actions">
-            {!run.cleared && (
-              <button className="btn-primary" disabled={busy} onClick={advance}>
-                Press deeper
+            {here.interact && (
+              <button className="btn-primary" disabled={busy} onClick={interact}>
+                {here.interact}
               </button>
             )}
+            <button className="btn-action" disabled={busy} onClick={search}>
+              Search the room
+            </button>
             <button className="btn-action" disabled={busy} onClick={leave}>
               Leave the Substrate
             </button>
@@ -100,5 +126,42 @@ export default function DungeonScreen() {
         </section>
       )}
     </main>
+  )
+}
+
+function FloorMap({ map }) {
+  if (!map?.length) return null
+  const xs = map.map((r) => r.x)
+  const ys = map.map((r) => r.y)
+  const minX = Math.min(...xs)
+  const minY = Math.min(...ys)
+  const cols = Math.max(...xs) - minX + 1
+  const rows = Math.max(...ys) - minY + 1
+
+  return (
+    <div
+      className="floor-map"
+      style={{
+        gridTemplateColumns: `repeat(${cols}, 2.2rem)`,
+        gridTemplateRows: `repeat(${rows}, 2.2rem)`,
+      }}
+      aria-label="Floor map"
+    >
+      {map.map((room) => (
+        <span
+          key={room.id}
+          className={[
+            'map-room',
+            room.stub ? 'map-room--stub' : '',
+            room.current ? 'map-room--here' : '',
+            room.resolved ? 'map-room--done' : '',
+          ].join(' ')}
+          style={{ gridColumn: room.x - minX + 1, gridRow: room.y - minY + 1 }}
+          title={room.stub ? 'Unexplored' : room.name}
+        >
+          {room.stub ? '?' : (ROOM_ICON[room.type] ?? '·')}
+        </span>
+      ))}
+    </div>
   )
 }

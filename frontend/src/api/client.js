@@ -42,7 +42,10 @@ export const api = {
     request('/gift', { method: 'POST', body: JSON.stringify({ npc_id: npcId, item_id: itemId }) }),
   dungeonState: () => request('/dungeon/state'),
   dungeonEnter: () => request('/dungeon/enter', { method: 'POST', body: '{}' }),
-  dungeonAdvance: () => request('/dungeon/advance', { method: 'POST', body: '{}' }),
+  dungeonMove: (dir) =>
+    request('/dungeon/move', { method: 'POST', body: JSON.stringify({ dir }) }),
+  dungeonSearch: () => request('/dungeon/search', { method: 'POST', body: '{}' }),
+  dungeonInteract: () => request('/dungeon/interact', { method: 'POST', body: '{}' }),
   dungeonEvent: (choiceIndex) =>
     request('/dungeon/event', {
       method: 'POST',

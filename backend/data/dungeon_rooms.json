@@ -1,0 +1,79 @@
+{
+  "tiers": {
+    "1": {
+      "names": [
+        "Service Gallery", "Cargo Duct", "Coolant Well", "Switchyard",
+        "Maintenance Bay", "Pipe Gallery", "Sorting Floor", "Vent Junction",
+        "Freight Shaft", "Tool Crib", "Pressure Lock", "Old Dock Spur"
+      ],
+      "descs": [
+        "Ankle-deep in warm condensation. Something two floors down is humming a waltz.",
+        "Crates stacked by hands that measured differently than yours. The labels have worn to suggestion.",
+        "Pipes sweat along the walls, each one tagged in three dead shorthand systems.",
+        "Work lights still burn here on some forgotten schedule, faithful as dogs.",
+        "The floor is scarred where machinery was dragged away in a hurry.",
+        "A breeze moves through with nowhere obvious to come from.",
+        "Paint on the wall marks exits for a crew that never came back for their tools.",
+        "The hum of the city above is fainter here, like a radio between stations."
+      ]
+    },
+    "2": {
+      "names": [
+        "Grown Corridor", "Rib Vault", "Warm Gallery", "The Long Throat",
+        "Cable Garden", "Murmur Hall", "Slick Chamber", "The Bend",
+        "Filament Grove", "Soft Room", "Pulse Landing", "Antler Junction"
+      ],
+      "descs": [
+        "The walls stopped being built somewhere behind you and started being grown.",
+        "Cabling hangs in loops that look less installed than rooted.",
+        "The architecture breathes — slowly, politely, like it's trying not to wake you.",
+        "Bioluminescent veins in the wall brighten as you pass, then linger on you.",
+        "It is warmer here than any machine should need. The warmth feels attentive.",
+        "Every surface is faintly ridged, like the inside of something's palm.",
+        "You hear water, or something practicing the sound of water.",
+        "The corridor curves in a way the station's blueprints would deny."
+      ]
+    },
+    "3": {
+      "names": [
+        "Dream Gallery", "The Unfinished Room", "Choir Vault", "Mirror Shallows",
+        "The Remembered Street", "Signal Garden", "Empty Ballroom", "The Quiet",
+        "Halo Landing", "The Underneath", "Vestibule of Lights", "Terminus"
+      ],
+      "descs": [
+        "This room is a memory of a street you've never walked, rendered lovingly and slightly wrong.",
+        "The geometry here answers to something other than the station's spin.",
+        "Lost signals drift near the ceiling like slow fish, murmuring their last sentences.",
+        "The floor reflects a version of you that moves half a beat late.",
+        "It's beautiful down here. You distrust how much you agree with that thought.",
+        "Someone — something — has arranged the debris into an almost-garden.",
+        "Music without a source, faint and patient, the kind played for one dancer.",
+        "The dark doesn't press in here. It makes room for you. That's worse."
+      ]
+    }
+  },
+  "exit_labels": [
+    "through the ruptured bulkhead",
+    "past a curtain of dead cabling",
+    "down a humming corridor",
+    "through a hatch stenciled in dead shorthand",
+    "along a catwalk over dark water",
+    "through the tall, patient doorway",
+    "beneath a flickering lintel",
+    "through a seam in the grown wall",
+    "up a short ramp slick with condensation",
+    "through the blast door, jammed half-open"
+  ],
+  "hidden_hints": [
+    "A draft breathes from one wall — from somewhere that shouldn't exist.",
+    "The dust on the floor is scuffed toward a blank wall.",
+    "One panel rings hollow when your boot knocks it.",
+    "A hairline seam in the wall catches the light wrong."
+  ],
+  "battle_hints": [
+    "Something is ticking softly beyond the {dir} door.",
+    "A slow, deliberate scrape repeats itself somewhere {dir} of here.",
+    "You catch a wet glimmer of movement through the {dir} exit.",
+    "Faint song — the luring kind — drifts from the {dir}."
+  ]
+}

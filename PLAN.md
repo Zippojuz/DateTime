@@ -353,6 +353,27 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   Deep). Migration 7; routes /api/equipment + equip/unequip/socket/unsocket;
   EquipmentPanel UI with socket management. +16 pytest (152 total).
 
+### Follow-up: Zork-style dungeon (maps, hidden rooms, puzzles) ✅ DONE
+- Floors are seeded room GRAPHS on a lattice (10–13 rooms + hidden), compass
+  exits with flavor labels, loops not just branches; moving = one action (5m).
+- **Fog of war**: the server only ever sends visited rooms + doorway stubs;
+  the map UI draws itself as you explore.
+- **Room descriptions** from themed fragment pools by depth (maintenance decks
+  → grown corridors → dream-architecture) — `dungeon_rooms.json`.
+- **Hidden rooms**: 1–2 per floor behind concealed exits; room text hints,
+  explicit Search action (Wit + d6 vs DC 7) reveals; premium caches inside.
+- **Puzzles** (non-boss floors, stairs locked): keycard hidden in a far room,
+  or power routing (two generators to unseal the bulkhead). Boss floors
+  (3/6/9): the boss camps in the stairwell. Puzzle floors also carry an
+  optional miniboss hoard (premium loot).
+- **Telegraphed threats**: uncleared enemies leak hints through doorways
+  ("something is ticking beyond the east door"); cleared rooms stay clear;
+  fleeing returns you the way you came.
+- Routes: /api/dungeon/move|search|interact replace /advance. New DungeonScreen:
+  fog-of-war grid map, room prose, compass exit buttons, Search/Interact.
+- +14 pytest (166 total). Verified with a live delve: generators, keycards,
+  searches → caches, minibosses, the floor-3 boss, defeat ejection.
+
 ### Follow-up: boss mechanics & status effects ✅ DONE
 - Telegraphed signature moves on a cadence (charge turn → ⚠ banner → big hit);
   guarding a telegraphed hit cuts it to 1/3 (regular guard 1/2).

@@ -873,30 +873,83 @@ body {
   font-size: 0.85rem;
 }
 
-.dungeon-rooms {
-  display: flex;
-  gap: 0.5rem;
+.floor-map {
+  display: grid;
+  gap: 0.3rem;
+  justify-content: center;
+  padding: 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  overflow-x: auto;
 }
 
-.droom {
-  width: 2rem;
-  height: 2rem;
+.map-room {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border: 1px solid #26304a;
   border-radius: 4px;
-  color: var(--text-dim);
+  color: var(--text);
+  font-size: 0.95rem;
+  background: var(--bg-panel);
 }
 
-.droom--here {
+.map-room--stub {
+  border-style: dashed;
+  color: var(--text-dim);
+  background: transparent;
+  opacity: 0.7;
+}
+
+.map-room--here {
   border-color: var(--neon);
   color: var(--neon);
-  box-shadow: 0 0 8px var(--neon-dim);
+  box-shadow: 0 0 10px var(--neon-dim);
 }
 
-.droom--done {
-  opacity: 0.45;
+.map-room--done {
+  opacity: 0.55;
+}
+
+.room-name {
+  margin: 0 0 0.4rem;
+  font-size: 1.15rem;
+  color: var(--neon);
+  letter-spacing: 0.04rem;
+}
+
+.dungeon-result {
+  color: var(--neon);
+  line-height: 1.5;
+  margin: 0 0 0.75rem;
+}
+
+.dungeon-note {
+  color: var(--text-dim);
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
+.dungeon-hint {
+  color: var(--accent);
+  font-size: 0.9rem;
+  margin: 0 0 0.5rem;
+}
+
+.dungeon-exits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 1rem 0;
+}
+
+.exit-btn {
+  text-align: left;
+}
+
+.exit-label {
+  color: var(--text-dim);
+  font-size: 0.82rem;
 }
 
 .dungeon-card {

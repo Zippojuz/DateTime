@@ -95,23 +95,31 @@ def test_floor_generation_is_deterministic():
 
 
 def test_boss_and_miniboss_placement():
+    # Boss floors: the boss camps in the stairwell room. Puzzle floors: a
+    # miniboss guards an optional hoard and the stairs are locked instead.
     for floor in (1, 2, 4, 5, 7, 8):
-        rooms = dungeon.generate_floor(7, floor)
-        assert rooms[-1]["type"] == "miniboss"
+        fd = dungeon.generate_floor(7, floor)
+        stairwell = fd["rooms"][fd["stairwell"]]["content"]
+        assert stairwell["guard"] is None
+        assert stairwell["locked"] is True
+        assert fd["puzzle"] in ("keycard", "power")
+        minibosses = [r for r in fd["rooms"].values() if r["content"]["type"] == "miniboss"]
+        assert len(minibosses) == 1
     for floor, boss in dungeon.BOSS_BY_FLOOR.items():
-        rooms = dungeon.generate_floor(7, floor)
-        assert rooms[-1]["type"] == "boss"
-        assert rooms[-1]["enemy"] == boss
+        fd = dungeon.generate_floor(7, floor)
+        stairwell = fd["rooms"][fd["stairwell"]]["content"]
+        assert stairwell["guard"] == boss
+        assert stairwell["locked"] is False
 
 
 def test_enemy_tier_matches_floor_depth():
     from game import data
 
     enemies = data.load("enemies")
-    rooms = dungeon.generate_floor(7, 8)  # tier 3 depth
-    for room in rooms:
-        if room["type"] == "battle":
-            assert enemies[room["enemy"]]["tier"] == 3
+    fd = dungeon.generate_floor(7, 8)  # tier 3 depth
+    for room in fd["rooms"].values():
+        if room["content"]["type"] == "battle":
+            assert enemies[room["content"]["enemy"]]["tier"] == 3
 
 
 # --- The run, via the API ----------------------------------------------------
@@ -129,9 +137,11 @@ def test_enter_and_walk_a_floor(client):
     assert res["run"]["active"] is True
     assert res["run"]["floor"] == 1
     assert res["stats"]["level"] == 1
+    # Fog of war: exactly the entrance is visited at the start.
+    assert len([r for r in res["run"]["map"] if not r.get("stub")]) == 1
 
-    # Advance until something happens; resolve whatever comes.
-    for _ in range(30):
+    # Wander: resolve combat/events, otherwise step through the first exit.
+    for _ in range(40):
         state = client.get("/api/dungeon/state").get_json()
         if state["combat"]:
             r = client.post("/api/combat/action", json={"action": "attack"})
@@ -140,8 +150,9 @@ def test_enter_and_walk_a_floor(client):
             r = client.post("/api/dungeon/event", json={"choice_index": 0})
             assert r.status_code == 200
         elif state["run"]:
-            r = client.post("/api/dungeon/advance")
-            # Either fine, or blocked because a fight/event just started.
+            exits = state["run"]["here"]["exits"]
+            assert exits, "every room must have at least one exit"
+            r = client.post("/api/dungeon/move", json={"dir": exits[0]["dir"]})
             assert r.status_code in (200, 400)
         else:
             break  # run ended (defeat) — acceptable outcome of the walk
