@@ -170,7 +170,9 @@ def create_app():
             if (a := world.availability(npc, clock))["available"]
             and a.get("district") == player.location
         }
-        encounter = encounters.roll_encounter(present, met_ids)
+        encounter = encounters.roll_encounter(
+            present, met_ids, luck=player.attributes.get("luck", 0)
+        )
         if encounter and encounter.get("affection"):
             social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
 

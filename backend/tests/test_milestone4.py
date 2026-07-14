@@ -35,11 +35,13 @@ def test_jobs_list_reports_reachability(client):
 
 def test_working_pays_credits_with_stat_bonus(client):
     # dock_hauling: base 18 + courage(5) bonus = 23; -15 energy; +2h.
+    # A luck tip may land on top (random), so subtract it before asserting.
     res = client.post("/api/job", json={"job_id": "dock_hauling"}).get_json()
-    assert res["result"]["pay"] == 23
+    tip = res["result"]["tip"]
+    assert res["result"]["pay"] - tip == 23
     assert res["result"]["bonus"] == 5
     player = res["state"]["player"]
-    assert player["credits"] == 73  # 50 + 23
+    assert player["credits"] == 73 + tip  # 50 + 23 (+ any tip)
     assert player["energy"] == 85
     assert res["state"]["clock"]["time"] == "10:00"  # 08:00 + 2h
 
@@ -64,11 +66,13 @@ def test_cannot_work_when_too_tired(client):
 
 
 def test_pay_debt_reduces_debt_and_credits(client):
-    client.post("/api/job", json={"job_id": "dock_hauling"})  # credits -> 73
+    # credits -> 73 (+ any random luck tip, which we subtract back out)
+    job = client.post("/api/job", json={"job_id": "dock_hauling"}).get_json()
+    tip = job["result"]["tip"]
     res = client.post("/api/debt/pay", json={"amount": 40}).get_json()
     assert res["paid"] == 40
     player = res["state"]["player"]
-    assert player["credits"] == 33
+    assert player["credits"] == 33 + tip
     assert player["debt"] == 460
 
 

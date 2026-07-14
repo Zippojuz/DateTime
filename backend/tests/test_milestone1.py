@@ -36,6 +36,8 @@ def test_new_game_defaults_to_human_with_registry_attributes(client):
         "wit": 5,
         "courage": 5,
         "empathy": 5,
+        "agility": 5,
+        "luck": 5,
     }
     # Identity is locked: current == created at creation.
     assert player["identity"] == player["created_identity"]
@@ -159,7 +161,14 @@ def test_player_and_npc_are_characters():
 
 def test_npc_attributes_mirror_the_registry():
     npc = NPC.from_data({"id": "x", "name": "Vael"})  # no overrides
-    assert npc.attributes == {"charm": 5, "wit": 5, "courage": 5, "empathy": 5}
+    assert npc.attributes == {
+        "charm": 5,
+        "wit": 5,
+        "courage": 5,
+        "empathy": 5,
+        "agility": 5,
+        "luck": 5,
+    }
 
 
 def test_npc_overrides_merge_over_defaults():
@@ -176,7 +185,7 @@ def test_npc_loads_from_characters_json():
     assert vael.romanceable is True
     assert len(vael.schedule) > 0
     # Mirrors the registry attribute set since Vael has no overrides.
-    assert set(vael.attributes) == {"charm", "wit", "courage", "empathy"}
+    assert set(vael.attributes) == {"charm", "wit", "courage", "empathy", "agility", "luck"}
 
 
 def test_npc_load_unknown_raises():

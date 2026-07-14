@@ -24,10 +24,12 @@ class QuietRng:
 
 
 class EagerRng(QuietRng):
-    """Passes every chance roll (crit-free variant for status tests)."""
+    """Passes inflict rolls without critting or dodging."""
 
     def random(self):
-        return 0.11  # below inflict chances (0.30/0.35), above crit (0.10)
+        # Below inflict chances (0.30/0.35); above crit for the levels used
+        # here (≤0.18 with speed+luck) and above default dodge (~0.10).
+        return 0.2
 
 
 def _pass_turns(player, state, n):

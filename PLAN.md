@@ -400,6 +400,24 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: agility & luck; speed→crit, agility→dodge ✅ DONE
+- Two new registry attributes (zero-code additions elsewhere: StatBar, train
+  action, and NPC mirroring all pick them up automatically; old saves gain
+  them at default 5 via the registry merge on load).
+- **Speed now matters**: crit chance = 5% + 0.5%/speed + 0.4%/luck (cap 35%).
+  Enemies crit off their own speed stat (finally used). Companions keep the
+  flat 10%.
+- **Agility**: dodge = 1.5%/agi + 0.4%/luck (cap 30%) against enemy basic and
+  charged strikes — telegraphed signatures can't be dodged (guard-reading
+  stays their counter). Agility//2 also joins defense alongside wit//2.
+- **Luck wired through the whole game**: crit + dodge contributions; flee
+  window (+2%/pt, cap 90%); loot drop + jackpot chances (+3% relative/pt);
+  treasure/cache/hoard credit payouts (+2%/pt); hidden-seam Search (+luck//3
+  on the Wit check); job tips (luck%-chance ×3 of +5+luck cr, shown in the
+  UI); travel encounter chance (+1%/pt).
+- player_stats exposes crit/dodge (shown as % on the equipment panel).
+  +13 pytest (205 total).
+
 ### Follow-up: FF7-style battle screen ✅ DONE
 - Combat is now a wide modal popup (min(1080px, 96vw)) over the dungeon: party
   on the LEFT of the battlefield, enemy on the RIGHT, FF7-style message box up

@@ -36,7 +36,8 @@ export default function EquipmentPanel() {
     <section className="equipment-panel">
       <h2>Equipment</h2>
       <p className="equip-stats">
-        ATK {stats.attack} · DEF {stats.defense} · HP {stats.max_hp} · SPD {stats.speed}
+        ATK {stats.attack} · DEF {stats.defense} · HP {stats.max_hp} · SPD {stats.speed} · CRIT{' '}
+        {Math.round(stats.crit * 100)}% · DODGE {Math.round(stats.dodge * 100)}%
         {bonuses.weapon_element && (
           <span className={`element element--${bonuses.weapon_element}`}>
             {bonuses.weapon_element} strikes

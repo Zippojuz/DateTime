@@ -18,12 +18,34 @@ from game.errors import GameError
 CHARGE_START = 2
 CHARGE_MAX = 5
 CHARGE_PER_TURN = 1
-CRIT_CHANCE = 0.10
+CRIT_CHANCE = 0.10  # baseline (companions; fallback when no speed is known)
 CRIT_MULT = 1.5
 FLEE_CHANCE = 0.6
 BASIC_POWER = 1.0
 ENEMY_SKILL_CHANCE = 0.3
 ENEMY_SKILL_POWER = 1.4
+
+# Crit scales with speed (and a little luck); dodge with agility (and a little
+# luck). Both capped so maxed builds stay beatable/hittable.
+CRIT_BASE = 0.05
+CRIT_PER_SPEED = 0.005
+CRIT_PER_LUCK = 0.004
+CRIT_CAP = 0.35
+DODGE_PER_AGILITY = 0.015
+DODGE_PER_LUCK = 0.004
+DODGE_CAP = 0.30
+FLEE_PER_LUCK = 0.02
+FLEE_CAP = 0.9
+DROP_PER_LUCK = 0.03  # +3% relative drop chance per luck point
+
+
+def crit_chance(speed, luck=0):
+    return min(CRIT_CAP, CRIT_BASE + speed * CRIT_PER_SPEED + luck * CRIT_PER_LUCK)
+
+
+def dodge_chance(agility, luck=0):
+    return min(DODGE_CAP, agility * DODGE_PER_AGILITY + luck * DODGE_PER_LUCK)
+
 
 # Status effects. burn = damage over time; slow = no charge regen; charm =
 # your outgoing damage halved; corrode = defense halved. burn/corrode can also
@@ -52,13 +74,19 @@ def player_stats(player):
     level = player.combat_level
     courage = player.attributes.get("courage", 5)
     wit = player.attributes.get("wit", 5)
+    agility = player.attributes.get("agility", 5)
+    luck = player.attributes.get("luck", 5)
     eq = equipment.bonuses(player)
+    speed = 5 + level + wit + eq["speed"]
     return {
         "level": level,
         "max_hp": 30 + level * 10 + courage * 2 + eq["max_hp"],
         "attack": 6 + level * 2 + courage + eq["attack"],
-        "defense": 2 + level + wit // 2 + eq["defense"],
-        "speed": 5 + level + wit + eq["speed"],
+        "defense": 2 + level + wit // 2 + agility // 2 + eq["defense"],
+        "speed": speed,
+        "crit": round(crit_chance(speed, luck), 3),
+        "dodge": round(dodge_chance(agility, luck), 3),
+        "luck": luck,
     }
 
 
@@ -120,11 +148,11 @@ def scaled_enemy(enemy_id, floor, difficulty):
     }
 
 
-def _damage(attack, power, defense, elem_mult, rng):
+def _damage(attack, power, defense, elem_mult, rng, crit=CRIT_CHANCE):
     variance = rng.uniform(0.9, 1.1)
-    crit = rng.random() < CRIT_CHANCE
-    raw = attack * power * elem_mult * variance * (CRIT_MULT if crit else 1.0)
-    return max(1, round(raw - defense * 0.5)), crit
+    is_crit = rng.random() < crit
+    raw = attack * power * elem_mult * variance * (CRIT_MULT if is_crit else 1.0)
+    return max(1, round(raw - defense * 0.5)), is_crit
 
 
 def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None):
@@ -252,12 +280,15 @@ def _enemy_turn(player, state, pstats, rng):
     defense = pstats["defense"] * (0.5 if "corrode" in pe else 1.0)
     # Armor gems (or a prisma) blunt the enemy's element.
     resist = incoming_resist(player, enemy["element"])
+    # Enemies crit off their own speed; your dodge comes from agility + luck.
+    enemy_crit = crit_chance(enemy.get("speed", 5))
 
     if state.get("charging"):
-        # Unleash the telegraphed signature move.
+        # Unleash the telegraphed signature move. Signatures can't be dodged —
+        # reading the telegraph and guarding is the counter.
         move = state["charging"]
         state["charging"] = None
-        dmg, _crit = _damage(enemy["attack"], move["power"], defense, resist, rng)
+        dmg, _crit = _damage(enemy["attack"], move["power"], defense, resist, rng, crit=enemy_crit)
         if state["guarding"]:
             dmg = max(1, dmg // TELEGRAPH_GUARD_DIVISOR)
             state["guarding"] = False
@@ -284,14 +315,19 @@ def _enemy_turn(player, state, pstats, rng):
                 roll = rng.random()
                 target_comp = roll < (0.55 if comp["role"] == "tank" else 0.25)
             if target_comp:
-                dmg, crit = _damage(enemy["attack"], power, comp["defense"], 1.0, rng)
+                dmg, crit = _damage(
+                    enemy["attack"], power, comp["defense"], 1.0, rng, crit=enemy_crit
+                )
                 comp["hp"] = max(0, comp["hp"] - dmg)
                 log.append(f"{enemy['name']} turns on {comp['name']} — {dmg} damage.")
                 if comp["hp"] <= 0:
                     comp["down"] = True
                     log.append(f"{comp['name']} goes down! They'll need a rest stop.")
+            elif rng.random() < pstats["dodge"]:
+                verb = "a charged strike" if use_skill else "the blow"
+                log.append(f"You twist aside — {verb} finds nothing but afterimage.")
             else:
-                dmg, crit = _damage(enemy["attack"], power, defense, resist, rng)
+                dmg, crit = _damage(enemy["attack"], power, defense, resist, rng, crit=enemy_crit)
                 if state["guarding"]:
                     dmg = max(1, dmg // 2)
                     state["guarding"] = False
@@ -318,19 +354,20 @@ def _enemy_turn(player, state, pstats, rng):
         log.append("You go down. The Substrate spits you back out.")
 
 
-def roll_drops(enemy, rng):
+def roll_drops(enemy, rng, luck=0):
     """Roll the enemy's loot table (data/loot.json). Normals roll by tier with a
     drop chance; minibosses always drop; bosses roll twice, guaranteed — plus a
-    slim jackpot roll for the super-rare gems."""
+    slim jackpot roll for the super-rare gems. Luck fattens every roll."""
     tables = data.load("loot")
     role = enemy.get("role", "normal")
     table = tables[role] if role != "normal" else tables["normal"][str(enemy["tier"])]
+    fortune = 1 + luck * DROP_PER_LUCK
     drops = []
     for _ in range(table.get("rolls", 1)):
-        if rng.random() < table["chance"]:
+        if rng.random() < min(1.0, table["chance"] * fortune):
             drops.append(rng.choice(table["items"]))
     bonus = table.get("bonus")
-    if bonus and rng.random() < bonus["chance"]:
+    if bonus and rng.random() < min(1.0, bonus["chance"] * fortune):
         drops.append(rng.choice(bonus["items"]))
     return drops
 
@@ -348,7 +385,7 @@ def _win(state, player, rng):
     ups = grant_xp(player, xp)
     player.credits += credits
 
-    drops = roll_drops(enemy, rng)
+    drops = roll_drops(enemy, rng, luck=player.attributes.get("luck", 0))
     for item_id in drops:
         inventory.add_item(player, item_id, 1)
     drop_names = [inventory.get_item(i)["name"] for i in drops]
@@ -381,7 +418,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         elem = attack_element(player, enemy["element"])  # weapon gems can change this
         mult = element_multiplier(elem, enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng)
+        dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng, crit=pstats["crit"])
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -400,7 +437,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         state["charge"] -= skill["cost"]
         mult = element_multiplier(skill["element"], enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, skill["power"], enemy_defense, mult, rng)
+        dmg, crit = _damage(atk, skill["power"], enemy_defense, mult, rng, crit=pstats["crit"])
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -437,7 +474,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
     elif action == "flee":
         if enemy.get("role") == "boss":
             raise GameError(f"{enemy['name']} won't let you leave.")
-        if rng.random() < FLEE_CHANCE:
+        if rng.random() < min(FLEE_CAP, FLEE_CHANCE + pstats["luck"] * FLEE_PER_LUCK):
             state["over"] = True
             state["fled"] = True
             state["log"].append("You slip away into the dark.")

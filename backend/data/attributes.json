@@ -26,5 +26,19 @@
     "default": 5,
     "min": 0,
     "max": 20
+  },
+  "agility": {
+    "name": "Agility",
+    "description": "Dodging blows in the Substrate, and a share of defense.",
+    "default": 5,
+    "min": 0,
+    "max": 20
+  },
+  "luck": {
+    "name": "Luck",
+    "description": "A thumb on every scale: crits, dodges, loot, tips, chance meetings.",
+    "default": 5,
+    "min": 0,
+    "max": 20
   }
 }

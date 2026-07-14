@@ -55,6 +55,11 @@ def _tier_for(floor):
     return min(3, (floor - 1) // 3 + 1)
 
 
+def _fortune(player):
+    """Luck's cut of found credits: +2% per point."""
+    return 1 + player.attributes.get("luck", 0) * 0.02
+
+
 def _rng_for(seed, floor):
     return _random.Random(f"{seed}:{floor}")
 
@@ -350,7 +355,7 @@ def _resolve_room(player, run, room, rng):
     if kind == "treasure" and not content.get("looted"):
         content["looted"] = True
         if rng.random() < 0.5:
-            amount = rng.randint(8, 20) * run["floor"]
+            amount = round(rng.randint(8, 20) * run["floor"] * _fortune(player))
             player.credits += amount
             return {"type": "treasure", "text": f"A cache of hard currency: +{amount} cr."}
         pool = ["stim_tea", "protein_cube", "star_ration"]
@@ -366,7 +371,7 @@ def _resolve_room(player, run, room, rng):
     if kind == "cache" and not content.get("looted"):
         content["looted"] = True
         item_id = rng.choice(PREMIUM_LOOT)
-        amount = rng.randint(15, 30) * run["floor"]
+        amount = round(rng.randint(15, 30) * run["floor"] * _fortune(player))
         inventory.add_item(player, item_id, 1)
         player.credits += amount
         return {
@@ -433,7 +438,10 @@ def search(player, clock, rng=None):
     hidden = [(d, e) for d, e in room["exits"].items() if e["hidden"] and not e["revealed"]]
     if not hidden:
         return {"found": False, "text": "You search carefully. Nothing but honest walls."}
-    roll = player.attributes.get("wit", 0) + rng.randint(1, 6)
+    # Wit does the looking; luck trips over the seam anyway.
+    roll = (
+        player.attributes.get("wit", 0) + player.attributes.get("luck", 0) // 3 + rng.randint(1, 6)
+    )
     if roll < SEARCH_DC:
         return {
             "found": False,
@@ -594,7 +602,7 @@ def finish_combat(player):
             if content["type"] == "miniboss":
                 # The hoard: premium loot behind the optional miniboss.
                 item_id = _random.choice(PREMIUM_LOOT)
-                amount = _random.randint(20, 40) * run["floor"]
+                amount = round(_random.randint(20, 40) * run["floor"] * _fortune(player))
                 inventory.add_item(player, item_id, 1)
                 player.credits += amount
                 result["hoard"] = (

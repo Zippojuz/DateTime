@@ -125,6 +125,7 @@ def test_enemy_prefers_the_tank():
 
 def test_tank_shoulders_part_of_a_player_hit():
     p = _player()
+    p.attributes["agility"] = 0  # keep defense low enough that the hit exceeds 2
     state = _fight(p, _ally("tank"))
     combat.act(p, state, "attack", rng=QuietRng())  # 0.99: never targets the tank
     assert any("shoulders" in line for line in state["log"])

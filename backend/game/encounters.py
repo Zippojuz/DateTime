@@ -12,8 +12,10 @@ import random as _random
 
 from game import data
 
-# Chance that travel produces any encounter at all.
+# Chance that travel produces any encounter at all (luck nudges it up).
 ENCOUNTER_CHANCE = 0.6
+ENCOUNTER_PER_LUCK = 0.01
+ENCOUNTER_CAP = 0.9
 
 # Weighted kinds (flavor is common).
 _KINDS = ["flavor", "flavor", "flavor", "sighting", "merchant", "trouble"]
@@ -21,14 +23,15 @@ _KINDS = ["flavor", "flavor", "flavor", "sighting", "merchant", "trouble"]
 SIGHTING_AFFECTION = 1
 
 
-def roll_encounter(present_npcs, met_ids, rng=None):
+def roll_encounter(present_npcs, met_ids, rng=None, luck=0):
     """Return an encounter dict or None.
 
     present_npcs: {npc_id: name} available in the destination right now.
     met_ids: set of npc_ids the player has already met (eligible for sightings).
+    luck: the traveler's luck — lucky people run into things.
     """
     rng = rng or _random
-    if rng.random() > ENCOUNTER_CHANCE:
+    if rng.random() > min(ENCOUNTER_CAP, ENCOUNTER_CHANCE + luck * ENCOUNTER_PER_LUCK):
         return None
 
     lines = data.load("encounters")

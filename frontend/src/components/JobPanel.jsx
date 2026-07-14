@@ -17,6 +17,7 @@ export default function JobPanel() {
       {lastJob && (
         <p className="job-result">
           Earned {lastJob.pay} cr from {lastJob.job}.
+          {lastJob.tip > 0 && ` A lucky tip landed in there (+${lastJob.tip} cr).`}
         </p>
       )}
       {here.length === 0 ? (
