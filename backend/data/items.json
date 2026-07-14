@@ -303,7 +303,7 @@
     "type": "equipment",
     "slot": "accessory",
     "rarity": "uncommon",
-    "description": "A casino chip from a place that burned down. Pure gem housing — two sockets.",
+    "description": "A casino chip from a place that burned down. Pure gem housing \u2014 two sockets.",
     "bonuses": {},
     "sockets": 2,
     "value": 5
@@ -518,7 +518,7 @@
     "type": "equipment",
     "slot": "ring",
     "rarity": "uncommon",
-    "description": "A slim band with a single gem housing. Buy two — you have two hands.",
+    "description": "A slim band with a single gem housing. Buy two \u2014 you have two hands.",
     "bonuses": {},
     "sockets": 1,
     "value": 5
@@ -545,5 +545,152 @@
     "dungeon_only": true,
     "description": "Found in the Substrate, still warm. Whoever owned it had excellent taste and terrible luck.",
     "value": 5
+  },
+  "shard_gravity_snap": {
+    "id": "shard_gravity_snap",
+    "name": "Data-Shard: Gravity Snap",
+    "type": "shard",
+    "rarity": "rare",
+    "teaches": "gravity_snap",
+    "dungeon_only": true,
+    "description": "A splinter of forbidden wetware code. Use it to burn Gravity Snap into your lace.",
+    "value": 40
+  },
+  "shard_time_stutter": {
+    "id": "shard_time_stutter",
+    "name": "Data-Shard: Time Stutter",
+    "type": "shard",
+    "rarity": "epic",
+    "teaches": "time_stutter",
+    "dungeon_only": true,
+    "description": "Clock-forking code the city banned twice. Use it to learn Time Stutter.",
+    "value": 80
+  },
+  "shard_mirror_ghost": {
+    "id": "shard_mirror_ghost",
+    "name": "Data-Shard: Mirror Ghost",
+    "type": "shard",
+    "rarity": "rare",
+    "teaches": "mirror_ghost",
+    "dungeon_only": true,
+    "description": "Sensory-echo routines, still warm from someone else's lace. Teaches Mirror Ghost.",
+    "value": 40
+  },
+  "shard_purge_cycle": {
+    "id": "shard_purge_cycle",
+    "name": "Data-Shard: Purge Cycle",
+    "type": "shard",
+    "rarity": "uncommon",
+    "teaches": "purge_cycle",
+    "description": "Medical-grade reboot code. Teaches Purge Cycle.",
+    "value": 25
+  },
+  "shard_overclock_lace": {
+    "id": "shard_overclock_lace",
+    "name": "Data-Shard: Overclock Lace",
+    "type": "shard",
+    "rarity": "rare",
+    "teaches": "overclock_lace",
+    "dungeon_only": true,
+    "description": "Firmware with the safety limits commented out. Teaches Overclock Lace.",
+    "value": 40
+  },
+  "shard_cartographers_dream": {
+    "id": "shard_cartographers_dream",
+    "name": "Data-Shard: Cartographer's Dream",
+    "type": "shard",
+    "rarity": "uncommon",
+    "teaches": "cartographers_dream",
+    "description": "Survey code that dreams in floor plans. Teaches Cartographer's Dream.",
+    "value": 25
+  },
+  "shard_phantom_hands": {
+    "id": "shard_phantom_hands",
+    "name": "Data-Shard: Phantom Hands",
+    "type": "shard",
+    "rarity": "uncommon",
+    "teaches": "phantom_hands",
+    "dungeon_only": true,
+    "description": "Haptic projection code with a burglar's fingerprints all over it. Teaches Phantom Hands.",
+    "value": 25
+  },
+  "reflex_splice": {
+    "id": "reflex_splice",
+    "name": "Reflex Splice",
+    "type": "augment",
+    "slot": "aug_neural",
+    "rarity": "rare",
+    "description": "Spliced reaction pathways. +2 speed, +5% dodge.",
+    "bonuses": {
+      "speed": 2,
+      "dodge": 0.05
+    },
+    "value": 45
+  },
+  "coolant_weave": {
+    "id": "coolant_weave",
+    "name": "Coolant Weave",
+    "type": "augment",
+    "slot": "aug_neural",
+    "rarity": "epic",
+    "dungeon_only": true,
+    "description": "Microcapillary coolant threaded through the lace. Vents +6 heat per round.",
+    "bonuses": {
+      "heat_vent": 6
+    },
+    "value": 70
+  },
+  "smartlink_eyes": {
+    "id": "smartlink_eyes",
+    "name": "Smartlink Eyes",
+    "type": "augment",
+    "slot": "aug_ocular",
+    "rarity": "rare",
+    "description": "Targeting overlays etched onto your corneas. +2 attack, +1 speed.",
+    "bonuses": {
+      "attack": 2,
+      "speed": 1
+    },
+    "value": 45
+  },
+  "subdermal_plating": {
+    "id": "subdermal_plating",
+    "name": "Subdermal Plating",
+    "type": "augment",
+    "slot": "aug_dermal",
+    "rarity": "rare",
+    "description": "Flexible armor grown under the skin. +3 defense, +5 max HP.",
+    "bonuses": {
+      "defense": 3,
+      "max_hp": 5
+    },
+    "value": 45
+  },
+  "myofiber_graft": {
+    "id": "myofiber_graft",
+    "name": "Myofiber Graft",
+    "type": "augment",
+    "slot": "aug_skeletal",
+    "rarity": "rare",
+    "dungeon_only": true,
+    "description": "Woven synthetic muscle. +2 attack, +3 defense.",
+    "bonuses": {
+      "attack": 2,
+      "defense": 3
+    },
+    "value": 55
+  },
+  "overclock_core": {
+    "id": "overclock_core",
+    "name": "Overclock Core",
+    "type": "augment",
+    "slot": "aug_skeletal",
+    "rarity": "epic",
+    "dungeon_only": true,
+    "description": "A sternum-mounted compute block. +40 heat capacity for protocol work.",
+    "bonuses": {
+      "heat_cap": 40
+    },
+    "value": 70
   }
 }

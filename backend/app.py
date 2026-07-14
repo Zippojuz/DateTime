@@ -64,6 +64,10 @@ def create_app():
     def districts():
         return jsonify(data.load("districts"))
 
+    @app.get("/api/protocols")
+    def protocols():
+        return jsonify(data.load("protocols"))
+
     # --- Game state ---
 
     @app.post("/api/game/new")
@@ -402,6 +406,11 @@ def create_app():
             lambda p, c: dungeon.curio_act(p, c, body.get("curio_id"), body.get("verb"))
         )
 
+    @app.post("/api/dungeon/protocol")
+    def dungeon_protocol():
+        body = request.get_json(silent=True) or {}
+        return _dungeon_action(lambda p, c: dungeon.cast_protocol(p, c, body.get("protocol_id")))
+
     @app.post("/api/dungeon/event")
     def dungeon_event():
         body = request.get_json(silent=True) or {}
@@ -454,6 +463,7 @@ def create_app():
                 body.get("action"),
                 skill_id=body.get("skill_id"),
                 item_id=body.get("item_id"),
+                protocol_id=body.get("protocol_id"),
             )
         except GameError as err:
             return jsonify(error=str(err)), 400

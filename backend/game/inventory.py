@@ -40,9 +40,19 @@ def remove_item(player, item_id, qty=1):
 
 
 def use_item(player, item_id):
-    """Use a consumable (food). Applies its effects and consumes one. Returns a
-    summary. Non-consumables can't be 'used'."""
+    """Use a consumable: food restores energy; a data-shard burns its wetware
+    protocol into your lace (permanent, consumed). Returns a summary."""
     item = get_item(item_id)
+
+    if item.get("type") == "shard":
+        protocol_id = item["teaches"]
+        protocol = data.load("protocols")[protocol_id]
+        if protocol_id in player.protocols:
+            raise GameError(f"Your lace already runs {protocol['name']}.")
+        remove_item(player, item_id, 1)
+        player.protocols.append(protocol_id)
+        return {"item": item["name"], "energy": 0, "learned": protocol["name"]}
+
     if item.get("type") != "food":
         raise GameError(f"You can't use the {item['name']} like that.")
     remove_item(player, item_id, 1)

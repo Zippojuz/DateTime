@@ -37,9 +37,19 @@ export default function InventoryPanel() {
                     Use
                   </button>
                 )}
-                {item.type === 'equipment' && (
+                {item.type === 'shard' && (
+                  <button
+                    className="btn-action"
+                    disabled={busy}
+                    title="Burn this protocol into your lace (consumed)"
+                    onClick={() => useItem(id)}
+                  >
+                    Learn
+                  </button>
+                )}
+                {(item.type === 'equipment' || item.type === 'augment') && (
                   <button className="btn-action" disabled={busy} onClick={() => equipItem(id)}>
-                    Equip
+                    {item.type === 'augment' ? 'Install' : 'Equip'}
                   </button>
                 )}
               </li>

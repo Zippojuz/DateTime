@@ -139,6 +139,11 @@ def _m8_companion(conn):
     _add_column(conn, "player", "companion", "TEXT NOT NULL DEFAULT ''")
 
 
+def _m9_protocols(conn):
+    """Add learned wetware protocols (JSON list of protocol ids)."""
+    _add_column(conn, "player", "protocols", "TEXT NOT NULL DEFAULT '[]'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -148,6 +153,7 @@ MIGRATIONS = [
     _m6_combat_and_dungeon,
     _m7_equipment,
     _m8_companion,
+    _m9_protocols,
 ]
 
 

@@ -24,7 +24,10 @@
       "arc_blade",
       "signal_ring",
       "volt_gem",
-      "power_gem"
+      "power_gem",
+      "shard_purge_cycle",
+      "shard_cartographers_dream",
+      "reflex_splice"
     ]
   },
   "citadel_ring": {
@@ -36,7 +39,8 @@
       "protein_cube",
       "visor",
       "plate_greaves",
-      "aegis_gem"
+      "aegis_gem",
+      "subdermal_plating"
     ]
   },
   "bloom_district": {
@@ -49,7 +53,8 @@
       "aurora_pendant",
       "myomer_sleeves",
       "vitality_gem",
-      "ember_gem"
+      "ember_gem",
+      "smartlink_eyes"
     ]
   },
   "the_shallows": {

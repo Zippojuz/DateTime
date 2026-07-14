@@ -48,6 +48,10 @@ PREMIUM_LOOT = [
     "voidglass_edge",
     "band_of_the_deep",
     "nano_patch",
+    "shard_overclock_lace",
+    "shard_phantom_hands",
+    "coolant_weave",
+    "overclock_core",
 ]
 
 
@@ -665,6 +669,44 @@ def _build_companion(player):
         "defense": 2 + level,
         "credit_bonus": spec.get("credit_bonus", 0),
         "down": False,
+    }
+
+
+def cast_protocol(player, clock, protocol_id):
+    """Cast an out-of-combat wetware protocol inside the Substrate. Costs
+    energy (no heat outside battle) and a few minutes."""
+    run = _require_free(player)
+    protocol = data.load("protocols").get(protocol_id)
+    if protocol is None or protocol_id not in player.protocols:
+        raise GameError("Your lace doesn't run that protocol.")
+    if protocol["kind"] not in ("reveal_map", "reveal_seams"):
+        raise GameError(f"{protocol['name']} only runs in combat.")
+    cost = protocol.get("energy", 10)
+    if player.energy < cost:
+        raise GameError("Your lace browns out — too tired to cast.")
+
+    player.energy -= cost
+    clock.advance(MOVE_MINUTES)
+    if protocol["kind"] == "reveal_map":
+        for room in run["rooms"].values():
+            room["visited"] = True
+        return {
+            "type": "protocol",
+            "text": "You dream the floor complete — every room unfolds across your map.",
+        }
+    # reveal_seams: concealed exits in the current room give themselves up.
+    room = run["rooms"][run["at"]]
+    hidden = [e for e in room["exits"].values() if e["hidden"] and not e["revealed"]]
+    for exit_ in hidden:
+        exit_["revealed"] = True
+    if hidden:
+        return {
+            "type": "protocol",
+            "text": "Phantom fingers trace the walls — a concealed seam clicks open.",
+        }
+    return {
+        "type": "protocol",
+        "text": "Phantom fingers sweep the walls and find only honest architecture.",
     }
 
 

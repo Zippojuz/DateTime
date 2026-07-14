@@ -60,6 +60,7 @@ def load_models():
         combat=json.loads(row["combat"]),
         equipment=json.loads(row["equipment"]),
         companion=row["companion"],
+        protocols=json.loads(row["protocols"]),
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -86,7 +87,7 @@ def save_models(save_id, player, clock):
                    location=?, credits=?, debt=?, debt_due_week=?, fired_events=?,
                    inventory=?,
                    combat_level=?, combat_xp=?, difficulty=?, max_floor=?,
-                   dungeon=?, combat=?, equipment=?, companion=?,
+                   dungeon=?, combat=?, equipment=?, companion=?, protocols=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
@@ -109,6 +110,7 @@ def save_models(save_id, player, clock):
                 json.dumps(player.combat),
                 json.dumps(player.equipment),
                 player.companion,
+                json.dumps(player.protocols),
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
                 json.dumps(player.unlocked_transformations),
@@ -130,10 +132,10 @@ def _insert_player(conn, save_id, player, clock):
                save_id, species, attributes, preferences, energy,
                location, credits, debt, debt_due_week, fired_events, inventory,
                combat_level, combat_xp, difficulty, max_floor, dungeon, combat, equipment,
-               companion,
+               companion, protocols,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
@@ -154,6 +156,7 @@ def _insert_player(conn, save_id, player, clock):
             json.dumps(player.combat),
             json.dumps(player.equipment),
             player.companion,
+            json.dumps(player.protocols),
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),
             json.dumps(player.unlocked_transformations),

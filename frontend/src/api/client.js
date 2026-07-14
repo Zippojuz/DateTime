@@ -25,6 +25,7 @@ export const api = {
   actions: () => request('/actions'),
   topics: () => request('/topics'),
   districts: () => request('/districts'),
+  protocols: () => request('/protocols'),
   travel: (to, mode) =>
     request('/travel', { method: 'POST', body: JSON.stringify({ to, mode }) }),
   jobs: () => request('/jobs'),
@@ -55,6 +56,11 @@ export const api = {
     request('/dungeon/curio', {
       method: 'POST',
       body: JSON.stringify({ curio_id: curioId, verb }),
+    }),
+  dungeonProtocol: (protocolId) =>
+    request('/dungeon/protocol', {
+      method: 'POST',
+      body: JSON.stringify({ protocol_id: protocolId }),
     }),
   dungeonLeave: () => request('/dungeon/leave', { method: 'POST', body: '{}' }),
   party: () => request('/party'),

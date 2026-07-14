@@ -1,11 +1,15 @@
-"""Equipment: JRPG gear slots with socketed gems (materia-style).
+"""Equipment: JRPG gear slots with socketed gems (materia-style) + augments.
 
-Ten slots: weapon, head, torso, arms, hands, legs, feet, two rings, and an
+Ten gear slots: weapon, head, torso, arms, hands, legs, feet, two rings, and an
 accessory. Gear gives flat stat bonuses and has 0-2 gem sockets. A gem's effect
 depends on where it sits: an element gem in the WEAPON changes your basic
 attack's element; the same gem in ARMOR resists that element. Stat/charge/xp/
 credit gems work anywhere. The legendary Prisma Gem auto-targets weaknesses in
 a weapon and resists all elements in armor.
+
+Four AUGMENT slots (neural, ocular, dermal, skeletal) hold installed cyberware
+(item type "augment"): passive body hardware granting stats, dodge, or heat
+capacity/venting for wetware protocols. Augments have no gem sockets.
 
 Ring items declare slot "ring" and fit either ring1 or ring2 (you can wear two).
 
@@ -28,8 +32,14 @@ SLOTS = (
     "ring1",
     "ring2",
     "accessory",
+    "aug_neural",
+    "aug_ocular",
+    "aug_dermal",
+    "aug_skeletal",
 )
 STAT_KEYS = ("attack", "defense", "max_hp", "speed")
+# Extra flat bonuses gear/augments may carry (dodge is a probability add).
+EXTRA_KEYS = ("dodge", "heat_cap", "heat_vent")
 
 
 def _target_slot(player, item, requested=None):
@@ -54,7 +64,7 @@ def equip(player, item_id, slot=None):
     """Equip a piece of gear (consumes it from inventory; swaps out whatever was
     in that slot, returning it and its gems). Returns the slot used."""
     item = inventory.get_item(item_id)
-    if item.get("type") != "equipment":
+    if item.get("type") not in ("equipment", "augment"):
         raise GameError("That can't be equipped.")
     target = _target_slot(player, item, slot)
     inventory.remove_item(player, item_id, 1)
@@ -116,6 +126,9 @@ def bonuses(player):
         "defense": 0,
         "max_hp": 0,
         "speed": 0,
+        "dodge": 0.0,  # flat dodge-probability add (augments)
+        "heat_cap": 0,  # extra protocol heat headroom
+        "heat_vent": 0,  # extra heat shed per combat round
         "weapon_element": None,  # element gem in the weapon slot
         "auto_weakness": False,  # prisma in the weapon
         "resists": [],  # element gems in armor slots
@@ -128,7 +141,7 @@ def bonuses(player):
     items = data.load("items")
     for slot, entry in player.equipment.items():
         gear = items.get(entry["item"], {})
-        for stat in STAT_KEYS:
+        for stat in STAT_KEYS + EXTRA_KEYS:
             total[stat] += gear.get("bonuses", {}).get(stat, 0)
         for gem_id in entry["gems"]:
             if not gem_id:

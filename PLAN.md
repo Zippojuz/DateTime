@@ -400,6 +400,28 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: wetware protocols (magic) + augmentation slots ✅ DONE
+- **Magic, sci-fi flavored**: protocols are forbidden code run on your neural
+  lace, learned permanently by consuming data-shards (new item type, found in
+  boss/miniboss loot, premium caches, and a few shops). Registry:
+  `protocols.json`; player list persisted via migration 9.
+- **Heat**: casting in combat builds heat (cap 100, vents 8/round). A cast
+  that overflows the cap still fires but burns you with feedback (12% max HP)
+  — can even kill you before the enemy moves. Heat gauge in the battle HUD.
+- Combat protocols: Gravity Snap (2.2x kinetic), Time Stutter (enemy loses a
+  turn), Mirror Ghost (+40% dodge, 2 turns), Purge Cycle (cleanse + heal),
+  Overclock Lace (+2 charge, +3 attack for the fight). Utility (energy cost,
+  out of combat): Cartographer's Dream (reveal floor), Phantom Hands (reveal
+  concealed seams). Battle command menu gains a Protocol ▸ submenu; dungeon
+  actions gain utility cast buttons.
+- **Augmentation slots**: four new cyberware slots (neural/ocular/dermal/
+  skeletal) riding the whole equipment engine — install/swap like gear, no
+  gem sockets. Six augments: Reflex Splice (+2 spd, +5% dodge), Smartlink
+  Eyes, Subdermal Plating, Myofiber Graft, Coolant Weave (+6 heat vent),
+  Overclock Core (+40 heat cap). Equipment bonuses now aggregate dodge/
+  heat_cap/heat_vent. +17 pytest (222 total); verified live (learn → install
+  → map reveal → Time Stutter steals a turn at heat 37/140).
+
 ### Follow-up: agility & luck; speed→crit, agility→dodge ✅ DONE
 - Two new registry attributes (zero-code additions elsewhere: StatBar, train
   action, and NPC mirroring all pick them up automatically; old saves gain

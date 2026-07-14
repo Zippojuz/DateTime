@@ -12,6 +12,10 @@ const SLOT_LABEL = {
   ring1: 'Ring I',
   ring2: 'Ring II',
   accessory: 'Accessory',
+  aug_neural: 'Aug · Neural',
+  aug_ocular: 'Aug · Ocular',
+  aug_dermal: 'Aug · Dermal',
+  aug_skeletal: 'Aug · Skeletal',
 }
 
 // Gear loadout: ten JRPG slots, each with gem sockets (materia-style — an

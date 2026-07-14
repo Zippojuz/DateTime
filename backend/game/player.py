@@ -64,6 +64,7 @@ class Player(Character):
         combat=None,
         equipment=None,
         companion="",
+        protocols=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -88,6 +89,8 @@ class Player(Character):
         self.equipment = dict(equipment) if equipment else {}
         # Recruited dungeon companion (npc id, "" = delving solo).
         self.companion = companion
+        # Wetware protocols learned from data-shards (list of protocol ids).
+        self.protocols = list(protocols or [])
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -130,6 +133,7 @@ class Player(Character):
                 "max_floor": self.max_floor,
                 "equipment": {k: dict(v) for k, v in self.equipment.items()},
                 "companion": self.companion,
+                "protocols": list(self.protocols),
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

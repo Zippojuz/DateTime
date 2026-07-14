@@ -1452,6 +1452,32 @@ body {
   white-space: nowrap;
 }
 
+/* Wetware protocol heat */
+
+.heat-label {
+  color: #ffab5a;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+}
+
+.hpbar-fill--heat {
+  background: linear-gradient(90deg, #ffab5a, #ff7a4d);
+}
+
+.hpbar-fill--hot {
+  animation: hp-low 0.8s ease-in-out infinite;
+}
+
+.cmd-meta--heat {
+  color: #ffab5a;
+}
+
+.protocol-btn {
+  color: #ffab5a;
+  border-color: rgba(255, 171, 90, 0.35);
+}
+
 @media (max-width: 720px) {
   .battle-field {
     grid-template-columns: 1fr;
@@ -1678,6 +1704,8 @@ body {
 .status--slow { color: #7ad9ff; }
 .status--charm { color: #d98aff; }
 .status--corrode { color: #8dff7a; }
+.status--ghost { color: #c0c8d8; }
+.status--stutter { color: #ffe95a; }
 
 /* --- Equipment --- */
 

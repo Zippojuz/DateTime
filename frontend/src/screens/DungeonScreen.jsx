@@ -27,6 +27,9 @@ export default function DungeonScreen() {
   const search = useGameStore((s) => s.searchDungeon)
   const interact = useGameStore((s) => s.interactDungeon)
   const curioAct = useGameStore((s) => s.curioAct)
+  const castProtocol = useGameStore((s) => s.castProtocol)
+  const protocolRegistry = useGameStore((s) => s.protocols)
+  const knownIds = useGameStore((s) => s.state?.player?.protocols) ?? []
   const leave = useGameStore((s) => s.leaveDungeon)
   const chooseEvent = useGameStore((s) => s.chooseDungeonEvent)
   const busy = useGameStore((s) => s.busy)
@@ -35,6 +38,9 @@ export default function DungeonScreen() {
   const run = dungeon?.run
   const combat = dungeon?.combat
   const stats = dungeon?.stats
+  const utilityProtocols = knownIds
+    .map((id) => protocolRegistry?.[id])
+    .filter((p) => p && p.kind.startsWith('reveal_'))
   if (!run) return null
 
   const here = run.here
@@ -154,6 +160,17 @@ export default function DungeonScreen() {
             <button className="btn-action" disabled={busy} onClick={search}>
               Search the room
             </button>
+            {utilityProtocols.map((p) => (
+              <button
+                key={p.id}
+                className="btn-action protocol-btn"
+                disabled={busy}
+                title={`${p.description} (${p.energy} energy)`}
+                onClick={() => castProtocol(p.id)}
+              >
+                ⟁ {p.name}
+              </button>
+            ))}
             <button className="btn-action" disabled={busy} onClick={leave}>
               Leave the Substrate
             </button>

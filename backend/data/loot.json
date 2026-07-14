@@ -39,7 +39,9 @@
       "singing_crystal",
       "surge_gem",
       "voidglass_edge",
-      "band_of_the_deep"
+      "band_of_the_deep",
+      "shard_mirror_ghost",
+      "shard_phantom_hands"
     ]
   },
   "boss": {
@@ -53,7 +55,10 @@
       "substrate_weave",
       "grav_dancers",
       "sage_gem",
-      "fortune_gem"
+      "fortune_gem",
+      "shard_time_stutter",
+      "shard_gravity_snap",
+      "myofiber_graft"
     ],
     "bonus": {
       "chance": 0.12,

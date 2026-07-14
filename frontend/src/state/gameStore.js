@@ -18,6 +18,7 @@ export const useGameStore = create((set, get) => ({
   topics: null, // registry: { id: {name, changeable} }
   districts: null, // registry: { id: {name, vibe, adjacent} }
   items: null, // registry: { id: {name, type, rarity, ...} }
+  protocols: null, // registry: { id: {name, kind, heat|energy, ...} }
 
   // Shop stock for the current district; gift flow + last reaction.
   shop: null,
@@ -62,14 +63,15 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts, items] = await Promise.all([
+      const [attributes, actions, topics, districts, items, protocols] = await Promise.all([
         api.attributes(),
         api.actions(),
         api.topics(),
         api.districts(),
         api.items(),
+        api.protocols(),
       ])
-      set({ attributes, actions, topics, districts, items, connection: 'ok' })
+      set({ attributes, actions, topics, districts, items, protocols, connection: 'ok' })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return
@@ -253,6 +255,7 @@ export const useGameStore = create((set, get) => ({
   searchDungeon: () => get()._dungeonAction(() => api.dungeonSearch()),
   interactDungeon: () => get()._dungeonAction(() => api.dungeonInteract()),
   curioAct: (curioId, verb) => get()._dungeonAction(() => api.dungeonCurio(curioId, verb)),
+  castProtocol: (protocolId) => get()._dungeonAction(() => api.dungeonProtocol(protocolId)),
 
   chooseDungeonEvent: async (choiceIndex) => {
     set({ busy: true, error: null })

@@ -1,0 +1,57 @@
+{
+  "gravity_snap": {
+    "id": "gravity_snap",
+    "name": "Gravity Snap",
+    "kind": "strike",
+    "element": "kinetic",
+    "power": 2.2,
+    "heat": 35,
+    "description": "Invert a cubic meter of gravity inside your enemy. Loud, brief, decisive."
+  },
+  "time_stutter": {
+    "id": "time_stutter",
+    "name": "Time Stutter",
+    "kind": "stutter",
+    "heat": 45,
+    "description": "Fork the enemy's clock and quietly drop one branch. They lose their next turn."
+  },
+  "mirror_ghost": {
+    "id": "mirror_ghost",
+    "name": "Mirror Ghost",
+    "kind": "ghost",
+    "turns": 2,
+    "dodge_bonus": 0.4,
+    "heat": 30,
+    "description": "Project a sensory echo a half-step to your left. Most attacks choose the wrong you."
+  },
+  "purge_cycle": {
+    "id": "purge_cycle",
+    "name": "Purge Cycle",
+    "kind": "purge",
+    "heat": 25,
+    "description": "Hard-reboot your body chemistry: statuses cleansed, tissue patched."
+  },
+  "overclock_lace": {
+    "id": "overclock_lace",
+    "name": "Overclock Lace",
+    "kind": "overclock",
+    "charge": 2,
+    "attack_buff": 3,
+    "heat": 30,
+    "description": "Run your lace past spec. Everything sings; everything hits harder."
+  },
+  "cartographers_dream": {
+    "id": "cartographers_dream",
+    "name": "Cartographer's Dream",
+    "kind": "reveal_map",
+    "energy": 12,
+    "description": "Dream the floor the way the Substrate dreams it — complete. (Out of combat.)"
+  },
+  "phantom_hands": {
+    "id": "phantom_hands",
+    "name": "Phantom Hands",
+    "kind": "reveal_seams",
+    "energy": 8,
+    "description": "Send intangible fingers along the walls. Concealed seams here give themselves up. (Out of combat.)"
+  }
+}

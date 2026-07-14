@@ -6,7 +6,11 @@ const STATUS_HINT = {
   slow: 'no charge regen',
   charm: 'your damage halved',
   corrode: 'defense halved',
+  ghost: 'sensory echo — huge dodge boost',
+  stutter: 'clock forked — loses this turn',
 }
+
+const COMBAT_PROTOCOL_KINDS = ['strike', 'stutter', 'ghost', 'purge', 'overclock']
 
 const ROLE_ICON = {
   tank: '⛨',
@@ -38,15 +42,19 @@ function StatusChips({ effects }) {
 export default function BattleView() {
   const dungeon = useGameStore((s) => s.dungeon)
   const items = useGameStore((s) => s.items)
+  const protocolRegistry = useGameStore((s) => s.protocols)
   const player = useGameStore((s) => s.state?.player)
   const inventory = player?.inventory ?? {}
   const act = useGameStore((s) => s.combatAct)
   const busy = useGameStore((s) => s.busy)
-  const [menu, setMenu] = useState(null) // null | 'skills' | 'items'
+  const [menu, setMenu] = useState(null) // null | 'skills' | 'items' | 'protocols'
 
   const combat = dungeon?.combat
   const stats = dungeon?.stats
   const skills = Object.values(dungeon?.skills ?? {})
+  const knownProtocols = (player?.protocols ?? [])
+    .map((id) => protocolRegistry?.[id])
+    .filter((p) => p && COMBAT_PROTOCOL_KINDS.includes(p.kind))
   if (!combat) return null
 
   const enemy = combat.enemy
@@ -146,6 +154,21 @@ export default function BattleView() {
                   </button>
                 ))}
               </SubMenu>
+            ) : menu === 'protocols' ? (
+              <SubMenu onBack={() => setMenu(null)}>
+                {knownProtocols.map((p) => (
+                  <button
+                    key={p.id}
+                    className="battle-cmd"
+                    disabled={busy}
+                    title={p.description}
+                    onClick={() => command('protocol', { protocol_id: p.id })}
+                  >
+                    {p.name}
+                    <span className="cmd-meta cmd-meta--heat">{p.heat}♨</span>
+                  </button>
+                ))}
+              </SubMenu>
             ) : menu === 'items' ? (
               <SubMenu onBack={() => setMenu(null)}>
                 {usable.map(([id, qty]) => (
@@ -173,6 +196,16 @@ export default function BattleView() {
                 >
                   Skill <span className="cmd-arrow">▸</span>
                 </button>
+                {knownProtocols.length > 0 && (
+                  <button
+                    className="battle-cmd"
+                    disabled={busy}
+                    title="Wetware protocols — casting builds heat"
+                    onClick={() => setMenu('protocols')}
+                  >
+                    Protocol <span className="cmd-arrow">▸</span>
+                  </button>
+                )}
                 <button
                   className="battle-cmd"
                   disabled={busy}
@@ -213,6 +246,9 @@ export default function BattleView() {
                 </span>
               }
             />
+            {(knownProtocols.length > 0 || combat.heat > 0) && (
+              <HeatGauge heat={combat.heat ?? 0} cap={stats.heat_cap ?? 100} />
+            )}
             {companion && (
               <StatusRow
                 name={companion.name}
@@ -272,6 +308,27 @@ function StatusRow({ name, hp, maxHp, down, effects, extra }) {
       )}
       <span className="status-row-extra">{extra}</span>
       {effects && <StatusChips effects={effects} />}
+    </div>
+  )
+}
+
+function HeatGauge({ heat, cap }) {
+  const pct = Math.max(0, Math.min(100, (heat / cap) * 100))
+  return (
+    <div className="status-row heat-row" title="Protocol heat — overflow burns you">
+      <span className="status-row-name heat-label">Heat</span>
+      <div className="hpbar">
+        <div className="hpbar-track">
+          <span
+            className={`hpbar-fill hpbar-fill--heat${pct >= 85 ? ' hpbar-fill--hot' : ''}`}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+        <span className="hpbar-num">
+          {heat}/{cap}
+        </span>
+      </div>
+      <span className="status-row-extra" />
     </div>
   )
 }

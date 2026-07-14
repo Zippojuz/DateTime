@@ -38,6 +38,14 @@ FLEE_PER_LUCK = 0.02
 FLEE_CAP = 0.9
 DROP_PER_LUCK = 0.03  # +3% relative drop chance per luck point
 
+# Wetware protocols: reality-bending code cast from your neural lace. Casting
+# builds HEAT; heat vents a little each round. Pushing past capacity fires the
+# cast anyway but burns you with feedback.
+HEAT_CAP = 100
+HEAT_VENT = 8  # shed per round
+OVERHEAT_FEEDBACK = 0.12  # of max HP, when a cast overflows the cap
+GHOST_DODGE_CAP = 0.6  # dodge ceiling with Mirror Ghost up
+
 
 def crit_chance(speed, luck=0):
     return min(CRIT_CAP, CRIT_BASE + speed * CRIT_PER_SPEED + luck * CRIT_PER_LUCK)
@@ -85,8 +93,10 @@ def player_stats(player):
         "defense": 2 + level + wit // 2 + agility // 2 + eq["defense"],
         "speed": speed,
         "crit": round(crit_chance(speed, luck), 3),
-        "dodge": round(dodge_chance(agility, luck), 3),
+        "dodge": round(min(0.5, dodge_chance(agility, luck) + eq["dodge"]), 3),
         "luck": luck,
+        "heat_cap": HEAT_CAP + eq["heat_cap"],
+        "heat_vent": HEAT_VENT + eq["heat_vent"],
     }
 
 
@@ -171,6 +181,7 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None):
         "charge_max": charge_max,
         "guarding": False,
         "attack_buff": attack_buff,
+        "heat": 0,  # wetware protocol heat
         "turn": 1,
         "log": [f"{enemy['name']} bars your way."],
         "player_effects": {},  # {status: {turns, amount}}
@@ -280,8 +291,15 @@ def _enemy_turn(player, state, pstats, rng):
     defense = pstats["defense"] * (0.5 if "corrode" in pe else 1.0)
     # Armor gems (or a prisma) blunt the enemy's element.
     resist = incoming_resist(player, enemy["element"])
-    # Enemies crit off their own speed; your dodge comes from agility + luck.
+    # Enemies crit off their own speed; your dodge comes from agility + luck,
+    # plus Mirror Ghost's echo while it lasts.
     enemy_crit = crit_chance(enemy.get("speed", 5))
+    ghost = pe.get("ghost", {}).get("amount", 0)
+    dodge = min(GHOST_DODGE_CAP, pstats["dodge"] + ghost)
+
+    if "stutter" in state["enemy_effects"]:
+        log.append(f"{enemy['name']} hangs mid-motion, caught in a dead clock branch.")
+        return
 
     if state.get("charging"):
         # Unleash the telegraphed signature move. Signatures can't be dodged —
@@ -323,7 +341,7 @@ def _enemy_turn(player, state, pstats, rng):
                 if comp["hp"] <= 0:
                     comp["down"] = True
                     log.append(f"{comp['name']} goes down! They'll need a rest stop.")
-            elif rng.random() < pstats["dodge"]:
+            elif rng.random() < dodge:
                 verb = "a charged strike" if use_skill else "the blow"
                 log.append(f"You twist aside — {verb} finds nothing but afterimage.")
             else:
@@ -400,7 +418,54 @@ def _win(state, player, rng):
         state["player_hp"] = player_stats(player)["max_hp"]
 
 
-def act(player, state, action, skill_id=None, item_id=None, rng=None):
+def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng):
+    """Run a combat protocol: add heat (overflow = feedback damage), then apply
+    the effect by kind."""
+    log = state["log"]
+    heat_cap = pstats["heat_cap"]
+    state["heat"] += protocol["heat"]
+    log.append(f"You run {protocol['name']} — heat {min(state['heat'], heat_cap)}/{heat_cap}.")
+    if state["heat"] > heat_cap:
+        state["heat"] = heat_cap
+        feedback = round(pstats["max_hp"] * OVERHEAT_FEEDBACK)
+        state["player_hp"] = max(0, state["player_hp"] - feedback)
+        log.append(f"OVERHEAT — feedback arcs through your lace: {feedback} damage.")
+
+    kind = protocol["kind"]
+    if kind == "strike":
+        mult = element_multiplier(protocol.get("element"), state["enemy"]["element"])
+        atk = pstats["attack"] + state.get("attack_buff", 0)
+        dmg, crit = _damage(atk, protocol["power"], enemy_defense, mult, rng, crit=pstats["crit"])
+        if charmed:
+            dmg = max(1, dmg // 2)
+        state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
+        note = " It hits a weakness!" if mult > 1 else (" Resisted." if mult < 1 else "")
+        log.append(f"{protocol['name']} — {dmg} damage{' (crit!)' if crit else ''}.{note}")
+    elif kind == "stutter":
+        _inflict(state["enemy_effects"], "stutter", 1)
+        log.append(f"{state['enemy']['name']}'s clock forks — and one branch quietly dies.")
+    elif kind == "ghost":
+        state["player_effects"]["ghost"] = {
+            "turns": protocol.get("turns", 2),
+            "amount": protocol.get("dodge_bonus", 0.4),
+        }
+        log.append("A sensory echo peels off you and takes half a step left.")
+    elif kind == "purge":
+        cleared = list(state["player_effects"])
+        state["player_effects"] = {}
+        heal = 10 + pstats["level"]
+        state["player_hp"] = min(pstats["max_hp"], state["player_hp"] + heal)
+        cleared_note = f" Cleansed: {', '.join(cleared)}." if cleared else ""
+        log.append(f"Purge Cycle reboots your chemistry — +{heal} HP.{cleared_note}")
+    elif kind == "overclock":
+        state["charge"] = min(
+            state.get("charge_max", CHARGE_MAX), state["charge"] + protocol.get("charge", 2)
+        )
+        state["attack_buff"] = state.get("attack_buff", 0) + protocol.get("attack_buff", 3)
+        log.append("Your lace screams past spec — charge floods in, every edge sharpens.")
+
+
+def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_id=None):
     """Resolve one player action (and the enemy's answer) in place."""
     rng = rng or _random
     if not state.get("active") or state.get("over"):
@@ -452,6 +517,14 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
                 _inflict(state["enemy_effects"], status, 3)
                 state["log"].append(f"{enemy['name']} is afflicted: {status}!")
 
+    elif action == "protocol":
+        protocol = data.load("protocols").get(protocol_id)
+        if protocol is None or protocol_id not in player.protocols:
+            raise GameError("Your lace doesn't run that protocol.")
+        if protocol["kind"] not in ("strike", "stutter", "ghost", "purge", "overclock"):
+            raise GameError(f"{protocol['name']} only runs outside combat.")
+        _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng)
+
     elif action == "guard":
         state["guarding"] = True
         state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + 1)
@@ -484,6 +557,13 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
     else:
         raise GameError(f"Unknown combat action: {action!r}")
 
+    if state["player_hp"] <= 0:
+        # Overheat feedback can finish you before the enemy even moves.
+        state["over"] = True
+        state["victory"] = False
+        state["log"].append("Your own lace burns you down. The Substrate spits you back out.")
+        return state
+
     if state["enemy_hp"] <= 0:
         _win(state, player, rng)
         return state
@@ -509,5 +589,6 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
                 state["charge"] = min(
                     state.get("charge_max", CHARGE_MAX), state["charge"] + CHARGE_PER_TURN
                 )
+            state["heat"] = max(0, state.get("heat", 0) - pstats["heat_vent"])
             state["turn"] += 1
     return state
