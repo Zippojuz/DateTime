@@ -68,6 +68,10 @@ def create_app():
     def protocols():
         return jsonify(data.load("protocols"))
 
+    @app.get("/api/statuses")
+    def statuses():
+        return jsonify(data.load("statuses"))
+
     # --- Game state ---
 
     @app.post("/api/game/new")
@@ -130,7 +134,7 @@ def create_app():
         day = _day_index(clock)
         rels = social.all_relationships(save_id, day)
         result = []
-        for cid, npc in NPC.load_all().items():
+        for cid, npc in NPC.load_unlocked(player).items():
             rel = rels.get(cid, {})
             known = set(rel.get("known_npc_topics", []))
             payload = npc.to_dict()
@@ -170,7 +174,7 @@ def create_app():
         met_ids = {cid for cid, rel in rels.items() if rel.get("last_talked_day", 0) > 0}
         present = {
             cid: npc.name
-            for cid, npc in NPC.load_all().items()
+            for cid, npc in NPC.load_unlocked(player).items()
             if (a := world.availability(npc, clock))["available"]
             and a.get("district") == player.location
         }
@@ -296,6 +300,8 @@ def create_app():
         try:
             npc = NPC.load(body.get("npc_id"))
         except KeyError:
+            return jsonify(error="No such character."), 404
+        if not npc.unlocked_for(player):
             return jsonify(error="No such character."), 404
 
         avail = world.availability(npc, clock)
@@ -474,6 +480,11 @@ def create_app():
             # Even a rout deepens the bond a little — you went down together.
             if outcome.get("result") == "defeat" and outcome.get("companion"):
                 social.add_opinion(save_id, outcome["companion"], 1, _day_index(clock))
+            # A defeated NPC boss surfaces: make sure their relationship row
+            # exists (new games pre-seed it; older saves won't have one).
+            if outcome.get("unlocked"):
+                npc = NPC.load(outcome["unlocked"]["npc"])
+                social.ensure_relationship(save_id, npc.id, npc.starting_disposition)
         save.save_models(save_id, player, clock)
         return jsonify(
             {
@@ -493,7 +504,7 @@ def create_app():
         save_id, player, clock = models
         day = _day_index(clock)
         candidates = []
-        for cid, npc in NPC.load_all().items():
+        for cid, npc in NPC.load_unlocked(player).items():
             spec = npc.companion
             if not spec:
                 continue
@@ -527,6 +538,8 @@ def create_app():
         try:
             npc = NPC.load(body.get("npc_id"))
         except KeyError:
+            return jsonify(error="No such character."), 404
+        if not npc.unlocked_for(player):
             return jsonify(error="No such character."), 404
         if not npc.companion:
             return jsonify(error=f"{npc.name} won't delve."), 400
@@ -640,6 +653,8 @@ def create_app():
         try:
             npc = NPC.load(body.get("npc_id"))
         except KeyError:
+            return jsonify(error="No such character."), 404
+        if not npc.unlocked_for(player):
             return jsonify(error="No such character."), 404
 
         avail = world.availability(npc, clock)

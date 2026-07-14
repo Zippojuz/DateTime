@@ -323,5 +323,65 @@
       "atk_mult": 0.8,
       "blurb": "Battle-rhythm. Keeps your charge meter singing."
     }
+  },
+  "nyx": {
+    "id": "nyx",
+    "name": "Nyx",
+    "pronouns": "she/they",
+    "species": "Substrate signal given flesh",
+    "personality": "Ancient, playful, homesick for a place that turned out to be you",
+    "district": "the_shallows",
+    "arc_theme": "Learning to be finite",
+    "romanceable": true,
+    "starting_disposition": 10,
+    "requires_defeat": "nyx_deep_signal",
+    "preferences": {
+      "music": {
+        "sentiment": "love"
+      },
+      "books": {
+        "sentiment": "like"
+      },
+      "fitness": {
+        "sentiment": "dislike"
+      },
+      "nightlife": {
+        "sentiment": "love",
+        "changeable": false
+      }
+    },
+    "schedule": [
+      {
+        "start": "18:00",
+        "end": "23:00",
+        "district": "the_shallows",
+        "location": "shallows_market",
+        "activity": "Tasting everything the surface sells",
+        "available": true
+      },
+      {
+        "start": "23:00",
+        "end": "04:00",
+        "district": "the_shallows",
+        "location": "music_venue",
+        "activity": "Standing too close to the speakers",
+        "available": true
+      },
+      {
+        "start": "04:00",
+        "end": "18:00",
+        "district": "the_shallows",
+        "location": "home",
+        "activity": "Down in the signal",
+        "available": false
+      }
+    ],
+    "companion": {
+      "role": "dps",
+      "element": "psionic",
+      "hp_mult": 1.1,
+      "atk_mult": 1.2,
+      "blurb": "The Substrate's favorite dream, fighting on your side now. Enemies hesitate. She doesn't."
+    }
   }
 }

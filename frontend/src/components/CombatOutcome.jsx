@@ -45,6 +45,11 @@ export default function CombatOutcome() {
               </dl>
             )}
             {result.hoard && <p className="outcome-hoard">{result.hoard}</p>}
+            {result.unlocked && (
+              <p className="outcome-unlocked">
+                ♥ {result.unlocked.text}
+              </p>
+            )}
           </>
         )}
 

@@ -1,16 +1,7 @@
 import { useState } from 'react'
 import { useGameStore } from '../state/gameStore'
 
-const STATUS_HINT = {
-  burn: 'taking damage each turn',
-  slow: 'no charge regen',
-  charm: 'your damage halved',
-  corrode: 'defense halved',
-  ghost: 'sensory echo — huge dodge boost',
-  stutter: 'clock forked — loses this turn',
-}
-
-const COMBAT_PROTOCOL_KINDS = ['strike', 'stutter', 'ghost', 'purge', 'overclock']
+const COMBAT_PROTOCOL_KINDS = ['strike', 'stutter', 'ghost', 'purge', 'overclock', 'entrance']
 
 const ROLE_ICON = {
   tank: '⛨',
@@ -22,16 +13,26 @@ const ROLE_ICON = {
 
 const ENEMY_ICON = { normal: '⚔', miniboss: '☠', boss: '♛' }
 
+// Chips render from the statuses.json registry: name, hover hint, and color.
 function StatusChips({ effects }) {
+  const registry = useGameStore((s) => s.statuses) ?? {}
   const entries = Object.entries(effects ?? {})
   if (!entries.length) return null
   return (
     <span className="status-chips">
-      {entries.map(([name, e]) => (
-        <span key={name} className={`status status--${name}`} title={STATUS_HINT[name]}>
-          {name} {e.turns}
-        </span>
-      ))}
+      {entries.map(([id, e]) => {
+        const spec = registry[id] ?? {}
+        return (
+          <span
+            key={id}
+            className="status"
+            style={spec.color ? { color: spec.color } : undefined}
+            title={spec.hint}
+          >
+            {(spec.name ?? id).toLowerCase()} {e.turns}
+          </span>
+        )
+      })}
     </span>
   )
 }

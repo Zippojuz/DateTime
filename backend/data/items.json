@@ -692,5 +692,31 @@
       "heat_cap": 40
     },
     "value": 70
+  },
+  "shard_siren_overlay": {
+    "id": "shard_siren_overlay",
+    "name": "Data-Shard: Siren Overlay",
+    "type": "shard",
+    "rarity": "epic",
+    "teaches": "siren_overlay",
+    "dungeon_only": true,
+    "description": "Somebody weaponized wanting. Teaches Siren Overlay.",
+    "value": 80
+  },
+  "composure_spray": {
+    "id": "composure_spray",
+    "name": "Composure Spray",
+    "type": "booster",
+    "rarity": "uncommon",
+    "description": "Smells like cold showers and good decisions. Cleanses smitten, marked, weak knees, and charm mid-fight.",
+    "effects": {
+      "cleanse": [
+        "smitten",
+        "marked",
+        "weak_knees",
+        "charm"
+      ]
+    },
+    "value": 12
   }
 }

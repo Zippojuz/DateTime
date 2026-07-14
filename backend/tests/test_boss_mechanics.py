@@ -216,7 +216,9 @@ def test_all_mechanics_reference_valid_data():
             assert move["every_n_turns"] >= 2
             assert move["telegraph"]
             if move.get("inflicts"):
-                assert move["inflicts"]["effect"] in ("burn", "slow", "charm", "corrode")
+                # Signature inflicts must be player-side statuses from the registry.
+                status = data.load("statuses").get(move["inflicts"]["effect"])
+                assert status and status["side"] in ("player", "both")
         for phase in mech.get("phases", []):
             assert 0 < phase["hp_below"] < 1
             assert phase["text"]

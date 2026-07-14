@@ -26,6 +26,7 @@ export const api = {
   topics: () => request('/topics'),
   districts: () => request('/districts'),
   protocols: () => request('/protocols'),
+  statuses: () => request('/statuses'),
   travel: (to, mode) =>
     request('/travel', { method: 'POST', body: JSON.stringify({ to, mode }) }),
   jobs: () => request('/jobs'),

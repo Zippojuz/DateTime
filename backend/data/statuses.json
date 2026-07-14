@@ -1,0 +1,100 @@
+{
+  "burn": {
+    "id": "burn",
+    "name": "Burn",
+    "side": "both",
+    "color": "#ff7a4d",
+    "hint": "taking damage each turn"
+  },
+  "slow": {
+    "id": "slow",
+    "name": "Slow",
+    "side": "player",
+    "color": "#7ad9ff",
+    "hint": "no charge regen"
+  },
+  "charm": {
+    "id": "charm",
+    "name": "Charm",
+    "side": "player",
+    "color": "#d98aff",
+    "hint": "your damage halved"
+  },
+  "corrode": {
+    "id": "corrode",
+    "name": "Corrode",
+    "side": "both",
+    "color": "#8dff7a",
+    "hint": "defense halved"
+  },
+  "ghost": {
+    "id": "ghost",
+    "name": "Ghost",
+    "side": "player",
+    "color": "#c0c8d8",
+    "hint": "sensory echo — huge dodge boost"
+  },
+  "stutter": {
+    "id": "stutter",
+    "name": "Stutter",
+    "side": "enemy",
+    "color": "#ffe95a",
+    "hint": "clock forked — loses this turn"
+  },
+  "smitten": {
+    "id": "smitten",
+    "name": "Smitten",
+    "side": "player",
+    "color": "#ff5da2",
+    "hint": "damage halved, and you may lose your turn admiring them"
+  },
+  "marked": {
+    "id": "marked",
+    "name": "Marked",
+    "side": "player",
+    "color": "#ff5da2",
+    "hint": "a lipstick burn — you take +25% damage"
+  },
+  "weak_knees": {
+    "id": "weak_knees",
+    "name": "Weak Knees",
+    "side": "player",
+    "color": "#ffab5a",
+    "hint": "swept off your feet — no dodging, crits falter"
+  },
+  "static_cling": {
+    "id": "static_cling",
+    "name": "Static Cling",
+    "side": "player",
+    "color": "#ffe95a",
+    "hint": "she's clingy — losing 1 charge per turn"
+  },
+  "drained": {
+    "id": "drained",
+    "name": "Drained",
+    "side": "player",
+    "color": "#d98aff",
+    "hint": "your warmth is being sipped — the damage heals them"
+  },
+  "stagger": {
+    "id": "stagger",
+    "name": "Stagger",
+    "side": "enemy",
+    "color": "#c0c8d8",
+    "hint": "off balance — loses this turn"
+  },
+  "shock": {
+    "id": "shock",
+    "name": "Shock",
+    "side": "enemy",
+    "color": "#ffe95a",
+    "hint": "attack reduced 25%"
+  },
+  "entranced": {
+    "id": "entranced",
+    "name": "Entranced",
+    "side": "enemy",
+    "color": "#ff5da2",
+    "hint": "can't stop watching you — basic attacks only"
+  }
+}

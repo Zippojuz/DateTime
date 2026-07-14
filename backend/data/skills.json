@@ -61,5 +61,47 @@
     "cost": 4,
     "unlock_level": 8,
     "description": "Everything you have, all at once."
+  },
+  "blown_kiss": {
+    "id": "blown_kiss",
+    "name": "Blown Kiss",
+    "element": "psionic",
+    "power": 0.9,
+    "cost": 1,
+    "unlock_level": 4,
+    "inflicts": {
+      "effect": "entranced",
+      "chance": 0.4,
+      "turns": 2
+    },
+    "description": "A kiss wrapped around a psionic payload. Some enemies forget what they were doing."
+  },
+  "hip_check": {
+    "id": "hip_check",
+    "name": "Hip Check",
+    "element": "kinetic",
+    "power": 1.3,
+    "cost": 2,
+    "unlock_level": 6,
+    "inflicts": {
+      "effect": "stagger",
+      "chance": 0.35,
+      "turns": 1
+    },
+    "description": "Sweep them off their feet \u2014 literally. Bosses are unmoved; minibosses sometimes."
+  },
+  "static_touch": {
+    "id": "static_touch",
+    "name": "Static Touch",
+    "element": "voltaic",
+    "power": 1.2,
+    "cost": 2,
+    "unlock_level": 7,
+    "inflicts": {
+      "effect": "shock",
+      "chance": 0.4,
+      "turns": 3
+    },
+    "description": "One fingertip of raw voltage dragged slowly along whatever passes for a spine."
   }
 }

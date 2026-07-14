@@ -22,7 +22,7 @@ from game import combat, data, inventory
 from game.errors import GameError
 
 ENTRANCE_DISTRICT = "the_shallows"
-MAX_FLOOR = 9
+MAX_FLOOR = 10
 ENTER_ENERGY_COST = 10
 ENTER_MINUTES = 30
 MOVE_MINUTES = 5
@@ -36,8 +36,18 @@ DIRS = {"n": (0, -1), "s": (0, 1), "e": (1, 0), "w": (-1, 0)}
 OPPOSITE = {"n": "s", "s": "n", "e": "w", "w": "e"}
 DIR_WORD = {"n": "north", "s": "south", "e": "east", "w": "west"}
 
-BOSS_BY_FLOOR = {3: "chrome_contessa", 6: "neon_seraph", 9: "substrate_empress"}
+BOSS_BY_FLOOR = {
+    3: "chrome_contessa",
+    6: "neon_seraph",
+    9: "substrate_empress",
+    10: "nyx_deep_signal",
+}
 MINIBOSSES = ["warden_lyss", "overclock_queen", "spore_matriarch"]
+
+# Every tenth floor is guarded by an NPC boss who, once bested, surfaces in the
+# city as a romanceable character. Beating them appends "defeated:<enemy_id>"
+# to player.fired_events, which unlocks the matching characters.json entry.
+NPC_BOSS_UNLOCKS = {"nyx_deep_signal": "nyx"}
 
 # Premium loot pool for hidden caches and miniboss hoards.
 PREMIUM_LOOT = [
@@ -599,6 +609,21 @@ def finish_combat(player):
             "enemy": state["enemy"]["name"],
             "rewards": state.get("rewards"),
         }
+        # NPC bosses surface in the city once bested (and stay bested).
+        unlock_npc = NPC_BOSS_UNLOCKS.get(state["enemy"]["id"])
+        if unlock_npc:
+            marker = f"defeated:{state['enemy']['id']}"
+            if marker not in player.fired_events:
+                player.fired_events.append(marker)
+                entry = data.load("characters")[unlock_npc]
+                result["unlocked"] = {
+                    "npc": unlock_npc,
+                    "name": entry["name"],
+                    "text": (
+                        f"{entry['name']} rides your signal back to the surface. "
+                        f"Someone new is loose in The Shallows."
+                    ),
+                }
         if content["type"] == "stairs_down":
             content["guard_cleared"] = True
         else:

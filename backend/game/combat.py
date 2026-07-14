@@ -55,13 +55,22 @@ def dodge_chance(agility, luck=0):
     return min(DODGE_CAP, agility * DODGE_PER_AGILITY + luck * DODGE_PER_LUCK)
 
 
-# Status effects. burn = damage over time; slow = no charge regen; charm =
-# your outgoing damage halved; corrode = defense halved. burn/corrode can also
-# afflict enemies (via thermal/toxin player skills); slow/charm are player-only.
+# Status effects (registry: data/statuses.json). Mechanics live here; names,
+# hints, and chip colors live in the registry so the UI stays data-driven.
+# On YOU: burn (DoT), slow (no charge regen), charm (damage halved), corrode
+# (defense halved), smitten (charm + you may lose your turn admiring them),
+# marked (+25% damage taken), weak_knees (no dodge, crits falter), static_cling
+# (-1 charge/turn), drained (DoT that heals the enemy), ghost (dodge boost).
+# On THEM: burn, corrode, stutter/stagger (lose a turn), shock (-25% attack),
+# entranced (basic attacks only — no telegraphs, no charged strikes).
 ENEMY_STATUSES = ("burn", "corrode")
-SKILL_INFLICT_CHANCE = 0.30  # player skills
+SKILL_INFLICT_CHANCE = 0.30  # player skills (element-mapped fallback)
 ENEMY_SKILL_INFLICT_CHANCE = 0.35  # enemy charged strikes
 DEFAULT_BURN = 4
+SMITTEN_SLIP_CHANCE = 0.35  # chance an offensive action is lost to admiring
+MARKED_MULT = 1.25  # damage taken while marked
+SHOCK_MULT = 0.75  # enemy attack while shocked
+STAGGER_MINIBOSS_RESIST = 0.5  # bosses are outright immune
 # Guarding a telegraphed signature move cuts it to a third (regular guard: half).
 TELEGRAPH_GUARD_DIVISOR = 3
 
@@ -200,10 +209,27 @@ def _status_for(element):
 
 
 def _inflict(effects, effect, turns, amount=0):
+    if effect == "smitten":
+        effects.pop("charm", None)  # smitten supersedes charm, never stacks with it
     effects[effect] = {
         "turns": turns,
         "amount": amount or (DEFAULT_BURN if effect == "burn" else 0),
     }
+
+
+def _inflict_enemy(state, effect, turns, rng, amount=0):
+    """Land a status on the enemy, respecting stagger immunities. Returns
+    whether it stuck (and logs the resist when it doesn't)."""
+    role = state["enemy"].get("role", "normal")
+    if effect == "stagger":
+        if role == "boss":
+            state["log"].append(f"{state['enemy']['name']} doesn't even wobble.")
+            return False
+        if role == "miniboss" and rng.random() < STAGGER_MINIBOSS_RESIST:
+            state["log"].append(f"{state['enemy']['name']} rides the hit and keeps their feet.")
+            return False
+    _inflict(state["enemy_effects"], effect, turns, amount)
+    return True
 
 
 def _check_phases(state):
@@ -225,13 +251,20 @@ def _check_phases(state):
 
 
 def _tick_effects(state):
-    """End-of-round: apply burn damage and count every effect down."""
+    """End-of-round: apply burn/drain damage and count every effect down."""
     log = state["log"]
     pe, ee = state["player_effects"], state["enemy_effects"]
     if "burn" in pe:
         dmg = pe["burn"]["amount"]
         state["player_hp"] = max(0, state["player_hp"] - dmg)
         log.append(f"Burn sears you — {dmg} damage.")
+    if "drained" in pe:
+        # Vampiric: what she sips, she keeps. The sip alone can't finish you.
+        sip = min(pe["drained"]["amount"], state["player_hp"] - 1)
+        if sip > 0:
+            state["player_hp"] -= sip
+            state["enemy_hp"] = min(state["enemy"]["hp"], state["enemy_hp"] + sip)
+            log.append(f"{state['enemy']['name']} sips your warmth and sighs — {sip} HP, hers now.")
     if "burn" in ee:
         dmg = ee["burn"]["amount"]
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -295,18 +328,26 @@ def _enemy_turn(player, state, pstats, rng):
     # plus Mirror Ghost's echo while it lasts.
     enemy_crit = crit_chance(enemy.get("speed", 5))
     ghost = pe.get("ghost", {}).get("amount", 0)
-    dodge = min(GHOST_DODGE_CAP, pstats["dodge"] + ghost)
+    # Weak knees: no dancing out of anything. Shock: their arm's gone numb.
+    dodge = 0 if "weak_knees" in pe else min(GHOST_DODGE_CAP, pstats["dodge"] + ghost)
+    atk = round(enemy["attack"] * (SHOCK_MULT if "shock" in state["enemy_effects"] else 1.0))
+    marked = MARKED_MULT if "marked" in pe else 1.0
 
     if "stutter" in state["enemy_effects"]:
         log.append(f"{enemy['name']} hangs mid-motion, caught in a dead clock branch.")
         return
+    if "stagger" in state["enemy_effects"]:
+        log.append(f"{enemy['name']} is still finding their feet after that hip check.")
+        return
+    entranced = "entranced" in state["enemy_effects"]
 
     if state.get("charging"):
         # Unleash the telegraphed signature move. Signatures can't be dodged —
         # reading the telegraph and guarding is the counter.
         move = state["charging"]
         state["charging"] = None
-        dmg, _crit = _damage(enemy["attack"], move["power"], defense, resist, rng, crit=enemy_crit)
+        dmg, _crit = _damage(atk, move["power"], defense, resist, rng, crit=enemy_crit)
+        dmg = round(dmg * marked)
         if state["guarding"]:
             dmg = max(1, dmg // TELEGRAPH_GUARD_DIVISOR)
             state["guarding"] = False
@@ -319,13 +360,14 @@ def _enemy_turn(player, state, pstats, rng):
             log.append(f"You're afflicted: {inflict['effect']}!")
     else:
         moves = (enemy.get("mechanics") or {}).get("moves") or []
-        if moves and state["turn"] % moves[0].get("every_n_turns", 4) == 0:
+        if moves and not entranced and state["turn"] % moves[0].get("every_n_turns", 4) == 0:
             # Telegraph: the boss spends this turn charging — your cue to guard.
+            # An entranced boss can't focus enough to wind one up.
             move = rng.choice(moves)
             state["charging"] = move
             log.append(move["telegraph"])
         else:
-            use_skill = not moves and rng.random() < ENEMY_SKILL_CHANCE
+            use_skill = not moves and not entranced and rng.random() < ENEMY_SKILL_CHANCE
             power = ENEMY_SKILL_POWER if use_skill else BASIC_POWER
             comp = state.get("companion")
             target_comp = False
@@ -333,9 +375,7 @@ def _enemy_turn(player, state, pstats, rng):
                 roll = rng.random()
                 target_comp = roll < (0.55 if comp["role"] == "tank" else 0.25)
             if target_comp:
-                dmg, crit = _damage(
-                    enemy["attack"], power, comp["defense"], 1.0, rng, crit=enemy_crit
-                )
+                dmg, crit = _damage(atk, power, comp["defense"], 1.0, rng, crit=enemy_crit)
                 comp["hp"] = max(0, comp["hp"] - dmg)
                 log.append(f"{enemy['name']} turns on {comp['name']} — {dmg} damage.")
                 if comp["hp"] <= 0:
@@ -345,7 +385,8 @@ def _enemy_turn(player, state, pstats, rng):
                 verb = "a charged strike" if use_skill else "the blow"
                 log.append(f"You twist aside — {verb} finds nothing but afterimage.")
             else:
-                dmg, crit = _damage(enemy["attack"], power, defense, resist, rng, crit=enemy_crit)
+                dmg, crit = _damage(atk, power, defense, resist, rng, crit=enemy_crit)
+                dmg = round(dmg * marked)
                 if state["guarding"]:
                     dmg = max(1, dmg // 2)
                     state["guarding"] = False
@@ -418,7 +459,7 @@ def _win(state, player, rng):
         state["player_hp"] = player_stats(player)["max_hp"]
 
 
-def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng):
+def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, pcrit, rng):
     """Run a combat protocol: add heat (overflow = feedback damage), then apply
     the effect by kind."""
     log = state["log"]
@@ -435,7 +476,7 @@ def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng)
     if kind == "strike":
         mult = element_multiplier(protocol.get("element"), state["enemy"]["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, protocol["power"], enemy_defense, mult, rng, crit=pstats["crit"])
+        dmg, crit = _damage(atk, protocol["power"], enemy_defense, mult, rng, crit=pcrit)
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -463,6 +504,12 @@ def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng)
         )
         state["attack_buff"] = state.get("attack_buff", 0) + protocol.get("attack_buff", 3)
         log.append("Your lace screams past spec — charge floods in, every edge sharpens.")
+    elif kind == "entrance":
+        _inflict(state["enemy_effects"], "entranced", protocol.get("turns", 2))
+        log.append(
+            f"You project {state['enemy']['name']}'s own fantasy back at them. "
+            "They forget to be clever."
+        )
 
 
 def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_id=None):
@@ -474,16 +521,34 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
     pstats = player_stats(player)
     enemy = state["enemy"]
     state["guarding"] = False
+    pe = state["player_effects"]
 
-    # Corrode on the enemy halves their defense; charm on you halves your output.
+    # Corrode on the enemy halves their defense; charm (or being smitten)
+    # halves your output; weak knees make your crits falter.
     enemy_defense = enemy["defense"] * (0.5 if "corrode" in state["enemy_effects"] else 1.0)
-    charmed = "charm" in state["player_effects"]
+    charmed = "charm" in pe or "smitten" in pe
+    pcrit = pstats["crit"] * (0.5 if "weak_knees" in pe else 1.0)
 
-    if action == "attack":
+    # Smitten: offensive actions can be lost to a long moment of admiring them.
+    if (
+        action in ("attack", "skill", "protocol")
+        and "smitten" in pe
+        and rng.random() < SMITTEN_SLIP_CHANCE
+    ):
+        state["log"].append(
+            f"You raise your hand — and spend the moment watching the light move on "
+            f"{enemy['name']} instead."
+        )
+        action = "__slipped__"
+
+    if action == "__slipped__":
+        pass  # your turn, wasted beautifully
+
+    elif action == "attack":
         elem = attack_element(player, enemy["element"])  # weapon gems can change this
         mult = element_multiplier(elem, enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng, crit=pstats["crit"])
+        dmg, crit = _damage(atk, BASIC_POWER, enemy_defense, mult, rng, crit=pcrit)
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -502,7 +567,7 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
         state["charge"] -= skill["cost"]
         mult = element_multiplier(skill["element"], enemy["element"])
         atk = pstats["attack"] + state.get("attack_buff", 0)
-        dmg, crit = _damage(atk, skill["power"], enemy_defense, mult, rng, crit=pstats["crit"])
+        dmg, crit = _damage(atk, skill["power"], enemy_defense, mult, rng, crit=pcrit)
         if charmed:
             dmg = max(1, dmg // 2)
         state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
@@ -510,20 +575,27 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
         if charmed:
             note += " (charmed)"
         state["log"].append(f"{skill['name']} — {dmg} damage{' (crit!)' if crit else ''}.{note}")
-        # Thermal/toxin skills can afflict the enemy (burn / corrode).
-        status = _status_for(skill["element"])
-        if status in ENEMY_STATUSES and state["enemy_hp"] > 0:
-            if rng.random() < SKILL_INFLICT_CHANCE:
-                _inflict(state["enemy_effects"], status, 3)
-                state["log"].append(f"{enemy['name']} is afflicted: {status}!")
+        if state["enemy_hp"] > 0:
+            spec = skill.get("inflicts")
+            if spec:
+                # Signature inflicts (the sexy attacks): entrance, stagger, shock.
+                if rng.random() < spec["chance"]:
+                    if _inflict_enemy(state, spec["effect"], spec["turns"], rng):
+                        state["log"].append(f"{enemy['name']} is afflicted: {spec['effect']}!")
+            else:
+                # Thermal/toxin skills can afflict the enemy (burn / corrode).
+                status = _status_for(skill["element"])
+                if status in ENEMY_STATUSES and rng.random() < SKILL_INFLICT_CHANCE:
+                    _inflict(state["enemy_effects"], status, 3)
+                    state["log"].append(f"{enemy['name']} is afflicted: {status}!")
 
     elif action == "protocol":
         protocol = data.load("protocols").get(protocol_id)
         if protocol is None or protocol_id not in player.protocols:
             raise GameError("Your lace doesn't run that protocol.")
-        if protocol["kind"] not in ("strike", "stutter", "ghost", "purge", "overclock"):
+        if protocol["kind"] not in ("strike", "stutter", "ghost", "purge", "overclock", "entrance"):
             raise GameError(f"{protocol['name']} only runs outside combat.")
-        _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, rng)
+        _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, pcrit, rng)
 
     elif action == "guard":
         state["guarding"] = True
@@ -533,11 +605,21 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
     elif action == "item":
         item = inventory.get_item(item_id)
         if item.get("type") == "booster":
-            # Combat-only consumable: dumps charge into your systems.
+            # Combat-only consumable: charge dump, or a status cleanse.
             inventory.remove_item(player, item_id, 1)
-            gain = item.get("effects", {}).get("charge", 0)
-            state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + gain)
-            state["log"].append(f"You slot a {item['name']} — +{gain} charge.")
+            effects = item.get("effects", {})
+            if "cleanse" in effects:
+                cleared = [s for s in effects["cleanse"] if pe.pop(s, None)]
+                if cleared:
+                    state["log"].append(
+                        f"{item['name']} — composure restored. Cleansed: {', '.join(cleared)}."
+                    )
+                else:
+                    state["log"].append(f"{item['name']} — bracing, but you were already composed.")
+            else:
+                gain = effects.get("charge", 0)
+                state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + gain)
+                state["log"].append(f"You slot a {item['name']} — +{gain} charge.")
         else:
             result = inventory.use_item(player, item_id)  # validates + consumes
             heal = result["energy"]
@@ -588,6 +670,11 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
             if "slow" not in state["player_effects"]:
                 state["charge"] = min(
                     state.get("charge_max", CHARGE_MAX), state["charge"] + CHARGE_PER_TURN
+                )
+            if "static_cling" in state["player_effects"] and state["charge"] > 0:
+                state["charge"] -= 1
+                state["log"].append(
+                    "Static cling grounds a charge through wherever she touched you."
                 )
             state["heat"] = max(0, state.get("heat", 0) - pstats["heat_vent"])
             state["turn"] += 1

@@ -10,7 +10,8 @@
       "pulse_pistol",
       "flak_vest",
       "grip_gloves",
-      "arm_plating"
+      "arm_plating",
+      "composure_spray"
     ]
   },
   "the_grid": {
@@ -54,7 +55,8 @@
       "myomer_sleeves",
       "vitality_gem",
       "ember_gem",
-      "smartlink_eyes"
+      "smartlink_eyes",
+      "composure_spray"
     ]
   },
   "the_shallows": {

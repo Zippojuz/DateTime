@@ -58,7 +58,8 @@
       "fortune_gem",
       "shard_time_stutter",
       "shard_gravity_snap",
-      "myofiber_graft"
+      "myofiber_graft",
+      "shard_siren_overlay"
     ],
     "bonus": {
       "chance": 0.12,

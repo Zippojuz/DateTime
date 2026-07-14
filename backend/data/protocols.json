@@ -45,7 +45,7 @@
     "name": "Cartographer's Dream",
     "kind": "reveal_map",
     "energy": 12,
-    "description": "Dream the floor the way the Substrate dreams it — complete. (Out of combat.)"
+    "description": "Dream the floor the way the Substrate dreams it \u2014 complete. (Out of combat.)"
   },
   "phantom_hands": {
     "id": "phantom_hands",
@@ -53,5 +53,13 @@
     "kind": "reveal_seams",
     "energy": 8,
     "description": "Send intangible fingers along the walls. Concealed seams here give themselves up. (Out of combat.)"
+  },
+  "siren_overlay": {
+    "id": "siren_overlay",
+    "name": "Siren Overlay",
+    "kind": "entrance",
+    "turns": 2,
+    "heat": 35,
+    "description": "Project the enemy's own fantasy back at them. For two turns, they can't do anything clever."
   }
 }

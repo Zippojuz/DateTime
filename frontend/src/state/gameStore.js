@@ -19,6 +19,7 @@ export const useGameStore = create((set, get) => ({
   districts: null, // registry: { id: {name, vibe, adjacent} }
   items: null, // registry: { id: {name, type, rarity, ...} }
   protocols: null, // registry: { id: {name, kind, heat|energy, ...} }
+  statuses: null, // registry: { id: {name, side, color, hint} }
 
   // Shop stock for the current district; gift flow + last reaction.
   shop: null,
@@ -63,15 +64,17 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts, items, protocols] = await Promise.all([
-        api.attributes(),
-        api.actions(),
-        api.topics(),
-        api.districts(),
-        api.items(),
-        api.protocols(),
-      ])
-      set({ attributes, actions, topics, districts, items, protocols, connection: 'ok' })
+      const [attributes, actions, topics, districts, items, protocols, statuses] =
+        await Promise.all([
+          api.attributes(),
+          api.actions(),
+          api.topics(),
+          api.districts(),
+          api.items(),
+          api.protocols(),
+          api.statuses(),
+        ])
+      set({ attributes, actions, topics, districts, items, protocols, statuses, connection: 'ok' })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return
@@ -291,6 +294,10 @@ export const useGameStore = create((set, get) => ({
       })
       if (res.outcome?.result === 'defeat') {
         get().loadCharacters() // going down together still deepens the bond
+      }
+      if (res.outcome?.unlocked) {
+        get().loadCharacters() // someone new just surfaced
+        get().loadParty()
       }
     } catch (err) {
       set({ error: err.message, busy: false })

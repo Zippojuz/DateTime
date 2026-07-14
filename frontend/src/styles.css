@@ -1592,6 +1592,13 @@ body {
   line-height: 1.5;
 }
 
+.outcome-unlocked {
+  margin: 0.3rem 0 0;
+  color: var(--accent);
+  line-height: 1.5;
+  text-shadow: 0 0 12px rgba(255, 93, 162, 0.4);
+}
+
 .outcome-loss {
   margin: 0;
   color: var(--error);

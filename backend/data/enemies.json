@@ -6,8 +6,12 @@
     "role": "normal",
     "element": "psionic",
     "description": "A dancer of pure light, all curve and shimmer, whose looping song slides straight into your neural lace and asks you to stay.",
-    "hp": 26, "attack": 7, "defense": 2, "speed": 8,
-    "xp": 12, "credits": 6
+    "hp": 26,
+    "attack": 7,
+    "defense": 2,
+    "speed": 8,
+    "xp": 12,
+    "credits": 6
   },
   "chrome_vixen": {
     "id": "chrome_vixen",
@@ -16,8 +20,12 @@
     "role": "normal",
     "element": "kinetic",
     "description": "A gynoid with a predator's grace and a showgirl's smile, mirror-polished and moving like she's always mid-performance.",
-    "hp": 32, "attack": 8, "defense": 3, "speed": 6,
-    "xp": 14, "credits": 8
+    "hp": 32,
+    "attack": 8,
+    "defense": 3,
+    "speed": 6,
+    "xp": 14,
+    "credits": 8
   },
   "static_nymph": {
     "id": "static_nymph",
@@ -26,8 +34,12 @@
     "role": "normal",
     "element": "voltaic",
     "description": "She flickers between wall sockets in a dress of loose current, giggling in white noise, leaving lipstick burns on the conduits.",
-    "hp": 24, "attack": 9, "defense": 1, "speed": 10,
-    "xp": 13, "credits": 7
+    "hp": 24,
+    "attack": 9,
+    "defense": 1,
+    "speed": 10,
+    "xp": 13,
+    "credits": 7
   },
   "vent_dryad": {
     "id": "vent_dryad",
@@ -36,8 +48,12 @@
     "role": "normal",
     "element": "toxin",
     "description": "An androgynous spore-being grown around the air system, willowy and languid, exhaling sweetness you know better than to breathe.",
-    "hp": 30, "attack": 7, "defense": 3, "speed": 5,
-    "xp": 13, "credits": 6
+    "hp": 30,
+    "attack": 7,
+    "defense": 3,
+    "speed": 5,
+    "xp": 13,
+    "credits": 6
   },
   "cryo_duelist": {
     "id": "cryo_duelist",
@@ -46,8 +62,12 @@
     "role": "normal",
     "element": "cryo",
     "description": "A fencer sculpted from living ice, androgynous and elegant, who salutes before every bout and means it.",
-    "hp": 44, "attack": 12, "defense": 5, "speed": 9,
-    "xp": 22, "credits": 12
+    "hp": 44,
+    "attack": 12,
+    "defense": 5,
+    "speed": 9,
+    "xp": 22,
+    "credits": 12
   },
   "plasma_dancer": {
     "id": "plasma_dancer",
@@ -56,8 +76,12 @@
     "role": "normal",
     "element": "thermal",
     "description": "She burns in slow motion, trailing veils of fire like silk, and every step closer raises the temperature two degrees.",
-    "hp": 40, "attack": 14, "defense": 4, "speed": 8,
-    "xp": 24, "credits": 13
+    "hp": 40,
+    "attack": 14,
+    "defense": 4,
+    "speed": 8,
+    "xp": 24,
+    "credits": 13
   },
   "neural_temptress": {
     "id": "neural_temptress",
@@ -66,8 +90,12 @@
     "role": "normal",
     "element": "psionic",
     "description": "She never moves. She doesn't need to. The whisper arrives already inside your head, wearing your own voice, asking you to lower your guard.",
-    "hp": 38, "attack": 13, "defense": 4, "speed": 7,
-    "xp": 24, "credits": 14
+    "hp": 38,
+    "attack": 13,
+    "defense": 4,
+    "speed": 7,
+    "xp": 24,
+    "credits": 14
   },
   "razor_doll": {
     "id": "razor_doll",
@@ -76,8 +104,12 @@
     "role": "normal",
     "element": "kinetic",
     "description": "A porcelain-faced automaton in a ballerina's frame, beautiful until the fans of blades unfold from her sleeves.",
-    "hp": 48, "attack": 13, "defense": 6, "speed": 6,
-    "xp": 23, "credits": 12
+    "hp": 48,
+    "attack": 13,
+    "defense": 6,
+    "speed": 6,
+    "xp": 23,
+    "credits": 12
   },
   "ion_valkyrie": {
     "id": "ion_valkyrie",
@@ -86,8 +118,12 @@
     "role": "normal",
     "element": "voltaic",
     "description": "Winged in charged plasma, tall and radiant, she descends like judgment with a smile that says she's already chosen you.",
-    "hp": 60, "attack": 18, "defense": 7, "speed": 11,
-    "xp": 36, "credits": 20
+    "hp": 60,
+    "attack": 18,
+    "defense": 7,
+    "speed": 11,
+    "xp": 36,
+    "credits": 20
   },
   "synth_medusa": {
     "id": "synth_medusa",
@@ -96,8 +132,12 @@
     "role": "normal",
     "element": "toxin",
     "description": "Fiber-optic serpents crown her like living jewelry. Meet her gaze and your HUD starts agreeing with everything she says.",
-    "hp": 64, "attack": 17, "defense": 8, "speed": 7,
-    "xp": 38, "credits": 22
+    "hp": 64,
+    "attack": 17,
+    "defense": 8,
+    "speed": 7,
+    "xp": 38,
+    "credits": 22
   },
   "mirage_twins": {
     "id": "mirage_twins",
@@ -106,8 +146,12 @@
     "role": "normal",
     "element": "psionic",
     "description": "Two identical figures sharing one shadow, finishing each other's movements, and only one of them is ever really there.",
-    "hp": 56, "attack": 19, "defense": 6, "speed": 12,
-    "xp": 38, "credits": 21
+    "hp": 56,
+    "attack": 19,
+    "defense": 6,
+    "speed": 12,
+    "xp": 38,
+    "credits": 21
   },
   "inferno_diva": {
     "id": "inferno_diva",
@@ -116,8 +160,12 @@
     "role": "normal",
     "element": "thermal",
     "description": "An opera of heat in a gown of magma-glass. Her high note melts bulkheads; her encore is worse.",
-    "hp": 66, "attack": 18, "defense": 8, "speed": 8,
-    "xp": 40, "credits": 24
+    "hp": 66,
+    "attack": 18,
+    "defense": 8,
+    "speed": 8,
+    "xp": 40,
+    "credits": 24
   },
   "warden_lyss": {
     "id": "warden_lyss",
@@ -125,9 +173,13 @@
     "tier": 1,
     "role": "miniboss",
     "element": "cryo",
-    "description": "The Substrate's self-appointed jailer — statuesque, frost-armored, achingly formal. She'd rather you surrendered. She always asks nicely first.",
-    "hp": 70, "attack": 11, "defense": 6, "speed": 7,
-    "xp": 40, "credits": 30,
+    "description": "The Substrate's self-appointed jailer \u2014 statuesque, frost-armored, achingly formal. She'd rather you surrendered. She always asks nicely first.",
+    "hp": 70,
+    "attack": 11,
+    "defense": 6,
+    "speed": 7,
+    "xp": 40,
+    "credits": 30,
     "mechanics": {
       "moves": [
         {
@@ -135,7 +187,10 @@
           "power": 1.8,
           "every_n_turns": 4,
           "telegraph": "Frost crawls up Warden Lyss's arms as she begins drawing a sealing sigil in the air. Brace yourself.",
-          "inflicts": { "effect": "slow", "turns": 2 }
+          "inflicts": {
+            "effect": "slow",
+            "turns": 2
+          }
         }
       ]
     }
@@ -147,16 +202,23 @@
     "role": "miniboss",
     "element": "voltaic",
     "description": "A regal figure on a throne of stripped processors, crowned in arcing current, ruling a court of humming fans. She thinks you're a fascinating peripheral.",
-    "hp": 95, "attack": 16, "defense": 8, "speed": 9,
-    "xp": 60, "credits": 45,
+    "hp": 95,
+    "attack": 16,
+    "defense": 8,
+    "speed": 9,
+    "xp": 60,
+    "credits": 45,
     "mechanics": {
       "moves": [
         {
           "name": "Full Overclock",
           "power": 1.9,
           "every_n_turns": 4,
-          "telegraph": "The Queen's crown of current flares white — every fan in her court screams to full speed. Get ready.",
-          "inflicts": { "effect": "corrode", "turns": 3 }
+          "telegraph": "The Queen's crown of current flares white \u2014 every fan in her court screams to full speed. Get ready.",
+          "inflicts": {
+            "effect": "corrode",
+            "turns": 3
+          }
         }
       ]
     }
@@ -167,9 +229,13 @@
     "tier": 3,
     "role": "miniboss",
     "element": "toxin",
-    "description": "Mother to every bloom in the deep vents — vast, serene, and terribly fond of visitors. Her garden keeps whoever falls asleep in it.",
-    "hp": 130, "attack": 20, "defense": 10, "speed": 6,
-    "xp": 85, "credits": 60,
+    "description": "Mother to every bloom in the deep vents \u2014 vast, serene, and terribly fond of visitors. Her garden keeps whoever falls asleep in it.",
+    "hp": 130,
+    "attack": 20,
+    "defense": 10,
+    "speed": 6,
+    "xp": 85,
+    "credits": 60,
     "mechanics": {
       "moves": [
         {
@@ -177,7 +243,10 @@
           "power": 1.7,
           "every_n_turns": 4,
           "telegraph": "The Matriarch opens her arms, and the air goes thick and sweet with spores. You know what comes next.",
-          "inflicts": { "effect": "charm", "turns": 2 }
+          "inflicts": {
+            "effect": "charm",
+            "turns": 2
+          }
         }
       ]
     }
@@ -189,16 +258,23 @@
     "role": "boss",
     "element": "kinetic",
     "description": "Nobility of the upper Substrate: a towering gynoid aristocrat in liquid-metal couture, flanked by curtseying drones. She duels every guest personally. It would be rude not to.",
-    "hp": 120, "attack": 14, "defense": 8, "speed": 8,
-    "xp": 80, "credits": 70,
+    "hp": 120,
+    "attack": 14,
+    "defense": 8,
+    "speed": 8,
+    "xp": 80,
+    "credits": 70,
     "mechanics": {
       "moves": [
         {
           "name": "Curtsy of Blades",
           "power": 2.2,
           "every_n_turns": 4,
-          "telegraph": "The Contessa sinks into a deep, gleaming curtsy — fans of blades unfolding from her sleeves. Guard, now.",
-          "inflicts": null
+          "telegraph": "The Contessa sinks into a deep, gleaming curtsy \u2014 fans of blades unfolding from her sleeves. Guard, now.",
+          "inflicts": {
+            "effect": "marked",
+            "turns": 3
+          }
         }
       ],
       "phases": [
@@ -206,7 +282,7 @@
           "hp_below": 0.5,
           "attack_mult": 1.35,
           "defense_mult": 0.6,
-          "text": "The Contessa sheds her gown-armor in a cascade of liquid metal — faster now, and furious, and laughing."
+          "text": "The Contessa sheds her gown-armor in a cascade of liquid metal \u2014 faster now, and furious, and laughing."
         }
       ]
     }
@@ -218,8 +294,12 @@
     "role": "boss",
     "element": "voltaic",
     "description": "Six wings of pure signal, a halo of warning glyphs, and a face you're sure you've seen in an ad you can't remember. Being noticed by her feels like sunburn.",
-    "hp": 170, "attack": 20, "defense": 10, "speed": 11,
-    "xp": 130, "credits": 110,
+    "hp": 170,
+    "attack": 20,
+    "defense": 10,
+    "speed": 11,
+    "xp": 130,
+    "credits": 110,
     "mechanics": {
       "moves": [
         {
@@ -227,7 +307,11 @@
           "power": 2.0,
           "every_n_turns": 4,
           "telegraph": "The Seraph's halo fractures into a ring of falling glyphs, each one brightening toward white. Cover!",
-          "inflicts": { "effect": "burn", "turns": 3, "amount": 5 }
+          "inflicts": {
+            "effect": "burn",
+            "turns": 3,
+            "amount": 5
+          }
         }
       ],
       "phases": [
@@ -235,7 +319,7 @@
           "hp_below": 0.5,
           "attack_mult": 1.2,
           "element": "psionic",
-          "text": "Her halo inverts — the light goes soft and terribly intimate. The Seraph is inside your head now. (Her element has shifted!)"
+          "text": "Her halo inverts \u2014 the light goes soft and terribly intimate. The Seraph is inside your head now. (Her element has shifted!)"
         }
       ]
     }
@@ -246,9 +330,13 @@
     "tier": 3,
     "role": "boss",
     "element": "psionic",
-    "description": "The deepest dream of the machine beneath the city, wearing a crown of every lost signal Nexus ever swallowed. She has been expecting you — she says it like an old friend would.",
-    "hp": 240, "attack": 24, "defense": 12, "speed": 10,
-    "xp": 220, "credits": 200,
+    "description": "The deepest dream of the machine beneath the city, wearing a crown of every lost signal Nexus ever swallowed. She has been expecting you \u2014 she says it like an old friend would.",
+    "hp": 240,
+    "attack": 24,
+    "defense": 12,
+    "speed": 10,
+    "xp": 220,
+    "credits": 200,
     "mechanics": {
       "moves": [
         {
@@ -256,7 +344,10 @@
           "power": 2.4,
           "every_n_turns": 4,
           "telegraph": "Every lost signal the city ever swallowed rises around the Empress in a slow chorus. It is beautiful. It is aimed at you.",
-          "inflicts": { "effect": "charm", "turns": 2 }
+          "inflicts": {
+            "effect": "charm",
+            "turns": 2
+          }
         }
       ],
       "phases": [
@@ -269,7 +360,61 @@
           "hp_below": 0.33,
           "attack_mult": 1.15,
           "defense_mult": 1.3,
-          "text": "The city dreams with her now — the walls themselves lean in to shield their Empress."
+          "text": "The city dreams with her now \u2014 the walls themselves lean in to shield their Empress."
+        }
+      ]
+    }
+  },
+  "nyx_deep_signal": {
+    "id": "nyx_deep_signal",
+    "name": "Nyx, the Deep Signal",
+    "role": "boss",
+    "tier": 3,
+    "element": "psionic",
+    "hp": 150,
+    "attack": 16,
+    "defense": 7,
+    "speed": 15,
+    "xp": 110,
+    "credits": 150,
+    "description": "The Substrate's oldest dream, wearing a body of signal and smoke because you needed something to look at. She has been waiting ten floors to meet you properly.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Undertow Kiss",
+          "power": 2.0,
+          "every_n_turns": 4,
+          "telegraph": "Nyx drifts close enough to share breath, lips parting around a hum you feel in your fillings. Guard \u2014 or don't.",
+          "inflicts": {
+            "effect": "drained",
+            "turns": 3,
+            "amount": 5
+          }
+        },
+        {
+          "name": "Total Eclipse",
+          "power": 2.3,
+          "every_n_turns": 4,
+          "telegraph": "She unfolds \u2014 all of her at once, every frequency, entirely too much to look at. You are going to look.",
+          "inflicts": {
+            "effect": "smitten",
+            "turns": 2
+          }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.6,
+          "attack_mult": 1.2,
+          "element": "voltaic",
+          "text": "Nyx laughs, delighted, and the room's power grid leans in to listen. \"Oh, you're LOVELY. Again.\""
+        },
+        {
+          "hp_below": 0.25,
+          "attack_mult": 1.25,
+          "defense_mult": 0.8,
+          "element": "psionic",
+          "text": "The smoke thins. Underneath is something small and bright and almost human, fighting like it finally has something to lose."
         }
       ]
     }

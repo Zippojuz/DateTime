@@ -400,6 +400,33 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: status expansion + sexy attacks + Nyx (floor-10 NPC boss) ✅ DONE
+- **Status registry** (`statuses.json`): all 14 effects data-driven (name/side/
+  color/hint); battle chips render from it, no more hardcoded UI hints.
+- **On you (the sexy ones)**: smitten (damage halved + 35% chance to lose your
+  action admiring them; supersedes charm), marked (a lipstick burn — +25%
+  damage taken), weak_knees (no dodge, crits falter), static_cling (−1
+  charge/turn), drained (DoT that HEALS the enemy; the sip can't finish you).
+  Element map: voltaic→static_cling, kinetic→weak_knees. Boss signatures:
+  Contessa marks, Seraph smites, Empress drains.
+- **On them / sexy player attacks**: new skills Blown Kiss (psionic, 40%
+  entranced — no telegraphs or charged strikes), Hip Check (kinetic, 35%
+  stagger — lose a turn; bosses immune, minibosses resist 50%), Static Touch
+  (voltaic, 40% shock — attack −25%). New protocol Siren Overlay (guaranteed
+  entrance, heat 35, epic boss-loot shard). Composure Spray (shop booster)
+  cleanses the affection-family statuses.
+- **Nyx, the Deep Signal** — floor-10 NPC boss (MAX_FLOOR now 10; the
+  every-10th-floor pattern hangs off NPC_BOSS_UNLOCKS). Psionic boss with
+  Undertow Kiss (drains) and Total Eclipse (smites), two phases. Beating her
+  appends `defeated:nyx_deep_signal` to fired_events, which unlocks her
+  characters.json entry (`requires_defeat` field, filtered everywhere via
+  NPC.load_unlocked): she surfaces in The Shallows as a full romanceable —
+  schedule, preferences, intro dialogue tree, psionic dps companion block,
+  starting affection 10 ("she liked losing to you"). Victory screen announces
+  the unlock. +19 pytest (241 total); verified live — she WON the first
+  level-14 fight (drain sustain is real), fell to a guard-the-telegraph
+  level-25 rematch, then chatted in the market.
+
 ### Follow-up: wetware protocols (magic) + augmentation slots ✅ DONE
 - **Magic, sci-fi flavored**: protocols are forbidden code run on your neural
   lace, learned permanently by consuming data-shards (new item type, found in

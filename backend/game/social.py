@@ -49,6 +49,13 @@ def seed_relationship(conn, save_id, npc_id, starting_disposition=0):
     )
 
 
+def ensure_relationship(save_id, npc_id, starting_disposition=0):
+    """Seed a relationship row mid-game if it doesn't exist yet (used when an
+    NPC unlocks after game start — e.g. a defeated deep-floor boss surfacing)."""
+    with get_connection() as conn:
+        seed_relationship(conn, save_id, npc_id, starting_disposition)
+
+
 def _row(save_id, npc_id):
     with get_connection() as conn:
         return conn.execute(

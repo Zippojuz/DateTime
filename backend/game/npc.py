@@ -30,6 +30,7 @@ class NPC(Character):
         preferences=None,
         starting_disposition=0,
         companion=None,
+        requires_defeat=None,
     ):
         super().__init__(name, attributes, preferences)
         self.id = id
@@ -41,6 +42,9 @@ class NPC(Character):
         self.romanceable = romanceable
         # Combat spec if this NPC can be recruited to delve ({} = never delves).
         self.companion = dict(companion) if companion else {}
+        # If set, this NPC is hidden until the named dungeon boss is beaten
+        # (the deep-floor bosses who surface as romanceables after the fight).
+        self.requires_defeat = requires_defeat
         # Where affection starts when the relationship is first seeded (0 =
         # neutral). Most NPCs start neutral; some may lean warm/cold.
         self.starting_disposition = starting_disposition
@@ -66,7 +70,15 @@ class NPC(Character):
             preferences=entry.get("preferences"),
             starting_disposition=entry.get("starting_disposition", 0),
             companion=entry.get("companion"),
+            requires_defeat=entry.get("requires_defeat"),
         )
+
+    def unlocked_for(self, player):
+        """Whether the player has met this NPC's unlock condition (always True
+        for the base cast; deep-floor bosses need their fight won first)."""
+        if not self.requires_defeat:
+            return True
+        return f"defeated:{self.requires_defeat}" in player.fired_events
 
     @classmethod
     def load(cls, npc_id):
@@ -78,8 +90,14 @@ class NPC(Character):
 
     @classmethod
     def load_all(cls):
-        """Load every NPC from characters.json, keyed by id."""
+        """Load every NPC from characters.json, keyed by id (locked included —
+        filter with ``unlocked_for`` where the player must have met them)."""
         return {cid: cls.from_data(entry) for cid, entry in data.characters().items()}
+
+    @classmethod
+    def load_unlocked(cls, player):
+        """Every NPC the player has actually unlocked."""
+        return {cid: npc for cid, npc in cls.load_all().items() if npc.unlocked_for(player)}
 
     def to_dict(self):
         base = super().to_dict()

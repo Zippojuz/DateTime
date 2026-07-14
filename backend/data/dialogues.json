@@ -7,44 +7,114 @@
       "n1": {
         "text": "Vael doesn't look up from the plaza lights. \"You again. Most people give the Citadel Ring a wide berth after dark.\"",
         "choices": [
-          { "text": "Maybe I'm not most people.", "next": "n2", "affection": 2 },
-          { "text": "[Charm] The company here beats the bars.", "next": "n3", "affection": 3, "requires": { "charm": 6 } },
-          { "text": "Just getting my bearings.", "next": "n4", "affection": 1 },
-          { "text": "Nice glow-stick act. Do it on command?", "next": "n_cold", "offense": { "delta": -4, "severity": "moderate" } }
+          {
+            "text": "Maybe I'm not most people.",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "[Charm] The company here beats the bars.",
+            "next": "n3",
+            "affection": 3,
+            "requires": {
+              "charm": 6
+            }
+          },
+          {
+            "text": "Just getting my bearings.",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "Nice glow-stick act. Do it on command?",
+            "next": "n_cold",
+            "offense": {
+              "delta": -4,
+              "severity": "moderate"
+            }
+          }
         ]
       },
       "n2": {
         "text": "\"No. You're not.\" A flicker of blue crosses her skin before she stills it. \"Sit, if you're going to hover.\"",
         "choices": [
-          { "text": "Sit down beside her.", "next": "n5", "affection": 2 },
-          { "text": "[Wit] Your glow gave you away — that was almost a smile.", "next": "n5", "affection": 3, "requires": { "wit": 6 } },
-          { "text": "Wait — is that a paper book on your lap?", "next": "n6", "reveal_npc": "books" }
+          {
+            "text": "Sit down beside her.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "[Wit] Your glow gave you away \u2014 that was almost a smile.",
+            "next": "n5",
+            "affection": 3,
+            "requires": {
+              "wit": 6
+            }
+          },
+          {
+            "text": "Wait \u2014 is that a paper book on your lap?",
+            "next": "n6",
+            "reveal_npc": "books"
+          }
         ]
       },
       "n6": {
         "text": "\"Paper. Ink. Something you can actually hold.\" For once she meets your eyes. \"Most people don't understand why that matters.\"",
         "choices": [
-          { "text": "Tell her where you stand on books.", "next": "n5", "affection": 1, "express": "books" },
-          { "text": "Change the subject.", "next": "n5" }
+          {
+            "text": "Tell her where you stand on books.",
+            "next": "n5",
+            "affection": 1,
+            "express": "books"
+          },
+          {
+            "text": "Change the subject.",
+            "next": "n5"
+          }
         ]
       },
       "n_cold": {
         "text": "The glow under her skin goes dark. \"...We're done here.\"",
-        "choices": [{ "text": "Leave.", "next": null }]
+        "choices": [
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
       },
       "n3": {
         "text": "She snorts. \"Flattery. From a drifter.\" But she doesn't tell you to leave.",
-        "choices": [{ "text": "Sit down beside her.", "next": "n5", "affection": 1 }]
+        "choices": [
+          {
+            "text": "Sit down beside her.",
+            "next": "n5",
+            "affection": 1
+          }
+        ]
       },
       "n4": {
         "text": "\"Bearings.\" She nods slowly. \"The plaza's as good a place as any to find them.\"",
-        "choices": [{ "text": "Sit down beside her.", "next": "n5", "affection": 1 }]
+        "choices": [
+          {
+            "text": "Sit down beside her.",
+            "next": "n5",
+            "affection": 1
+          }
+        ]
       },
       "n5": {
         "text": "You sit. For a while neither of you says anything, and the quiet is comfortable. \"...Come back sometime,\" she says finally. \"If you want.\"",
         "choices": [
-          { "text": "I will.", "next": null, "affection": 2 },
-          { "text": "Goodnight, Vael.", "next": null, "affection": 1 }
+          {
+            "text": "I will.",
+            "next": null,
+            "affection": 2
+          },
+          {
+            "text": "Goodnight, Vael.",
+            "next": null,
+            "affection": 1
+          }
         ]
       }
     }
@@ -58,16 +128,39 @@
       "vc1": {
         "text": "Vael is already at the plaza rail when you arrive, as if she'd been waiting. The glow along her jaw is soft, unguarded. \"You keep coming back,\" she says. \"People don't, with me.\"",
         "choices": [
-          { "text": "I'm not people, remember?", "next": "vc2", "affection": 3 },
-          { "text": "Maybe you're worth coming back for.", "next": "vc2", "affection": 4, "requires": { "charm": 7 } },
-          { "text": "You make it easy.", "next": "vc2", "affection": 2 }
+          {
+            "text": "I'm not people, remember?",
+            "next": "vc2",
+            "affection": 3
+          },
+          {
+            "text": "Maybe you're worth coming back for.",
+            "next": "vc2",
+            "affection": 4,
+            "requires": {
+              "charm": 7
+            }
+          },
+          {
+            "text": "You make it easy.",
+            "next": "vc2",
+            "affection": 2
+          }
         ]
       },
       "vc2": {
-        "text": "For a long moment the glow flares — bright, involuntary, honest — before she can school it back down. She doesn't apologize for it this time. \"...Stay a while,\" she says quietly.",
+        "text": "For a long moment the glow flares \u2014 bright, involuntary, honest \u2014 before she can school it back down. She doesn't apologize for it this time. \"...Stay a while,\" she says quietly.",
         "choices": [
-          { "text": "As long as you'll have me.", "next": null, "affection": 4 },
-          { "text": "I'm not going anywhere.", "next": null, "affection": 3 }
+          {
+            "text": "As long as you'll have me.",
+            "next": null,
+            "affection": 4
+          },
+          {
+            "text": "I'm not going anywhere.",
+            "next": null,
+            "affection": 3
+          }
         ]
       }
     }
@@ -80,14 +173,35 @@
       "z1": {
         "text": "Three of the little bodies turn toward you at once; the rest keep working. \"Fresh face. You buying, selling, or lost?\"",
         "choices": [
-          { "text": "Just curious about the Grid.", "next": "z2", "affection": 2 },
-          { "text": "[Wit] Depends which of you I'm asking.", "next": "z2", "affection": 3, "requires": { "wit": 6 } },
-          { "text": "Lost, mostly.", "next": "z2", "affection": 1 }
+          {
+            "text": "Just curious about the Grid.",
+            "next": "z2",
+            "affection": 2
+          },
+          {
+            "text": "[Wit] Depends which of you I'm asking.",
+            "next": "z2",
+            "affection": 3,
+            "requires": {
+              "wit": 6
+            }
+          },
+          {
+            "text": "Lost, mostly.",
+            "next": "z2",
+            "affection": 1
+          }
         ]
       },
       "z2": {
-        "text": "A grin ripples across the colony in sequence. \"Honest. I like honest — it's rare down here. Stick around, drifter.\"",
-        "choices": [{ "text": "Maybe I will.", "next": null, "affection": 2 }]
+        "text": "A grin ripples across the colony in sequence. \"Honest. I like honest \u2014 it's rare down here. Stick around, drifter.\"",
+        "choices": [
+          {
+            "text": "Maybe I will.",
+            "next": null,
+            "affection": 2
+          }
+        ]
       }
     }
   },
@@ -97,15 +211,29 @@
     "start": "s1",
     "nodes": {
       "s1": {
-        "text": "Sora looks up from a bed of luminous vines, spores drifting faintly around them. \"Oh — a visitor. The garden doesn't get many.\"",
+        "text": "Sora looks up from a bed of luminous vines, spores drifting faintly around them. \"Oh \u2014 a visitor. The garden doesn't get many.\"",
         "choices": [
-          { "text": "It's beautiful in here.", "next": "s2", "affection": 3 },
-          { "text": "Sorry, am I intruding?", "next": "s2", "affection": 1 }
+          {
+            "text": "It's beautiful in here.",
+            "next": "s2",
+            "affection": 3
+          },
+          {
+            "text": "Sorry, am I intruding?",
+            "next": "s2",
+            "affection": 1
+          }
         ]
       },
       "s2": {
         "text": "The spores warm to a soft gold. \"Not at all. Stay as long as you like. Growing things are patient with company.\"",
-        "choices": [{ "text": "Thank you, Sora.", "next": null, "affection": 2 }]
+        "choices": [
+          {
+            "text": "Thank you, Sora.",
+            "next": null,
+            "affection": 2
+          }
+        ]
       }
     }
   },
@@ -117,13 +245,30 @@
       "c1": {
         "text": "Carro's nictitating eyes flick over you once, pricing you out. \"New in the Quarter. Everyone here wants something. What's your poison?\"",
         "choices": [
-          { "text": "Just looking around.", "next": "c2", "affection": 1 },
-          { "text": "[Charm] Maybe I'm just enjoying the view.", "next": "c2", "affection": 3, "requires": { "charm": 6 } }
+          {
+            "text": "Just looking around.",
+            "next": "c2",
+            "affection": 1
+          },
+          {
+            "text": "[Charm] Maybe I'm just enjoying the view.",
+            "next": "c2",
+            "affection": 3,
+            "requires": {
+              "charm": 6
+            }
+          }
         ]
       },
       "c2": {
         "text": "A slow, unhurried smile. \"Cheap answer. But I'll remember you gave it.\" He always remembers.",
-        "choices": [{ "text": "I'll be back.", "next": null, "affection": 1 }]
+        "choices": [
+          {
+            "text": "I'll be back.",
+            "next": null,
+            "affection": 1
+          }
+        ]
       }
     }
   },
@@ -135,13 +280,131 @@
       "m1": {
         "text": "Miko's plumage flares bright as they hit the last chord, then notices you watching. \"...Oh. How much of that did you catch?\"",
         "choices": [
-          { "text": "Enough to want more.", "next": "m2", "affection": 3 },
-          { "text": "All of it. You're good.", "next": "m2", "affection": 2 }
+          {
+            "text": "Enough to want more.",
+            "next": "m2",
+            "affection": 3
+          },
+          {
+            "text": "All of it. You're good.",
+            "next": "m2",
+            "affection": 2
+          }
         ]
       },
       "m2": {
-        "text": "The feathers can't lie — they ripple gold with pleasure before Miko can play it cool. \"Yeah? Then come to the venue tonight. Really hear it.\"",
-        "choices": [{ "text": "I'll be there.", "next": null, "affection": 2 }]
+        "text": "The feathers can't lie \u2014 they ripple gold with pleasure before Miko can play it cool. \"Yeah? Then come to the venue tonight. Really hear it.\"",
+        "choices": [
+          {
+            "text": "I'll be there.",
+            "next": null,
+            "affection": 2
+          }
+        ]
+      }
+    }
+  },
+  "nyx_intro": {
+    "id": "nyx_intro",
+    "npc": "nyx",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "Nyx is exactly where the market noise is thickest, eating skewered something with visible wonder. \"There you are. I wore a BODY to this. Ten floors of grinding down to me, and then you just... left me up here with all this LIGHT.\"",
+        "choices": [
+          {
+            "text": "You followed me up.",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "[Charm] Hard to leave something that pretty unsupervised.",
+            "next": "n3",
+            "affection": 3,
+            "requires": {
+              "charm": 6
+            }
+          },
+          {
+            "text": "Are you... eating street food?",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "You're supposed to be a boss fight.",
+            "next": "n_cold",
+            "offense": {
+              "delta": -3,
+              "severity": "minor"
+            }
+          }
+        ]
+      },
+      "n2": {
+        "text": "\"I rode your signal out. Rude of me. You left a door open and I have never once seen a door I respected.\" She shrugs, smoke curling off her shoulders. \"The Substrate dreams slow. You dream LOUD. I picked.\"",
+        "choices": [
+          {
+            "text": "Then welcome to the surface.",
+            "next": "n5",
+            "affection": 2,
+            "express": "nightlife"
+          },
+          {
+            "text": "What happens to the dungeon without you?",
+            "next": "n5",
+            "affection": 1,
+            "reveal_npc": "music"
+          }
+        ]
+      },
+      "n3": {
+        "text": "She points the skewer at you, eyes bright. \"See, THAT. Ten thousand years of dreaming other people's wants and nobody ever aimed one at me before. Do it again sometime when I'm braced for it.\"",
+        "choices": [
+          {
+            "text": "No promises.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Get braced, then.",
+            "next": "n5",
+            "affection": 3
+          }
+        ]
+      },
+      "n4": {
+        "text": "\"I am eating street food. I have eaten four of these. Being finite is INCREDIBLE \u2014 everything matters and then you're full.\" She looks briefly, cosmically sad, then finishes the skewer.",
+        "choices": [
+          {
+            "text": "Wait till you try music up here.",
+            "next": "n5",
+            "affection": 2,
+            "reveal_npc": "music"
+          },
+          {
+            "text": "Pace yourself, deep one.",
+            "next": "n5",
+            "affection": 1
+          }
+        ]
+      },
+      "n5": {
+        "text": "\"Come find me when the market's loud or the music's louder. I have ten floors of owing you a rematch \u2014 or a drink. Dealer's choice.\" The neon leans toward her slightly as she goes, like it can't help it either.",
+        "choices": []
+      },
+      "n_cold": {
+        "text": "\"WAS. Was a boss fight.\" The smoke around her goes flat and still. \"I'm trying very hard to be a person at the moment; you could try meeting me there.\"",
+        "choices": [
+          {
+            "text": "You're right. Starting over: hi, Nyx.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
       }
     }
   }
