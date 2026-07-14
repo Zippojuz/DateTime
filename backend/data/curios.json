@@ -1,0 +1,111 @@
+{
+  "warm_mannequin": {
+    "id": "warm_mannequin",
+    "name": "Chrome Mannequin",
+    "short": "A chrome mannequin stands in the corner, warm to the touch.",
+    "examine": "Full-figured, mirror-polished, posed mid-invitation. Its surface is body-warm and you can hear something inside it, purring at two hertz.",
+    "verbs": {
+      "touch": {
+        "once": true,
+        "text": "You rest a hand on its shoulder. It shifts — subtly, approvingly — correcting your stance like a patient fencing instructor. You feel deadlier.",
+        "outcome": { "type": "buff", "amount": 2, "text": "+2 attack this run." }
+      },
+      "kiss": {
+        "once": true,
+        "text": "Its lips are warm and taste faintly of ozone. Somewhere inside, the purr climbs half an octave. You feel absurdly, unreasonably restored.",
+        "outcome": { "type": "heal", "amount": 15, "text": "+15 HP." }
+      }
+    }
+  },
+  "dreaming_terminal": {
+    "id": "dreaming_terminal",
+    "name": "Dreaming Terminal",
+    "short": "A terminal murmurs in its sleep, screen glowing through closed shutters.",
+    "examine": "The terminal is dreaming in schematics. Floor plans drift across the dark glass like fish under ice.",
+    "verbs": {
+      "wake": {
+        "once": true,
+        "text": "You touch the glass. The terminal startles awake and, embarrassed, pours everything it was dreaming straight into your HUD.",
+        "outcome": { "type": "reveal", "text": "The whole floor unfolds across your map." }
+      }
+    }
+  },
+  "mirror_pool": {
+    "id": "mirror_pool",
+    "name": "Mirror Pool",
+    "short": "A still pool of something reflective that isn't water.",
+    "examine": "Your reflection is a half-beat late, and it watches you with an expression you don't remember making. It looks like it knows something.",
+    "verbs": {
+      "touch": {
+        "once": true,
+        "text": "The surface bites cold up your arm — and for one long second you are on both sides of it, seeing yourself complete. The knowledge stays. The warmth doesn't.",
+        "outcome": { "type": "xp_damage", "xp": 18, "amount": 6, "text": "-6 HP, +18 XP." }
+      }
+    }
+  },
+  "velvet_recliner": {
+    "id": "velvet_recliner",
+    "name": "Velvet Recliner",
+    "short": "A plush recliner sits in impossible good condition, upholstered in red velvet.",
+    "examine": "It is spotless in a way nothing down here should be. The headrest has shaped itself to no head you've ever seen — six indentations, arranged lovingly.",
+    "verbs": {
+      "rest": {
+        "once": true,
+        "text": "The chair remembers every body it has ever held, and it is very, very good at this. You get up twenty minutes later feeling like a new organism.",
+        "outcome": { "type": "heal", "amount": 30, "text": "+30 HP." }
+      }
+    }
+  },
+  "lipstick_case": {
+    "id": "lipstick_case",
+    "name": "Abandoned Vanity Case",
+    "short": "A vanity case lies open, its mirror cracked into a flattering mosaic.",
+    "examine": "Brushes, pigment pots labeled in a dancer's shorthand, and one chrome lipstick — still warm, as if set down a moment ago by someone in a hurry to be beautiful.",
+    "verbs": {
+      "take": {
+        "once": true,
+        "text": "You pocket the chrome lipstick. Somewhere, you feel certain, its owner just smiled.",
+        "outcome": { "type": "item", "item": "chrome_lipstick", "text": "Taken: Chrome Lipstick." }
+      }
+    }
+  },
+  "glitter_moths": {
+    "id": "glitter_moths",
+    "name": "Glitter Moths",
+    "short": "A slow constellation of glittering moths orbits a dead light fixture.",
+    "examine": "Each moth is a scrap of foil that decided, at some point, to be alive. They navigate by wealth — you can feel them noticing your credit chit.",
+    "verbs": {
+      "offer": {
+        "once": true,
+        "text": "You hold out your hand. The moths settle along your arm, tasting your warmth, and leave in trade a fine dust of precious metal.",
+        "outcome": { "type": "credits", "amount": 18, "text": "+18 cr in gold dust." }
+      }
+    }
+  },
+  "static_kiss": {
+    "id": "static_kiss",
+    "name": "Scorched Kiss",
+    "short": "A perfect lipstick print is scorched into a pane of glass, still crackling faintly.",
+    "examine": "Someone kissed this glass hard enough to burn. The static around it raises the hair on your arms in a way that feels less like electricity and more like attention.",
+    "verbs": {
+      "kiss": {
+        "once": true,
+        "text": "You press your lips to the print. The shock is immediate, intimate, and entirely worth it — every capacitor you're carrying wakes up singing.",
+        "outcome": { "type": "buff_damage", "amount": 3, "damage": 5, "text": "-5 HP, +3 attack this run." }
+      }
+    }
+  },
+  "whisper_vent": {
+    "id": "whisper_vent",
+    "name": "Whispering Vent",
+    "short": "A floor vent breathes slow and warm, carrying voices from somewhere deep.",
+    "examine": "The voices are conversational, overlapping, unhurried — the Substrate gossiping with itself about everyone who has ever walked its floors.",
+    "verbs": {
+      "listen": {
+        "once": true,
+        "text": "You kneel and listen. Mostly it's gossip — but folded inside is a fighting trick someone died proud of, and now it's yours.",
+        "outcome": { "type": "xp", "amount": 12, "text": "+12 XP." }
+      }
+    }
+  }
+}

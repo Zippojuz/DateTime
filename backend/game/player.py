@@ -63,6 +63,7 @@ class Player(Character):
         dungeon=None,
         combat=None,
         equipment=None,
+        companion="",
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -85,6 +86,8 @@ class Player(Character):
         # {slot: {"item": item_id, "gems": [gem_id | None, ...]}}. Gems live on
         # the equipped slot (inventory is quantity-based, not per-instance).
         self.equipment = dict(equipment) if equipment else {}
+        # Recruited dungeon companion (npc id, "" = delving solo).
+        self.companion = companion
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -126,6 +129,7 @@ class Player(Character):
                 "difficulty": self.difficulty,
                 "max_floor": self.max_floor,
                 "equipment": {k: dict(v) for k, v in self.equipment.items()},
+                "companion": self.companion,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

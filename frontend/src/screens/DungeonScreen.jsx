@@ -26,6 +26,7 @@ export default function DungeonScreen() {
   const move = useGameStore((s) => s.moveDungeon)
   const search = useGameStore((s) => s.searchDungeon)
   const interact = useGameStore((s) => s.interactDungeon)
+  const curioAct = useGameStore((s) => s.curioAct)
   const leave = useGameStore((s) => s.leaveDungeon)
   const chooseEvent = useGameStore((s) => s.chooseDungeonEvent)
   const busy = useGameStore((s) => s.busy)
@@ -53,6 +54,14 @@ export default function DungeonScreen() {
           <span className="dungeon-xp">
             XP {useGameStore.getState().state?.player?.combat_xp ?? 0}/{dungeon.xp_to_next}
           </span>
+          {run.companion && (
+            <span className={`dungeon-companion${run.companion.down ? ' companion--down' : ''}`}>
+              {run.companion.name} ({run.companion.role}) ·{' '}
+              {run.companion.down
+                ? 'down'
+                : `HP ${run.companion.hp}/${run.companion.max_hp}`}
+            </span>
+          )}
         </div>
       </header>
 
@@ -84,11 +93,37 @@ export default function DungeonScreen() {
           <h2 className="room-name">{here.name}</h2>
           <p className="dungeon-text">{here.desc}</p>
           {result?.text && <p className="dungeon-result">{result.text}</p>}
+          {result?.outcome?.text && <p className="dungeon-result">{result.outcome.text}</p>}
           {here.stairs_note && <p className="dungeon-note">{here.stairs_note}</p>}
           {here.hints.map((hint, i) => (
             <p key={i} className="dungeon-hint">
               {hint}
             </p>
+          ))}
+
+          {here.curios.map((curio) => (
+            <div key={curio.id} className="dungeon-curio">
+              <p className="curio-short">{curio.short}</p>
+              <div className="curio-verbs">
+                <button
+                  className="btn-action curio-btn"
+                  disabled={busy}
+                  onClick={() => curioAct(curio.id, 'examine')}
+                >
+                  Examine
+                </button>
+                {curio.verbs.map((verb) => (
+                  <button
+                    key={verb}
+                    className="btn-action curio-btn"
+                    disabled={busy}
+                    onClick={() => curioAct(curio.id, verb)}
+                  >
+                    {verb[0].toUpperCase() + verb.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
           {run.cleared && (
             <p className="dungeon-text">

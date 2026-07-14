@@ -974,6 +974,94 @@ body {
   gap: 0.75rem;
 }
 
+.dungeon-companion {
+  color: var(--neon);
+  font-size: 0.85rem;
+}
+
+.companion--down {
+  color: var(--error);
+}
+
+/* --- Curios --- */
+
+.dungeon-curio {
+  border-left: 2px solid var(--accent);
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin: 0 0 0.75rem;
+}
+
+.curio-short {
+  color: var(--accent);
+  font-style: italic;
+  margin: 0 0 0.4rem;
+  line-height: 1.5;
+}
+
+.curio-verbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.curio-btn {
+  font-size: 0.82rem;
+  padding: 0.3rem 0.7rem;
+}
+
+/* --- Party (delving partner) --- */
+
+.party-panel h3 {
+  margin: 1.25rem 0 0.25rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.05rem;
+  color: var(--neon);
+}
+
+.party-hint {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin: 0 0 0.6rem;
+}
+
+.party-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.party-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #26304a;
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+}
+
+.party-row--current {
+  border-color: var(--neon);
+}
+
+.party-role {
+  color: var(--accent);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+}
+
+.party-blurb {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+  margin: 0.15rem 0 0;
+  line-height: 1.4;
+}
+
 /* --- Battle --- */
 
 .battle {
@@ -1043,6 +1131,30 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+.battle-companion {
+  background: var(--bg-panel);
+  border: 1px solid var(--neon-dim);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+}
+
+.battle-companion--down {
+  border-color: var(--error);
+  opacity: 0.75;
+}
+
+.battle-companion-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.battle-companion--down .battle-desc {
+  margin: 0;
+  color: var(--error);
 }
 
 .hpbar {

@@ -134,6 +134,11 @@ def _m7_equipment(conn):
     _add_column(conn, "player", "equipment", "TEXT NOT NULL DEFAULT '{}'")
 
 
+def _m8_companion(conn):
+    """Add the recruited dungeon companion (empty = solo)."""
+    _add_column(conn, "player", "companion", "TEXT NOT NULL DEFAULT ''")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -142,6 +147,7 @@ MIGRATIONS = [
     _m5_inventory_and_gifts,
     _m6_combat_and_dungeon,
     _m7_equipment,
+    _m8_companion,
 ]
 
 

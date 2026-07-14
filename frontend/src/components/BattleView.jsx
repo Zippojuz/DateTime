@@ -73,6 +73,30 @@ export default function BattleView() {
         </span>
       </div>
 
+      {combat.companion && (
+        <div
+          className={`battle-companion${combat.companion.down ? ' battle-companion--down' : ''}`}
+        >
+          <div className="battle-companion-head">
+            <strong>{combat.companion.name}</strong>
+            <span className="battle-role">{combat.companion.role}</span>
+            <span className={`element element--${combat.companion.element}`}>
+              {combat.companion.element}
+            </span>
+          </div>
+          {combat.companion.down ? (
+            <p className="battle-desc">Down — they need a rest stop.</p>
+          ) : (
+            <HpBar
+              label=""
+              value={combat.companion.hp}
+              max={combat.companion.max_hp}
+              kind="you"
+            />
+          )}
+        </div>
+      )}
+
       <div className="battle-actions">
         <button className="btn-action" disabled={busy} onClick={() => act('attack')}>
           Attack

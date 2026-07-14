@@ -536,5 +536,14 @@
     },
     "sockets": 1,
     "value": 6
+  },
+  "chrome_lipstick": {
+    "id": "chrome_lipstick",
+    "name": "Chrome Lipstick",
+    "type": "gift",
+    "rarity": "uncommon",
+    "dungeon_only": true,
+    "description": "Found in the Substrate, still warm. Whoever owned it had excellent taste and terrible luck.",
+    "value": 5
   }
 }

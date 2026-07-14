@@ -51,7 +51,16 @@ export const api = {
       method: 'POST',
       body: JSON.stringify({ choice_index: choiceIndex }),
     }),
+  dungeonCurio: (curioId, verb) =>
+    request('/dungeon/curio', {
+      method: 'POST',
+      body: JSON.stringify({ curio_id: curioId, verb }),
+    }),
   dungeonLeave: () => request('/dungeon/leave', { method: 'POST', body: '{}' }),
+  party: () => request('/party'),
+  recruit: (npcId) =>
+    request('/party/recruit', { method: 'POST', body: JSON.stringify({ npc_id: npcId }) }),
+  dismissCompanion: () => request('/party/dismiss', { method: 'POST', body: '{}' }),
   combatAction: (payload) =>
     request('/combat/action', { method: 'POST', body: JSON.stringify(payload) }),
   equipment: () => request('/equipment'),

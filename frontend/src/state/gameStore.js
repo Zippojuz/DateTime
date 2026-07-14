@@ -53,6 +53,9 @@ export const useGameStore = create((set, get) => ({
   // Gear loadout: { slots, slot_order, bonuses, stats } from the server.
   equipment: null,
 
+  // Party: { companion, required_affection, candidates } from the server.
+  party: null,
+
   busy: false,
   error: null,
 
@@ -93,6 +96,7 @@ export const useGameStore = create((set, get) => ({
       get().loadShop()
       get().loadDungeon() // resume a mid-run Substrate dive
       get().loadEquipment()
+      get().loadParty()
     }
   },
 
@@ -106,6 +110,7 @@ export const useGameStore = create((set, get) => ({
       get().loadShop()
       get().loadDungeon()
       get().loadEquipment()
+      get().loadParty()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -247,6 +252,7 @@ export const useGameStore = create((set, get) => ({
   moveDungeon: (dir) => get()._dungeonAction(() => api.dungeonMove(dir)),
   searchDungeon: () => get()._dungeonAction(() => api.dungeonSearch()),
   interactDungeon: () => get()._dungeonAction(() => api.dungeonInteract()),
+  curioAct: (curioId, verb) => get()._dungeonAction(() => api.dungeonCurio(curioId, verb)),
 
   chooseDungeonEvent: async (choiceIndex) => {
     set({ busy: true, error: null })
@@ -263,6 +269,8 @@ export const useGameStore = create((set, get) => ({
     try {
       const res = await api.dungeonLeave()
       set({ dungeon: res, state: res.state, dungeonResult: null, busy: false })
+      get().loadCharacters() // delving together builds the bond
+      get().loadParty()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -278,6 +286,9 @@ export const useGameStore = create((set, get) => ({
         dungeonResult: res.outcome ? { type: 'combat', ...res.outcome } : get().dungeonResult,
         busy: false,
       })
+      if (res.outcome?.result === 'defeat') {
+        get().loadCharacters() // going down together still deepens the bond
+      }
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -318,6 +329,38 @@ export const useGameStore = create((set, get) => ({
   socketGem: (slot, gemId, index) =>
     get()._equipmentAction(() => api.socketGem(slot, gemId, index)),
   unsocketGem: (slot, index) => get()._equipmentAction(() => api.unsocketGem(slot, index)),
+
+  // --- Party (one dungeon companion at a time) ---
+
+  loadParty: async () => {
+    try {
+      set({ party: await api.party() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  recruitCompanion: async (npcId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.recruit(npcId)
+      set({ state: res.state, busy: false })
+      get().loadParty()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  dismissCompanion: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dismissCompanion()
+      set({ state: res.state, busy: false })
+      get().loadParty()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
 
   doAction: async (action, attribute) => {
     set({ busy: true, error: null })

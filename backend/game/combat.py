@@ -127,7 +127,7 @@ def _damage(attack, power, defense, elem_mult, rng):
     return max(1, round(raw - defense * 0.5)), crit
 
 
-def start(player, enemy_id, floor, player_hp, attack_buff=0):
+def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None):
     """Begin a battle. Returns the new combat state dict."""
     enemy = scaled_enemy(enemy_id, floor, player.difficulty)
     stats = player_stats(player)
@@ -135,6 +135,7 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0):
     charge_max = CHARGE_MAX + eq["charge_max"]
     return {
         "active": True,
+        "companion": dict(companion) if companion else None,
         "enemy": enemy,
         "enemy_hp": enemy["hp"],
         "player_hp": min(player_hp, stats["max_hp"]),
@@ -203,6 +204,46 @@ def _tick_effects(state):
                 del effects[name]
 
 
+def _companion_turn(player, state, rng):
+    """The companion acts once per round, by role. Auto-piloted."""
+    comp = state.get("companion")
+    if not comp or comp["down"] or state["over"] or state["enemy_hp"] <= 0:
+        return
+    enemy = state["enemy"]
+    log = state["log"]
+    enemy_defense = enemy["defense"] * (0.5 if "corrode" in state["enemy_effects"] else 1.0)
+    pstats = player_stats(player)
+
+    def strike(power, note=""):
+        mult = element_multiplier(comp["element"], enemy["element"])
+        dmg, _ = _damage(comp["attack"], power, enemy_defense, mult, rng)
+        state["enemy_hp"] = max(0, state["enemy_hp"] - dmg)
+        extra = " It hits a weakness!" if mult > 1 else ""
+        log.append(f"{comp['name']} strikes — {dmg} damage.{extra}{note}")
+
+    role = comp["role"]
+    if role == "healer":
+        if state["player_hp"] < pstats["max_hp"] * 0.6:
+            heal = 12 + pstats["level"] * 2
+            state["player_hp"] = min(pstats["max_hp"], state["player_hp"] + heal)
+            log.append(f"{comp['name']} tends to you — +{heal} HP.")
+            if state["player_effects"]:
+                cured = next(iter(state["player_effects"]))
+                del state["player_effects"][cured]
+                log.append(f"{comp['name']} clears the {cured} from your system.")
+        else:
+            strike(0.9)
+    elif role == "dps":
+        strike(1.3)
+    elif role == "support":
+        state["charge"] = min(state.get("charge_max", CHARGE_MAX), state["charge"] + 1)
+        strike(0.7, " Their rhythm feeds your charge (+1).")
+    elif role == "rogue":
+        strike(1.1)
+    else:  # tank
+        strike(0.8)
+
+
 def _enemy_turn(player, state, pstats, rng):
     enemy = state["enemy"]
     log = state["log"]
@@ -237,18 +278,39 @@ def _enemy_turn(player, state, pstats, rng):
         else:
             use_skill = not moves and rng.random() < ENEMY_SKILL_CHANCE
             power = ENEMY_SKILL_POWER if use_skill else BASIC_POWER
-            dmg, crit = _damage(enemy["attack"], power, defense, resist, rng)
-            if state["guarding"]:
-                dmg = max(1, dmg // 2)
-                state["guarding"] = False
-            state["player_hp"] = max(0, state["player_hp"] - dmg)
-            verb = "unleashes a charged strike" if use_skill else "attacks"
-            log.append(f"{enemy['name']} {verb} — {dmg} damage{' (crit!)' if crit else ''}.")
-            if use_skill and rng.random() < ENEMY_SKILL_INFLICT_CHANCE:
-                status = _status_for(enemy["element"])
-                if status and state["player_hp"] > 0:
-                    _inflict(pe, status, 2)
-                    log.append(f"You're afflicted: {status}!")
+            comp = state.get("companion")
+            target_comp = False
+            if comp and not comp["down"]:
+                roll = rng.random()
+                target_comp = roll < (0.55 if comp["role"] == "tank" else 0.25)
+            if target_comp:
+                dmg, crit = _damage(enemy["attack"], power, comp["defense"], 1.0, rng)
+                comp["hp"] = max(0, comp["hp"] - dmg)
+                log.append(f"{enemy['name']} turns on {comp['name']} — {dmg} damage.")
+                if comp["hp"] <= 0:
+                    comp["down"] = True
+                    log.append(f"{comp['name']} goes down! They'll need a rest stop.")
+            else:
+                dmg, crit = _damage(enemy["attack"], power, defense, resist, rng)
+                if state["guarding"]:
+                    dmg = max(1, dmg // 2)
+                    state["guarding"] = False
+                if comp and not comp["down"] and comp["role"] == "tank" and dmg > 2:
+                    absorbed = round(dmg * 0.3)
+                    comp["hp"] = max(0, comp["hp"] - absorbed)
+                    dmg -= absorbed
+                    log.append(f"{comp['name']} shoulders {absorbed} of the hit.")
+                    if comp["hp"] <= 0:
+                        comp["down"] = True
+                        log.append(f"{comp['name']} goes down! They'll need a rest stop.")
+                state["player_hp"] = max(0, state["player_hp"] - dmg)
+                verb = "unleashes a charged strike" if use_skill else "attacks"
+                log.append(f"{enemy['name']} {verb} — {dmg} damage{' (crit!)' if crit else ''}.")
+                if use_skill and rng.random() < ENEMY_SKILL_INFLICT_CHANCE:
+                    status = _status_for(enemy["element"])
+                    if status and state["player_hp"] > 0:
+                        _inflict(pe, status, 2)
+                        log.append(f"You're afflicted: {status}!")
 
     if state["player_hp"] <= 0:
         state["over"] = True
@@ -277,8 +339,10 @@ def _win(state, player, rng):
     enemy = state["enemy"]
     diff = data.load("difficulty")[player.difficulty]
     eq = equipment.bonuses(player)
+    comp = state.get("companion")
+    rogue_bonus = 1 + comp.get("credit_bonus", 0) if comp and not comp["down"] else 1
     xp = round(enemy["xp"] * diff["xp"] * eq["xp_mult"])
-    credits = round(enemy["credits"] * rng.uniform(0.85, 1.15) * eq["credit_mult"])
+    credits = round(enemy["credits"] * rng.uniform(0.85, 1.15) * eq["credit_mult"] * rogue_bonus)
     state["over"] = True
     state["victory"] = True
     ups = grant_xp(player, xp)
@@ -387,6 +451,11 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None):
         _win(state, player, rng)
         return state
 
+    _check_phases(state)
+    _companion_turn(player, state, rng)
+    if state["enemy_hp"] <= 0:
+        _win(state, player, rng)
+        return state
     _check_phases(state)
     _enemy_turn(player, state, pstats, rng)
     if not state["over"]:

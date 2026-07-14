@@ -393,6 +393,13 @@ def create_app():
     def dungeon_interact():
         return _dungeon_action(dungeon.interact)
 
+    @app.post("/api/dungeon/curio")
+    def dungeon_curio():
+        body = request.get_json(silent=True) or {}
+        return _dungeon_action(
+            lambda p, c: dungeon.curio_act(p, c, body.get("curio_id"), body.get("verb"))
+        )
+
     @app.post("/api/dungeon/event")
     def dungeon_event():
         body = request.get_json(silent=True) or {}
@@ -419,6 +426,11 @@ def create_app():
             result = dungeon.leave(player, clock)
         except GameError as err:
             return jsonify(error=str(err)), 400
+        # Delving together builds the bond — deeper floors mean more shared danger.
+        if result.get("companion"):
+            gained = min(6, 2 + result["left_at_floor"] // 2)
+            social.add_opinion(save_id, result["companion"], gained, _day_index(clock))
+            result["bond"] = gained
         save.save_models(save_id, player, clock)
         return jsonify(
             {**_dungeon_payload(player), "result": result, "state": save.state_dict(player, clock)}
@@ -447,6 +459,9 @@ def create_app():
         outcome = None
         if player.combat.get("over"):
             outcome = dungeon.finish_combat(player)
+            # Even a rout deepens the bond a little — you went down together.
+            if outcome.get("result") == "defeat" and outcome.get("companion"):
+                social.add_opinion(save_id, outcome["companion"], 1, _day_index(clock))
         save.save_models(save_id, player, clock)
         return jsonify(
             {
@@ -455,6 +470,77 @@ def create_app():
                 "state": save.state_dict(player, clock),
             }
         )
+
+    # --- Party: one dungeon companion at a time ---
+
+    @app.get("/api/party")
+    def party_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        day = _day_index(clock)
+        candidates = []
+        for cid, npc in NPC.load_all().items():
+            spec = npc.companion
+            if not spec:
+                continue
+            affection = social.get_affection(save_id, cid, day)
+            candidates.append(
+                {
+                    "id": cid,
+                    "name": npc.name,
+                    "role": spec["role"],
+                    "element": spec["element"],
+                    "blurb": spec.get("blurb", ""),
+                    "affection": affection,
+                    "recruitable": affection >= dungeon.RECRUIT_AFFECTION,
+                }
+            )
+        return jsonify(
+            {
+                "companion": player.companion or None,
+                "required_affection": dungeon.RECRUIT_AFFECTION,
+                "candidates": candidates,
+            }
+        )
+
+    @app.post("/api/party/recruit")
+    def party_recruit():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            npc = NPC.load(body.get("npc_id"))
+        except KeyError:
+            return jsonify(error="No such character."), 404
+        if not npc.companion:
+            return jsonify(error=f"{npc.name} won't delve."), 400
+        if player.dungeon.get("active"):
+            return jsonify(error="You can't change your party inside the Substrate."), 400
+        affection = social.get_affection(save_id, npc.id, _day_index(clock))
+        if affection < dungeon.RECRUIT_AFFECTION:
+            return (
+                jsonify(error=f"{npc.name} doesn't trust you enough to follow you down there."),
+                400,
+            )
+        player.companion = npc.id
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "companion": npc.id})
+
+    @app.post("/api/party/dismiss")
+    def party_dismiss():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        if player.dungeon.get("active"):
+            return jsonify(error="You can't change your party inside the Substrate."), 400
+        player.companion = ""
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "companion": None})
 
     # --- Equipment & gems ---
 

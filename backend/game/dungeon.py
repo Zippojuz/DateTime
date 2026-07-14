@@ -30,6 +30,7 @@ SEARCH_MINUTES = 10
 DEFEAT_CREDIT_LOSS = 0.15
 REST_HEAL_FRACTION = 0.4
 SEARCH_DC = 7  # wit + d6 must reach this to spot a concealed exit
+RECRUIT_AFFECTION = 25  # a friend (stage threshold) will follow you down
 
 DIRS = {"n": (0, -1), "s": (0, 1), "e": (1, 0), "w": (-1, 0)}
 OPPOSITE = {"n": "s", "s": "n", "e": "w", "w": "e"}
@@ -217,6 +218,18 @@ def generate_floor(seed, floor):
             rooms[k]["content"] = {"type": "rest", "used": False}
         # else stays empty — a quiet room with only its description.
 
+    # 7) Curios: strange interactable objects scattered through the floor.
+    curio_ids = list(data.load("curios"))
+    rng.shuffle(curio_ids)
+    hosts = [
+        k
+        for k, r in rooms.items()
+        if r["content"]["type"] not in ("stairs_down", "cache") and k != entrance
+    ]
+    rng.shuffle(hosts)
+    for host_key, curio_id in zip(hosts, curio_ids[: rng.randint(2, 3)]):
+        rooms[host_key].setdefault("curios", []).append({"id": curio_id, "used": []})
+
     return {"rooms": rooms, "entrance": entrance, "stairwell": stairwell, "puzzle": puzzle}
 
 
@@ -250,6 +263,7 @@ def enter(player, clock, seed=None):
     floor_data["rooms"][floor_data["entrance"]]["visited"] = True
     stats = combat.player_stats(player)
     player.dungeon = {
+        "companion": _build_companion(player),
         "active": True,
         "seed": seed,
         "floor": 1,
@@ -310,7 +324,12 @@ def _resolve_room(player, run, room, rng):
 
     if kind in ("battle", "miniboss") and not content.get("cleared"):
         player.combat = combat.start(
-            player, content["enemy"], run["floor"], run["player_hp"], run["attack_buff"]
+            player,
+            content["enemy"],
+            run["floor"],
+            run["player_hp"],
+            run["attack_buff"],
+            companion=run.get("companion"),
         )
         return {"type": kind, "text": player.combat["log"][0]}
 
@@ -318,7 +337,12 @@ def _resolve_room(player, run, room, rng):
         guard = content.get("guard")
         if guard and not content.get("guard_cleared"):
             player.combat = combat.start(
-                player, guard, run["floor"], run["player_hp"], run["attack_buff"]
+                player,
+                guard,
+                run["floor"],
+                run["player_hp"],
+                run["attack_buff"],
+                companion=run.get("companion"),
             )
             return {"type": "boss", "text": player.combat["log"][0]}
         return {"type": "stairs", "text": _stairs_text(run, content)}
@@ -358,7 +382,13 @@ def _resolve_room(player, run, room, rng):
         max_hp = combat.player_stats(player)["max_hp"]
         heal = round(max_hp * REST_HEAL_FRACTION)
         run["player_hp"] = min(max_hp, run["player_hp"] + heal)
-        return {"type": "rest", "text": f"A defensible corner and quiet machinery. +{heal} HP."}
+        text = f"A defensible corner and quiet machinery. +{heal} HP."
+        comp = run.get("companion")
+        if comp and (comp["down"] or comp["hp"] < comp["max_hp"]):
+            comp["down"] = False
+            comp["hp"] = max(comp["hp"], round(comp["max_hp"] * 0.5))
+            text += f" {comp['name']} patches up beside you."
+        return {"type": "rest", "text": text}
 
     if kind == "event" and not content.get("done"):
         content["done"] = True
@@ -522,6 +552,17 @@ def _apply_outcome(player, run, outcome):
         run["attack_buff"] = run.get("attack_buff", 0) + outcome["amount"]
     elif kind == "item":
         inventory.add_item(player, outcome["item"], 1)
+    elif kind == "xp":
+        combat.grant_xp(player, outcome["amount"])
+    elif kind == "xp_damage":
+        combat.grant_xp(player, outcome["xp"])
+        run["player_hp"] = max(1, run["player_hp"] - outcome["amount"])
+    elif kind == "buff_damage":
+        run["attack_buff"] = run.get("attack_buff", 0) + outcome["amount"]
+        run["player_hp"] = max(1, run["player_hp"] - outcome["damage"])
+    elif kind == "reveal":
+        for room in run["rooms"].values():
+            room["visited"] = True
     return {"type": kind, "text": outcome["text"]}
 
 
@@ -537,6 +578,8 @@ def finish_combat(player):
 
     if state["victory"]:
         run["player_hp"] = state["player_hp"]
+        if state.get("companion"):
+            run["companion"] = state["companion"]
         result = {"result": "victory"}
         if content["type"] == "stairs_down":
             content["guard_cleared"] = True
@@ -556,15 +599,18 @@ def finish_combat(player):
 
     if state["fled"]:
         run["player_hp"] = state["player_hp"]
+        if state.get("companion"):
+            run["companion"] = state["companion"]
         run["at"] = run["prev"]  # you retreat the way you came
         player.combat = {}
         return {"result": "fled"}
 
     lost = round(player.credits * DEFEAT_CREDIT_LOSS)
+    companion_id = (run.get("companion") or {}).get("id")
     player.credits -= lost
     player.combat = {}
     player.dungeon = {}
-    return {"result": "defeat", "credits_lost": lost}
+    return {"result": "defeat", "credits_lost": lost, "companion": companion_id}
 
 
 def leave(player, clock):
@@ -573,8 +619,60 @@ def leave(player, clock):
         raise GameError("Not with something blocking the way out.")
     clock.advance(ENTER_MINUTES)
     floor = run["floor"]
+    companion_id = (run.get("companion") or {}).get("id")
     player.dungeon = {}
-    return {"left_at_floor": floor}
+    return {"left_at_floor": floor, "companion": companion_id}
+
+
+def _build_companion(player):
+    """Materialise the recruited companion for a run (None = delving solo)."""
+    if not player.companion:
+        return None
+    entry = data.load("characters").get(player.companion)
+    if not entry or "companion" not in entry:
+        return None
+    spec = entry["companion"]
+    level = player.combat_level
+    max_hp = round((20 + level * 8) * spec["hp_mult"])
+    return {
+        "id": player.companion,
+        "name": entry["name"],
+        "role": spec["role"],
+        "element": spec["element"],
+        "blurb": spec.get("blurb", ""),
+        "hp": max_hp,
+        "max_hp": max_hp,
+        "attack": round((5 + level * 1.8) * spec["atk_mult"]),
+        "defense": 2 + level,
+        "credit_bonus": spec.get("credit_bonus", 0),
+        "down": False,
+    }
+
+
+def curio_act(player, clock, curio_id, verb, rng=None):
+    """Interact with a curio in the current room. Examine is free; other verbs
+    are one actions (5m) and usually one-shot."""
+    rng = rng or _random
+    run = _require_free(player)
+    room = run["rooms"][run["at"]]
+    entry = next((c for c in room.get("curios", []) if c["id"] == curio_id), None)
+    if entry is None:
+        raise GameError("There's nothing like that here.")
+    curio = data.load("curios")[curio_id]
+
+    if verb == "examine":
+        return {"type": "examine", "text": curio["examine"]}
+
+    spec = curio["verbs"].get(verb)
+    if spec is None:
+        raise GameError(f"You can't {verb} the {curio['name']}.")
+    if spec.get("once") and verb in entry["used"]:
+        raise GameError("It has given what it has to give.")
+
+    clock.advance(MOVE_MINUTES)
+    entry["used"].append(verb)
+    outcome = _apply_outcome(player, run, spec["outcome"])
+    return {"type": "curio", "text": spec["text"], "outcome": outcome}
 
 
 # --- Fog-of-war view --------------------------------------------------------------
@@ -653,9 +751,18 @@ def view(player):
         if not (content.get("guard") and not content.get("guard_cleared")):
             interact_label = "Descend the stairs"
 
+    curios = []
+    for entry in here.get("curios", []):
+        curio = data.load("curios")[entry["id"]]
+        verbs = [v for v in curio["verbs"] if v not in entry["used"]]
+        curios.append(
+            {"id": entry["id"], "name": curio["name"], "short": curio["short"], "verbs": verbs}
+        )
+
     return {
         "floor": run["floor"],
         "map": map_rooms,
+        "companion": run.get("companion"),
         "here": {
             "id": here["id"],
             "name": here["name"],
@@ -663,6 +770,7 @@ def view(player):
             "type": content["type"],
             "exits": exits,
             "hints": hints,
+            "curios": curios,
             "interact": interact_label,
             "stairs_note": _stairs_note(run, content),
         },

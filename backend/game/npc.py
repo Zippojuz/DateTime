@@ -29,6 +29,7 @@ class NPC(Character):
         attributes=None,
         preferences=None,
         starting_disposition=0,
+        companion=None,
     ):
         super().__init__(name, attributes, preferences)
         self.id = id
@@ -38,6 +39,8 @@ class NPC(Character):
         self.district = district
         self.arc_theme = arc_theme
         self.romanceable = romanceable
+        # Combat spec if this NPC can be recruited to delve ({} = never delves).
+        self.companion = dict(companion) if companion else {}
         # Where affection starts when the relationship is first seeded (0 =
         # neutral). Most NPCs start neutral; some may lean warm/cold.
         self.starting_disposition = starting_disposition
@@ -62,6 +65,7 @@ class NPC(Character):
             attributes=entry.get("attributes"),
             preferences=entry.get("preferences"),
             starting_disposition=entry.get("starting_disposition", 0),
+            companion=entry.get("companion"),
         )
 
     @classmethod

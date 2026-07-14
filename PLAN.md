@@ -374,6 +374,32 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 - +14 pytest (166 total). Verified with a live delve: generators, keycards,
   searches → caches, minibosses, the floor-3 boss, defeat ejection.
 
+### Follow-up: curios & companions ✅ DONE
+- **Curios** (`curios.json`): strange interactable objects, 2–3 scattered per
+  floor — chrome mannequins, mirror pools, glitter moths, whispering vents.
+  Examine is free and repeatable; other verbs (touch/kiss/rest/take/offer/
+  listen/wake) cost 5m, are one-shot per placement, and pay out through the
+  shared outcome engine (heal, buff, credits, items, XP, XP-for-blood,
+  full-map reveal). Kept sci-fi/sexy/weird per direction. Route
+  POST /api/dungeon/curio; verb buttons in DungeonScreen.
+- **Companions**: one delving partner at a time (roles make the choice
+  matter). All five romanceables have a `companion` block: Vael tank/cryo,
+  Zix dps/voltaic, Sora healer/toxin, Carro rogue/kinetic (+25% credits),
+  Miko support/psionic (+1 charge/turn). Recruit gate: affection ≥ 25
+  (friend); recruit/dismiss only topside (POST /api/party/recruit|dismiss,
+  GET /api/party).
+- In combat the companion auto-acts each round by role (healer heals+cleanses
+  below 60%, dps 1.3x, support feeds charge, tank draws 55% of enemy fire and
+  shoulders 30% of player hits). At 0 HP they go DOWN (not dead) until a rest
+  stop. Elemental multipliers apply to their strikes.
+- **The bond loop**: leaving a run together grants affection (2 + floor//2,
+  cap 6); even a defeat grants +1 — the dungeon feeds the dating sim.
+- Migration 8 (`player.companion`); companion state persisted inside the run
+  blob. UI: party picker in SubstratePanel, companion HP in the dungeon
+  header, companion card in BattleView. +26 pytest (192 total). Verified with
+  a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
+  assists, leave bond (+2 on floor 1), dismiss.
+
 ### Follow-up: boss mechanics & status effects ✅ DONE
 - Telegraphed signature moves on a cadence (charge turn → ⚠ banner → big hit);
   guarding a telegraphed hit cuts it to 1/3 (regular guard 1/2).
