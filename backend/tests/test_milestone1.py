@@ -38,6 +38,7 @@ def test_new_game_defaults_to_human_with_registry_attributes(client):
         "empathy": 5,
         "agility": 5,
         "luck": 5,
+        "hacking": 5,
     }
     # Identity is locked: current == created at creation.
     assert player["identity"] == player["created_identity"]
@@ -168,6 +169,7 @@ def test_npc_attributes_mirror_the_registry():
         "empathy": 5,
         "agility": 5,
         "luck": 5,
+        "hacking": 5,
     }
 
 
@@ -185,7 +187,15 @@ def test_npc_loads_from_characters_json():
     assert vael.romanceable is True
     assert len(vael.schedule) > 0
     # Mirrors the registry attribute set since Vael has no overrides.
-    assert set(vael.attributes) == {"charm", "wit", "courage", "empathy", "agility", "luck"}
+    assert set(vael.attributes) == {
+        "charm",
+        "wit",
+        "courage",
+        "empathy",
+        "agility",
+        "luck",
+        "hacking",
+    }
 
 
 def test_npc_load_unknown_raises():

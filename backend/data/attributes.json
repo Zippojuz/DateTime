@@ -40,5 +40,12 @@
     "default": 5,
     "min": 0,
     "max": 20
+  },
+  "hacking": {
+    "name": "Hacking",
+    "description": "How well your lace obeys: wetware protocol power and heat discipline.",
+    "default": 5,
+    "min": 0,
+    "max": 20
   }
 }

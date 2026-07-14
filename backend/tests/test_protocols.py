@@ -62,8 +62,38 @@ def test_casting_builds_heat_and_strikes():
     before = state["enemy_hp"]
     combat.act(p, state, "protocol", protocol_id="gravity_snap", rng=QuietRng())
     assert state["enemy_hp"] < before
-    # 35 heat added, one round vented (8) -> 27
-    assert state["heat"] == 35 - combat.player_stats(p)["heat_vent"]
+    # 35 base heat, hacking-discounted, then one round vented.
+    stats = combat.player_stats(p)
+    assert state["heat"] == (35 - stats["heat_discount"]) - stats["heat_vent"]
+
+
+def test_hacking_scales_protocol_damage_but_not_weapon_damage():
+    dull = _adept(5, "gravity_snap")
+    dull.attributes["hacking"] = 0
+    sharp = _adept(5, "gravity_snap")
+    sharp.attributes["hacking"] = 20
+    assert (
+        combat.player_stats(sharp)["protocol_power"] > combat.player_stats(dull)["protocol_power"]
+    )
+    assert combat.player_stats(sharp)["attack"] == combat.player_stats(dull)["attack"]
+    d_state = _fight(dull, enemy_id="warden_lyss")
+    combat.act(dull, d_state, "protocol", protocol_id="gravity_snap", rng=QuietRng())
+    s_state = _fight(sharp, enemy_id="warden_lyss")
+    combat.act(sharp, s_state, "protocol", protocol_id="gravity_snap", rng=QuietRng())
+    dull_dmg = d_state["enemy"]["hp"] - d_state["enemy_hp"]
+    sharp_dmg = s_state["enemy"]["hp"] - s_state["enemy_hp"]
+    assert sharp_dmg > dull_dmg
+
+
+def test_hacking_runs_casts_cooler_with_a_floor():
+    cool = _adept(5, "purge_cycle")
+    cool.attributes["hacking"] = 20  # discount 10: 25 -> 15 heat
+    state = _fight(cool, enemy_id="warden_lyss")
+    combat.act(cool, state, "protocol", protocol_id="purge_cycle", rng=QuietRng())
+    stats = combat.player_stats(cool)
+    assert state["heat"] == 15 - stats["heat_vent"]
+    # The floor: even absurd discipline never drops a cast below 5 heat.
+    assert max(5, 25 - 100) == 5
 
 
 def test_unknown_protocol_is_rejected():

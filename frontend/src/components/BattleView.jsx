@@ -166,7 +166,9 @@ export default function BattleView() {
                     onClick={() => command('protocol', { protocol_id: p.id })}
                   >
                     {p.name}
-                    <span className="cmd-meta cmd-meta--heat">{p.heat}♨</span>
+                    <span className="cmd-meta cmd-meta--heat">
+                      {Math.max(5, p.heat - (stats.heat_discount ?? 0))}♨
+                    </span>
                   </button>
                 ))}
               </SubMenu>

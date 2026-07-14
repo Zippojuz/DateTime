@@ -400,6 +400,17 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: hacking — the casting stat ✅ DONE
+- Seventh registry attribute: **hacking** ("how well your lace obeys").
+  Trainable/visible/mirrored automatically; old saves gain it at 5.
+- Strike protocols now swing with **lace power** (6 + level×2 + hacking×2)
+  instead of your weapon-arm attack — courage builds punch, hacking builds
+  cast. Shown as LACE on the equipment stats line.
+- **Heat discipline**: every combat cast costs hacking//2 less heat (floor 5);
+  the battle Protocol menu shows your true discounted costs.
+- Flavor overrides: Zix hacks at 12 (wit 8), Nyx at 10 (charm 8).
+  +2 pytest (243 total).
+
 ### Follow-up: status expansion + sexy attacks + Nyx (floor-10 NPC boss) ✅ DONE
 - **Status registry** (`statuses.json`): all 14 effects data-driven (name/side/
   color/hint); battle chips render from it, no more hardcoded UI hints.

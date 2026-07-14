@@ -132,6 +132,10 @@
       "hp_mult": 0.9,
       "atk_mult": 1.3,
       "blurb": "Six bodies, one grudge. Arc-strikes that seek soft spots."
+    },
+    "attributes": {
+      "hacking": 12,
+      "wit": 8
     }
   },
   "sora": {
@@ -382,6 +386,10 @@
       "hp_mult": 1.1,
       "atk_mult": 1.2,
       "blurb": "The Substrate's favorite dream, fighting on your side now. Enemies hesitate. She doesn't."
+    },
+    "attributes": {
+      "hacking": 10,
+      "charm": 8
     }
   }
 }

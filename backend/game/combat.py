@@ -93,6 +93,7 @@ def player_stats(player):
     wit = player.attributes.get("wit", 5)
     agility = player.attributes.get("agility", 5)
     luck = player.attributes.get("luck", 5)
+    hacking = player.attributes.get("hacking", 5)
     eq = equipment.bonuses(player)
     speed = 5 + level + wit + eq["speed"]
     return {
@@ -104,6 +105,10 @@ def player_stats(player):
         "crit": round(crit_chance(speed, luck), 3),
         "dodge": round(min(0.5, dodge_chance(agility, luck) + eq["dodge"]), 3),
         "luck": luck,
+        # Hacking is the casting stat: strike protocols swing with lace power
+        # (not your weapon arm), and a disciplined lace runs cooler per cast.
+        "protocol_power": 6 + level * 2 + hacking * 2,
+        "heat_discount": hacking // 2,
         "heat_cap": HEAT_CAP + eq["heat_cap"],
         "heat_vent": HEAT_VENT + eq["heat_vent"],
     }
@@ -464,7 +469,9 @@ def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, pcri
     the effect by kind."""
     log = state["log"]
     heat_cap = pstats["heat_cap"]
-    state["heat"] += protocol["heat"]
+    # A practiced hacker runs the same code cooler (never below 5 heat).
+    cost = max(5, protocol["heat"] - pstats["heat_discount"])
+    state["heat"] += cost
     log.append(f"You run {protocol['name']} — heat {min(state['heat'], heat_cap)}/{heat_cap}.")
     if state["heat"] > heat_cap:
         state["heat"] = heat_cap
@@ -475,7 +482,7 @@ def _cast_protocol(player, state, protocol, pstats, enemy_defense, charmed, pcri
     kind = protocol["kind"]
     if kind == "strike":
         mult = element_multiplier(protocol.get("element"), state["enemy"]["element"])
-        atk = pstats["attack"] + state.get("attack_buff", 0)
+        atk = pstats["protocol_power"] + state.get("attack_buff", 0)
         dmg, crit = _damage(atk, protocol["power"], enemy_defense, mult, rng, crit=pcrit)
         if charmed:
             dmg = max(1, dmg // 2)
