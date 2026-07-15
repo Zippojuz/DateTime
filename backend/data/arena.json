@@ -1,8 +1,9 @@
 {
   "id": "the_pit",
   "name": "The Pit",
-  "district": "docking_quarter",
-  "blurb": "An unlicensed fighting ring in a drained ballast tank under the docks. No seconds, no spoils, no insurance \u2014 the Pit pays in reputation, and the crowd never forgets a name.",
+  "venue": "the_pit",
+  "district": "the_grid",
+  "blurb": "An unlicensed fighting ring in a drained coolant cistern three levels under the Grid. No seconds, no spoils, no insurance \u2014 the Pit pays in reputation, and the crowd never forgets a name.",
   "energy": 10,
   "minutes": 45,
   "win_cred": 1,
@@ -61,6 +62,13 @@
       "purse": 800,
       "prize": "zenith_sigil",
       "title": "The Apex"
+    },
+    "50": {
+      "enemy": "ondo_the_bell",
+      "cred": 100,
+      "purse": 0,
+      "prize": "founders_bell",
+      "title": "The Founder's Bout"
     }
   },
   "rematch": {
@@ -68,5 +76,64 @@
     "cred": 20,
     "purse": 300,
     "title": "Apex Rematch"
+  },
+  "founder": {
+    "name": "Ondo “The Bell” Marr",
+    "record": "Undefeated (retired)",
+    "note": "The book is theirs. The bell is theirs. The rest is negotiable."
+  },
+  "leaderboard": [
+    {
+      "name": "Zenith, the Crowd's Own",
+      "wins": 214,
+      "note": "Holds The Apex. Is, on some real level, the crowd."
+    },
+    {
+      "name": "Gravekeeper Lull",
+      "wins": 158,
+      "note": "Retired three times. It never takes."
+    },
+    {
+      "name": "Saint Voltage",
+      "wins": 121,
+      "note": "Canonized themself mid-bout. The paperwork stuck."
+    },
+    {
+      "name": "Mirrorblade Duessa",
+      "wins": 77,
+      "note": "Gatekeeper of the first belt. Fights you with your own face."
+    },
+    {
+      "name": "Kilowatt Kid",
+      "wins": 61,
+      "note": "Fast hands, faster mouth, exactly one good idea."
+    },
+    {
+      "name": "“Handshake” Bree",
+      "wins": 44,
+      "note": "Wins most fights before the bell. Wins the rest after."
+    },
+    {
+      "name": "Two-Sockets",
+      "wins": 29,
+      "note": "Named for what's left."
+    },
+    {
+      "name": "The Upright Man",
+      "wins": 17,
+      "note": "Has never once ducked. On principle. It shows."
+    },
+    {
+      "name": "Moth",
+      "wins": 8,
+      "note": "Keeps coming back to the light. The crowd loves Moth."
+    }
+  ],
+  "crowd_lines": {
+    "Unknown": "The crowd barely looks up. Earn the look.",
+    "Known Face": "A few tiers clock your walk. Somebody says your name wrong, but they say it.",
+    "Name in the Grid": "The chant starts in the cheap seats and spreads. They know you now.",
+    "Undercard Legend": "The whole tank leans in when you climb down the ladder.",
+    "Crowd's Own": "They ring bottles against the scaffold in your rhythm. The Pit is yours before the bell."
   }
 }

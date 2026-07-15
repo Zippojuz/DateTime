@@ -1,12 +1,14 @@
 """Districts, travel, and NPC availability. (Milestone 2 / 3)
 
-The city is a ring of five districts. Travel between them costs time and energy
-(and credits for fast transit); adjacent hops are cheaper than cross-city. NPC
+The city is a ring of five districts, plus venues nested inside them (see
+game/places.py). Travel between districts costs time and energy (and credits
+for fast transit); adjacent hops are cheaper than cross-city, and stepping
+into or out of a venue within the same district is a short local hop. NPC
 availability is resolved from schedules, and — as of Milestone 3 — you must be
-in the same district as an NPC to reach them.
+in the same place as an NPC to reach them.
 """
 
-from game import data
+from game import data, places
 from game.errors import GameError
 
 # Travel cost by (distance, mode): distance is "adjacent" or "cross".
@@ -16,6 +18,9 @@ TRAVEL_COST = {
     ("cross", "walk"): {"minutes": 40, "energy": -15, "credits": 0},
     ("cross", "transit"): {"minutes": 18, "energy": -6, "credits": 18},
 }
+
+# Entering/leaving a venue, or moving between venues, within one district.
+LOCAL_COST = {"minutes": 5, "energy": -1, "credits": 0}
 
 
 def districts():
@@ -28,7 +33,13 @@ def are_adjacent(a, b):
 
 
 def travel_cost(from_id, to_id, mode):
-    distance = "adjacent" if are_adjacent(from_id, to_id) else "cross"
+    """Cost between two places. Same-district moves (venue in/out) are a
+    local hop regardless of mode; district legs price by adjacency."""
+    from_district = places.district_of(from_id)
+    to_district = places.district_of(to_id)
+    if from_district == to_district:
+        return {"distance": "local", **LOCAL_COST}
+    distance = "adjacent" if are_adjacent(from_district, to_district) else "cross"
     cost = TRAVEL_COST.get((distance, mode))
     if cost is None:
         raise GameError(f"Unknown travel mode: {mode!r}")
@@ -36,12 +47,16 @@ def travel_cost(from_id, to_id, mode):
 
 
 def travel(player, clock, to_id, mode):
-    """Move the player to another district in place. Raises GameError on invalid
-    destinations, insufficient credits, or exhaustion. Returns the cost applied."""
-    if to_id not in districts():
-        raise GameError("There's no such district.")
+    """Move the player to another place (district or venue). Raises GameError
+    on invalid destinations, closed venues, insufficient credits, or
+    exhaustion. Returns the cost applied."""
+    place = places.get(to_id)
+    if place is None:
+        raise GameError("There's no such place.")
     if to_id == player.location:
         raise GameError("You're already there.")
+    if not places.is_open(to_id, clock):
+        raise GameError(place.get("closed_line", f"{place['name']} is closed right now."))
 
     cost = travel_cost(player.location, to_id, mode)
     if player.credits < cost["credits"]:

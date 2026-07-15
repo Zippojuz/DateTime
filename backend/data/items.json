@@ -893,5 +893,20 @@
       "speed": 2
     },
     "value": 20
+  },
+  "founders_bell": {
+    "id": "founders_bell",
+    "name": "Founder's Bell",
+    "kind": "equipment",
+    "slot": "accessory",
+    "rarity": "legendary",
+    "price": 0,
+    "bonuses": {
+      "attack": 2,
+      "defense": 4,
+      "hp": 20
+    },
+    "sockets": 1,
+    "description": "A brass ship's bell the size of a fist, cut from the Pit's rope the night the founder finally lost. It doesn't ring for anyone else. Ondo pressed it into your hands like it weighed fifteen years."
   }
 }

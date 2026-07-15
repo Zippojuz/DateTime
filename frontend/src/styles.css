@@ -1601,7 +1601,173 @@ body {
   font-style: italic;
 }
 
-/* --- The Pit (arena) --- */
+/* --- The Pit (arena venue) --- */
+
+.pit-view {
+  border: 1px solid #26304a;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  background:
+    radial-gradient(ellipse at 50% -20%, rgba(255, 233, 90, 0.06), transparent 60%),
+    var(--bg-panel, transparent);
+}
+
+.pit-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.pit-head h2 {
+  font-size: 1.2rem;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+
+.pit-hours {
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+}
+
+.pit-closed {
+  color: var(--text-dim);
+  font-style: italic;
+  border: 1px dashed #26304a;
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+}
+
+.pit-bell-line {
+  color: #ffe95a;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.pit-belts h3,
+.pit-book h3 {
+  margin: 1rem 0 0.4rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.14rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.pit-belts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.pit-belt {
+  border: 1px solid #26304a;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 9rem;
+}
+
+.pit-belt--claimed {
+  border-color: #ffe95a;
+  box-shadow: 0 0 12px rgba(255, 233, 90, 0.12);
+}
+
+.pit-belt-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.06rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.pit-belt--claimed .pit-belt-holder {
+  color: #ffe95a;
+  letter-spacing: 0.12rem;
+}
+
+.pit-belt-holder {
+  font-size: 0.85rem;
+}
+
+.pit-board {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.pit-row,
+.pit-founder {
+  display: grid;
+  grid-template-columns: 2rem minmax(10rem, 1fr) 4rem 2fr;
+  gap: 0.6rem;
+  padding: 0.3rem 0.4rem;
+  border-bottom: 1px dashed #1c2438;
+  font-size: 0.88rem;
+  align-items: baseline;
+}
+
+.pit-founder {
+  color: #ffe95a;
+  border-bottom: 1px solid #26304a;
+}
+
+.pit-row--you {
+  background: rgba(255, 233, 90, 0.08);
+  border-left: 2px solid #ffe95a;
+}
+
+.pit-rank {
+  color: var(--text-dim);
+  text-align: right;
+}
+
+.pit-wins {
+  text-align: right;
+}
+
+.pit-note {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+@media (max-width: 40rem) {
+  .pit-row,
+  .pit-founder {
+    grid-template-columns: 2rem 1fr 4rem;
+  }
+
+  .pit-note {
+    display: none;
+  }
+}
+
+/* Venue travel (local hops) */
+
+.travel-list--local {
+  border-bottom: 1px dashed #26304a;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.travel-dest--venue .travel-name {
+  color: #ffe95a;
+}
+
+.travel-under,
+.hud-under {
+  color: var(--text-dim);
+  font-size: 0.8em;
+}
 
 .arena-panel h2 {
   font-size: 1.1rem;

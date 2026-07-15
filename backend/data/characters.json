@@ -496,5 +496,63 @@
         "available": false
       }
     ]
+  },
+  "ondo": {
+    "id": "ondo",
+    "name": "Ondo \u201cThe Bell\u201d Marr",
+    "pronouns": "they/them",
+    "species": "Human, extensively field-repaired",
+    "personality": "Founder and master of ceremonies of the Pit. Retired undefeated, keeps score of everything, forgives almost nothing, remembers your first win better than you do",
+    "district": "the_grid",
+    "arc_theme": "What the crowd takes from you",
+    "romanceable": true,
+    "starting_disposition": 0,
+    "attributes": {
+      "courage": 10,
+      "charm": 8,
+      "empathy": 6,
+      "luck": 7
+    },
+    "preferences": {
+      "sports": {
+        "sentiment": "love"
+      },
+      "fitness": {
+        "sentiment": "love"
+      },
+      "music": {
+        "sentiment": "like"
+      },
+      "books": {
+        "sentiment": "dislike"
+      }
+    },
+    "schedule": [
+      {
+        "start": "16:00",
+        "end": "04:00",
+        "district": "the_pit",
+        "location": "ringside",
+        "activity": "Ringside, running the card",
+        "available": true
+      },
+      {
+        "start": "04:00",
+        "end": "16:00",
+        "district": "the_grid",
+        "location": "tide_line",
+        "activity": "Walking the flooded maintenance levels. Don't.",
+        "available": false
+      }
+    ],
+    "companion": {
+      "role": "tank",
+      "element": "kinetic",
+      "hp_mult": 1.5,
+      "atk_mult": 1.0,
+      "requires_event": "defeated:ondo_the_bell",
+      "locked_blurb": "They won't stand beside anyone they haven't stood across from.",
+      "blurb": "Fifteen years retired and still nobody's laid them down. The bell rings; they step in front of you like a door closing."
+    }
   }
 }

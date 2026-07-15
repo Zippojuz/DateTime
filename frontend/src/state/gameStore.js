@@ -17,6 +17,7 @@ export const useGameStore = create((set, get) => ({
   actions: null, // { id: {label, minutes, energy, ...} }
   topics: null, // registry: { id: {name, changeable} }
   districts: null, // registry: { id: {name, vibe, adjacent} }
+  venues: null, // registry: { id: {name, district, vibe, hours} } — places inside districts
   items: null, // registry: { id: {name, type, rarity, ...} }
   protocols: null, // registry: { id: {name, kind, heat|energy, ...} }
   statuses: null, // registry: { id: {name, side, color, hint} }
@@ -71,17 +72,28 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts, items, protocols, statuses] =
+      const [attributes, actions, topics, districts, venues, items, protocols, statuses] =
         await Promise.all([
           api.attributes(),
           api.actions(),
           api.topics(),
           api.districts(),
+          api.venues(),
           api.items(),
           api.protocols(),
           api.statuses(),
         ])
-      set({ attributes, actions, topics, districts, items, protocols, statuses, connection: 'ok' })
+      set({
+        attributes,
+        actions,
+        topics,
+        districts,
+        venues,
+        items,
+        protocols,
+        statuses,
+        connection: 'ok',
+      })
     } catch (err) {
       set({ connection: 'error', connectionError: err.message, screen: 'title' })
       return
@@ -453,6 +465,7 @@ export const useGameStore = create((set, get) => ({
       get()._pushEvents(events)
       get().loadCharacters() // availability changes as the clock advances
       get().loadGigs()
+      get().loadArena() // the Pit's doors track the clock
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -468,6 +481,7 @@ export const useGameStore = create((set, get) => ({
       get().loadJobs()
       get().loadGigs()
       get().loadShop()
+      get().loadArena() // open state + bell line track the clock and your record
     } catch (err) {
       set({ error: err.message, busy: false })
     }

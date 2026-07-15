@@ -22,6 +22,7 @@ from game import (
     gifts,
     inventory,
     jobs,
+    places,
     preferences,
     save,
     shop,
@@ -82,6 +83,10 @@ def create_app():
     @app.get("/api/districts")
     def districts():
         return jsonify(data.load("districts"))
+
+    @app.get("/api/venues")
+    def venues():
+        return jsonify(data.load("venues"))
 
     @app.get("/api/protocols")
     def protocols():
@@ -592,8 +597,8 @@ def create_app():
         models = save.load_models()
         if models is None:
             return jsonify(error="No game in progress."), 404
-        _, player, _clock = models
-        return jsonify(arena.view(player))
+        _, player, clock = models
+        return jsonify(arena.view(player, clock))
 
     @app.post("/api/arena/fight")
     def arena_fight():
@@ -625,15 +630,20 @@ def create_app():
             if not spec:
                 continue
             affection = social.get_affection(save_id, cid, day)
+            # Some companions want more than affection — Ondo won't delve with
+            # anyone who hasn't beaten them in the ring.
+            event = spec.get("requires_event")
+            locked = bool(event) and event not in player.fired_events
             candidates.append(
                 {
                     "id": cid,
                     "name": npc.name,
                     "role": spec["role"],
                     "element": spec["element"],
-                    "blurb": spec.get("blurb", ""),
+                    "blurb": spec.get("locked_blurb", "") if locked else spec.get("blurb", ""),
                     "affection": affection,
-                    "recruitable": affection >= dungeon.RECRUIT_AFFECTION,
+                    "locked": locked,
+                    "recruitable": not locked and affection >= dungeon.RECRUIT_AFFECTION,
                 }
             )
         return jsonify(
@@ -659,6 +669,10 @@ def create_app():
             return jsonify(error="No such character."), 404
         if not npc.companion:
             return jsonify(error=f"{npc.name} won't delve."), 400
+        event = npc.companion.get("requires_event")
+        if event and event not in player.fired_events:
+            reason = npc.companion.get("locked_blurb", f"{npc.name} isn't ready to follow you.")
+            return jsonify(error=reason), 400
         if player.dungeon.get("active"):
             return jsonify(error="You can't change your party inside the Substrate."), 400
         affection = social.get_affection(save_id, npc.id, _day_index(clock))
@@ -781,8 +795,8 @@ def create_app():
         if not avail["available"]:
             return jsonify(error=f"{npc.name} isn't available right now."), 400
         if avail.get("district") != player.location:
-            districts = data.load("districts")
-            where = districts.get(avail.get("district"), {}).get("name", "another district")
+            place = places.get(avail.get("district")) or {}
+            where = place.get("name", "another district")
             return jsonify(error=f"You need to be in {where} to reach {npc.name}."), 400
         if social.has_talked_today(save_id, npc.id, _day_index(clock)):
             return jsonify(error=f"You've already spent real time with {npc.name} today."), 400

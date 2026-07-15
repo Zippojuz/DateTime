@@ -2,9 +2,12 @@
 
 Trees are authored in data/dialogues.json, keyed by dialogue id. A node has
 `text` and `choices`; a choice has `text`, `next` (node id or null to end),
-optional `affection`, and optional `requires` (attribute thresholds — a light
-stat gate). Choice text is rendered through the pronoun helper so player (and
-NPC) references resolve correctly, respecting the player's *current* pronouns.
+optional `affection`, optional `requires` (attribute thresholds — a light
+stat gate, shown locked), and optional `requires_event` (a fired-event marker
+like "defeated:ondo_the_bell" — hidden entirely until it's true, so story
+payoffs don't spoil themselves as grayed-out options). Choice text is rendered
+through the pronoun helper so player (and NPC) references resolve correctly,
+respecting the player's *current* pronouns.
 """
 
 from game import data
@@ -98,6 +101,9 @@ def node_view(tree, node_id, player):
     pronouns = player.current_identity.get("pronouns", "they/them")
     choices = []
     for index, choice in enumerate(node["choices"]):
+        event = choice.get("requires_event")
+        if event and event not in player.fired_events:
+            continue  # hidden, not locked — indices stay stable via `index`
         requires = choice.get("requires")
         choices.append(
             {
@@ -128,5 +134,8 @@ def resolve_choice(tree, node_id, choice_index, player):
     choice = node["choices"][choice_index]
     requires = choice.get("requires")
     if requires and not _meets(player, requires):
+        raise GameError("You don't meet the requirement for that option.")
+    event = choice.get("requires_event")
+    if event and event not in player.fired_events:
         raise GameError("You don't meet the requirement for that option.")
     return choice.get("next"), choice

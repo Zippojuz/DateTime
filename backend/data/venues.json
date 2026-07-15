@@ -1,0 +1,11 @@
+{
+  "the_pit": {
+    "id": "the_pit",
+    "name": "The Pit",
+    "district": "the_grid",
+    "vibe": "A drained coolant cistern three levels under the Grid. Scaffold seating bolted to the tank walls, one ring of scavenged stadium light, and a brass ship's bell that decides everything. The crowd never forgets a name.",
+    "hours": { "open": "16:00", "close": "04:00" },
+    "closed_line": "The hatch is chained and the tank below is dark. A hand-lettered sign: FIRST BELL AT 16:00.",
+    "enter_line": "You climb down the service ladder into heat, noise, and the smell of ozone and old blood."
+  }
+}

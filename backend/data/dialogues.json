@@ -609,5 +609,193 @@
         ]
       }
     }
+  },
+  "ondo_intro": {
+    "id": "ondo_intro",
+    "npc": "ondo",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "Ringside, the noise bends around a still point: a tall figure in a tailored longcoat, lacquered nails resting on the bell rope, dock-worker shoulders holding the coat like scaffolding. Ondo Marr looks at you the way an assayer looks at ore. \u201cI know every name on my card and most of the ones off it. Yours is new. Say it like you plan to keep it.\u201d",
+        "choices": [
+          {
+            "text": "I'm {name}. You'll be ringing that bell for me soon.",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "[Courage] I'm {name}. Ring it now and find out.",
+            "next": "n2b",
+            "affection": 3,
+            "requires": {
+              "courage": 6
+            }
+          },
+          {
+            "text": "Who's asking?",
+            "next": "n3",
+            "affection": 1
+          },
+          {
+            "text": "Nice coat. Who'd you rob?",
+            "next": "n_cold",
+            "offense": {
+              "delta": -3,
+              "severity": "minor"
+            }
+          }
+        ]
+      },
+      "n2": {
+        "text": "\u201cEverybody plans.\u201d They tug the rope once \u2014 not a ring, a promise. \u201cThe bell doesn't care about plans. It cares about who's still standing when it gets bored. But I'll remember you said it.\u201d They will. You can tell they will.",
+        "choices": [
+          {
+            "text": "What is this place, really?",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "And you? Who rings the bell for you?",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Then put me on the card.",
+            "next": "n6",
+            "affection": 2
+          }
+        ]
+      },
+      "n2b": {
+        "text": "Something crosses their face \u2014 too quick to name, too warm to be anger. \u201cFifteen years and the mouthy ones still walk in like the floor's theirs.\u201d They lean in; ozone and cedar. \u201cI like it. Don't die before it gets interesting.\u201d",
+        "choices": [
+          {
+            "text": "What is this place, really?",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "And you? Who rings the bell for you?",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Then put me on the card.",
+            "next": "n6",
+            "affection": 2
+          }
+        ]
+      },
+      "n3": {
+        "text": "\u201cOndo Marr. I built this tank, I keep its book, and I ring its bell.\u201d They nod at the crowd above \u2014 tiers of faces lit like a verdict. \u201cThey come to watch people find out what they're made of. I come to make sure the finding-out is fair.\u201d",
+        "choices": [
+          {
+            "text": "Fair? In an unlicensed fight ring?",
+            "next": "n4",
+            "affection": 2
+          },
+          {
+            "text": "I'm {name}. Put me in the book.",
+            "next": "n6",
+            "affection": 2
+          }
+        ]
+      },
+      "n4": {
+        "text": "\u201cFairest floor in Nexus. No betting in my house \u2014 you wager on a fighter, you've decided what they're worth before they show you. The corps price everything.\u201d The lacquered nails drum once on the rope. \u201cDown here the only currency is what you do when you're out of everything else. The crowd pays attention. That's all it pays, and it's the only honest wage in the city.\u201d",
+        "choices": [
+          {
+            "text": "That's the most romantic thing I've heard all week.",
+            "next": "n5",
+            "affection": 3,
+            "express": "sports"
+          },
+          {
+            "text": "Attention doesn't buy dinner.",
+            "next": "n6",
+            "affection": 1
+          }
+        ]
+      },
+      "n5": {
+        "text": "A beat. The crowd roars at something in the ring and Ondo doesn't turn to look \u2014 they're looking at you. \u201cNobody,\u201d they say at last. \u201cI rang it for myself, once. Last time it ever spoke to me.\u201d The subject closes like a door, politely.",
+        "choices": [
+          {
+            "text": "Why did you really retire?",
+            "next": "n_wall",
+            "affection": 1
+          },
+          {
+            "text": "You could just tell me. I've heard your last fight from the other side of the bell.",
+            "next": "n_answer",
+            "affection": 5,
+            "requires_event": "defeated:ondo_the_bell"
+          },
+          {
+            "text": "Then I'll make it speak again.",
+            "next": "n6",
+            "affection": 2
+          }
+        ]
+      },
+      "n_wall": {
+        "text": "\u201cEveryone asks. The kind ones ask twice.\u201d They straighten your collar with two fingers, unhurried, proprietary. \u201cClimb my ladder, little bell. Ask me again from the top step \u2014 if you still want the answer more than the belt.\u201d",
+        "choices": [
+          {
+            "text": "I'll hold you to that.",
+            "next": "n6",
+            "affection": 2
+          },
+          {
+            "text": "Leave it.",
+            "next": null
+          }
+        ]
+      },
+      "n_answer": {
+        "text": "The noise of the Pit drops away like water off a raised deck. \u201cYou know how it ends now. Not losing \u2014 winning. Two hundred and fourteen times I gave them everything and the crowd took it and asked for more, and one night I looked up mid-round and couldn't find myself anywhere in the roar.\u201d Their hand finds the rope, then your shoulder \u2014 choosing the second. \u201cSo I walked. Built a house where the crowd gives it back instead. Then you came down my ladder and beat me in it, and for the first time in fifteen years \u2014\u201d they ring the bell, once, soft, \u201c\u2014 it spoke.\u201d",
+        "choices": [
+          {
+            "text": "It said your name. I heard it.",
+            "next": null,
+            "affection": 6
+          },
+          {
+            "text": "Then keep it ringing. I'm not going anywhere.",
+            "next": null,
+            "affection": 6
+          }
+        ]
+      },
+      "n6": {
+        "text": "The book appears from a coat pocket \u2014 paper, actual paper, every page a decade of names. They write yours slowly, like it deserves penmanship. \u201cFight nights run four to four. Win and the crowd learns you. Lose and \u2014\u201d a shrug that moves the whole coat, \u201c\u2014 lose like it's worth watching, and they'll learn you anyway.\u201d",
+        "choices": [
+          {
+            "text": "See you at first bell.",
+            "next": null,
+            "affection": 2
+          },
+          {
+            "text": "Watch close, then.",
+            "next": null,
+            "affection": 2
+          }
+        ]
+      },
+      "n_cold": {
+        "text": "\u201cA dead man's estate sale, and I paid double because his widow was short.\u201d The look they give you weighs and files you. \u201cIn my house we're rude in the ring and courteous out of it. You've got it backwards. Fixable. Most things are.\u201d",
+        "choices": [
+          {
+            "text": "...Fair. Starting over: I'm {name}.",
+            "next": "n3",
+            "affection": 1
+          },
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
+      }
+    }
   }
 }

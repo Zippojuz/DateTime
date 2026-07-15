@@ -602,5 +602,56 @@
         }
       ]
     }
+  },
+  "ondo_the_bell": {
+    "id": "ondo_the_bell",
+    "name": "Ondo \u201cThe Bell\u201d Marr",
+    "role": "boss",
+    "tier": 3,
+    "element": "kinetic",
+    "hp": 420,
+    "attack": 34,
+    "defense": 17,
+    "speed": 22,
+    "xp": 0,
+    "credits": 0,
+    "description": "The founder steps down from the bell rope, hangs their longcoat on the hook that has waited fifteen years, and rolls their shoulders once. They are not the hardest fight in the Pit. They are the reason the Pit measures hardness.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "First Bell",
+          "power": 2.4,
+          "every_n_turns": 3,
+          "telegraph": "Ondo reaches up without looking and rings the bell themself. The tone hangs in the tank \u2014 low, patient, incoming.",
+          "inflicts": {
+            "effect": "slow",
+            "turns": 2
+          }
+        },
+        {
+          "name": "Fifteen Years",
+          "power": 2.0,
+          "every_n_turns": 4,
+          "telegraph": "They take one slow step back and study you the way they study every fighter on the card: kindly, and completely.",
+          "inflicts": {
+            "effect": "marked",
+            "turns": 3
+          }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.6,
+          "attack_mult": 1.15,
+          "text": "Ondo smiles for the first time all fight. \u201cThere you are,\u201d they say, and the crowd forgets to breathe."
+        },
+        {
+          "hp_below": 0.25,
+          "attack_mult": 1.3,
+          "defense_mult": 0.9,
+          "text": "FINAL ROUND. The bell rings itself \u2014 nobody touched it \u2014 and the founder stops holding back what retirement never took."
+        }
+      ]
+    }
   }
 }

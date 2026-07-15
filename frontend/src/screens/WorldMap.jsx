@@ -8,7 +8,7 @@ import TravelPanel from '../components/TravelPanel.jsx'
 import EncounterCard from '../components/EncounterCard.jsx'
 import JobPanel from '../components/JobPanel.jsx'
 import GigPanel from '../components/GigPanel.jsx'
-import ArenaPanel from '../components/ArenaPanel.jsx'
+import PitView from '../components/PitView.jsx'
 import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
@@ -27,6 +27,7 @@ export default function WorldMap() {
   const actions = useGameStore((s) => s.actions)
   const registry = useGameStore((s) => s.attributes)
   const districts = useGameStore((s) => s.districts)
+  const venues = useGameStore((s) => s.venues)
   const doAction = useGameStore((s) => s.doAction)
   const busy = useGameStore((s) => s.busy)
   const error = useGameStore((s) => s.error)
@@ -35,7 +36,8 @@ export default function WorldMap() {
 
   if (!state) return null
   const { player, clock } = state
-  const here = districts?.[player.location]
+  const insideVenue = venues?.[player.location]
+  const here = districts?.[player.location] ?? insideVenue
 
   return (
     <main className="world-map">
@@ -47,7 +49,12 @@ export default function WorldMap() {
           </span>
         </div>
         <div className="hud-place">
-          <span className="hud-district">{here?.name ?? player.location}</span>
+          <span className="hud-district">
+            {here?.name ?? player.location}
+            {insideVenue && (
+              <span className="hud-under"> · under {districts?.[insideVenue.district]?.name}</span>
+            )}
+          </span>
           <span className="hud-sub">{player.credits} cr</span>
         </div>
         <div className="hud-identity">
@@ -74,7 +81,7 @@ export default function WorldMap() {
       <SubstratePanel />
       <JobPanel />
       <GigPanel />
-      <ArenaPanel />
+      <PitView />
       <ClinicPanel />
       <ShopPanel />
       <InventoryPanel />

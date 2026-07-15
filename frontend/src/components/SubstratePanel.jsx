@@ -81,11 +81,13 @@ export default function SubstratePanel() {
                       title={
                         c.recruitable
                           ? ''
-                          : `Needs ${party.required_affection}+ affection (now ${c.affection})`
+                          : c.locked
+                            ? c.blurb
+                            : `Needs ${party.required_affection}+ affection (now ${c.affection})`
                       }
                       onClick={() => recruitCompanion(c.id)}
                     >
-                      Recruit
+                      {c.locked ? '🔒 Recruit' : 'Recruit'}
                     </button>
                   )}
                 </li>

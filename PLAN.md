@@ -447,6 +447,46 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   +15 pytest (279 total); verified live — 9-win climb (zero XP/credit gain),
   Gatekeeper's Bout and The Canonization both won in-browser.
 
+### Follow-up: the Pit becomes a real place + Ondo the pit master ✅ DONE
+- **Places layer** (`game/places.py` + `data/venues.json`): a *place* is a
+  district OR a venue nested inside one; `player.location` may hold either.
+  Neighborhood rules (travel cost/adjacency) resolve via `district_of()`;
+  room rules (NPC reach, shops, fight gates) compare place ids exactly.
+  Venues keep hours (midnight-wrapping); districts never close. Travel gains
+  a **local hop** (5 min / 1 energy) for same-district moves; entering a
+  closed venue is refused with its `closed_line`. New venues = one JSON
+  entry (gym, library etc. later). GET /api/venues; travel accepts venue ids.
+- **The Pit moved into The Grid** — a drained coolant cistern three levels
+  under the district (cred stage "Name in the Grid" now literal). Open
+  16:00–04:00; fights require being *inside* during open hours. TravelPanel
+  shows gold venue chips ("here · 16:00–04:00 · Enter · 5m"), the HUD reads
+  "The Pit · under The Grid", PitView (replaces ArenaPanel) renders the whole
+  venue: fight card, closed-state, the belt rack, and the book.
+- **Ondo "The Bell" Marr** (they/them, andro-masc): ninth cast member, the
+  Pit's founder — retired undefeated 15 years ago, mid-fight, and won't say
+  why. Ringside 16:00–04:00 (reachable only inside the venue), romanceable,
+  loves sports/fitness, hates betting on fighters ("you've decided what
+  they're worth before they show you"). `ondo_intro` dialogue with
+  record-aware bell-line greetings on the arena board.
+- **The Founder's Bout (fight #50)**: Ondo steps into their own ring once —
+  the true apex, out-statting Zenith on every stat (420hp/34atk/17def/22spd,
+  First Bell telegraph, FINAL ROUND enrage). NO purse ("you don't get paid to
+  beat them; you get remembered") — 100 cred + the legendary Founder's Bell.
+  Championship wins now leave `defeated:<enemy>` markers (same as dungeon
+  bosses); Ondo's tank companion (hp×1.5) and the answer to their retirement
+  (a `requires_event`-hidden dialogue choice — new dialogue capability,
+  hidden not locked, so payoffs don't spoil themselves) both key off beating
+  them. #60+ falls through to Apex rematches unchanged.
+- **The book + belt rack**: arena.json leaderboard of nine named fighters
+  (Zenith 214W … Moth 8W) with the player's row spliced in by wins (ties go
+  to the named fighter); Ondo sits above the table, unranked, "Undefeated
+  (retired)". Belts show holder → YOURS as titles are taken. Victory
+  outcomes carry a crowd line keyed to your cred stage.
+- +20 pytest (305 total, incl. dialogue event-gating and venue travel), 18
+  vitest; verified live end-to-end (closed-door refusal at 08:00, evening
+  entry, Ondo talk/gift, bout win, locked recruit refusal) + Playwright
+  screenshots of PitView/travel chips/HUD.
+
 ### Follow-up: cyberpunk city — corps, markets, the fixer, the ripperdoc ✅ DONE
 - **The Triumvirate** (`corps.json` + `game/corps.py`): Oceania Consolidated
   ("SAFETY IS FREEDOM" — surveillance that loves you), Eurasia Heavy

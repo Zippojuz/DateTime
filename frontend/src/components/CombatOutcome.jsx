@@ -24,7 +24,7 @@ export default function CombatOutcome() {
             </h2>
             {arena ? (
               <p className="outcome-sub">
-                Win #{result.wins} in the Pit. The crowd decides it loves you.
+                Win #{result.wins} in the Pit.{result.crowd ? ` ${result.crowd}` : ''}
               </p>
             ) : (
               result.enemy && <p className="outcome-sub">{result.enemy} falls.</p>
@@ -63,7 +63,7 @@ export default function CombatOutcome() {
                     <dd>{champ.title}</dd>
                   </div>
                 )}
-                {champ && (
+                {champ && champ.purse > 0 && (
                   <div>
                     <dt>Purse</dt>
                     <dd>+{champ.purse} cr</dd>

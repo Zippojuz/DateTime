@@ -1,18 +1,21 @@
-"""The Pit — an unlicensed arena under the Docking Quarter. (data/arena.json)
+"""The Pit — an unlicensed arena, a real venue under the Grid. (data/arena.json)
 
 A pure win ladder: losses cost nothing and don't advance it. Every 10th WIN is
 a championship bout against a named champion; the first four titles pay a
-purse, a unique prize, and real street cred, and the deepest two champions are
-the hardest fights in the game — harder than anything under floor ten. Past
-the fourth title, every 10th win is an Apex rematch (cred and purse only).
+purse, a unique prize, and real street cred, and the deepest champions are the
+hardest fights in the game — harder than anything under floor ten. Fight #50
+is the Founder's Bout: Ondo Marr, the pit master, steps into their own ring
+one time. Past the listed titles, every 10th win is an Apex rematch (cred and
+purse only).
 
 Regular bouts pay no XP, no credits, no drops (combat's arena flag handles
-that) — one point of cred per win. The Pit pays in reputation.
+that) — one point of cred per win. The Pit pays in reputation, and keeps the
+book: a leaderboard of named fighters the player's record is spliced into.
 """
 
 import random as _random
 
-from game import combat, data, inventory
+from game import combat, data, inventory, places
 from game.errors import GameError
 
 # Reputation thresholds -> how the city knows you.
@@ -82,10 +85,12 @@ def next_bout(player):
 
 
 def start_fight(player, clock):
-    """Step into the Pit: full HP, no companion (no seconds), arena rules."""
+    """Step into the ring: full HP, no companion (no seconds), arena rules."""
     cfg = _config()
-    if player.location != cfg["district"]:
-        raise GameError("The Pit is under the docks — Docking Quarter only.")
+    if player.location != cfg["venue"]:
+        raise GameError("Fights start in the tank — step down into the Pit first.")
+    if not places.is_open(cfg["venue"], clock):
+        raise GameError(data.load("venues")[cfg["venue"]]["closed_line"])
     if player.combat.get("active"):
         raise GameError("You're already in a fight.")
     if player.dungeon.get("active"):
@@ -101,9 +106,17 @@ def start_fight(player, clock):
     max_hp = combat.player_stats(player)["max_hp"]
     player.combat = combat.start(player, bout["enemy"]["id"], floor, max_hp, arena=True)
     if bout["championship"]:
-        player.combat["log"].insert(
-            0, f"CHAMPIONSHIP — {bout['title']}. The Pit goes quiet, then very loud."
-        )
+        # The pit master announces title bouts personally — except their own.
+        if bout["enemy"]["id"] == "ondo_the_bell":
+            line = (
+                "Ondo hands the bell rope to a stranger and steps into their own "
+                "ring. The Pit makes a sound you will never hear again."
+            )
+        else:
+            line = (
+                f"Ondo rings the bell themself. “{bout['title']},” they call, and the Pit answers."
+            )
+        player.combat["log"].insert(0, f"CHAMPIONSHIP — {line}")
     return bout
 
 
@@ -140,24 +153,96 @@ def finish_fight(player):
         if champ.get("prize"):
             inventory.add_item(player, champ["prize"], 1)
             outcome["championship"]["prize"] = inventory.get_item(champ["prize"])["name"]
+        # Beating a named champion is a fact the city remembers — the same
+        # marker dungeon boss victories leave (dialogue and companions key on it).
+        marker = f"defeated:{champ['enemy']}"
+        if marker not in player.fired_events:
+            player.fired_events.append(marker)
     player.street_cred += cred
     outcome["cred_gained"] = cred
     outcome["street_cred"] = player.street_cred
+    outcome["crowd"] = cfg["crowd_lines"].get(cred_stage(player.street_cred))
     return outcome
 
 
-def view(player):
-    """The Pit's card, record, and standing for the API."""
+def leaderboard(player):
+    """The book: named fighters ranked by wins, the player spliced in. On a
+    tie the named fighter ranks first — they got there before you."""
+    rows = [dict(row) for row in _config()["leaderboard"]]
+    rows.append(
+        {
+            "name": player.current_identity.get("name", "You"),
+            "wins": player.arena_wins,
+            "note": cred_stage(player.street_cred),
+            "you": True,
+        }
+    )
+    rows.sort(key=lambda row: (-row["wins"], row.get("you", False)))
+    for rank, row in enumerate(rows, 1):
+        row["rank"] = rank
+    return rows
+
+
+def belts(player):
+    """The belt rack: each title, who holds it, and whether you've taken it."""
+    rack = []
+    for number, spec in sorted(_config()["championships"].items(), key=lambda kv: int(kv[0])):
+        claimed = player.arena_wins >= int(number)
+        enemy = data.load("enemies")[spec["enemy"]]
+        rack.append(
+            {
+                "number": int(number),
+                "title": spec["title"],
+                "holder": enemy["name"],
+                "claimed": claimed,
+            }
+        )
+    return rack
+
+
+def _bell_line(player):
+    """Ondo's ringside greeting — the pit master tracks your record closer
+    than you do."""
+    wins = player.arena_wins
+    if "defeated:ondo_the_bell" in player.fired_events:
+        return (
+            "Ondo catches your eye from the bell rope and — for you, only for "
+            "you — inclines their head."
+        )
+    if wins == 0:
+        return "Ondo studies you from the bell rope. “New name. Say it like you plan to keep it.”"
+    if wins < 10:
+        return (
+            f"“{wins} on the book,” Ondo says without checking it. “The Gatekeeper waits at ten.”"
+        )
+    if wins < 40:
+        return "Ondo marks your walk-in with a slow nod. Your page in the book has history now."
+    if wins < 50:
+        return "“The card runs out at the top, little bell,” Ondo says, and doesn't look away."
+    return "Ondo watches you the way the crowd watches Ondo."
+
+
+def view(player, clock=None):
+    """The Pit's card, record, book, and standing for the API."""
     cfg = _config()
+    venue = data.load("venues").get(cfg["venue"], {})
     return {
         "name": cfg["name"],
+        "venue": cfg["venue"],
         "district": cfg["district"],
         "blurb": cfg["blurb"],
         "energy": cfg["energy"],
         "minutes": cfg["minutes"],
+        "hours": venue.get("hours"),
+        "open": places.is_open(cfg["venue"], clock) if clock else True,
+        "closed_line": venue.get("closed_line"),
         "wins": player.arena_wins,
         "titles": min(player.arena_wins // 10, len(cfg["championships"])),
         "street_cred": player.street_cred,
         "cred_stage": cred_stage(player.street_cred),
         "next": next_bout(player),
+        "founder": cfg["founder"],
+        "bell_line": _bell_line(player),
+        "leaderboard": leaderboard(player),
+        "belts": belts(player),
     }
