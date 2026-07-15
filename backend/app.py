@@ -313,7 +313,11 @@ def create_app():
         return jsonify(
             {
                 "state": save.state_dict(player, clock),
-                "result": {"text": choice["result"], "pay": choice["pay"]},
+                "result": {
+                    "text": choice["result"],
+                    "pay": choice["pay"],
+                    "cred_gained": choice.get("cred", 0),
+                },
                 "events": fired,
             }
         )

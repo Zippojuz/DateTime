@@ -167,6 +167,7 @@ export const useGameStore = create((set, get) => ({
       get()._pushEvents(res.events)
       get().loadGigs()
       get().loadCharacters() // gigs move opinions — cleanly or otherwise
+      get().loadShop() // dirty-gig cred can open black-market back rooms
     } catch (err) {
       set({ error: err.message, busy: false })
     }

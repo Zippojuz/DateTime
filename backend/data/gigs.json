@@ -27,7 +27,8 @@
           "npc": "vael",
           "delta": -4,
           "severity": "moderate"
-        }
+        },
+        "cred": 3
       }
     ]
   },
@@ -59,7 +60,8 @@
           "npc": "sora",
           "delta": -4,
           "severity": "moderate"
-        }
+        },
+        "cred": 3
       }
     ]
   },
@@ -91,7 +93,8 @@
           "npc": "miko",
           "delta": -4,
           "severity": "moderate"
-        }
+        },
+        "cred": 3
       }
     ]
   },
@@ -123,7 +126,8 @@
           "npc": "vael",
           "delta": -4,
           "severity": "moderate"
-        }
+        },
+        "cred": 3
       }
     ]
   }

@@ -36,6 +36,9 @@ def run_gig(player, clock, day_index, gig_id, choice_index):
     choice = gig["choices"][choice_index]
     player.energy -= gig["energy"]
     player.credits += choice["pay"]
+    # The dirty option builds a certain kind of name — the wrong people
+    # notice, approvingly.
+    player.street_cred += choice.get("cred", 0)
     player.last_gig_day = day_index
     clock.advance(gig["minutes"])
     return choice

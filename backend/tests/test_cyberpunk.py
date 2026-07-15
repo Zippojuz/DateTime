@@ -191,6 +191,17 @@ def test_every_gig_forks_clean_and_dirty():
         clean, dirty = gig["choices"]
         assert dirty["pay"] > clean["pay"]  # the dirty option always pays better
         assert dirty.get("offense"), "the dirty option always costs someone's opinion"
+        assert dirty.get("cred", 0) > 0, "the wrong people always notice, approvingly"
+        assert clean.get("cred", 0) == 0  # clean work builds no such name
+
+
+def test_dirty_gigs_pay_street_cred_clean_ones_dont():
+    clean_hand = _fixer_player()
+    fixer.run_gig(clean_hand, GameClock(), 1, fixer.today_gig(1)["id"], 0)
+    assert clean_hand.street_cred == 0
+    dirty_hand = _fixer_player()
+    choice = fixer.run_gig(dirty_hand, GameClock(), 1, fixer.today_gig(1)["id"], 1)
+    assert dirty_hand.street_cred == choice["cred"] > 0
 
 
 @pytest.fixture
@@ -218,6 +229,8 @@ def test_gig_api_applies_the_dirty_fork(client):
     assert res.status_code == 200
     body = res.get_json()
     assert body["result"]["pay"] == dirty["pay"]
+    assert body["result"]["cred_gained"] == dirty["cred"]
+    assert body["state"]["player"]["street_cred"] == dirty["cred"]
     after = {c["id"]: c["affection"] for c in client.get("/api/characters").get_json()}
     victim = dirty["offense"]["npc"]
     assert after[victim] < before[victim]  # word travels

@@ -414,6 +414,11 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   refreshes when cred moves (arena outcomes, dungeon depth records).
 - Data-integrity tests (dungeon-only, duplicates) now sweep tier stock too.
   +7 pytest (284 total); verified live at 0 and 45 cred in-browser.
+- **Dirty gigs pay cred**: every dirty fork on Vex's board grants +3 street
+  cred ("the wrong people notice, approvingly") on top of the better pay and
+  the cast offense — clean work builds no such name. Shown on the gig
+  buttons/results; the shop refreshes after gigs since cred can open Bazaar
+  rooms. (+2 pytest, 285 total.)
 
 ### Follow-up: The Pit (battle arena) + street cred ✅ DONE
 - **The Pit** (`arena.json` + `game/arena.py`): unlicensed ring in a drained

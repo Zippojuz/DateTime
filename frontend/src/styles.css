@@ -1521,6 +1521,11 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
+.gig-cred {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
 .gig-choices {
   display: flex;
   flex-direction: column;

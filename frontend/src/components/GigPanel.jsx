@@ -19,6 +19,9 @@ export default function GigPanel() {
       {lastGig && (
         <p className="gig-result">
           {lastGig.text} <span className="gig-pay">+{lastGig.pay} cr</span>
+          {lastGig.cred_gained > 0 && (
+            <span className="gig-cred"> · +{lastGig.cred_gained} cred</span>
+          )}
         </p>
       )}
       {done ? (
@@ -40,6 +43,7 @@ export default function GigPanel() {
                 onClick={() => workGig(gig.id, i)}
               >
                 {c.text} <span className="gig-pay">+{c.pay} cr</span>
+                {c.cred > 0 && <span className="gig-cred"> · +{c.cred} cred</span>}
               </button>
             ))}
           </div>
