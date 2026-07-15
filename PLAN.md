@@ -400,6 +400,33 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: cyberpunk city — corps, markets, the fixer, the ripperdoc ✅ DONE
+- **The Triumvirate** (`corps.json` + `game/corps.py`): Oceania Consolidated
+  ("SAFETY IS FREEDOM" — surveillance that loves you), Eurasia Heavy
+  Industries ("STRENGTH IS UNITY" — the people's muscle), Eastasia
+  Transcendence ("THE SELF IS A DOOR" — premium ego-loss). Forever at "war":
+  two allies vs one enemy, rotating weekly, each week declared eternal.
+  Exactly the same at heart — every flagship ships from Plant 7. Street ads
+  (new travel encounter kind) name-drop the current war. GET /api/corps.
+- **Two cyberware markets**: The Triumvirate Exchange (Citadel Ring, 1.7×
+  — cheap shelves are robbery, but the corp flagship augments are exclusive
+  to it: PanOpt Suite, Atlas Frame, Ghostlace). The Static Bazaar (The Grid,
+  0.55× — used chrome, honest prices, no receipts; discounted augments).
+  Shop payloads carry a flavor blurb.
+- **Mama Vex, the fixer** — the debt finally has a face. Full romanceable in
+  the Docking Quarter back room (noon–2am). Her gig board (gigs.json,
+  migration 10 `last_gig_day`): one gig a day, every gig forking clean
+  (fair pay, sometimes a cast member approves) vs dirty (better pay + a
+  moderate offense with someone who hears about it). GET /api/gigs,
+  POST /api/gig; GigPanel UI.
+- **Juno, the ripperdoc** — Second Skin clinic in The Grid: the
+  transformation system's home. Full romanceable; her trust unlocks identity
+  aspects (affection 15 → appearance, 25 → pronouns, 40 → body), and
+  transforms now happen at the clinic (a place, never an identity gate —
+  the paperwork is very forgiving). ClinicPanel UI with per-aspect editing.
+- Intro dialogue trees for both. +13 pytest (259 total); verified live
+  (dirty gig fork, both markets, unlock thresholds, clinic transform, ads).
+
 ### Follow-up: hacking — the casting stat ✅ DONE
 - Seventh registry attribute: **hacking** ("how well your lace obeys").
   Trainable/visible/mirrored automatically; old saves gain it at 5.
@@ -520,7 +547,10 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 | Story & seasonal events, jobs | 4 | ✅ DONE — see below |
 | Combat | 5 | ✅ DONE — see below |
 | Crafting, gifting, full arcs | 6 | ⚑ Gifting/inventory/shop DONE — see below; crafting deferred |
-| Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets |
+| Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets; **UI grime** (NEXUS OS boot screen, scanline vignette, glitch-on-damage text, terminal title) |
+| Night city rhythm | — | after-22:00 district shifts: night stock/prices, swapped encounter tables, night-only schedule windows |
+| Memory economy | — | MAYBE: dungeon memory shards (dead delvers' last recordings, lore + a quiet questline) and a memory pawnshop (pawn discovered topics/affection history for credits, buy back with interest, cast reacts) |
+| Street cred + battle arena | — | ON HOLD until arena design lands (user will say when): rep track from gigs/dungeon feats gating black-market tiers, dialogue, fixers |
 
 ---
 

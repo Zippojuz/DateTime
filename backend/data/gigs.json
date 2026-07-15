@@ -1,0 +1,130 @@
+{
+  "parcel_run": {
+    "id": "parcel_run",
+    "name": "Parcel Run",
+    "brief": "An Oceania parcel, unmarked, body-warm. Vex slides it across the table. \"Docks to the Citadel drop-box. Sealed means sealed, sweetheart.\"",
+    "minutes": 90,
+    "energy": 15,
+    "choices": [
+      {
+        "text": "Deliver it sealed.",
+        "pay": 30,
+        "result": "The drop-box swallows the parcel. Somewhere, Oceania smiles. Vex wires your cut before you're off the plaza.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        }
+      },
+      {
+        "text": "Peek inside, sell what's worth selling to a Eurasia rep.",
+        "pay": 65,
+        "result": "Optics. Prototype, still warm. The Eurasia rep pays double and doesn't blink. Citadel security starts asking around the docks by nightfall.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        },
+        "offense": {
+          "npc": "vael",
+          "delta": -4,
+          "severity": "moderate"
+        }
+      }
+    ]
+  },
+  "signal_scrub": {
+    "id": "signal_scrub",
+    "name": "Signal Scrub",
+    "brief": "\"Kid in the Shallows got flagged by Eastasia collections \u2014 inherited debt, dead mother's lace. Scrub the record.\" Vex's face says do it clean.",
+    "minutes": 90,
+    "energy": 15,
+    "choices": [
+      {
+        "text": "Wipe the record, leave no trace.",
+        "pay": 25,
+        "result": "The flag dissolves. The kid will never know it existed, which is the point. Zix hears about the handiwork and approves loudly.",
+        "affection": {
+          "npc": "zix",
+          "delta": 2
+        }
+      },
+      {
+        "text": "Wipe it \u2014 and skim the dormant accounts on the way out.",
+        "pay": 60,
+        "result": "The record dies and three dead people's balances follow you home. Clean money, technically. Sora would not call it that.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        },
+        "offense": {
+          "npc": "sora",
+          "delta": -4,
+          "severity": "moderate"
+        }
+      }
+    ]
+  },
+  "chaperone": {
+    "id": "chaperone",
+    "name": "Chaperone",
+    "brief": "\"Scared kid needs walking through the Shallows after dark. Family paid standard.\" Vex shrugs like it's nothing. Her eyes don't.",
+    "minutes": 90,
+    "energy": 15,
+    "choices": [
+      {
+        "text": "Walk them safe, charge as agreed.",
+        "pay": 20,
+        "result": "The kid talks the whole way \u2014 about music, mostly. They get home fine. Miko was playing the corner venue and saw the whole thing.",
+        "affection": {
+          "npc": "miko",
+          "delta": 2
+        }
+      },
+      {
+        "text": "Walk them safe \u2014 then bill the family double for 'hazards'.",
+        "pay": 45,
+        "result": "The family pays without meeting your eyes. The kid waves goodbye anyway, which is somehow worse. Word travels.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        },
+        "offense": {
+          "npc": "miko",
+          "delta": -4,
+          "severity": "moderate"
+        }
+      }
+    ]
+  },
+  "quiet_pickup": {
+    "id": "quiet_pickup",
+    "name": "Quiet Pickup",
+    "brief": "\"Eurasia crate, 'misplaced' at the docks, and they'd like it back before the audit. No badges, no noise.\"",
+    "minutes": 90,
+    "energy": 15,
+    "choices": [
+      {
+        "text": "Return it to Eurasia, quiet as asked.",
+        "pay": 30,
+        "result": "The crate goes home. The dock manifest never knew it left. Vex calls you 'professional', which from her is poetry.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        }
+      },
+      {
+        "text": "Sell it to Eastasia instead \u2014 this week they're at war anyway.",
+        "pay": 70,
+        "result": "Eastasia pays in crisp anonymous chits and a smile with too much serenity in it. Somewhere in the Citadel, a liability report grows your description.",
+        "affection": {
+          "npc": "vex",
+          "delta": 1
+        },
+        "offense": {
+          "npc": "vael",
+          "delta": -4,
+          "severity": "moderate"
+        }
+      }
+    ]
+  }
+}

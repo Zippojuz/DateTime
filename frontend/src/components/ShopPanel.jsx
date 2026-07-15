@@ -14,6 +14,7 @@ export default function ShopPanel() {
   return (
     <section className="shop-panel">
       <h2>{shop.name ?? 'Shop'}</h2>
+      {shop.blurb && <p className="shop-blurb">{shop.blurb}</p>}
       <ul className="shop-list">
         {shop.stock.map((item) => (
           <li key={item.id} className="shop-item">

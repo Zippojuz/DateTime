@@ -15,8 +15,9 @@
     ]
   },
   "the_grid": {
-    "name": "Grid Night Market",
-    "price_mod": 1.0,
+    "name": "The Static Bazaar",
+    "blurb": "Black market. Everything fell off a truck; the truck also fell off a truck. Used chrome, honest prices, no receipts, no questions in either direction.",
+    "price_mod": 0.55,
     "stock": [
       "stim_tea",
       "sheet_music",
@@ -28,12 +29,17 @@
       "power_gem",
       "shard_purge_cycle",
       "shard_cartographers_dream",
-      "reflex_splice"
+      "reflex_splice",
+      "reflex_splice",
+      "smartlink_eyes",
+      "subdermal_plating",
+      "composure_spray"
     ]
   },
   "citadel_ring": {
-    "name": "Citadel Provisions",
-    "price_mod": 1.1,
+    "name": "The Triumvirate Exchange",
+    "blurb": "All three corps under one gleaming roof, at war everywhere but here. The cheap shelves are robbery; the top shelf is the best money can buy.",
+    "price_mod": 1.7,
     "stock": [
       "paper_book",
       "first_edition",
@@ -41,7 +47,10 @@
       "visor",
       "plate_greaves",
       "aegis_gem",
-      "subdermal_plating"
+      "subdermal_plating",
+      "oceania_panopt",
+      "eurasia_atlas_frame",
+      "eastasia_ghostlace"
     ]
   },
   "bloom_district": {

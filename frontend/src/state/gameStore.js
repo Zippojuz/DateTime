@@ -40,6 +40,10 @@ export const useGameStore = create((set, get) => ({
   jobs: [],
   lastJob: null, // last job result: { job, pay, bonus }
 
+  // Mama Vex's daily gig: { gig, done_today, reachable }
+  gigs: null,
+  lastGig: null, // last gig result: { text, pay }
+
   // Seasonal events waiting to be acknowledged.
   pendingEvents: [],
 
@@ -98,6 +102,7 @@ export const useGameStore = create((set, get) => ({
       set({ screen: 'play' })
       get().loadCharacters()
       get().loadJobs()
+      get().loadGigs()
       get().loadShop()
       get().loadDungeon() // resume a mid-run Substrate dive
       get().loadEquipment()
@@ -112,6 +117,7 @@ export const useGameStore = create((set, get) => ({
       set({ state, hasSave: true, screen: 'play', busy: false })
       get().loadCharacters()
       get().loadJobs()
+      get().loadGigs()
       get().loadShop()
       get().loadDungeon()
       get().loadEquipment()
@@ -135,6 +141,37 @@ export const useGameStore = create((set, get) => ({
       set({ jobs: await api.jobs() })
     } catch {
       // Non-fatal.
+    }
+  },
+
+  loadGigs: async () => {
+    try {
+      set({ gigs: await api.gigs() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  workGig: async (gigId, choiceIndex) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.workGig(gigId, choiceIndex)
+      set({ state: res.state, lastGig: res.result, busy: false })
+      get()._pushEvents(res.events)
+      get().loadGigs()
+      get().loadCharacters() // gigs move opinions — cleanly or otherwise
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  transform: async (changes) => {
+    set({ busy: true, error: null })
+    try {
+      const state = await api.transform(changes)
+      set({ state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
     }
   },
 
@@ -382,6 +419,7 @@ export const useGameStore = create((set, get) => ({
       set({ state, busy: false })
       get()._pushEvents(events)
       get().loadCharacters() // availability changes as the clock advances
+      get().loadGigs()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -395,6 +433,7 @@ export const useGameStore = create((set, get) => ({
       get()._pushEvents(res.events)
       get().loadCharacters() // reachability changes with location + time
       get().loadJobs()
+      get().loadGigs()
       get().loadShop()
     } catch (err) {
       set({ error: err.message, busy: false })

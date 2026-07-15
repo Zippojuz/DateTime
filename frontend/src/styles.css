@@ -1488,6 +1488,114 @@ body {
   color: var(--text-dim);
 }
 
+/* --- Vex's gig board --- */
+
+.gig-panel h2,
+.clinic-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+  color: var(--accent);
+}
+
+.gig-name {
+  margin: 0.4rem 0 0.2rem;
+  font-size: 0.95rem;
+  color: var(--neon);
+}
+
+.gig-brief,
+.gig-note {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.gig-result {
+  color: var(--neon);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.gig-pay {
+  color: #ffe95a;
+  font-variant-numeric: tabular-nums;
+}
+
+.gig-choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.gig-choice--dirty {
+  border-color: rgba(255, 93, 162, 0.45);
+}
+
+/* --- Second Skin (Juno's clinic) --- */
+
+.clinic-blurb,
+.shop-blurb {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.clinic-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.clinic-aspect {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.clinic-aspect-name {
+  color: var(--neon);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+}
+
+.clinic-edit {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.clinic-current {
+  color: var(--text-dim);
+  font-size: 0.88rem;
+}
+
+.clinic-edit input {
+  flex: 1;
+  min-width: 8rem;
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 4px;
+  color: var(--text);
+  padding: 0.4rem 0.55rem;
+  font-family: inherit;
+}
+
+.clinic-edit input:focus {
+  border-color: var(--neon);
+  outline: none;
+}
+
+.clinic-locked {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
 @media (max-width: 720px) {
   .battle-field {
     grid-template-columns: 1fr;

@@ -144,6 +144,11 @@ def _m9_protocols(conn):
     _add_column(conn, "player", "protocols", "TEXT NOT NULL DEFAULT '[]'")
 
 
+def _m10_gigs(conn):
+    """Track the last day a fixer gig was worked (one per day)."""
+    _add_column(conn, "player", "last_gig_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -154,6 +159,7 @@ MIGRATIONS = [
     _m7_equipment,
     _m8_companion,
     _m9_protocols,
+    _m10_gigs,
 ]
 
 

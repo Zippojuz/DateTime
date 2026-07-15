@@ -391,5 +391,110 @@
       "hacking": 10,
       "charm": 8
     }
+  },
+  "vex": {
+    "id": "vex",
+    "name": "Mama Vex",
+    "pronouns": "she/her",
+    "species": "Human, allegedly",
+    "personality": "Fixer. Owns your debt, remembers your birthday, means both",
+    "district": "docking_quarter",
+    "arc_theme": "The cost of being owed",
+    "romanceable": true,
+    "starting_disposition": 0,
+    "attributes": {
+      "charm": 9,
+      "wit": 8,
+      "hacking": 6
+    },
+    "preferences": {
+      "sports": {
+        "sentiment": "love"
+      },
+      "nightlife": {
+        "sentiment": "like"
+      },
+      "books": {
+        "sentiment": "dislike"
+      },
+      "music": {
+        "sentiment": "like"
+      }
+    },
+    "schedule": [
+      {
+        "start": "12:00",
+        "end": "02:00",
+        "district": "docking_quarter",
+        "location": "dockside_bar_backroom",
+        "activity": "Holding court in the back room",
+        "available": true
+      },
+      {
+        "start": "02:00",
+        "end": "12:00",
+        "district": "docking_quarter",
+        "location": "home",
+        "activity": "Unreachable, on purpose",
+        "available": false
+      }
+    ]
+  },
+  "juno": {
+    "id": "juno",
+    "name": "Juno",
+    "pronouns": "she/her",
+    "species": "Human, extensively self-edited",
+    "personality": "Ripperdoc-confessor. Gentle hands, gentler questions",
+    "district": "the_grid",
+    "arc_theme": "Every body is a first draft",
+    "romanceable": true,
+    "starting_disposition": 5,
+    "attributes": {
+      "hacking": 11,
+      "empathy": 10,
+      "wit": 7
+    },
+    "preferences": {
+      "books": {
+        "sentiment": "like"
+      },
+      "music": {
+        "sentiment": "love"
+      },
+      "nightlife": {
+        "sentiment": "dislike"
+      },
+      "fitness": {
+        "sentiment": "like",
+        "changeable": false
+      }
+    },
+    "schedule": [
+      {
+        "start": "10:00",
+        "end": "20:00",
+        "district": "the_grid",
+        "location": "second_skin_clinic",
+        "activity": "Clinic hours at Second Skin",
+        "available": true
+      },
+      {
+        "start": "20:00",
+        "end": "23:00",
+        "district": "the_grid",
+        "location": "grid_market",
+        "activity": "Late dinner, people-watching",
+        "available": true
+      },
+      {
+        "start": "23:00",
+        "end": "10:00",
+        "district": "the_grid",
+        "location": "home",
+        "activity": "Sleeping off other people's surgeries",
+        "available": false
+      }
+    ]
   }
 }

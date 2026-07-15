@@ -65,6 +65,7 @@ class Player(Character):
         equipment=None,
         companion="",
         protocols=None,
+        last_gig_day=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -91,6 +92,8 @@ class Player(Character):
         self.companion = companion
         # Wetware protocols learned from data-shards (list of protocol ids).
         self.protocols = list(protocols or [])
+        # Last absolute day a fixer gig was worked (0 = never; one gig per day).
+        self.last_gig_day = last_gig_day
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -134,6 +137,7 @@ class Player(Character):
                 "equipment": {k: dict(v) for k, v in self.equipment.items()},
                 "companion": self.companion,
                 "protocols": list(self.protocols),
+                "last_gig_day": self.last_gig_day,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

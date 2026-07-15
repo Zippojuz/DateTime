@@ -7,6 +7,8 @@ import PlayerProfile from '../components/PlayerProfile.jsx'
 import TravelPanel from '../components/TravelPanel.jsx'
 import EncounterCard from '../components/EncounterCard.jsx'
 import JobPanel from '../components/JobPanel.jsx'
+import GigPanel from '../components/GigPanel.jsx'
+import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
 import ShopPanel from '../components/ShopPanel.jsx'
@@ -70,6 +72,8 @@ export default function WorldMap() {
       <TravelPanel />
       <SubstratePanel />
       <JobPanel />
+      <GigPanel />
+      <ClinicPanel />
       <ShopPanel />
       <InventoryPanel />
       <EquipmentPanel />

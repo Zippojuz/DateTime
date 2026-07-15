@@ -32,6 +32,12 @@ export const api = {
   jobs: () => request('/jobs'),
   work: (jobId) =>
     request('/job', { method: 'POST', body: JSON.stringify({ job_id: jobId }) }),
+  gigs: () => request('/gigs'),
+  workGig: (gigId, choiceIndex) =>
+    request('/gig', {
+      method: 'POST',
+      body: JSON.stringify({ gig_id: gigId, choice_index: choiceIndex }),
+    }),
   payDebt: (amount) =>
     request('/debt/pay', { method: 'POST', body: JSON.stringify({ amount }) }),
   items: () => request('/items'),

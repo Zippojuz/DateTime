@@ -1,0 +1,29 @@
+{
+  "oceania": {
+    "id": "oceania",
+    "name": "Oceania Consolidated",
+    "slogan": "SAFETY IS FREEDOM",
+    "sector": "Surveillance, optics, and public reassurance",
+    "voice": "Warm. Paternal. It loves you, and it is watching, and those are the same thing.",
+    "flagship": "oceania_panopt",
+    "blurb": "Every camera in Nexus City that isn't broken is an Oceania camera, and Oceania will fix the broken ones for free. Their ads know your name and use it kindly. Nobody remembers signing anything."
+  },
+  "eurasia": {
+    "id": "eurasia",
+    "name": "Eurasia Heavy Industries",
+    "slogan": "STRENGTH IS UNITY",
+    "sector": "Structural chrome, labor frames, and the people's muscle",
+    "voice": "Collective. Triumphant. The body is the people's engine and the people's engine must be maintained.",
+    "flagship": "eurasia_atlas_frame",
+    "blurb": "Eurasia builds the bones — of towers, of dock cranes, of dockworkers. Their showrooms smell like machine oil and marching music. Employee of the Month is everyone, forever."
+  },
+  "eastasia": {
+    "id": "eastasia",
+    "name": "Eastasia Transcendence",
+    "slogan": "THE SELF IS A DOOR",
+    "sector": "Neural lace, dissolution therapy, and premium ego-loss",
+    "voice": "Serene. Hollow. Why be someone when you could be everyone? Financing available.",
+    "flagship": "eastasia_ghostlace",
+    "blurb": "Eastasia sells the exit from yourself, by the minute. Their clinics are very quiet. Their customers come out smiling, eventually, mostly."
+  }
+}

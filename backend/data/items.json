@@ -718,5 +718,45 @@
       ]
     },
     "value": 12
+  },
+  "oceania_panopt": {
+    "id": "oceania_panopt",
+    "name": "Oceania PanOpt Suite",
+    "type": "augment",
+    "slot": "aug_ocular",
+    "rarity": "legendary",
+    "description": "Sees everything, forgets nothing, forgives you anyway. +4 attack, +3 speed, +5% dodge. Manufactured at Plant 7.",
+    "bonuses": {
+      "attack": 4,
+      "speed": 3,
+      "dodge": 0.05
+    },
+    "value": 30
+  },
+  "eurasia_atlas_frame": {
+    "id": "eurasia_atlas_frame",
+    "name": "Eurasia Atlas Frame",
+    "type": "augment",
+    "slot": "aug_skeletal",
+    "rarity": "legendary",
+    "description": "The people's spine, now yours. +5 defense, +20 max HP. Manufactured at Plant 7.",
+    "bonuses": {
+      "defense": 5,
+      "max_hp": 20
+    },
+    "value": 30
+  },
+  "eastasia_ghostlace": {
+    "id": "eastasia_ghostlace",
+    "name": "Eastasia Ghostlace",
+    "type": "augment",
+    "slot": "aug_neural",
+    "rarity": "legendary",
+    "description": "Room for so much more of everything that isn't you. +30 heat cap, +5 heat vent. Manufactured at Plant 7.",
+    "bonuses": {
+      "heat_cap": 30,
+      "heat_vent": 5
+    },
+    "value": 30
   }
 }

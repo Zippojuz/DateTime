@@ -126,6 +126,12 @@ def test_day_and_week_roll_over(client):
 
 def test_transform_is_locked_at_creation(client):
     _new(client)
+    # Outside the clinic, the location gate answers first.
+    resp = client.post("/api/player/transform", json={"changes": {"pronouns": "he/him"}})
+    assert resp.status_code == 400
+    assert "second skin" in resp.get_json()["error"].lower()
+    # At the clinic, the story lock still holds until Juno unlocks the aspect.
+    client.post("/api/travel", json={"to": "the_grid", "mode": "walk"})
     resp = client.post("/api/player/transform", json={"changes": {"pronouns": "he/him"}})
     assert resp.status_code == 400
     assert "unlocked" in resp.get_json()["error"].lower()

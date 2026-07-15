@@ -407,5 +407,207 @@
         ]
       }
     }
+  },
+  "vex_intro": {
+    "id": "vex_intro",
+    "npc": "vex",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "The back room smells like citrus and collateral. Mama Vex doesn't look up from three ledgers at once. \"There's my favorite line item. Sit. You still owe me five hundred, minus whatever you've scraped \u2014 I keep better track than you do.\"",
+        "choices": [
+          {
+            "text": "You bought my docking debt? Why?",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "[Charm] Favorite, huh? What do the other line items get?",
+            "next": "n3",
+            "affection": 3,
+            "requires": {
+              "charm": 6
+            }
+          },
+          {
+            "text": "I'll pay when I pay.",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "Loan sharks usually have worse taste in perfume.",
+            "next": "n_cold",
+            "offense": {
+              "delta": -3,
+              "severity": "minor"
+            }
+          }
+        ]
+      },
+      "n2": {
+        "text": "\"Somebody was going to own it. The port authority sells debt like fish \u2014 I just got to the market early.\" She finally looks up; the look weighs you like cargo. \"Better me. I collect in work, not in fingers. Ask around: nobody's ever lost a finger to Mama Vex. Teeth, once, but he swung first.\"",
+        "choices": [
+          {
+            "text": "Then give me work.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "What kind of work?",
+            "next": "n5",
+            "affection": 1,
+            "reveal_npc": "sports"
+          }
+        ]
+      },
+      "n3": {
+        "text": "For one second the ledgers stop mattering. \"The other line items,\" she says slowly, \"do not get flirted with across my own table. You I haven't decided about.\" The corner of her mouth is a solved negotiation. \"Points for nerve. Literally \u2014 I'm docking your interest a point.\"",
+        "choices": [
+          {
+            "text": "I'll take the point. And the work.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Decide fast. I'm in demand.",
+            "next": "n5",
+            "affection": 2
+          }
+        ]
+      },
+      "n4": {
+        "text": "\"You'll pay when I say, is how debt works. But\u2014\" she waves a hand, generous as a tax \"\u2014I like a debtor with spine. The ones who grovel always run. The ones who mouth off stick around and pay.\"",
+        "choices": [
+          {
+            "text": "So put me to work.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Noted, boss.",
+            "next": "n5",
+            "affection": 1
+          }
+        ]
+      },
+      "n5": {
+        "text": "\"Gigs go up daily \u2014 ask me when you're in the Quarter. Clean ones pay fair. The other kind pay better and cost different.\" She's back in her ledgers before you're at the door. \"And eat something, you look like an unpaid invoice.\"",
+        "choices": []
+      },
+      "n_cold": {
+        "text": "The room gets quiet in a way that includes the furniture. \"The perfume,\" Vex says pleasantly, \"was my wife's recipe, rest her. Try again, line item.\"",
+        "choices": [
+          {
+            "text": "That was out of line. I'm sorry.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
+      }
+    }
+  },
+  "juno_intro": {
+    "id": "juno_intro",
+    "npc": "juno",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "Second Skin is the cleanest room you've seen in Nexus \u2014 soft light, a chair like a held breath, walls of chrome arms sleeping in velvet. Juno is recalibrating someone's old elbow and smiling at it like it told a joke. \"Walk-in? Good. Sit. Tell me what your body's getting wrong about you lately.\"",
+        "choices": [
+          {
+            "text": "That's a strange way to ask 'what do you need'.",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "Honestly? A few things I've been carrying a while.",
+            "next": "n3",
+            "affection": 3
+          },
+          {
+            "text": "Just browsing the chrome.",
+            "next": "n4",
+            "affection": 1
+          },
+          {
+            "text": "Is any of this legal?",
+            "next": "n_cold",
+            "offense": {
+              "delta": -2,
+              "severity": "minor"
+            }
+          }
+        ]
+      },
+      "n2": {
+        "text": "\"It's the only way to ask.\" She sets the elbow down gently, like it might be dreaming. \"People come in saying they want a faster arm. Twenty minutes later it turns out they want to stop flinching. The arm is the easy part. I do arms AND the other thing.\"",
+        "choices": [
+          {
+            "text": "What's the other thing?",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "And if someone wants to change... more than an arm?",
+            "next": "n5",
+            "affection": 2,
+            "express": "books"
+          }
+        ]
+      },
+      "n3": {
+        "text": "Juno nods like you've said something medically precise. \"Carrying a while. Yeah.\" She doesn't reach for a scanner. She reaches for the kettle. \"First visits are tea. The body work comes when we trust each other \u2014 that part's not negotiable, and neither is the tea.\"",
+        "choices": [
+          {
+            "text": "Tea sounds right.",
+            "next": "n5",
+            "affection": 3
+          },
+          {
+            "text": "You always this careful?",
+            "next": "n5",
+            "affection": 2,
+            "reveal_npc": "music"
+          }
+        ]
+      },
+      "n4": {
+        "text": "\"Browse away. The sleeping arms like the attention.\" She watches you look \u2014 not at you, at HOW you look. \"You linger on the mirrors, not the chrome. Interesting. Most people do it the other way around.\"",
+        "choices": [
+          {
+            "text": "Maybe the mirrors are the point.",
+            "next": "n5",
+            "affection": 3
+          },
+          {
+            "text": "Caught me. Just tired of the docks.",
+            "next": "n5",
+            "affection": 1
+          }
+        ]
+      },
+      "n5": {
+        "text": "\"Come back whenever. Clinic hours are for bodies; after eight I'm at the market stalls being a person.\" At the door she adds, without looking up: \"For the record \u2014 whatever you decide to become, the paperwork here is very forgiving.\"",
+        "choices": []
+      },
+      "n_cold": {
+        "text": "\"Legal,\" Juno repeats, tasting the word like old anesthetic. \"Everything I do here is consensual, sterile, and reversible where it should be. Which is more than the Triumvirate's licensed clinics can say. Ask better questions.\"",
+        "choices": [
+          {
+            "text": "Fair. Starting over.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
+      }
+    }
   }
 }

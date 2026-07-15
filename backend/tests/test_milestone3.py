@@ -118,8 +118,8 @@ def test_characters_report_reachability(client):
 
 def test_all_five_characters_load_with_schedules_and_prefs():
     npcs = NPC.load_all()
-    # The base cast plus Nyx (locked behind her floor-10 fight).
-    assert set(npcs) == {"vael", "zix", "sora", "carro", "miko", "nyx"}
+    # The base cast, Nyx (locked behind her floor-10 fight), the fixer, the doc.
+    assert set(npcs) == {"vael", "zix", "sora", "carro", "miko", "nyx", "vex", "juno"}
     assert npcs["nyx"].requires_defeat == "nyx_deep_signal"
     for npc in npcs.values():
         assert npc.schedule, f"{npc.id} has no schedule"

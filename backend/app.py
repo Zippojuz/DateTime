@@ -10,12 +10,14 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from game import (
     combat,
+    corps,
     data,
     dialogue,
     dungeon,
     encounters,
     equipment,
     events,
+    fixer,
     gifts,
     inventory,
     jobs,
@@ -34,6 +36,22 @@ from game.player import DEFAULT_SPECIES, IDENTITY_FIELDS
 def _day_index(clock):
     """Absolute in-game day number, used to gate one conversation per day."""
     return (clock.week - 1) * 7 + clock.day
+
+
+# Growing close to Juno (the ripperdoc) unlocks identity transformation aspects
+# — trust first, body work second. See dtDesignDoc.md -> Identity Philosophy.
+JUNO_UNLOCKS = {15: "appearance", 25: "pronouns", 40: "body"}
+
+
+def _grant_juno_unlocks(save_id, player, clock):
+    """Sync transformation unlocks with Juno's affection. Returns new grants."""
+    affection = social.get_affection(save_id, "juno", _day_index(clock))
+    granted = []
+    for threshold, aspect in JUNO_UNLOCKS.items():
+        if affection >= threshold and aspect not in player.unlocked_transformations:
+            player.unlocked_transformations.append(aspect)
+            granted.append(aspect)
+    return granted
 
 
 def create_app():
@@ -71,6 +89,12 @@ def create_app():
     @app.get("/api/statuses")
     def statuses():
         return jsonify(data.load("statuses"))
+
+    @app.get("/api/corps")
+    def corps_view():
+        models = save.load_models()
+        week = models[2].week if models else 1
+        return jsonify(corps.view(week))
 
     # --- Game state ---
 
@@ -116,6 +140,9 @@ def create_app():
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
+        # Identity work happens at Juno's table (a place, never an identity gate).
+        if player.location != "the_grid":
+            return jsonify(error="Identity work happens at Second Skin, in The Grid."), 400
         try:
             player.transform(body.get("changes") or {})
         except GameError as err:
@@ -179,7 +206,7 @@ def create_app():
             and a.get("district") == player.location
         }
         encounter = encounters.roll_encounter(
-            present, met_ids, luck=player.attributes.get("luck", 0)
+            present, met_ids, luck=player.attributes.get("luck", 0), week=clock.week
         )
         if encounter and encounter.get("affection"):
             social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
@@ -239,6 +266,56 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({"state": save.state_dict(player, clock), "paid": paid})
 
+    # --- Mama Vex's gigs (the fixer economy) ---
+
+    @app.get("/api/gigs")
+    def gigs_today():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        day = _day_index(clock)
+        gig = fixer.today_gig(day)
+        vex_avail = world.availability(NPC.load("vex"), clock)
+        return jsonify(
+            {
+                "gig": gig,
+                "done_today": player.last_gig_day == day,
+                "reachable": (player.location == fixer.GIG_DISTRICT and vex_avail["available"]),
+            }
+        )
+
+    @app.post("/api/gig")
+    def work_gig():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        day = _day_index(clock)
+        if not world.availability(NPC.load("vex"), clock)["available"]:
+            return jsonify(error="Vex isn't holding court right now."), 400
+        try:
+            choice = fixer.run_gig(player, clock, day, body.get("gig_id"), body.get("choice_index"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        # The clean/dirty fork: who hears about it, and how they take it.
+        if choice.get("affection"):
+            fx = choice["affection"]
+            social.add_opinion(save_id, fx["npc"], fx["delta"], day)
+        if choice.get("offense"):
+            fx = choice["offense"]
+            social.record_offense(save_id, fx["npc"], fx["delta"], day, fx["severity"])
+        fired = events.fire_due(player, clock)
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {
+                "state": save.state_dict(player, clock),
+                "result": {"text": choice["result"], "pay": choice["pay"]},
+                "events": fired,
+            }
+        )
+
     # --- Items, shop, and gifting (Milestone 6) ---
 
     @app.get("/api/items")
@@ -257,6 +334,7 @@ def create_app():
             {
                 "district": player.location,
                 "name": here["name"] if here else None,
+                "blurb": here.get("blurb") if here else None,
                 "stock": shop.stock(player.location),
             }
         )
@@ -326,6 +404,8 @@ def create_app():
         if react["topic"]:
             social.discover_npc_topic(save_id, npc.id, react["topic"])
         social.mark_gifted(save_id, npc.id, day)
+        if npc.id == "juno":
+            _grant_juno_unlocks(save_id, player, clock)
 
         save.save_models(save_id, player, clock)
         return jsonify(
@@ -748,6 +828,11 @@ def create_app():
 
         after = social.get_affection(save_id, npc.id, day)
         payload = {"ended": next_id is None, "gained": after - before, "affection": after}
+        if npc.id == "juno":
+            granted = _grant_juno_unlocks(save_id, player, clock)
+            if granted:
+                save.save_models(save_id, player, clock)
+                payload["unlocked_transformations"] = granted
         if next_id is not None:
             payload["node"] = dialogue.node_view(tree, next_id, player)
         return jsonify(payload)
