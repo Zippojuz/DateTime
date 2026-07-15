@@ -108,7 +108,8 @@ def create_app():
         identity["name"] = name
         if not identity["pronouns"]:
             identity["pronouns"] = "they/them"
-        return jsonify(save.create_new_game(identity)), 201
+        state, fired = save.create_new_game(identity)
+        return jsonify({**state, "events": fired}), 201
 
     @app.get("/api/game/state")
     def game_state():

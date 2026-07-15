@@ -9,14 +9,17 @@ import json
 
 from db import get_connection
 
-from game import social
+from game import events, social
 from game.calendar import GameClock
 from game.npc import NPC
 from game.player import Player
 
 
 def create_new_game(identity):
-    """Start a fresh game, replacing any existing single save. Returns state."""
+    """Start a fresh game, replacing any existing single save. Fires any
+    events already due (e.g. the day-1 arrival story beat) so they surface
+    immediately rather than waiting for the first action. Returns
+    (state, fired_events)."""
     player = Player.create(identity)
     clock = GameClock()
     with get_connection() as conn:
@@ -29,7 +32,9 @@ def create_new_game(identity):
         # default), so affection begins neutral rather than empty.
         for cid, npc in NPC.load_all().items():
             social.seed_relationship(conn, save_id, cid, npc.starting_disposition)
-    return state_dict(player, clock)
+    fired = events.fire_due(player, clock)
+    save_models(save_id, player, clock)
+    return state_dict(player, clock), fired
 
 
 def load_models():

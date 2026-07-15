@@ -52,6 +52,14 @@ def test_new_game_requires_a_name(client):
     assert resp.status_code == 400
 
 
+def test_new_game_surfaces_the_arrival_story_beat_immediately(client):
+    # The opening event should be on screen right after character creation,
+    # not wait for the player's first action or first travel.
+    body = _new(client, name="Kai", pronouns="she/her")
+    ids = [e["id"] for e in body["events"]]
+    assert "arrival" in ids
+
+
 def test_state_persists_and_reloads(client):
     _new(client, name="Echo")
     state = client.get("/api/game/state").get_json()

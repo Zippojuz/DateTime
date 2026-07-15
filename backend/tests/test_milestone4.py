@@ -90,17 +90,23 @@ def test_pay_debt_rejects_nonpositive(client):
 # --- Events -----------------------------------------------------------------
 
 
-def test_arrival_event_fires_on_first_action(client):
-    res = client.post("/api/action", json={"action": "wait"}).get_json()
+def test_arrival_event_fires_on_game_creation():
+    # Fires immediately at creation (day 1), not on the first action — so the
+    # opening story beat is on screen right after character creation.
+    res = (
+        create_app()
+        .test_client()
+        .post("/api/game/new", json={"name": "Kai", "pronouns": "she/her"})
+        .get_json()
+    )
     ids = [e["id"] for e in res["events"]]
     assert "arrival" in ids
 
 
 def test_events_fire_once(client):
+    # The fixture already created the game, so arrival has already fired.
     first = client.post("/api/action", json={"action": "wait"}).get_json()
-    assert any(e["id"] == "arrival" for e in first["events"])
-    second = client.post("/api/action", json={"action": "wait"}).get_json()
-    assert all(e["id"] != "arrival" for e in second["events"])
+    assert all(e["id"] != "arrival" for e in first["events"])
 
 
 def test_future_event_not_yet_due():

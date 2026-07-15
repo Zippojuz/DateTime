@@ -113,8 +113,10 @@ export const useGameStore = create((set, get) => ({
   newGame: async (identity) => {
     set({ busy: true, error: null })
     try {
-      const state = await api.newGame(identity)
+      // Response is {player, clock, events} (events kept separate from state).
+      const { events, ...state } = await api.newGame(identity)
       set({ state, hasSave: true, screen: 'play', busy: false })
+      get()._pushEvents(events)
       get().loadCharacters()
       get().loadJobs()
       get().loadGigs()
