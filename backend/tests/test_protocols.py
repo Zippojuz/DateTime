@@ -1,7 +1,7 @@
 """Wetware protocols (data-shard magic + heat) and augmentation slots."""
 
 import pytest
-from game import combat, dungeon, equipment, inventory
+from game import combat, data, dungeon, equipment, inventory
 from game.calendar import GameClock
 from game.errors import GameError
 from game.player import Player
@@ -284,3 +284,20 @@ def test_swapping_within_an_occupied_slot_needs_no_headroom():
     # Coolant Weave also lives in aug_neural — a swap, not an addition.
     assert equipment.equip(p, "coolant_weave") == "aug_neural"
     assert p.inventory["reflex_splice"] == 1  # the old one came back
+
+
+# --- Hacking owns "hacking" content, not wit ---------------------------------------
+
+
+def test_the_derelict_terminal_checks_hacking_not_wit():
+    # This event predates the hacking stat and originally checked wit; a
+    # cyberpunk terminal-hack belongs to the stat built for it.
+    event = data.load("dungeon_events")["derelict_terminal"]
+    hack_choice = next(c for c in event["choices"] if "Hack" in c["text"])
+    assert hack_choice["stat"] == "hacking"
+
+
+def test_wits_description_no_longer_claims_hacking():
+    # wit and hacking split apart; wit's registry blurb shouldn't still
+    # advertise a domain that now belongs to hacking.
+    assert "hacking" not in data.attributes()["wit"]["description"].lower()

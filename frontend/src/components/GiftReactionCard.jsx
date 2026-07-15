@@ -1,11 +1,14 @@
 import { useGameStore } from '../state/gameStore'
 
+// Each line is a standalone sentence (subject "Their"/"They") so it never has
+// to double up on the gift as a grammatical object — the item gets its own
+// clause instead.
 const SENTIMENT_LINE = {
-  love: 'lights up',
-  like: 'seems genuinely pleased',
-  neutral: 'accepts it politely',
-  dislike: 'takes it with a faint frown',
-  hate: 'is clearly put off',
+  love: 'Their face lights up.',
+  like: 'They seem genuinely pleased.',
+  neutral: 'They accept it politely.',
+  dislike: 'They take it with a faint frown.',
+  hate: "They're clearly put off.",
 }
 
 // Toast shown after giving a gift.
@@ -20,7 +23,7 @@ export default function GiftReactionCard() {
     <div className="encounter-card" role="status">
       <span className="encounter-kind">gift</span>
       <p className="encounter-text">
-        {r.npcName} {SENTIMENT_LINE[r.sentiment] ?? 'reacts'} to the {r.item}.
+        You give {r.npcName} the {r.item}. {SENTIMENT_LINE[r.sentiment] ?? 'They react.'}
       </p>
       <span className={`encounter-affection ${r.delta < 0 ? 'is-neg' : ''}`}>
         {sign}

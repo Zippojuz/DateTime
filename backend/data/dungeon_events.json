@@ -3,7 +3,7 @@
     "id": "derelict_terminal",
     "text": "A derelict terminal still glows in the dark, cursor blinking like it's been waiting for you.",
     "choices": [
-      { "text": "[Wit] Hack it.", "stat": "wit", "dc": 7, "success": { "type": "credits", "amount": 25, "text": "Old crypto-wallets crack open. Someone's rainy-day fund is now yours." }, "failure": { "type": "damage", "amount": 8, "text": "Counter-intrusion bites back — feedback arcs up your arm." } },
+      { "text": "[Hacking] Hack it.", "stat": "hacking", "dc": 7, "success": { "type": "credits", "amount": 25, "text": "Old crypto-wallets crack open. Someone's rainy-day fund is now yours." }, "failure": { "type": "damage", "amount": 8, "text": "Counter-intrusion bites back — feedback arcs up your arm." } },
       { "text": "Leave it alone.", "outcome": { "type": "nothing", "text": "You step past. The cursor blinks on behind you, patient as ever." } }
     ]
   },

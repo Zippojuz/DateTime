@@ -133,9 +133,14 @@ def generate_floor(seed, floor):
         a, b = tuple(edge)
         for src, dst in ((a, b), (b, a)):
             direction = next(d for d, (dx, dy) in DIRS.items() if (src[0] + dx, src[1] + dy) == dst)
-            rooms[_key(*src)]["exits"][direction] = {
+            src_room = rooms[_key(*src)]
+            # Avoid two exits in the same room reading the same flavor label
+            # (falls back to the full pool once a room outgrows it).
+            used = {e["label"] for e in src_room["exits"].values()}
+            choices = [label for label in frags["exit_labels"] if label not in used]
+            src_room["exits"][direction] = {
                 "to": _key(*dst),
-                "label": rng.choice(frags["exit_labels"]),
+                "label": rng.choice(choices or frags["exit_labels"]),
                 "hidden": False,
                 "revealed": True,
             }

@@ -63,6 +63,19 @@ def test_generation_is_deterministic():
     assert dungeon.generate_floor(99, 4) == dungeon.generate_floor(99, 4)
 
 
+def test_exit_labels_dont_repeat_within_a_room():
+    # A room with 2+ exits shouldn't read the same flavor label twice — jarring
+    # when both doorways in "Pipe Gallery" say "up a short ramp slick with
+    # condensation". Checked across several floors since it's chance-driven.
+    for floor in range(1, 10):
+        fd = dungeon.generate_floor(1234, floor)
+        for room in fd["rooms"].values():
+            labels = [e["label"] for e in room["exits"].values()]
+            assert len(labels) == len(set(labels)), (
+                f"floor {floor} room {room['id']} repeats an exit label: {labels}"
+            )
+
+
 def test_every_floor_has_a_hidden_cache():
     for floor in range(1, 10):
         fd = dungeon.generate_floor(11, floor)

@@ -8,7 +8,7 @@
   },
   "wit": {
     "name": "Wit",
-    "description": "Puzzle and hacking outcomes, and certain dialogue.",
+    "description": "Search checks and certain dialogue; also feeds speed and defense.",
     "default": 5,
     "min": 0,
     "max": 20

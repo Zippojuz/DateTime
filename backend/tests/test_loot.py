@@ -94,6 +94,15 @@ def test_dungeon_only_items_not_sold_in_any_shop():
         assert not overlap, f"{shop_def['name']} sells dungeon-only items: {overlap}"
 
 
+def test_shop_stock_has_no_duplicate_items():
+    # A duplicated item id renders as a React key collision (duplicated /
+    # dropped rows in ShopPanel) — every shop's stock list must be a set.
+    for district_id, shop_def in data.load("shops").items():
+        stock = shop_def["stock"]
+        dupes = {i for i in stock if stock.count(i) > 1}
+        assert not dupes, f"{district_id} ({shop_def['name']}) lists duplicates: {dupes}"
+
+
 def test_dungeon_gifts_work_with_preferences():
     from game import gifts
     from game.npc import NPC
