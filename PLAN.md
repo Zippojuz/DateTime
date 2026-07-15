@@ -400,6 +400,33 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: The Pit (battle arena) + street cred ✅ DONE
+- **The Pit** (`arena.json` + `game/arena.py`): unlicensed ring in a drained
+  ballast tank under the Docking Quarter. Pure win ladder — losses cost
+  nothing and don't advance it; bouts pay NO XP, NO credits, NO drops
+  (combat's arena flag) — one cred per win. No companions ("no seconds").
+  Full HP each bout; 10 energy, 45 min.
+- **Every 10th WIN is a championship** against a named champion: Mirrorblade
+  Duessa (10, kinetic), Saint Voltage (20, voltaic), The Gravekeeper Lull
+  (30, cryo), and Zenith the Crowd's Own (40, psionic, three phases with
+  element shifts). Lull and Zenith out-stat floor-10 Nyx — the hardest fights
+  in the game. Titles pay a purse (100/200/400/800), a unique prize
+  (Champion's Belt / Voltage Halo / Gravekeeper's Signet / Zenith's Sigil)
+  and big cred (15/25/40/60). Past 40: Apex rematches (cred + purse only).
+  Regular bouts draw from tier pools scaled by bracket; championships can't
+  be fled.
+- **Street cred** (migration 11: street_cred + arena_wins): championships,
+  every Pit win, and NEW dungeon depth records (2 x floor, once per floor).
+  Stages: Unknown → Known Face → Name in the Grid → Undercard Legend →
+  Crowd's Own. Shown on the stat bar; reserved as a gate for future
+  black-market tiers/dialogue.
+- Routes GET /api/arena + POST /api/arena/fight; combat finish branches to
+  arena vs dungeon. ArenaPanel (gold championship card), BattleView now rides
+  over the world map for run-less fights, CombatOutcome gets CHAMPION
+  fanfare (title/purse/prize/cred) and Pit-flavored defeat/forfeit copy.
+  +15 pytest (279 total); verified live — 9-win climb (zero XP/credit gain),
+  Gatekeeper's Bout and The Canonization both won in-browser.
+
 ### Follow-up: cyberpunk city — corps, markets, the fixer, the ripperdoc ✅ DONE
 - **The Triumvirate** (`corps.json` + `game/corps.py`): Oceania Consolidated
   ("SAFETY IS FREEDOM" — surveillance that loves you), Eurasia Heavy
@@ -550,7 +577,7 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 | Polish: real art, music, save/load UX, title | 7 | swap placeholders for assets; **UI grime** (NEXUS OS boot screen, scanline vignette, glitch-on-damage text, terminal title) |
 | Night city rhythm | — | after-22:00 district shifts: night stock/prices, swapped encounter tables, night-only schedule windows |
 | Memory economy | — | MAYBE: dungeon memory shards (dead delvers' last recordings, lore + a quiet questline) and a memory pawnshop (pawn discovered topics/affection history for credits, buy back with interest, cast reacts) |
-| Street cred + battle arena | — | ON HOLD until arena design lands (user will say when): rep track from gigs/dungeon feats gating black-market tiers, dialogue, fixers |
+| Street cred + battle arena | — | ✅ DONE — see The Pit above. Future: cred-gated black-market tiers, dialogue options, gig-earned cred |
 
 ---
 

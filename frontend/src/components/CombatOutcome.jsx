@@ -1,8 +1,9 @@
 import { useGameStore } from '../state/gameStore'
 
 // Post-battle fanfare: victory spoils, a narrow escape, or the Substrate
-// spitting you back out. Rendered at App level so a defeat (which ends the
-// run) still gets its moment.
+// spitting you back out — plus Pit outcomes (no spoils, but titles, purses,
+// and cred). Rendered at App level so a defeat (which ends the run) still
+// gets its moment.
 export default function CombatOutcome() {
   const result = useGameStore((s) => s.dungeonResult)
   const clear = useGameStore((s) => s.clearDungeonResult)
@@ -10,14 +11,24 @@ export default function CombatOutcome() {
   if (result?.type !== 'combat') return null
 
   const rewards = result.rewards
+  const arena = result.arena
+  const champ = result.championship
 
   return (
     <div className="battle-overlay" role="dialog" aria-label="Battle outcome">
       <div className={`outcome-window outcome-window--${result.result}`}>
         {result.result === 'victory' && (
           <>
-            <h2 className="outcome-title outcome-title--victory">Victory</h2>
-            {result.enemy && <p className="outcome-sub">{result.enemy} falls.</p>}
+            <h2 className="outcome-title outcome-title--victory">
+              {champ ? 'Champion' : 'Victory'}
+            </h2>
+            {arena ? (
+              <p className="outcome-sub">
+                Win #{result.wins} in the Pit. The crowd decides it loves you.
+              </p>
+            ) : (
+              result.enemy && <p className="outcome-sub">{result.enemy} falls.</p>
+            )}
             {rewards && (
               <dl className="outcome-rewards">
                 <div>
@@ -44,19 +55,49 @@ export default function CombatOutcome() {
                 ))}
               </dl>
             )}
-            {result.hoard && <p className="outcome-hoard">{result.hoard}</p>}
-            {result.unlocked && (
-              <p className="outcome-unlocked">
-                ♥ {result.unlocked.text}
-              </p>
+            {arena && (
+              <dl className="outcome-rewards">
+                {champ && (
+                  <div className="outcome-levelup">
+                    <dt>Title</dt>
+                    <dd>{champ.title}</dd>
+                  </div>
+                )}
+                {champ && (
+                  <div>
+                    <dt>Purse</dt>
+                    <dd>+{champ.purse} cr</dd>
+                  </div>
+                )}
+                {champ?.prize && (
+                  <div>
+                    <dt>Prize</dt>
+                    <dd>{champ.prize}</dd>
+                  </div>
+                )}
+                <div>
+                  <dt>Street cred</dt>
+                  <dd>
+                    +{result.cred_gained} ({result.street_cred})
+                  </dd>
+                </div>
+              </dl>
             )}
+            {result.hoard && <p className="outcome-hoard">{result.hoard}</p>}
+            {result.unlocked && <p className="outcome-unlocked">♥ {result.unlocked.text}</p>}
           </>
         )}
 
         {result.result === 'fled' && (
           <>
-            <h2 className="outcome-title outcome-title--fled">Got away</h2>
-            <p className="outcome-sub">You slip back the way you came, heart hammering.</p>
+            <h2 className="outcome-title outcome-title--fled">
+              {arena ? 'Forfeit' : 'Got away'}
+            </h2>
+            <p className="outcome-sub">
+              {arena
+                ? 'You duck out under the ropes. The crowd boos, then forgets you ever existed.'
+                : 'You slip back the way you came, heart hammering.'}
+            </p>
           </>
         )}
 
@@ -64,8 +105,9 @@ export default function CombatOutcome() {
           <>
             <h2 className="outcome-title outcome-title--defeat">Defeat</h2>
             <p className="outcome-sub">
-              {result.enemy ? `${result.enemy} stands over you. ` : ''}
-              The Substrate spits you back out into The Shallows.
+              {arena
+                ? "The Pit takes nothing from the fallen but the win. The ladder waits where you left it."
+                : `${result.enemy ? `${result.enemy} stands over you. ` : ''}The Substrate spits you back out into The Shallows.`}
             </p>
             {result.credits_lost > 0 && (
               <p className="outcome-loss">−{result.credits_lost} cr lost in the scramble.</p>

@@ -1596,6 +1596,59 @@ body {
   font-style: italic;
 }
 
+/* --- The Pit (arena) --- */
+
+.arena-panel h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+  color: var(--accent);
+}
+
+.arena-blurb {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.arena-record {
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.arena-stage {
+  color: #ffe95a;
+}
+
+.arena-card {
+  border: 1px solid #26304a;
+  border-radius: 8px;
+  padding: 0.8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.arena-card--championship {
+  border-color: #ffe95a;
+  box-shadow: 0 0 18px rgba(255, 233, 90, 0.15);
+}
+
+.arena-champ-tag {
+  color: #ffe95a;
+  font-size: 0.72rem;
+  letter-spacing: 0.14rem;
+  text-transform: uppercase;
+}
+
+.arena-next {
+  margin: 0;
+}
+
+.stat-label--cred {
+  color: #ffe95a;
+}
+
 @media (max-width: 720px) {
   .battle-field {
     grid-template-columns: 1fr;

@@ -62,6 +62,9 @@ export const useGameStore = create((set, get) => ({
   // Party: { companion, required_affection, candidates } from the server.
   party: null,
 
+  // The Pit: { name, wins, titles, street_cred, cred_stage, next } from the server.
+  arena: null,
+
   busy: false,
   error: null,
 
@@ -107,6 +110,7 @@ export const useGameStore = create((set, get) => ({
       get().loadDungeon() // resume a mid-run Substrate dive
       get().loadEquipment()
       get().loadParty()
+      get().loadArena()
     }
   },
 
@@ -124,6 +128,7 @@ export const useGameStore = create((set, get) => ({
       get().loadDungeon()
       get().loadEquipment()
       get().loadParty()
+      get().loadArena()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -338,6 +343,9 @@ export const useGameStore = create((set, get) => ({
         get().loadCharacters() // someone new just surfaced
         get().loadParty()
       }
+      if (res.outcome?.arena) {
+        get().loadArena() // the ladder moved (or didn't)
+      }
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -388,6 +396,26 @@ export const useGameStore = create((set, get) => ({
       set({ party: await api.party() })
     } catch {
       // Non-fatal.
+    }
+  },
+
+  // --- The Pit (arena ladder) ---
+
+  loadArena: async () => {
+    try {
+      set({ arena: await api.arena() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  arenaFight: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.arenaFight()
+      set({ dungeon: res, state: res.state, dungeonResult: null, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
     }
   },
 

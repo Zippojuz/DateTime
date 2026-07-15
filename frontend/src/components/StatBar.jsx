@@ -21,6 +21,12 @@ export default function StatBar() {
         </span>
         <span className="stat-value">{player.energy}</span>
       </div>
+      <div className="stat">
+        <span className="stat-label stat-label--cred" title="Street cred — championships and depth records make you a name">
+          Cred
+        </span>
+        <span className="stat-value">{player.street_cred ?? 0}</span>
+      </div>
 
       {Object.entries(player.attributes).map(([id, value]) => (
         <div className="stat" key={id}>

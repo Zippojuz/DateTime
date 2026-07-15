@@ -9,6 +9,7 @@ from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from game import (
+    arena,
     combat,
     corps,
     data,
@@ -557,10 +558,13 @@ def create_app():
 
         outcome = None
         if player.combat.get("over"):
-            outcome = dungeon.finish_combat(player)
-            # Even a rout deepens the bond a little — you went down together.
-            if outcome.get("result") == "defeat" and outcome.get("companion"):
-                social.add_opinion(save_id, outcome["companion"], 1, _day_index(clock))
+            if player.combat.get("arena"):
+                outcome = arena.finish_fight(player)
+            else:
+                outcome = dungeon.finish_combat(player)
+                # Even a rout deepens the bond a little — you went down together.
+                if outcome.get("result") == "defeat" and outcome.get("companion"):
+                    social.add_opinion(save_id, outcome["companion"], 1, _day_index(clock))
             # A defeated NPC boss surfaces: make sure their relationship row
             # exists (new games pre-seed it; older saves won't have one).
             if outcome.get("unlocked"):
@@ -573,6 +577,31 @@ def create_app():
                 "outcome": outcome,
                 "state": save.state_dict(player, clock),
             }
+        )
+
+    # --- The Pit: arena ladder (no XP, no loot — cred and titles) ---
+
+    @app.get("/api/arena")
+    def arena_view():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, _clock = models
+        return jsonify(arena.view(player))
+
+    @app.post("/api/arena/fight")
+    def arena_fight():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            bout = arena.start_fight(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {**_dungeon_payload(player), "bout": bout, "state": save.state_dict(player, clock)}
         )
 
     # --- Party: one dungeon companion at a time ---

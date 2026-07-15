@@ -8,6 +8,7 @@ import TravelPanel from '../components/TravelPanel.jsx'
 import EncounterCard from '../components/EncounterCard.jsx'
 import JobPanel from '../components/JobPanel.jsx'
 import GigPanel from '../components/GigPanel.jsx'
+import ArenaPanel from '../components/ArenaPanel.jsx'
 import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
@@ -73,6 +74,7 @@ export default function WorldMap() {
       <SubstratePanel />
       <JobPanel />
       <GigPanel />
+      <ArenaPanel />
       <ClinicPanel />
       <ShopPanel />
       <InventoryPanel />

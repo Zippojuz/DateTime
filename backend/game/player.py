@@ -66,6 +66,8 @@ class Player(Character):
         companion="",
         protocols=None,
         last_gig_day=0,
+        street_cred=0,
+        arena_wins=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -94,6 +96,10 @@ class Player(Character):
         self.protocols = list(protocols or [])
         # Last absolute day a fixer gig was worked (0 = never; one gig per day).
         self.last_gig_day = last_gig_day
+        # Reputation: championships and depth records make you a name.
+        self.street_cred = street_cred
+        # Arena win ladder (losses don't advance it; every 10th win is a title).
+        self.arena_wins = arena_wins
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -138,6 +144,8 @@ class Player(Character):
                 "companion": self.companion,
                 "protocols": list(self.protocols),
                 "last_gig_day": self.last_gig_day,
+                "street_cred": self.street_cred,
+                "arena_wins": self.arena_wins,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

@@ -149,6 +149,12 @@ def _m10_gigs(conn):
     _add_column(conn, "player", "last_gig_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m11_arena_and_cred(conn):
+    """Street cred (reputation) + the arena win ladder."""
+    _add_column(conn, "player", "street_cred", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "player", "arena_wins", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -160,6 +166,7 @@ MIGRATIONS = [
     _m8_companion,
     _m9_protocols,
     _m10_gigs,
+    _m11_arena_and_cred,
 ]
 
 

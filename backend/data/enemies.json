@@ -418,5 +418,189 @@
         }
       ]
     }
+  },
+  "mirrorblade_duessa": {
+    "id": "mirrorblade_duessa",
+    "name": "Mirrorblade Duessa",
+    "role": "boss",
+    "tier": 1,
+    "element": "kinetic",
+    "hp": 120,
+    "attack": 13,
+    "defense": 7,
+    "speed": 12,
+    "xp": 0,
+    "credits": 0,
+    "description": "The Pit's first gatekeeper fights in a suit of mirror-shards, so every opponent spends the bout watching themselves lose. She signs autographs mid-parry.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Thousand Reflections",
+          "power": 2.0,
+          "every_n_turns": 4,
+          "telegraph": "Duessa fans her mirrored blades wide \u2014 a hundred little yous, all about to be hit at once.",
+          "inflicts": {
+            "effect": "weak_knees",
+            "turns": 2
+          }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.4,
+          "attack_mult": 1.3,
+          "defense_mult": 0.8,
+          "text": "Duessa sheds the cracked mirrors and grins with her own face for the first time. Faster now."
+        }
+      ]
+    }
+  },
+  "saint_voltage": {
+    "id": "saint_voltage",
+    "name": "Saint Voltage",
+    "role": "boss",
+    "tier": 2,
+    "element": "voltaic",
+    "hp": 200,
+    "attack": 19,
+    "defense": 10,
+    "speed": 14,
+    "xp": 0,
+    "credits": 0,
+    "description": "Second champion of the Pit, canonized by the crowd after she kissed a live main and stood back up. Her halo is an arc-flash that never quite finished happening.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Benediction",
+          "power": 2.1,
+          "every_n_turns": 4,
+          "telegraph": "Saint Voltage raises two fingers, sainted and sparking. The air goes greasy with charge.",
+          "inflicts": {
+            "effect": "static_cling",
+            "turns": 3
+          }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.55,
+          "attack_mult": 1.2,
+          "text": "Her halo widens. The front row's hair stands up as one."
+        },
+        {
+          "hp_below": 0.2,
+          "attack_mult": 1.25,
+          "defense_mult": 0.85,
+          "text": "\"CANONIZE ME AGAIN,\" she laughs, and the lights above the Pit brown out."
+        }
+      ]
+    }
+  },
+  "gravekeeper_lull": {
+    "id": "gravekeeper_lull",
+    "name": "The Gravekeeper, Lull",
+    "role": "boss",
+    "tier": 3,
+    "element": "cryo",
+    "hp": 290,
+    "attack": 26,
+    "defense": 13,
+    "speed": 15,
+    "xp": 0,
+    "credits": 0,
+    "description": "Third champion. She retired undefeated, twice, and both retirements are buried under the Pit with little chrome headstones. Slow voice, slower hands, and somehow you're already losing.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Lights Out",
+          "power": 2.2,
+          "every_n_turns": 4,
+          "telegraph": "Lull tilts her head, almost tender, the way you'd look at something already asleep.",
+          "inflicts": {
+            "effect": "slow",
+            "turns": 3
+          }
+        },
+        {
+          "name": "Little Headstone",
+          "power": 2.4,
+          "every_n_turns": 4,
+          "telegraph": "She draws a slow line across the floor with her boot. Fighters know it: she's measuring your plot.",
+          "inflicts": null
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.5,
+          "attack_mult": 1.2,
+          "defense_mult": 1.1,
+          "text": "Lull rolls her shoulders and the frost on the cage bars thickens. \"Third retirement,\" she murmurs. \"You'd be a lovely reason.\""
+        },
+        {
+          "hp_below": 0.2,
+          "attack_mult": 1.3,
+          "text": "For the first time all bout, the Gravekeeper hurries."
+        }
+      ]
+    }
+  },
+  "zenith_crowds_own": {
+    "id": "zenith_crowds_own",
+    "name": "Zenith, the Crowd's Own",
+    "role": "boss",
+    "tier": 3,
+    "element": "psionic",
+    "hp": 350,
+    "attack": 31,
+    "defense": 15,
+    "speed": 20,
+    "xp": 0,
+    "credits": 0,
+    "description": "The undisputed apex of the Pit \u2014 and of everything under Nexus City, including what sleeps below floor ten. Zenith doesn't fight the crowd's favorite; Zenith IS the crowd, ten thousand wanting minds braided into one beautiful body that hits like consensus.",
+    "mechanics": {
+      "moves": [
+        {
+          "name": "Standing Ovation",
+          "power": 2.3,
+          "every_n_turns": 4,
+          "telegraph": "The whole Pit rises to its feet at once \u2014 every fist in the crowd cocked back as Zenith's.",
+          "inflicts": {
+            "effect": "smitten",
+            "turns": 2
+          }
+        },
+        {
+          "name": "Final Bow",
+          "power": 2.6,
+          "every_n_turns": 4,
+          "telegraph": "Zenith bows to you, deep and gracious. In the Pit, that means goodbye.",
+          "inflicts": {
+            "effect": "marked",
+            "turns": 3
+          }
+        }
+      ],
+      "phases": [
+        {
+          "hp_below": 0.7,
+          "attack_mult": 1.15,
+          "element": "voltaic",
+          "text": "The crowd's roar changes key. Zenith flexes and the arena lights arc toward them like iron filings."
+        },
+        {
+          "hp_below": 0.4,
+          "attack_mult": 1.2,
+          "element": "kinetic",
+          "text": "Zenith stops performing. Ten thousand held breaths make the air heavy as water."
+        },
+        {
+          "hp_below": 0.15,
+          "attack_mult": 1.3,
+          "defense_mult": 0.85,
+          "element": "psionic",
+          "text": "For one impossible second the crowd is silent \u2014 and Zenith, alone in their own head at last, fights like it."
+        }
+      ]
+    }
   }
 }

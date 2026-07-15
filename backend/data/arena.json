@@ -1,0 +1,72 @@
+{
+  "id": "the_pit",
+  "name": "The Pit",
+  "district": "docking_quarter",
+  "blurb": "An unlicensed fighting ring in a drained ballast tank under the docks. No seconds, no spoils, no insurance \u2014 the Pit pays in reputation, and the crowd never forgets a name.",
+  "energy": 10,
+  "minutes": 45,
+  "win_cred": 1,
+  "brackets": [
+    {
+      "max_wins": 9,
+      "pool_tier": 1,
+      "scale_floor": 2
+    },
+    {
+      "max_wins": 19,
+      "pool_tier": 2,
+      "scale_floor": 5
+    },
+    {
+      "max_wins": 29,
+      "pool_tier": 3,
+      "scale_floor": 8
+    },
+    {
+      "max_wins": 39,
+      "pool_tier": 3,
+      "scale_floor": 11
+    },
+    {
+      "max_wins": null,
+      "pool_tier": 3,
+      "scale_floor": 13
+    }
+  ],
+  "championships": {
+    "10": {
+      "enemy": "mirrorblade_duessa",
+      "cred": 15,
+      "purse": 100,
+      "prize": "pit_champions_belt",
+      "title": "Gatekeeper's Bout"
+    },
+    "20": {
+      "enemy": "saint_voltage",
+      "cred": 25,
+      "purse": 200,
+      "prize": "voltage_halo",
+      "title": "The Canonization"
+    },
+    "30": {
+      "enemy": "gravekeeper_lull",
+      "cred": 40,
+      "purse": 400,
+      "prize": "gravekeepers_signet",
+      "title": "The Third Retirement"
+    },
+    "40": {
+      "enemy": "zenith_crowds_own",
+      "cred": 60,
+      "purse": 800,
+      "prize": "zenith_sigil",
+      "title": "The Apex"
+    }
+  },
+  "rematch": {
+    "enemy": "zenith_crowds_own",
+    "cred": 20,
+    "purse": 300,
+    "title": "Apex Rematch"
+  }
+}

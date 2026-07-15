@@ -758,5 +758,62 @@
       "heat_vent": 5
     },
     "value": 30
+  },
+  "pit_champions_belt": {
+    "id": "pit_champions_belt",
+    "name": "Pit Champion's Belt",
+    "type": "equipment",
+    "slot": "accessory",
+    "rarity": "rare",
+    "description": "Scuffed chrome and someone else's blood, buffed to a shine. +2 attack, +2 defense.",
+    "bonuses": {
+      "attack": 2,
+      "defense": 2
+    },
+    "sockets": 0,
+    "value": 40
+  },
+  "voltage_halo": {
+    "id": "voltage_halo",
+    "name": "Voltage Halo",
+    "type": "equipment",
+    "slot": "head",
+    "rarity": "rare",
+    "description": "Saint Voltage's blessing, worn above the brow: an arc-flash that never finishes. +2 defense, +10 max HP, one socket.",
+    "bonuses": {
+      "defense": 2,
+      "max_hp": 10
+    },
+    "sockets": 1,
+    "value": 55
+  },
+  "gravekeepers_signet": {
+    "id": "gravekeepers_signet",
+    "name": "Gravekeeper's Signet",
+    "type": "equipment",
+    "slot": "ring",
+    "rarity": "rare",
+    "description": "A little chrome headstone for a finger. Lull engraved it herself: 'NOT YET.' +2 speed, +5% dodge.",
+    "bonuses": {
+      "speed": 2,
+      "dodge": 0.05
+    },
+    "sockets": 0,
+    "value": 60
+  },
+  "zenith_sigil": {
+    "id": "zenith_sigil",
+    "name": "Zenith's Sigil",
+    "type": "equipment",
+    "slot": "accessory",
+    "rarity": "legendary",
+    "description": "The crowd's love, cast in metal warm as applause. +3 attack, +3 defense, +3 speed, two sockets.",
+    "bonuses": {
+      "attack": 3,
+      "defense": 3,
+      "speed": 3
+    },
+    "sockets": 2,
+    "value": 100
   }
 }

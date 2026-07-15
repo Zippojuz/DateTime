@@ -70,6 +70,8 @@ export const api = {
       body: JSON.stringify({ protocol_id: protocolId }),
     }),
   dungeonLeave: () => request('/dungeon/leave', { method: 'POST', body: '{}' }),
+  arena: () => request('/arena'),
+  arenaFight: () => request('/arena/fight', { method: 'POST', body: '{}' }),
   party: () => request('/party'),
   recruit: (npcId) =>
     request('/party/recruit', { method: 'POST', body: JSON.stringify({ npc_id: npcId }) }),

@@ -179,7 +179,7 @@ def _damage(attack, power, defense, elem_mult, rng, crit=CRIT_CHANCE):
     return max(1, round(raw - defense * 0.5)), is_crit
 
 
-def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None):
+def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None, arena=False):
     """Begin a battle. Returns the new combat state dict."""
     enemy = scaled_enemy(enemy_id, floor, player.difficulty)
     stats = player_stats(player)
@@ -187,6 +187,7 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None):
     charge_max = CHARGE_MAX + eq["charge_max"]
     return {
         "active": True,
+        "arena": arena,  # Pit bouts: no XP, no credits, no drops — cred only
         "companion": dict(companion) if companion else None,
         "enemy": enemy,
         "enemy_hp": enemy["hp"],
@@ -438,14 +439,22 @@ def roll_drops(enemy, rng, luck=0):
 
 def _win(state, player, rng):
     enemy = state["enemy"]
+    state["over"] = True
+    state["victory"] = True
+
+    if state.get("arena"):
+        # The Pit pays in reputation, not spoils (championship purses are
+        # handled by the arena module, not the fight itself).
+        state["rewards"] = None
+        state["log"].append(f"{enemy['name']} goes down. The crowd decides it loves you.")
+        return
+
     diff = data.load("difficulty")[player.difficulty]
     eq = equipment.bonuses(player)
     comp = state.get("companion")
     rogue_bonus = 1 + comp.get("credit_bonus", 0) if comp and not comp["down"] else 1
     xp = round(enemy["xp"] * diff["xp"] * eq["xp_mult"])
     credits = round(enemy["credits"] * rng.uniform(0.85, 1.15) * eq["credit_mult"] * rogue_bonus)
-    state["over"] = True
-    state["victory"] = True
     ups = grant_xp(player, xp)
     player.credits += credits
 

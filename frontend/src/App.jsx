@@ -6,6 +6,7 @@ import WorldMap from './screens/WorldMap.jsx'
 import DialogueScreen from './screens/DialogueScreen.jsx'
 import DungeonScreen from './screens/DungeonScreen.jsx'
 import CombatOutcome from './components/CombatOutcome.jsx'
+import BattleView from './components/BattleView.jsx'
 
 // A minimal screen router driven by the store's `screen` field. A dialogue,
 // when active, overlays the play screen; an active Substrate run replaces it.
@@ -31,6 +32,9 @@ export default function App() {
           <>
             <WorldMap />
             {dialogue && <DialogueScreen />}
+            {/* Arena bouts happen without a Substrate run — the battle modal
+                rides over the world map (it renders null unless a fight is on). */}
+            <BattleView />
           </>
         )}
         <CombatOutcome />

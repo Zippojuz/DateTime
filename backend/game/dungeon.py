@@ -31,6 +31,20 @@ DEFEAT_CREDIT_LOSS = 0.15
 REST_HEAL_FRACTION = 0.4
 SEARCH_DC = 7  # wit + d6 must reach this to spot a concealed exit
 RECRUIT_AFFECTION = 25  # a friend (stage threshold) will follow you down
+CRED_PER_FLOOR = 2  # street cred for each NEW deepest floor (2 x floor number)
+
+
+def _record_depth(player, floor):
+    """Update the depth record; a new personal best earns street cred (word
+    gets around about who's been how deep). Returns cred gained (0 if not a
+    record)."""
+    if floor <= player.max_floor:
+        return 0
+    player.max_floor = floor
+    gained = CRED_PER_FLOOR * floor
+    player.street_cred += gained
+    return gained
+
 
 DIRS = {"n": (0, -1), "s": (0, 1), "e": (1, 0), "w": (-1, 0)}
 OPPOSITE = {"n": "s", "s": "n", "e": "w", "w": "e"}
@@ -303,7 +317,7 @@ def enter(player, clock, seed=None):
         "pending_event": None,
         "cleared": False,
     }
-    player.max_floor = max(player.max_floor, 1)
+    _record_depth(player, 1)
     return player.dungeon
 
 
@@ -529,12 +543,16 @@ def descend(player, clock):
     run["puzzle"] = floor_data["puzzle"]
     run["keycard"] = False
     run["stairs_unlocked"] = floor_data["puzzle"] is None
-    player.max_floor = max(player.max_floor, run["floor"])
+    cred = _record_depth(player, run["floor"])
     clock.advance(MOVE_MINUTES)
+    text = f"You descend. Floor {run['floor']} exhales around you."
+    if cred:
+        text += f" Nobody you know has been this deep — word will travel. (+{cred} cred)"
     return {
         "type": "descend",
         "floor": run["floor"],
-        "text": f"You descend. Floor {run['floor']} exhales around you.",
+        "text": text,
+        "cred_gained": cred,
     }
 
 
