@@ -1649,6 +1649,39 @@ body {
   color: #ffe95a;
 }
 
+/* Black-market cred tiers */
+
+.shop-tier {
+  margin-top: 0.9rem;
+  border-top: 1px dashed #26304a;
+  padding-top: 0.6rem;
+}
+
+.shop-tier-name {
+  margin: 0 0 0.4rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.06rem;
+  color: #ffe95a;
+}
+
+.shop-tier-req {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  letter-spacing: normal;
+}
+
+.shop-tier--locked .shop-tier-name {
+  color: var(--text-dim);
+}
+
+.shop-tier-tease {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 0;
+}
+
 @media (max-width: 720px) {
   .battle-field {
     grid-template-columns: 1fr;

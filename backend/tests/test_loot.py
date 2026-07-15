@@ -85,20 +85,29 @@ def test_victory_includes_drops_and_credit_variance():
 # --- Dungeon-only items -------------------------------------------------------
 
 
+def _all_shop_stock(shop_def):
+    """Base stock plus every cred tier's stock (the whole sellable catalog)."""
+    ids = list(shop_def["stock"])
+    for tier in shop_def.get("cred_tiers", []):
+        ids.extend(tier["stock"])
+    return ids
+
+
 def test_dungeon_only_items_not_sold_in_any_shop():
     items = data.load("items")
     shops = data.load("shops")
     dungeon_only = {iid for iid, item in items.items() if item.get("dungeon_only")}
     for shop_def in shops.values():
-        overlap = dungeon_only.intersection(shop_def["stock"])
+        overlap = dungeon_only.intersection(_all_shop_stock(shop_def))
         assert not overlap, f"{shop_def['name']} sells dungeon-only items: {overlap}"
 
 
 def test_shop_stock_has_no_duplicate_items():
     # A duplicated item id renders as a React key collision (duplicated /
-    # dropped rows in ShopPanel) — every shop's stock list must be a set.
+    # dropped rows in ShopPanel) — every shop's catalog (tiers included) must
+    # be a set.
     for district_id, shop_def in data.load("shops").items():
-        stock = shop_def["stock"]
+        stock = _all_shop_stock(shop_def)
         dupes = {i for i in stock if stock.count(i) > 1}
         assert not dupes, f"{district_id} ({shop_def['name']}) lists duplicates: {dupes}"
 

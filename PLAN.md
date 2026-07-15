@@ -400,6 +400,21 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   a live run: recruit gate, mid-run lock, curio verbs + once-only, combat
   assists, leave bond (+2 on floor 1), dismiss.
 
+### Follow-up: black-market cred tiers ✅ DONE
+- The Static Bazaar grows three back rooms gated by street cred, aligned
+  with the cred stages: **The Back Shelf** (10 — Gutterware Coolant Sleeve,
+  Burner Blade, Duelist Gauntlets, Lucky Chip), **The Locked Case** (40 —
+  Flechette Pistol, Ghostweave Vest, Psi Gem), **The Basement** (100 —
+  Warlord Frame, Midnight Gem: legendary contraband).
+- Shops support ``cred_tiers`` generically (shop.tiers/_purchasable_ids):
+  locked tiers return only a tease + item count — the goods never leave the
+  server; buying below the threshold gets "The dealer's eyes slide past you
+  like you're furniture." ShopPanel renders open rooms with gold headers and
+  locked ones as 🔒 teaser rows showing required vs current cred; the shop
+  refreshes when cred moves (arena outcomes, dungeon depth records).
+- Data-integrity tests (dungeon-only, duplicates) now sweep tier stock too.
+  +7 pytest (284 total); verified live at 0 and 45 cred in-browser.
+
 ### Follow-up: The Pit (battle arena) + street cred ✅ DONE
 - **The Pit** (`arena.json` + `game/arena.py`): unlicensed ring in a drained
   ballast tank under the Docking Quarter. Pure win ladder — losses cost

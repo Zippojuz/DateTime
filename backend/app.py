@@ -338,6 +338,8 @@ def create_app():
                 "name": here["name"] if here else None,
                 "blurb": here.get("blurb") if here else None,
                 "stock": shop.stock(player.location),
+                "tiers": shop.tiers(player.location, player.street_cred),
+                "street_cred": player.street_cred,
             }
         )
 

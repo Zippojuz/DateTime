@@ -83,6 +83,75 @@ def test_black_market_discounts_used_chrome():
     assert black < corpo // 2  # the same chrome, a third the sticker
 
 
+# --- Black-market cred tiers -----------------------------------------------------------
+
+
+def _shopper(cred=0):
+    p = Player.create({"name": "Kai", "pronouns": "she/her"})
+    p.location = "the_grid"
+    p.street_cred = cred
+    p.credits = 5000
+    return p
+
+
+def test_bazaar_tiers_track_the_cred_stages():
+    tiers = data.load("shops")["the_grid"]["cred_tiers"]
+    assert [t["cred"] for t in tiers] == [10, 40, 100]
+    assert [t["name"] for t in tiers] == ["The Back Shelf", "The Locked Case", "The Basement"]
+    # Every tier's goods are black-market exclusives: sold in no base stock.
+    all_base = {i for s in data.load("shops").values() for i in s["stock"]}
+    for tier in tiers:
+        assert not all_base.intersection(tier["stock"])
+
+
+def test_locked_tiers_tease_without_showing_the_goods():
+    tiers = shop.tiers("the_grid", cred=0)
+    assert all(not t["unlocked"] for t in tiers)
+    assert all("stock" not in t and t["tease"] and t["count"] > 0 for t in tiers)
+    # At 40 cred the first two rooms open; the Basement still only teases.
+    tiers = shop.tiers("the_grid", cred=40)
+    assert [t["unlocked"] for t in tiers] == [True, True, False]
+    assert any(i["id"] == "flechette_pistol" for i in tiers[1]["stock"])
+
+
+def test_the_dealer_ignores_nobodies():
+    from game.calendar import GameClock
+
+    nobody = _shopper(cred=0)
+    with pytest.raises(GameError, match="slide past you.*Back Shelf.*10 cred"):
+        shop.buy(nobody, GameClock(), "burner_blade")
+    # Something not sold here at ANY cred stays a plain refusal.
+    with pytest.raises(GameError, match="isn't sold here"):
+        shop.buy(nobody, GameClock(), "prisma_gem")
+
+
+def test_a_name_opens_the_back_rooms():
+    from game.calendar import GameClock
+
+    somebody = _shopper(cred=100)
+    result = shop.buy(somebody, GameClock(), "warlord_frame")
+    assert result["item"] == "Warlord Frame"
+    assert somebody.inventory.get("warlord_frame") == 1
+
+
+def test_shop_api_reports_tiers(client):
+    from game import save
+
+    client.post("/api/travel", json={"to": "the_grid", "mode": "walk"})
+    body = client.get("/api/shop").get_json()
+    assert [t["unlocked"] for t in body["tiers"]] == [False, False, False]
+    assert client.post("/api/shop/buy", json={"item_id": "burner_blade"}).status_code == 400
+
+    save_id, player, clock = save.load_models()
+    player.street_cred = 12
+    player.credits = 500
+    save.save_models(save_id, player, clock)
+    body = client.get("/api/shop").get_json()
+    assert body["tiers"][0]["unlocked"] is True
+    assert any(i["id"] == "burner_blade" for i in body["tiers"][0]["stock"])
+    assert client.post("/api/shop/buy", json={"item_id": "burner_blade"}).status_code == 200
+
+
 # --- Mama Vex & the gig board ---------------------------------------------------------
 
 

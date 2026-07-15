@@ -33,6 +33,38 @@
       "smartlink_eyes",
       "subdermal_plating",
       "composure_spray"
+    ],
+    "cred_tiers": [
+      {
+        "cred": 10,
+        "name": "The Back Shelf",
+        "tease": "A shelf behind the counter, facing away. The dealer angles it toward known faces.",
+        "stock": [
+          "gutterware_coolant",
+          "burner_blade",
+          "duelist_gauntlets",
+          "lucky_chip"
+        ]
+      },
+      {
+        "cred": 40,
+        "name": "The Locked Case",
+        "tease": "A scuffed case with a palm lock. It only opens for names the Grid already says out loud.",
+        "stock": [
+          "flechette_pistol",
+          "ghostweave_vest",
+          "psi_gem"
+        ]
+      },
+      {
+        "cred": 100,
+        "name": "The Basement",
+        "tease": "Stairs behind a curtain of dead cabling. Nobody gets walked down there \u2014 you get INVITED.",
+        "stock": [
+          "warlord_frame",
+          "midnight_gem"
+        ]
+      }
     ]
   },
   "citadel_ring": {

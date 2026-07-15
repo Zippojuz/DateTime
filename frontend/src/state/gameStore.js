@@ -321,6 +321,7 @@ export const useGameStore = create((set, get) => ({
       set({ dungeon: res, state: res.state, dungeonResult: null, busy: false })
       get().loadCharacters() // delving together builds the bond
       get().loadParty()
+      get().loadShop() // depth-record cred can open black-market back rooms
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -345,6 +346,7 @@ export const useGameStore = create((set, get) => ({
       }
       if (res.outcome?.arena) {
         get().loadArena() // the ladder moved (or didn't)
+        get().loadShop() // cred can open black-market back rooms
       }
     } catch (err) {
       set({ error: err.message, busy: false })

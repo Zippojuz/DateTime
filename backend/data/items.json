@@ -815,5 +815,83 @@
     },
     "sockets": 2,
     "value": 100
+  },
+  "gutterware_coolant": {
+    "id": "gutterware_coolant",
+    "name": "Gutterware Coolant Sleeve",
+    "type": "augment",
+    "slot": "aug_neural",
+    "rarity": "uncommon",
+    "description": "A coolant sleeve with someone else's serial number filed off. Vents +2 heat per round. Probably sterile.",
+    "bonuses": {
+      "heat_vent": 2
+    },
+    "value": 8
+  },
+  "burner_blade": {
+    "id": "burner_blade",
+    "name": "Burner Blade",
+    "type": "equipment",
+    "slot": "weapon",
+    "rarity": "uncommon",
+    "description": "A duelist's edge with three previous owners, none of whom retired. +4 attack, one socket.",
+    "bonuses": {
+      "attack": 4
+    },
+    "sockets": 1,
+    "value": 8
+  },
+  "flechette_pistol": {
+    "id": "flechette_pistol",
+    "name": "Flechette Pistol",
+    "type": "equipment",
+    "slot": "weapon",
+    "rarity": "rare",
+    "description": "Military. Technically decommissioned. Technically. +6 attack, one socket.",
+    "bonuses": {
+      "attack": 6
+    },
+    "sockets": 1,
+    "value": 12
+  },
+  "ghostweave_vest": {
+    "id": "ghostweave_vest",
+    "name": "Ghostweave Vest",
+    "type": "equipment",
+    "slot": "torso",
+    "rarity": "rare",
+    "description": "Refraction mesh that remembers how not to be seen. +4 defense, +3% dodge.",
+    "bonuses": {
+      "defense": 4,
+      "dodge": 0.03
+    },
+    "sockets": 0,
+    "value": 12
+  },
+  "warlord_frame": {
+    "id": "warlord_frame",
+    "name": "Warlord Frame",
+    "type": "augment",
+    "slot": "aug_skeletal",
+    "rarity": "legendary",
+    "description": "Skeletal reinforcement from a war nobody admits to. +3 attack, +3 defense. Ask nothing.",
+    "bonuses": {
+      "attack": 3,
+      "defense": 3
+    },
+    "value": 20
+  },
+  "midnight_gem": {
+    "id": "midnight_gem",
+    "name": "Midnight Gem",
+    "type": "gem",
+    "rarity": "legendary",
+    "description": "Cut from something that shouldn't have facets. +2 attack, +2 defense, +2 speed while socketed.",
+    "effect": {
+      "attack": 2,
+      "defense": 2,
+      "speed": 2
+    },
+    "value": 20
   }
 }
