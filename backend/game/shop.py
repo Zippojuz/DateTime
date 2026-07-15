@@ -10,7 +10,7 @@ as teasers; their goods can't be browsed or bought until the dealer knows
 your name.
 """
 
-from game import data, inventory
+from game import data, inventory, traits
 from game.errors import GameError
 
 # Rarity's price multiplier, on top of an item's base value.
@@ -47,16 +47,21 @@ def _purchasable_ids(shop, cred):
     return ids
 
 
-def stock(district_id, cred=0):
+def _effective_mod(shop, discount):
+    """The district price mod after any player discount (Priced In)."""
+    return shop["price_mod"] * (1 - discount)
+
+
+def stock(district_id, cred=0, discount=0.0):
     """Base items for sale in a district, with computed prices (tier stock is
     reported separately via ``tiers``). Empty if no shop."""
     shop = _shop_for(district_id)
     if not shop:
         return []
-    return _priced(shop["stock"], shop["price_mod"])
+    return _priced(shop["stock"], _effective_mod(shop, discount))
 
 
-def tiers(district_id, cred=0):
+def tiers(district_id, cred=0, discount=0.0):
     """The shop's cred-gated back rooms: unlocked tiers carry priced stock,
     locked ones only their tease (and the cred the dealer expects)."""
     shop = _shop_for(district_id)
@@ -67,7 +72,7 @@ def tiers(district_id, cred=0):
         unlocked = cred >= tier["cred"]
         entry = {"name": tier["name"], "cred": tier["cred"], "unlocked": unlocked}
         if unlocked:
-            entry["stock"] = _priced(tier["stock"], shop["price_mod"])
+            entry["stock"] = _priced(tier["stock"], _effective_mod(shop, discount))
         else:
             entry["tease"] = tier["tease"]
             entry["count"] = len(tier["stock"])
@@ -92,7 +97,8 @@ def buy(player, clock, item_id):
                 )
         raise GameError("That isn't sold here.")
     item = inventory.get_item(item_id)
-    cost = price(item, shop["price_mod"])
+    mod = _effective_mod(shop, traits.effect(player, "shop_discount", 0.0))
+    cost = price(item, mod)
     if player.credits < cost:
         raise GameError("You can't afford that.")
 

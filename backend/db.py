@@ -155,6 +155,11 @@ def _m11_arena_and_cred(conn):
     _add_column(conn, "player", "arena_wins", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m12_species_trait(conn):
+    """The species trait chosen at creation ('' = untraited free-text species)."""
+    _add_column(conn, "player", "trait", "TEXT NOT NULL DEFAULT ''")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -167,6 +172,7 @@ MIGRATIONS = [
     _m9_protocols,
     _m10_gigs,
     _m11_arena_and_cred,
+    _m12_species_trait,
 ]
 
 

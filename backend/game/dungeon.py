@@ -18,7 +18,7 @@ topology, movement, and puzzle state.
 
 import random as _random
 
-from game import combat, data, inventory
+from game import combat, data, inventory, traits
 from game.errors import GameError
 
 ENTRANCE_DISTRICT = "the_shallows"
@@ -291,10 +291,12 @@ def enter(player, clock, seed=None):
         raise GameError("You're already inside the Substrate.")
     if player.location != ENTRANCE_DISTRICT:
         raise GameError("The way down is in The Shallows.")
-    if player.energy < ENTER_ENERGY_COST:
+    # Native Signal: the basement doesn't tax its own on the way in.
+    cost = ENTER_ENERGY_COST - traits.effect(player, "dungeon_enter_discount", 0)
+    if player.energy < cost:
         raise GameError("Too tired to brave the Substrate — rest first.")
 
-    player.energy -= ENTER_ENERGY_COST
+    player.energy -= cost
     clock.advance(ENTER_MINUTES)
     seed = seed if seed is not None else _random.randrange(1_000_000_000)
     floor_data = generate_floor(seed, 1)

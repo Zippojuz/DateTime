@@ -2,51 +2,126 @@
   "human": {
     "id": "human",
     "name": "Human",
-    "blurb": "Baseline. The city was priced for you — which isn't the same as being built for you."
+    "blurb": "Baseline. The city was priced for you \u2014 which isn't the same as being built for you.",
+    "trait": {
+      "name": "Priced In",
+      "blurb": "The city was built for you. Transit is free and dealers quote you the real price \u2014 about 10% under sticker.",
+      "effects": {
+        "transit_free": true,
+        "shop_discount": 0.1
+      }
+    }
   },
   "chassis": {
     "id": "chassis",
     "name": "Self-Owned Chassis",
-    "blurb": "Hardware holding its own title. Some bought themselves out; some just walked."
+    "blurb": "Hardware holding its own title. Some bought themselves out; some just walked.",
+    "trait": {
+      "name": "Maintenance Cycle",
+      "blurb": "You don't sleep; you defragment. A full rest takes 4 hours instead of 8.",
+      "effects": {
+        "rest_minutes": 240
+      }
+    }
   },
   "uplift": {
     "id": "uplift",
     "name": "Uplift",
-    "blurb": "Animal intelligence raised to speech in a corp lab. The paperwork says 'asset'; the law is still arguing."
+    "blurb": "Animal intelligence raised to speech in a corp lab. The paperwork says 'asset'; the law is still arguing.",
+    "trait": {
+      "name": "Escape Artist",
+      "blurb": "You got out of a lab; a fight is easier. Fleeing always succeeds (bosses still corner you) and you dodge a little better.",
+      "effects": {
+        "flee_always": true,
+        "dodge": 0.03
+      }
+    }
   },
   "warform": {
     "id": "warform",
     "name": "Warform",
-    "blurb": "Vat-grown for a war that ended before the invoice cleared."
+    "blurb": "Vat-grown for a war that ended before the invoice cleared.",
+    "trait": {
+      "name": "Built For It",
+      "blurb": "The vat had specifications. +10% max HP, and guarding a telegraphed signature move cuts it to a quarter instead of a third.",
+      "effects": {
+        "max_hp_mult": 1.1,
+        "telegraph_guard_divisor": 4
+      }
+    }
   },
   "hivemind": {
     "id": "hivemind",
     "name": "Hivemind Colony",
-    "blurb": "Many bodies, one opinion. On bad days, two."
+    "blurb": "Many bodies, one opinion. On bad days, two.",
+    "trait": {
+      "name": "Shift Change",
+      "blurb": "Some of you is always rested. Actions cost 25% less energy.",
+      "effects": {
+        "action_energy_mult": 0.75
+      }
+    }
   },
   "avian": {
     "id": "avian",
     "name": "Feathered Avian",
-    "blurb": "Hollow bones, storm-sense, and a grip on every ledge the city keeps building."
+    "blurb": "Hollow bones, storm-sense, and a grip on every ledge the city keeps building.",
+    "trait": {
+      "name": "Rooftop Lines",
+      "blurb": "The city has a second street plan ten meters up. Walking anywhere takes half the time.",
+      "effects": {
+        "walk_minutes_mult": 0.5
+      }
+    }
   },
   "reptilian": {
     "id": "reptilian",
     "name": "Reptilian Cold-blood",
-    "blurb": "A patient metabolism in an impatient city. Sunlamps are a love language."
+    "blurb": "A patient metabolism in an impatient city. Sunlamps are a love language.",
+    "trait": {
+      "name": "Patient Metabolism",
+      "blurb": "Poisons and flames burn out before you do. Status effects on you last one turn less.",
+      "effects": {
+        "status_turns_resist": 1
+      }
+    }
   },
   "mycoid": {
     "id": "mycoid",
     "name": "Plant-Fungal Hybrid",
-    "blurb": "Photosynthesizes a little. Remembers everything the soil heard."
+    "blurb": "Photosynthesizes a little. Remembers everything the soil heard.",
+    "trait": {
+      "name": "Photosynthesis",
+      "blurb": "You snack on daylight. Waiting or exploring between 06:00 and 18:00 restores 5 energy instead of costing any.",
+      "effects": {
+        "photosynthesis": 5
+      }
+    }
   },
   "luminal": {
     "id": "luminal",
     "name": "Bioluminescent",
-    "blurb": "Glows when feeling things. Poker is expensive."
+    "blurb": "Glows when feeling things. Poker is expensive.",
+    "trait": {
+      "name": "The Tell",
+      "blurb": "You glow when you feel things. Heartfelt dialogue lands harder (+1 affection) \u2014 and so do your offenses (\u22121 worse). Everyone can read you.",
+      "effects": {
+        "dialogue_affection_bonus": 1,
+        "offense_extra": 1
+      }
+    }
   },
   "substrate_born": {
     "id": "substrate_born",
     "name": "Substrate-Born",
-    "blurb": "A signal that wanted a body. The city's basement dreams these, sometimes."
+    "blurb": "A signal that wanted a body. The city's basement dreams these, sometimes.",
+    "trait": {
+      "name": "Native Signal",
+      "blurb": "The basement dreams in your dialect. +15 heat capacity, and entering the Substrate costs half the energy.",
+      "effects": {
+        "heat_cap": 15,
+        "dungeon_enter_discount": 5
+      }
+    }
   }
 }

@@ -516,6 +516,38 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   trained at −8/1h vs wit at −15/2h, Oona talked, tank hours refused, and
   the Hold→Pit hop correctly refused at 13:00 (Pit closed).
 
+### Follow-up: species traits ✅ DONE
+- **Design doc AMENDED** (user decision): species MAY be mechanical — traits,
+  flavored dialogue, minor gates — under two hard rules: the main romance
+  pathway is never species-gated (every dialogue node keeps a trait-free
+  path, enforced by an integrity test), and gender/orientation stay
+  never-mechanical. The "should species have mechanical implications?" open
+  question is RESOLVED.
+- **Traits** (species.json ``trait`` blocks + game/traits.py): one shared
+  knack per registry species, like a class built from what a body is.
+  Human **Priced In** (free transit, 10% shop discount) · Chassis
+  **Maintenance Cycle** (4h full rest) · Uplift **Escape Artist** (flee
+  always works, +0.03 dodge; bosses still corner you) · Warform **Built For
+  It** (+10% max HP, guard cuts telegraphs to 1/4) · Hivemind **Shift
+  Change** (action energy −25%) · Avian **Rooftop Lines** (walks half time)
+  · Reptilian **Patient Metabolism** (statuses −1 turn, min 1) · Mycoid
+  **Photosynthesis** (daylight wait/explore = +5 energy) · Luminal **The
+  Tell** (double-edged: dialogue affection +1, offenses −1 worse) ·
+  Substrate-Born **Native Signal** (+15 heat cap, Substrate entry half
+  energy).
+- **Selection**: registry species bring their trait automatically; a custom
+  free-text species may claim ANY trait or none (creation-screen picker).
+  Trait id persists on the player (migration 12), locked at creation.
+  traits.effect(player, key, default) is the single resolution point; hooks
+  live in actions/world/shop/combat/dungeon and the dialogue routes.
+- **Species-flavored dialogue**: choices gain ``requires_trait`` (hidden from
+  everyone else, like requires_event). Showcases: an Uplift line at Oona's
+  lab-escape beat, a Substrate-Born line greeting Nyx. NOTE: default humans
+  now ride transit free — old cost tests updated to use an untraited species.
+- +17 pytest (333 total); all ten traits verified LIVE against the real
+  server (one fresh save per trait), plus Playwright shots of the trait
+  picker (auto for registry species, full chip list for custom).
+
 ### Follow-up: cyberpunk city — corps, markets, the fixer, the ripperdoc ✅ DONE
 - **The Triumvirate** (`corps.json` + `game/corps.py`): Oceania Consolidated
   ("SAFETY IS FREEDOM" — surveillance that loves you), Eurasia Heavy

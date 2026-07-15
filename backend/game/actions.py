@@ -7,9 +7,11 @@ milestones and their own data. Time/energy costs follow the design doc.
 `energy` is an int delta, or the string "full" to restore to max.
 """
 
-from game import data
+from game import data, traits
 from game.errors import GameError
 from game.player import MAX_ENERGY
+
+DAYLIGHT = (6 * 60, 18 * 60)  # photosynthesis window
 
 ACTIONS = {
     "rest": {"label": "Rest (full sleep)", "minutes": 480, "energy": "full"},
@@ -33,6 +35,16 @@ def apply_action(player, clock, action_id, attribute=None):
         if rates:
             minutes, energy = rates["minutes"], rates["energy"]
 
+    # Species traits reshape the daily loop (see game/traits.py).
+    if action_id == "rest":
+        minutes = traits.effect(player, "rest_minutes", minutes)  # Maintenance Cycle
+    sun = traits.effect(player, "photosynthesis", 0)
+    if sun and action_id in ("wait", "explore") and _daylight(clock):
+        energy = sun  # Photosynthesis: daylight idling feeds you
+    if isinstance(energy, int) and energy < 0:
+        mult = traits.effect(player, "action_energy_mult", 1.0)  # Shift Change
+        energy = round(energy * mult)
+
     _apply_energy(player, energy)
 
     if action.get("trains"):
@@ -40,6 +52,10 @@ def apply_action(player, clock, action_id, attribute=None):
 
     clock.advance(minutes)
     return player, clock
+
+
+def _daylight(clock):
+    return DAYLIGHT[0] <= clock.minute_of_day < DAYLIGHT[1]
 
 
 def house_rates(player, attribute):

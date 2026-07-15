@@ -8,7 +8,7 @@ availability is resolved from schedules, and — as of Milestone 3 — you must 
 in the same place as an NPC to reach them.
 """
 
-from game import data, places
+from game import data, places, traits
 from game.errors import GameError
 
 # Travel cost by (distance, mode): distance is "adjacent" or "cross".
@@ -58,7 +58,12 @@ def travel(player, clock, to_id, mode):
     if not places.is_open(to_id, clock):
         raise GameError(place.get("closed_line", f"{place['name']} is closed right now."))
 
-    cost = travel_cost(player.location, to_id, mode)
+    cost = dict(travel_cost(player.location, to_id, mode))
+    # Species traits: Rooftop Lines halves walks; Priced In rides free.
+    if mode == "walk":
+        cost["minutes"] = round(cost["minutes"] * traits.effect(player, "walk_minutes_mult", 1.0))
+    if mode == "transit" and traits.effect(player, "transit_free", False):
+        cost["credits"] = 0
     if player.credits < cost["credits"]:
         raise GameError("Not enough credits for transit.")
     if player.energy + cost["energy"] < 0:

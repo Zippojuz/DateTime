@@ -45,6 +45,7 @@ class Player(Character):
         self,
         identity,
         species=DEFAULT_SPECIES,
+        trait="",
         attributes=None,
         energy=MAX_ENERGY,
         created_identity=None,
@@ -73,6 +74,9 @@ class Player(Character):
         # player's name is their identity name (never changeable via transform).
         super().__init__(identity.get("name", ""), attributes, preferences)
         self.species = species
+        # Species trait id (data/species.json key; "" = none). Chosen at
+        # creation and locked, like the rest of the created identity.
+        self.trait = trait
         self.energy = energy
         self.location = location
         self.credits = credits
@@ -106,14 +110,17 @@ class Player(Character):
         self.unlocked_transformations = list(unlocked_transformations or [])
 
     @classmethod
-    def create(cls, identity, species=DEFAULT_SPECIES):
+    def create(cls, identity, species=DEFAULT_SPECIES, trait=""):
         """Fresh player. Identity is locked: current == created. Species is
-        free text — data/species.json only offers suggestions, never gates."""
+        free text — data/species.json only offers suggestions — and carries a
+        trait (see game/traits.py): registry species bring their own; custom
+        species may pick any, or none."""
         clean = {field: identity.get(field, "") for field in IDENTITY_FIELDS}
         return cls(
             identity=clean,
             created_identity=clean,
             species=species,
+            trait=trait,
             preferences=DEFAULT_PREFERENCES,
             inventory=dict(DEFAULT_INVENTORY),
         )
@@ -132,6 +139,7 @@ class Player(Character):
         base.update(
             {
                 "species": self.species,
+                "trait": self.trait,
                 "energy": self.energy,
                 "location": self.location,
                 "credits": self.credits,

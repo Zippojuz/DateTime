@@ -1786,6 +1786,18 @@ body {
   font-style: italic;
 }
 
+.player-trait {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  line-height: 1.45;
+}
+
+.player-trait-name {
+  color: #ffe95a;
+  font-style: normal;
+  letter-spacing: 0.04rem;
+}
+
 .arena-panel h2 {
   font-size: 1.1rem;
   letter-spacing: 0.05rem;

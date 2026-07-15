@@ -16,17 +16,23 @@ export default function CreationScreen() {
   const [name, setName] = useState('')
   const [pronouns, setPronouns] = useState('they/them')
   const [species, setSpecies] = useState('Human')
+  const [customTrait, setCustomTrait] = useState('')
   const [appearance, setAppearance] = useState('')
   const [body, setBody] = useState('')
 
-  const speciesBlurb = Object.values(speciesRegistry ?? {}).find(
-    (s) => s.name === species,
-  )?.blurb
+  // A registry species brings its own trait; a custom species picks any (or
+  // none). Traits are the mechanical half of a species — chosen here, locked
+  // with the rest of your created identity.
+  const registryMatch = Object.values(speciesRegistry ?? {}).find(
+    (s) => s.name.toLowerCase() === species.trim().toLowerCase(),
+  )
+  const traitId = registryMatch ? registryMatch.id : customTrait
+  const trait = speciesRegistry?.[traitId]?.trait
 
   const submit = (e) => {
     e.preventDefault()
     if (!name.trim()) return
-    newGame({ name, pronouns, species, appearance, body })
+    newGame({ name, pronouns, species, trait: traitId, appearance, body })
   }
 
   return (
@@ -89,7 +95,44 @@ export default function CreationScreen() {
             onChange={(e) => setSpecies(e.target.value)}
             placeholder="Or type your own"
           />
-          {speciesBlurb && <span className="species-blurb">{speciesBlurb}</span>}
+          {registryMatch && <span className="species-blurb">{registryMatch.blurb}</span>}
+        </label>
+
+        <label>
+          Trait
+          {!registryMatch && (
+            <div className="pronoun-presets trait-presets">
+              <button
+                type="button"
+                className={`chip ${customTrait === '' ? 'chip--active' : ''}`}
+                onClick={() => setCustomTrait('')}
+              >
+                None
+              </button>
+              {Object.values(speciesRegistry ?? {}).map((s) => (
+                <button
+                  type="button"
+                  key={s.id}
+                  className={`chip ${customTrait === s.id ? 'chip--active' : ''}`}
+                  title={s.trait?.blurb}
+                  onClick={() => setCustomTrait(s.id)}
+                >
+                  {s.trait?.name}
+                </button>
+              ))}
+            </div>
+          )}
+          {trait ? (
+            <span className="species-blurb">
+              <strong className="player-trait-name">{trait.name}</strong> — {trait.blurb}
+            </span>
+          ) : (
+            <span className="species-blurb">
+              {registryMatch
+                ? 'This species carries no trait.'
+                : 'A written-in species may claim any trait — or walk in without one.'}
+            </span>
+          )}
         </label>
 
         <label>

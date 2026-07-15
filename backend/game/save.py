@@ -15,12 +15,12 @@ from game.npc import NPC
 from game.player import Player
 
 
-def create_new_game(identity, species=None):
+def create_new_game(identity, species=None, trait=""):
     """Start a fresh game, replacing any existing single save. Fires any
     events already due (e.g. the day-1 arrival story beat) so they surface
     immediately rather than waiting for the first action. Returns
     (state, fired_events)."""
-    player = Player.create(identity, **({"species": species} if species else {}))
+    player = Player.create(identity, **({"species": species} if species else {}), trait=trait)
     clock = GameClock()
     with get_connection() as conn:
         conn.execute("DELETE FROM player")
@@ -46,6 +46,7 @@ def load_models():
     player = Player(
         identity=json.loads(row["current_identity"]),
         species=row["species"],
+        trait=row["trait"],
         attributes=json.loads(row["attributes"]),
         energy=row["energy"],
         created_identity=json.loads(row["created_identity"]),
@@ -91,7 +92,7 @@ def save_models(save_id, player, clock):
     with get_connection() as conn:
         conn.execute(
             """UPDATE player SET
-                   species=?, attributes=?, preferences=?, energy=?,
+                   species=?, trait=?, attributes=?, preferences=?, energy=?,
                    location=?, credits=?, debt=?, debt_due_week=?, fired_events=?,
                    inventory=?,
                    combat_level=?, combat_xp=?, difficulty=?, max_floor=?,
@@ -102,6 +103,7 @@ def save_models(save_id, player, clock):
                WHERE save_id=?""",
             (
                 player.species,
+                player.trait,
                 json.dumps(player.attributes),
                 json.dumps(player.preferences),
                 player.energy,
@@ -141,17 +143,18 @@ def state_dict(player, clock):
 def _insert_player(conn, save_id, player, clock):
     conn.execute(
         """INSERT INTO player (
-               save_id, species, attributes, preferences, energy,
+               save_id, species, trait, attributes, preferences, energy,
                location, credits, debt, debt_due_week, fired_events, inventory,
                combat_level, combat_xp, difficulty, max_floor, dungeon, combat, equipment,
                companion, protocols, last_gig_day, street_cred, arena_wins,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
+            player.trait,
             json.dumps(player.attributes),
             json.dumps(player.preferences),
             player.energy,

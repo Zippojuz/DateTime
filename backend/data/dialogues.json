@@ -337,6 +337,12 @@
               "delta": -3,
               "severity": "minor"
             }
+          },
+          {
+            "text": "[Substrate-Born] Your signal sounds like home. I came up the same stairs, once.",
+            "next": "n2",
+            "affection": 5,
+            "requires_trait": "substrate_born"
           }
         ]
       },
@@ -892,6 +898,12 @@
             "text": "Arbitration-proof forgery. Respect.",
             "next": "n5",
             "affection": 2
+          },
+          {
+            "text": "[Uplift] I know that paperwork. Mine only needed one hand \u2014 but it held.",
+            "next": "n5",
+            "affection": 5,
+            "requires_trait": "uplift"
           }
         ]
       },

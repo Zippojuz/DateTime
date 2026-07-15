@@ -64,14 +64,28 @@ def test_walk_costs_time_and_energy_but_no_credits(client):
     assert res["state"]["clock"]["time"] == "08:20"  # +20 min
 
 
+def _untraited(client):
+    """A fresh save with a free-text species — no trait, so transit isn't
+    free (the default human's Priced In trait rides at no charge)."""
+    client.post("/api/game/new", json={"name": "Kai", "pronouns": "she/her", "species": "Drifter"})
+
+
 def test_transit_costs_credits(client):
+    _untraited(client)
     res = client.post("/api/travel", json={"to": "the_grid", "mode": "transit"}).get_json()
     player = res["state"]["player"]
     assert player["credits"] == 42  # 50 - 8
     assert res["state"]["clock"]["time"] == "08:08"
 
 
+def test_transit_is_free_for_the_priced_in(client):
+    # The default human carries Priced In: the city was built for them.
+    res = client.post("/api/travel", json={"to": "the_grid", "mode": "transit"}).get_json()
+    assert res["state"]["player"]["credits"] == 50
+
+
 def test_cross_city_is_more_expensive(client):
+    _untraited(client)
     res = client.post("/api/travel", json={"to": "citadel_ring", "mode": "transit"}).get_json()
     player = res["state"]["player"]
     assert player["credits"] == 32  # 50 - 18
@@ -79,6 +93,7 @@ def test_cross_city_is_more_expensive(client):
 
 
 def test_cannot_travel_without_enough_credits(client):
+    _untraited(client)
     # Loop the ring by transit — each adjacent hop is 8 credits: 50 -> 10.
     for dest in ("the_grid", "citadel_ring", "bloom_district", "the_shallows", "docking_quarter"):
         client.post("/api/travel", json={"to": dest, "mode": "transit"})

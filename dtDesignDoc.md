@@ -46,6 +46,18 @@ Gender and orientation are **fluid, never locked in, and never mechanical.**
 - The same applies to the cast: characters have pronouns and their own
   identities, mentioned only where they're meaningful to who they are.
 
+**Species is different** (amended): species MAY be mechanical. Every registry
+species carries a shared trait — a species-wide knack, like a D&D class
+reshaped around what a body *is* — and species may flavor dialogue and gate
+minor content (a bonus line, a shortcut, a knowing aside). Two hard rules:
+
+- **The main romance pathway is never species-gated.** Every character stays
+  fully romanceable by every species, and every dialogue node always keeps at
+  least one path open that requires no species at all. Species opens doors on
+  the side; it never closes the road.
+- Gender and orientation remain never-mechanical, exactly as above. The
+  amendment is species-only.
+
 ### Player Transformation (locked at creation → fluid over the story)
 
 - Your **initial state is locked in** at character creation — you commit to a
@@ -72,7 +84,7 @@ Gender and orientation are **fluid, never locked in, and never mechanical.**
  
 ### Design Questions (Open)
 - How alien do we go? Mix of humanoid-leaning and genuinely strange is the current direction
-- Should species have mechanical implications? (perception abilities, unique interactions) — leaning yes
+- Should species have mechanical implications? — RESOLVED yes: species traits (see Identity Philosophy amendment), plus species-flavored dialogue and minor gates; main romance pathway stays species-agnostic
 - Player species being unknown may tie into hidden abilities they don't yet understand
 - Romance characters' species affects *how* you interact with them mechanically
 ### Humanoid-ish Species

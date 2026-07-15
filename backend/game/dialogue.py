@@ -3,9 +3,12 @@
 Trees are authored in data/dialogues.json, keyed by dialogue id. A node has
 `text` and `choices`; a choice has `text`, `next` (node id or null to end),
 optional `affection`, optional `requires` (attribute thresholds — a light
-stat gate, shown locked), and optional `requires_event` (a fired-event marker
+stat gate, shown locked), optional `requires_event` (a fired-event marker
 like "defeated:ondo_the_bell" — hidden entirely until it's true, so story
-payoffs don't spoil themselves as grayed-out options). Choice text is rendered
+payoffs don't spoil themselves as grayed-out options), and optional
+`requires_trait` (a species trait id — hidden the same way; per the amended
+Identity Philosophy these are bonus color only, and an integrity test
+guarantees every node keeps a trait-free path). Choice text is rendered
 through the pronoun helper so player (and NPC) references resolve correctly,
 respecting the player's *current* pronouns.
 """
@@ -104,6 +107,9 @@ def node_view(tree, node_id, player):
         event = choice.get("requires_event")
         if event and event not in player.fired_events:
             continue  # hidden, not locked — indices stay stable via `index`
+        trait = choice.get("requires_trait")
+        if trait and getattr(player, "trait", "") != trait:
+            continue  # species color: hidden from everyone else
         requires = choice.get("requires")
         choices.append(
             {
@@ -137,5 +143,8 @@ def resolve_choice(tree, node_id, choice_index, player):
         raise GameError("You don't meet the requirement for that option.")
     event = choice.get("requires_event")
     if event and event not in player.fired_events:
+        raise GameError("You don't meet the requirement for that option.")
+    trait = choice.get("requires_trait")
+    if trait and getattr(player, "trait", "") != trait:
         raise GameError("You don't meet the requirement for that option.")
     return choice.get("next"), choice

@@ -12,7 +12,7 @@ hit, banks +1 charge), item (food heals HP in combat), flee (never from bosses).
 
 import random as _random
 
-from game import data, equipment, inventory
+from game import data, equipment, inventory, traits
 from game.errors import GameError
 
 CHARGE_START = 2
@@ -96,20 +96,25 @@ def player_stats(player):
     hacking = player.attributes.get("hacking", 5)
     eq = equipment.bonuses(player)
     speed = 5 + level + wit + eq["speed"]
+    # Species traits (game/traits.py): Built For It, Escape Artist, Native Signal.
+    hp_mult = traits.effect(player, "max_hp_mult", 1.0)
     return {
         "level": level,
-        "max_hp": 30 + level * 10 + courage * 2 + eq["max_hp"],
+        "max_hp": round((30 + level * 10 + courage * 2 + eq["max_hp"]) * hp_mult),
         "attack": 6 + level * 2 + courage + eq["attack"],
         "defense": 2 + level + wit // 2 + agility // 2 + eq["defense"],
         "speed": speed,
         "crit": round(crit_chance(speed, luck), 3),
-        "dodge": round(min(0.5, dodge_chance(agility, luck) + eq["dodge"]), 3),
+        "dodge": round(
+            min(0.5, dodge_chance(agility, luck) + eq["dodge"] + traits.effect(player, "dodge", 0)),
+            3,
+        ),
         "luck": luck,
         # Hacking is the casting stat: strike protocols swing with lace power
         # (not your weapon arm), and a disciplined lace runs cooler per cast.
         "protocol_power": 6 + level * 2 + hacking * 2,
         "heat_discount": hacking // 2,
-        "heat_cap": HEAT_CAP + eq["heat_cap"],
+        "heat_cap": HEAT_CAP + eq["heat_cap"] + traits.effect(player, "heat_cap", 0),
         "heat_vent": HEAT_VENT + eq["heat_vent"],
     }
 
@@ -212,6 +217,11 @@ def start(player, enemy_id, floor, player_hp, attack_buff=0, companion=None, are
 
 def _status_for(element):
     return data.load("elements").get(element, {}).get("status")
+
+
+def _resisted_turns(player, turns):
+    """Patient Metabolism: statuses on the player burn out a turn sooner."""
+    return max(1, turns - traits.effect(player, "status_turns_resist", 0))
 
 
 def _inflict(effects, effect, turns, amount=0):
@@ -355,14 +365,17 @@ def _enemy_turn(player, state, pstats, rng):
         dmg, _crit = _damage(atk, move["power"], defense, resist, rng, crit=enemy_crit)
         dmg = round(dmg * marked)
         if state["guarding"]:
-            dmg = max(1, dmg // TELEGRAPH_GUARD_DIVISOR)
+            # Warforms (Built For It) brace harder than the standard divisor.
+            divisor = traits.effect(player, "telegraph_guard_divisor", TELEGRAPH_GUARD_DIVISOR)
+            dmg = max(1, dmg // divisor)
             state["guarding"] = False
             log.append(f"You read it perfectly and brace through {move['name']}.")
         state["player_hp"] = max(0, state["player_hp"] - dmg)
         log.append(f"{enemy['name']} unleashes {move['name']} — {dmg} damage!")
         inflict = move.get("inflicts")
         if inflict and state["player_hp"] > 0:
-            _inflict(pe, inflict["effect"], inflict["turns"], inflict.get("amount", 0))
+            turns = _resisted_turns(player, inflict["turns"])
+            _inflict(pe, inflict["effect"], turns, inflict.get("amount", 0))
             log.append(f"You're afflicted: {inflict['effect']}!")
     else:
         moves = (enemy.get("mechanics") or {}).get("moves") or []
@@ -410,7 +423,7 @@ def _enemy_turn(player, state, pstats, rng):
                 if use_skill and rng.random() < ENEMY_SKILL_INFLICT_CHANCE:
                     status = _status_for(enemy["element"])
                     if status and state["player_hp"] > 0:
-                        _inflict(pe, status, 2)
+                        _inflict(pe, status, _resisted_turns(player, 2))
                         log.append(f"You're afflicted: {status}!")
 
     if state["player_hp"] <= 0:
@@ -645,7 +658,10 @@ def act(player, state, action, skill_id=None, item_id=None, rng=None, protocol_i
     elif action == "flee":
         if enemy.get("role") == "boss":
             raise GameError(f"{enemy['name']} won't let you leave.")
-        if rng.random() < min(FLEE_CAP, FLEE_CHANCE + pstats["luck"] * FLEE_PER_LUCK):
+        # Escape Artists always find the seam (bosses still corner you, above).
+        if traits.effect(player, "flee_always", False) or rng.random() < min(
+            FLEE_CAP, FLEE_CHANCE + pstats["luck"] * FLEE_PER_LUCK
+        ):
             state["over"] = True
             state["fled"] = True
             state["log"].append("You slip away into the dark.")

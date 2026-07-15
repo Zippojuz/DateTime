@@ -27,6 +27,7 @@ from game import (
     save,
     shop,
     social,
+    traits,
     world,
 )
 from game.actions import ACTIONS, apply_action
@@ -121,7 +122,15 @@ def create_app():
         if not identity["pronouns"]:
             identity["pronouns"] = "they/them"
         species = (body.get("species") or "").strip() or None
-        state, fired = save.create_new_game(identity, species=species)
+        # Trait: explicit (custom species pick any, or "" for none), otherwise
+        # inferred from the species name when it matches the registry.
+        if "trait" in body:
+            trait = (body.get("trait") or "").strip()
+            if trait and traits.get(trait) is None:
+                return jsonify(error="Unknown trait."), 400
+        else:
+            trait = traits.default_for_species(species or DEFAULT_SPECIES)
+        state, fired = save.create_new_game(identity, species=species, trait=trait)
         return jsonify({**state, "events": fired}), 201
 
     @app.get("/api/game/state")
@@ -348,13 +357,14 @@ def create_app():
         _, player, _clock = models
         shops = data.load("shops")
         here = shops.get(player.location)
+        discount = traits.effect(player, "shop_discount", 0.0)
         return jsonify(
             {
                 "district": player.location,
                 "name": here["name"] if here else None,
                 "blurb": here.get("blurb") if here else None,
-                "stock": shop.stock(player.location),
-                "tiers": shop.tiers(player.location, player.street_cred),
+                "stock": shop.stock(player.location, discount=discount),
+                "tiers": shop.tiers(player.location, player.street_cred, discount=discount),
                 "street_cred": player.street_cred,
             }
         )
@@ -857,7 +867,10 @@ def create_app():
         before = social.get_affection(save_id, npc.id, day)
 
         # Base affection from the choice, scaled by how late you arrived.
+        # The Tell (luminal trait): heartfelt choices glow — and land harder.
         base = round(choice.get("affection", 0) * world.TIER_MULTIPLIER.get(tier, 0))
+        if base > 0:
+            base += traits.effect(player, "dialogue_affection_bonus", 0)
         if base:
             social.add_opinion(save_id, npc.id, base, day)
 
@@ -877,11 +890,11 @@ def create_app():
             social.discover_npc_topic(save_id, npc.id, choice["reveal_npc"])
 
         # An offence: amplified when the bond is weak, decays by severity.
+        # The Tell cuts both ways — everyone can see you mean it.
         offense = choice.get("offense")
         if offense:
-            social.record_offense(
-                save_id, npc.id, offense.get("delta", 0), day, offense.get("severity", "minor")
-            )
+            delta = offense.get("delta", 0) - traits.effect(player, "offense_extra", 0)
+            social.record_offense(save_id, npc.id, delta, day, offense.get("severity", "minor"))
 
         after = social.get_affection(save_id, npc.id, day)
         payload = {"ended": next_id is None, "gained": after - before, "affection": after}
