@@ -1,0 +1,52 @@
+{
+  "human": {
+    "id": "human",
+    "name": "Human",
+    "blurb": "Baseline. The city was priced for you — which isn't the same as being built for you."
+  },
+  "chassis": {
+    "id": "chassis",
+    "name": "Self-Owned Chassis",
+    "blurb": "Hardware holding its own title. Some bought themselves out; some just walked."
+  },
+  "uplift": {
+    "id": "uplift",
+    "name": "Uplift",
+    "blurb": "Animal intelligence raised to speech in a corp lab. The paperwork says 'asset'; the law is still arguing."
+  },
+  "warform": {
+    "id": "warform",
+    "name": "Warform",
+    "blurb": "Vat-grown for a war that ended before the invoice cleared."
+  },
+  "hivemind": {
+    "id": "hivemind",
+    "name": "Hivemind Colony",
+    "blurb": "Many bodies, one opinion. On bad days, two."
+  },
+  "avian": {
+    "id": "avian",
+    "name": "Feathered Avian",
+    "blurb": "Hollow bones, storm-sense, and a grip on every ledge the city keeps building."
+  },
+  "reptilian": {
+    "id": "reptilian",
+    "name": "Reptilian Cold-blood",
+    "blurb": "A patient metabolism in an impatient city. Sunlamps are a love language."
+  },
+  "mycoid": {
+    "id": "mycoid",
+    "name": "Plant-Fungal Hybrid",
+    "blurb": "Photosynthesizes a little. Remembers everything the soil heard."
+  },
+  "luminal": {
+    "id": "luminal",
+    "name": "Bioluminescent",
+    "blurb": "Glows when feeling things. Poker is expensive."
+  },
+  "substrate_born": {
+    "id": "substrate_born",
+    "name": "Substrate-Born",
+    "blurb": "A signal that wanted a body. The city's basement dreams these, sometimes."
+  }
+}

@@ -15,12 +15,12 @@ from game.npc import NPC
 from game.player import Player
 
 
-def create_new_game(identity):
+def create_new_game(identity, species=None):
     """Start a fresh game, replacing any existing single save. Fires any
     events already due (e.g. the day-1 arrival story beat) so they surface
     immediately rather than waiting for the first action. Returns
     (state, fired_events)."""
-    player = Player.create(identity)
+    player = Player.create(identity, **({"species": species} if species else {}))
     clock = GameClock()
     with get_connection() as conn:
         conn.execute("DELETE FROM player")

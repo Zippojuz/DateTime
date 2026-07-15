@@ -94,6 +94,9 @@ export default function WorldMap() {
 
       <section className="action-panel">
         <h2>What do you do?</h2>
+        {insideVenue?.training && (
+          <p className="venue-perk">{insideVenue.training.blurb}</p>
+        )}
         {error && <p className="form-error">{error}</p>}
         <div className="action-list">
           {Object.entries(actions ?? {}).map(([id, def]) =>

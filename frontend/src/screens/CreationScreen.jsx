@@ -5,21 +5,28 @@ const PRONOUN_PRESETS = ['she/her', 'he/him', 'they/them']
 
 // Character creation. Identity is locked once you begin (see Identity
 // Philosophy) — appearance/pronouns/body can change later only through the
-// story-gated transformation system. Species is fixed to human for now.
+// story-gated transformation system. Species offers suggestions from the
+// registry but accepts anything: identity is data, never a gate.
 export default function CreationScreen() {
   const newGame = useGameStore((s) => s.newGame)
+  const speciesRegistry = useGameStore((s) => s.species)
   const busy = useGameStore((s) => s.busy)
   const error = useGameStore((s) => s.error)
 
   const [name, setName] = useState('')
   const [pronouns, setPronouns] = useState('they/them')
+  const [species, setSpecies] = useState('Human')
   const [appearance, setAppearance] = useState('')
   const [body, setBody] = useState('')
+
+  const speciesBlurb = Object.values(speciesRegistry ?? {}).find(
+    (s) => s.name === species,
+  )?.blurb
 
   const submit = (e) => {
     e.preventDefault()
     if (!name.trim()) return
-    newGame({ name, pronouns, appearance, body })
+    newGame({ name, pronouns, species, appearance, body })
   }
 
   return (
@@ -64,7 +71,25 @@ export default function CreationScreen() {
 
         <label>
           Species
-          <input value="Human" disabled title="Other species come later" />
+          <div className="pronoun-presets species-presets">
+            {Object.values(speciesRegistry ?? {}).map((s) => (
+              <button
+                type="button"
+                key={s.id}
+                className={`chip ${species === s.name ? 'chip--active' : ''}`}
+                title={s.blurb}
+                onClick={() => setSpecies(s.name)}
+              >
+                {s.name}
+              </button>
+            ))}
+          </div>
+          <input
+            value={species}
+            onChange={(e) => setSpecies(e.target.value)}
+            placeholder="Or type your own"
+          />
+          {speciesBlurb && <span className="species-blurb">{speciesBlurb}</span>}
         </label>
 
         <label>

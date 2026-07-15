@@ -162,6 +162,7 @@ body {
 
 .pronoun-presets {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.4rem;
 }
@@ -1767,6 +1768,22 @@ body {
 .hud-under {
   color: var(--text-dim);
   font-size: 0.8em;
+}
+
+.venue-perk {
+  color: #ffe95a;
+  font-size: 0.85rem;
+  border: 1px dashed rgba(255, 233, 90, 0.35);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+}
+
+.species-blurb {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-style: italic;
 }
 
 .arena-panel h2 {

@@ -27,13 +27,29 @@ def apply_action(player, clock, action_id, attribute=None):
     if action is None:
         raise GameError(f"Unknown action: {action_id!r}")
 
-    _apply_energy(player, action["energy"])
+    minutes, energy = action["minutes"], action["energy"]
+    if action.get("trains"):
+        rates = house_rates(player, attribute)
+        if rates:
+            minutes, energy = rates["minutes"], rates["energy"]
+
+    _apply_energy(player, energy)
 
     if action.get("trains"):
         _train(player, attribute)
 
-    clock.advance(action["minutes"])
+    clock.advance(minutes)
     return player, clock
+
+
+def house_rates(player, attribute):
+    """Venue coaching: a venue may discount training for its listed attributes
+    (the Hold coaches Agility and Courage). None when no discount applies."""
+    venue = data.load("venues").get(player.location)
+    rates = (venue or {}).get("training")
+    if rates and attribute in rates["attributes"]:
+        return rates
+    return None
 
 
 def _apply_energy(player, rule):

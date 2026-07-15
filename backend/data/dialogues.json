@@ -797,5 +797,134 @@
         ]
       }
     }
+  },
+  "oona_intro": {
+    "id": "oona_intro",
+    "npc": "oona",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "Three arms spot a dock worker's bench press, two chalk a bar, one writes on a clipboard, and the seventh and eighth fold \u2014 somehow \u2014 skeptically as you walk in. The exo-rig hisses; the octopus at the heart of it studies you with a horizontal pupil. \u201cNew meat. Let me guess: you bend in four places and you're proud of all four.\u201d",
+        "choices": [
+          {
+            "text": "Five, actually. I stretch.",
+            "next": "n2",
+            "affection": 2
+          },
+          {
+            "text": "[Agility] Throw something at me and find out.",
+            "next": "n2b",
+            "affection": 3,
+            "requires": {
+              "agility": 6
+            }
+          },
+          {
+            "text": "I'm {name}. I want to train here.",
+            "next": "n3",
+            "affection": 2
+          },
+          {
+            "text": "Does the calamari come with the membership?",
+            "next": "n_cold",
+            "offense": {
+              "delta": -4,
+              "severity": "minor"
+            }
+          }
+        ]
+      },
+      "n2": {
+        "text": "\u201cFive.\u201d She says it the way you'd say a toddler's age. An arm uncoils across the room and taps your shoulder blade, precisely where it's tight. \u201cThat one doesn't count, it's rusted shut. I have three hundred and twenty-eight. But fine \u2014 five. We can work with five.\u201d",
+        "choices": [
+          {
+            "text": "Three hundred and \u2014 how do you keep track?",
+            "next": "n4",
+            "affection": 2
+          },
+          {
+            "text": "Then coach me.",
+            "next": "n5",
+            "affection": 2
+          }
+        ]
+      },
+      "n2b": {
+        "text": "A chalk block whips at your head with no windup \u2014 you catch it, barely, in a puff of white. The pupil dilates: octopus for delight. \u201cOh, I LIKE you. Most of them wear the chalk. Floor's yours whenever, quick-hands.\u201d",
+        "choices": [
+          {
+            "text": "How's an octopus end up running a gym?",
+            "next": "n4",
+            "affection": 2
+          },
+          {
+            "text": "Coach me anyway. I want the whole program.",
+            "next": "n5",
+            "affection": 2
+          }
+        ]
+      },
+      "n3": {
+        "text": "\u201cEveryone wants to train. What they mean is they want to have trained.\u201d The clipboard arm flips a page. \u201cOona. Head coach, landlord's nightmare, best grip in the quarter. House rates are on the wall: you sweat, I coach, nobody bets on you. Deal?\u201d",
+        "choices": [
+          {
+            "text": "Deal.",
+            "next": "n5",
+            "affection": 2
+          },
+          {
+            "text": "How's an octopus end up running a gym?",
+            "next": "n4",
+            "affection": 1
+          }
+        ]
+      },
+      "n4": {
+        "text": "\u201cOceania grew me smart to run aquaculture inventory. Turns out smart doesn't stop at the clipboard.\u201d She flexes the rig; servos sing. \u201cI filed my own release paperwork. Forged, technically \u2014 signed it with four arms at once so it'd hold up in arbitration. Then I found the one job where having no spine is a credential.\u201d A beat. \u201cThe tank here is mine. Bought, not issued. It matters.\u201d",
+        "choices": [
+          {
+            "text": "Bought, not issued. That's the whole city, isn't it?",
+            "next": "n5",
+            "affection": 3,
+            "reveal_npc": "fitness"
+          },
+          {
+            "text": "Arbitration-proof forgery. Respect.",
+            "next": "n5",
+            "affection": 2
+          }
+        ]
+      },
+      "n5": {
+        "text": "\u201cGood. Rules of the Hold: warm up or I make you, form before weight, and if you knock on my tank after hours I feed your gym card to the crabs.\u201d Two arms are already adjusting a bench for you; a third steals your jacket. \u201cAgility and courage, that's what a body learns here. Charm you'll have to find in a bar.\u201d",
+        "choices": [
+          {
+            "text": "I train hard. You'll see.",
+            "next": null,
+            "affection": 2,
+            "express": "fitness"
+          },
+          {
+            "text": "What do the crabs get if I behave?",
+            "next": null,
+            "affection": 2
+          }
+        ]
+      },
+      "n_cold": {
+        "text": "The whole gym goes quiet the way a dock goes quiet when a crane swings low. Seven arms keep working; one points at the door. \u201cThe last one who made that joke trains at 04:00 now, when I'm asleep, out of shame. You can do better or you can do burpees.\u201d",
+        "choices": [
+          {
+            "text": "...Burpees. Then a proper introduction: I'm {name}.",
+            "next": "n3",
+            "affection": 2
+          },
+          {
+            "text": "Leave.",
+            "next": null
+          }
+        ]
+      }
+    }
   }
 }

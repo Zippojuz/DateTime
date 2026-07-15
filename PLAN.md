@@ -487,6 +487,35 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
   entry, Ondo talk/gift, bout win, locked recruit refusal) + Playwright
   screenshots of PitView/travel chips/HUD.
 
+### Follow-up: species registry + the Hold (gym) + Oona ✅ DONE
+- **species.json**: a registry of ten suggestions (Human, Self-Owned Chassis,
+  Uplift, Warform, Hivemind Colony, Feathered Avian, Reptilian Cold-blood,
+  Plant-Fungal Hybrid, Bioluminescent, Substrate-Born) — **suggestions, never
+  gates**. Creation screen grows a species picker: registry chips with lore
+  blurbs + a free-text field that accepts anything verbatim (GET /api/species;
+  /api/game/new takes species; Player.create passes it through; default stays
+  "human"). Species remains immutable post-creation per the identity doc.
+- **The Hold**: second venue (Docking Quarter) — a gutted cargo hold refitted
+  as a gym, 06:00–23:00, with a brine tank aft. Venues gain a generic
+  ``training`` block: **house rates** discount coached attributes (Agility &
+  Courage: 1h / −8 energy vs the street's 2h / −15) via
+  actions.house_rates(); other attributes pay full price ("charm you'll have
+  to find in a bar"). The action panel shows the gold house-rates note inside
+  a coaching venue.
+- **Oona** (she/her, "Uplifted octopus (exo-rig)"): tenth cast member, head
+  coach — lab-uplifted by Oceania for aquaculture inventory, forged her own
+  release paperwork with four arms at once. Ringside... floorside 06:00–13:00
+  and 15:00–23:00; in the tank (unavailable, do not knock) 13:00–15:00 and
+  overnight. Loves fitness, likes sports/books, hates nightlife. Support
+  companion (cryo, atk×1.1) behind the normal affection gate. `oona_intro`
+  full of anatomy sarcasm, the tank-is-bought-not-issued beat, and a
+  calamari-joke offense branch.
+- +11 pytest (316 total) incl. species free-text, house-rate boundaries, tank
+  hours, API creation flow; CreationScreen vitest rewritten for chips+custom.
+  Verified live: Uplift character created, Hold entered at 08:05, agility
+  trained at −8/1h vs wit at −15/2h, Oona talked, tank hours refused, and
+  the Hold→Pit hop correctly refused at 13:00 (Pit closed).
+
 ### Follow-up: cyberpunk city — corps, markets, the fixer, the ripperdoc ✅ DONE
 - **The Triumvirate** (`corps.json` + `game/corps.py`): Oceania Consolidated
   ("SAFETY IS FREEDOM" — surveillance that loves you), Eurasia Heavy

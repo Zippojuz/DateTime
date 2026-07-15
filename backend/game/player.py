@@ -106,12 +106,14 @@ class Player(Character):
         self.unlocked_transformations = list(unlocked_transformations or [])
 
     @classmethod
-    def create(cls, identity):
-        """Fresh player. Identity is locked: current == created."""
+    def create(cls, identity, species=DEFAULT_SPECIES):
+        """Fresh player. Identity is locked: current == created. Species is
+        free text — data/species.json only offers suggestions, never gates."""
         clean = {field: identity.get(field, "") for field in IDENTITY_FIELDS}
         return cls(
             identity=clean,
             created_identity=clean,
+            species=species,
             preferences=DEFAULT_PREFERENCES,
             inventory=dict(DEFAULT_INVENTORY),
         )

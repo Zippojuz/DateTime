@@ -7,5 +7,20 @@
     "hours": { "open": "16:00", "close": "04:00" },
     "closed_line": "The hatch is chained and the tank below is dark. A hand-lettered sign: FIRST BELL AT 16:00.",
     "enter_line": "You climb down the service ladder into heat, noise, and the smell of ozone and old blood."
+  },
+  "the_hold": {
+    "id": "the_hold",
+    "name": "The Hold",
+    "district": "docking_quarter",
+    "vibe": "A gutted cargo hold refitted as a gym: crane-counterweight machines, chalk dust hanging in the lamplight, and a brine tank bolted to the aft wall with the head coach living in it.",
+    "hours": { "open": "06:00", "close": "23:00" },
+    "closed_line": "The Hold's shutter is down. Chalk-scrawled hours: 06:00–23:00.",
+    "enter_line": "The smell of chalk, salt, and honest effort. Somewhere aft, water sloshes approvingly.",
+    "training": {
+      "attributes": ["agility", "courage"],
+      "minutes": 60,
+      "energy": -8,
+      "blurb": "House rates: Agility and Courage train under coaching here — one hour, −8 energy, instead of two and −15."
+    }
   }
 }

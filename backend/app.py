@@ -88,6 +88,12 @@ def create_app():
     def venues():
         return jsonify(data.load("venues"))
 
+    @app.get("/api/species")
+    def species():
+        # Suggestions for character creation — never a gate. Free text is
+        # always accepted (see dtDesignDoc.md -> Identity Philosophy).
+        return jsonify(data.load("species"))
+
     @app.get("/api/protocols")
     def protocols():
         return jsonify(data.load("protocols"))
@@ -114,7 +120,8 @@ def create_app():
         identity["name"] = name
         if not identity["pronouns"]:
             identity["pronouns"] = "they/them"
-        state, fired = save.create_new_game(identity)
+        species = (body.get("species") or "").strip() or None
+        state, fired = save.create_new_game(identity, species=species)
         return jsonify({**state, "events": fired}), 201
 
     @app.get("/api/game/state")

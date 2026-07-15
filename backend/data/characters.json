@@ -554,5 +554,77 @@
       "locked_blurb": "They won't stand beside anyone they haven't stood across from.",
       "blurb": "Fifteen years retired and still nobody's laid them down. The bell rings; they step in front of you like a door closing."
     }
+  },
+  "oona": {
+    "id": "oona",
+    "name": "Oona",
+    "pronouns": "she/her",
+    "species": "Uplifted octopus (exo-rig)",
+    "personality": "Head coach of the Hold. Eight arms, three hearts, zero patience for bad form. Walked out of an Oceania aquaculture lab; kept the sarcasm",
+    "district": "docking_quarter",
+    "arc_theme": "No tank was ever big enough",
+    "romanceable": true,
+    "starting_disposition": 0,
+    "attributes": {
+      "agility": 10,
+      "wit": 8,
+      "empathy": 7,
+      "courage": 6
+    },
+    "preferences": {
+      "fitness": {
+        "sentiment": "love"
+      },
+      "sports": {
+        "sentiment": "like"
+      },
+      "books": {
+        "sentiment": "like"
+      },
+      "nightlife": {
+        "sentiment": "dislike"
+      }
+    },
+    "schedule": [
+      {
+        "start": "06:00",
+        "end": "13:00",
+        "district": "the_hold",
+        "location": "the_floor",
+        "activity": "Morning coaching \u2014 grip work and grumbling",
+        "available": true
+      },
+      {
+        "start": "13:00",
+        "end": "15:00",
+        "district": "the_hold",
+        "location": "brine_tank",
+        "activity": "In the tank. The rig hangs empty; do not knock on the glass",
+        "available": false
+      },
+      {
+        "start": "15:00",
+        "end": "23:00",
+        "district": "the_hold",
+        "location": "the_floor",
+        "activity": "Evening coaching \u2014 spotting three benches at once",
+        "available": true
+      },
+      {
+        "start": "23:00",
+        "end": "06:00",
+        "district": "the_hold",
+        "location": "brine_tank",
+        "activity": "Dreaming in color. Literally",
+        "available": false
+      }
+    ],
+    "companion": {
+      "role": "support",
+      "element": "cryo",
+      "hp_mult": 1.0,
+      "atk_mult": 1.1,
+      "blurb": "Eight arms mean the enemy is always in a hold and you're always spotted. The coaching continues mid-fight, unfortunately."
+    }
   }
 }

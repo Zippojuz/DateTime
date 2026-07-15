@@ -18,6 +18,7 @@ export const useGameStore = create((set, get) => ({
   topics: null, // registry: { id: {name, changeable} }
   districts: null, // registry: { id: {name, vibe, adjacent} }
   venues: null, // registry: { id: {name, district, vibe, hours} } — places inside districts
+  species: null, // registry: { id: {name, blurb} } — creation suggestions, never gates
   items: null, // registry: { id: {name, type, rarity, ...} }
   protocols: null, // registry: { id: {name, kind, heat|energy, ...} }
   statuses: null, // registry: { id: {name, side, color, hint} }
@@ -72,13 +73,14 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts, venues, items, protocols, statuses] =
+      const [attributes, actions, topics, districts, venues, species, items, protocols, statuses] =
         await Promise.all([
           api.attributes(),
           api.actions(),
           api.topics(),
           api.districts(),
           api.venues(),
+          api.species(),
           api.items(),
           api.protocols(),
           api.statuses(),
@@ -89,6 +91,7 @@ export const useGameStore = create((set, get) => ({
         topics,
         districts,
         venues,
+        species,
         items,
         protocols,
         statuses,

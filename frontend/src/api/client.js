@@ -26,6 +26,7 @@ export const api = {
   topics: () => request('/topics'),
   districts: () => request('/districts'),
   venues: () => request('/venues'),
+  species: () => request('/species'),
   protocols: () => request('/protocols'),
   statuses: () => request('/statuses'),
   travel: (to, mode) =>

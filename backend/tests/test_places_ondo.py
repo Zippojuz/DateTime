@@ -32,7 +32,7 @@ def test_a_venue_is_a_place_inside_a_district():
     assert places.district_of("the_grid") == "the_grid"
     assert places.get("the_pit")["name"] == "The Pit"
     assert "the_pit" in places.venues_in("the_grid")
-    assert places.venues_in("docking_quarter") == {}
+    assert "the_pit" not in places.venues_in("docking_quarter")
 
 
 def test_venue_hours_cross_midnight():
