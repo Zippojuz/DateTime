@@ -699,6 +699,52 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 | Night city rhythm | — | after-22:00 district shifts: night stock/prices, swapped encounter tables, night-only schedule windows |
 | Memory economy | — | MAYBE: dungeon memory shards (dead delvers' last recordings, lore + a quiet questline) and a memory pawnshop (pawn discovered topics/affection history for credits, buy back with interest, cast reacts) |
 | Street cred + battle arena | — | ✅ DONE — see The Pit above. Future: cred-gated black-market tiers, dialogue options, gig-earned cred |
+| Corps differentiation pass | — | USER DIRECTION: the Triumvirate are NOT surface-identical — each corp is unique in aesthetic, product line, and voice; only *at heart* (money, power, extraction) are they the same. Rework blurbs/ads/flagships to distinct identities (e.g. Oceania=security/surveillance, Eurasia=heavy industry/body, Eastasia=media/mind); the Plant 7 gag survives only as buried conspiracy (same components inside all three flagships), not as identical storefronts |
+| The Forget-Me-Not (pawnshop venue) | — | MAYBE: buys anything no questions (item selling), later the memory-economy storefront |
+| The Better Devil (gambling barge venue) | — | MAYBE: luck-stat sink (dice/cards/wheel), runs a book on Pit fights — friction with Ondo |
+
+## Venue Roadmap (approved, build one at a time)
+
+Five venues approved 2026-07-15; detailed plans agreed in-session. Suggested
+order (each independently shippable):
+
+1. **The Night Market** (Bloom District, 18:00–04:00) — first night-only
+   venue. Venue-keyed shop (shops.json works for venues already), stock
+   rotating nightly from a pool (deterministic by day, gig-style), unique
+   street-food consumables (small buffs), gossip line per night (a random
+   undiscovered NPC preference hinted, not revealed). Nyx gets a post-unlock
+   schedule window here (her intro already lives at a night market).
+   Down-payment on the night-rhythm milestone.
+2. **Gantry 9** (The Grid, always open) — rooftop-line terminus teahouse.
+   The Lookout: a server-composed almanac (who's reachable where right now,
+   what's open, this week's corp war, today's gig, tonight's Pit card). Tea
+   service = small timed buff. Avian trait flavors the entry line (never
+   gates). Mostly a read-model + panel; smallest build.
+3. **The Stacks** (Citadel Ring, 24h) — archive-library. House rates for
+   Wit/Hacking (mirror of the Hold). Research desk: spend time+energy to
+   pull a file on a known NPC (reveals one undiscovered preference; slower
+   but surer than gifting blind). Home of **Index**, the ghost archivist —
+   the design doc's imperceivable energy being: present from day one but
+   unlockable via perception (a findable item for everyone; Substrate-Born
+   perceive them natively — species opens the door early, never exclusively).
+   New NPC-unlock kind: requires_perception.
+4. **The Steeps** (Bloom District, 10:00–02:00) — bathhouse in a dead cooling
+   tower. THE DATING SYSTEM: invite a reachable NPC on an outing (venue-keyed
+   scenes in dates.json, choice beats, big affection, once per NPC per week).
+   Also: paid soak = full rest + status cleanse in 90 min. Dates generalize
+   to Night Market/Gantry 9 afterwards.
+5. **The Tide Line** (Docking Quarter, open 04:00–06:00 only) — flooded
+   maintenance levels. Salvage-run venue (small event table: finds, hazards,
+   rare curio), and Ondo's dawn walk made real: meeting them down there
+   (they said "Don't") opens dialogue ringside can't — keyed to affection,
+   deepening their arc.
+
+**Transportation (decision pending):** proposal = make "transit" diegetically
+**the Loop** (pneumatic mag-tube ring; fits the ring-of-districts map) and add
+a third mode, **hovercab**: anywhere→anywhere incl. straight to a venue door,
+flat ~6 min, expensive (~30 cr, night surge) — pairs with a future Loop
+maintenance window (02:00–05:00) under the night-rhythm milestone. Ferries in
+the Shallows stay flavor. Priced In covers the Loop, not hovercabs.
 
 ---
 
