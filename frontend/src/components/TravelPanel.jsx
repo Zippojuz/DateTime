@@ -1,14 +1,13 @@
 import { useGameStore } from '../state/gameStore'
 
-// Mirrors backend world.TRAVEL_COST / LOCAL_COST / CAB_COST so the UI can
-// show costs before you commit. "local" is a hop within one district
-// (stepping into or out of a venue); the Loop is the mag-tube ring; cabs fly
-// door to door at a flat rate.
+// Mirrors backend world.TRAVEL_COST / CAB_COST so the UI can show costs
+// before you commit. Stepping into or out of a venue within a district is
+// free and instant; the Loop is the mag-tube ring; cabs fly door to door at
+// a flat rate.
 const COST = {
   adjacent: { walk: { minutes: 20, credits: 0 }, transit: { minutes: 8, credits: 8 } },
   cross: { walk: { minutes: 40, credits: 0 }, transit: { minutes: 18, credits: 18 } },
 }
-const LOCAL = { minutes: 5, credits: 0 }
 const CAB = { minutes: 6, credits: 30 }
 
 export default function TravelPanel() {
@@ -50,7 +49,7 @@ export default function TravelPanel() {
                   disabled={busy}
                   onClick={() => travel(hereDistrict, 'walk')}
                 >
-                  Climb up · {LOCAL.minutes}m
+                  Step out
                 </button>
               </span>
             </li>
@@ -69,7 +68,7 @@ export default function TravelPanel() {
                   disabled={busy}
                   onClick={() => travel(v.id, 'walk')}
                 >
-                  Enter · {LOCAL.minutes}m
+                  Enter
                 </button>
               </span>
             </li>

@@ -226,25 +226,30 @@ def create_app():
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
+        from_district = places.district_of(player.location)
         try:
             world.travel(player, clock, body.get("to"), body.get("mode", "walk"))
         except GameError as err:
             return jsonify(error=str(err)), 400
 
         day = _day_index(clock)
-        rels = social.all_relationships(save_id, day)
-        met_ids = {cid for cid, rel in rels.items() if rel.get("last_talked_day", 0) > 0}
-        present = {
-            cid: npc.name
-            for cid, npc in NPC.load_unlocked(player).items()
-            if (a := world.availability(npc, clock))["available"]
-            and a.get("district") == player.location
-        }
-        encounter = encounters.roll_encounter(
-            present, met_ids, luck=player.attributes.get("luck", 0), week=clock.week
-        )
-        if encounter and encounter.get("affection"):
-            social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
+        # Street encounters happen crossing the city, not stepping through a
+        # doorway — local hops are free and instant, so they roll nothing.
+        encounter = None
+        if places.district_of(player.location) != from_district:
+            rels = social.all_relationships(save_id, day)
+            met_ids = {cid for cid, rel in rels.items() if rel.get("last_talked_day", 0) > 0}
+            present = {
+                cid: npc.name
+                for cid, npc in NPC.load_unlocked(player).items()
+                if (a := world.availability(npc, clock))["available"]
+                and a.get("district") == player.location
+            }
+            encounter = encounters.roll_encounter(
+                present, met_ids, luck=player.attributes.get("luck", 0), week=clock.week
+            )
+            if encounter and encounter.get("affection"):
+                social.add_opinion(save_id, encounter["npc_id"], encounter["affection"], day)
 
         fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)

@@ -37,7 +37,7 @@ def test_use_food_restores_energy_and_consumes(client):
 
 def test_cannot_use_a_gift_item(client):
     # Buy a gift, then try to "use" it.
-    client.post("/api/shop/buy", json={"item_id": "club_pass"})
+    _buy(client, "club_pass")
     resp = client.post("/api/item/use", json={"item_id": "club_pass"})
     assert resp.status_code == 400
 
@@ -59,7 +59,8 @@ def test_rarity_scales_price():
 
 
 def test_shop_stock_is_district_specific(client):
-    # Start in the Docking Quarter — its stall, not the Bloom Bazaar's.
+    # Step into the Docking Quarter's stalls — theirs, not the Bloom Bazaar's.
+    client.post("/api/travel", json={"to": "dockside_stalls", "mode": "walk"})
     shop_here = client.get("/api/shop").get_json()
     ids = [i["id"] for i in shop_here["stock"]]
     assert "star_ration" in ids
@@ -67,7 +68,7 @@ def test_shop_stock_is_district_specific(client):
 
 
 def test_buy_spends_credits_and_adds_item(client):
-    res = client.post("/api/shop/buy", json={"item_id": "club_pass"}).get_json()
+    res = _buy(client, "club_pass").get_json()
     # club_pass: value 3, common x1, docking mod 0.8 -> round(2.4) = 2
     assert res["bought"]["cost"] == 2
     player = res["state"]["player"]
@@ -76,11 +77,21 @@ def test_buy_spends_credits_and_adds_item(client):
 
 
 def test_cannot_buy_what_isnt_stocked_here(client):
+    client.post("/api/travel", json={"to": "dockside_stalls", "mode": "walk"})
     resp = client.post("/api/shop/buy", json={"item_id": "aurora_pendant"})
     assert resp.status_code == 400
 
 
 # --- Gifting ----------------------------------------------------------------
+
+
+def _buy(client, item_id):
+    """Stores are places now: duck into the Dockside Stalls (free, instant),
+    buy, and step back onto the street."""
+    client.post("/api/travel", json={"to": "dockside_stalls", "mode": "walk"})
+    res = client.post("/api/shop/buy", json={"item_id": item_id})
+    client.post("/api/travel", json={"to": "docking_quarter", "mode": "walk"})
+    return res
 
 
 def _reach_carro(client):
@@ -111,7 +122,7 @@ def test_rarity_softens_but_never_flips_a_bad_gift():
 
 def test_giving_a_gift_raises_affection_and_reveals_topic(client):
     _reach_carro(client)  # Carro loves nightlife
-    client.post("/api/shop/buy", json={"item_id": "club_pass"})  # a nightlife gift
+    _buy(client, "club_pass")  # a nightlife gift
     res = client.post("/api/gift", json={"npc_id": "carro", "item_id": "club_pass"}).get_json()
     assert res["reaction"]["sentiment"] == "love"
     assert res["reaction"]["delta"] == 6  # love(6) + common(0)
@@ -125,8 +136,8 @@ def test_giving_a_gift_raises_affection_and_reveals_topic(client):
 
 def test_one_gift_per_day(client):
     _reach_carro(client)
-    client.post("/api/shop/buy", json={"item_id": "club_pass"})
-    client.post("/api/shop/buy", json={"item_id": "match_ticket"})
+    _buy(client, "club_pass")
+    _buy(client, "match_ticket")
     first = client.post("/api/gift", json={"npc_id": "carro", "item_id": "club_pass"})
     assert first.status_code == 200
     second = client.post("/api/gift", json={"npc_id": "carro", "item_id": "match_ticket"})
@@ -136,7 +147,7 @@ def test_one_gift_per_day(client):
 
 def test_cannot_gift_across_districts(client):
     _reach_carro(client)
-    client.post("/api/shop/buy", json={"item_id": "paper_book"})  # not stocked... 400 ignore
+    _buy(client, "paper_book")  # not stocked here; the 400 is fine, we just need distance
     # Vael is in the Citadel Ring; gifting her from the docks is blocked.
     resp = client.post("/api/gift", json={"npc_id": "vael", "item_id": "protein_cube"})
     assert resp.status_code == 400

@@ -772,6 +772,15 @@ order (each independently shippable):
    the vibe — flavor only, integrity test pins ids to real traits). No corp
    war on the board yet — that system doesn't exist; slot it in when the
    corps-differentiation pass lands.
+   **Shipped right after (user direction): stores are places.** Every shop
+   is now a venue you step into — Dockside Stalls, the Static Bazaar (back
+   rooms and all), the Triumvirate Exchange, the Bloom Bazaar, Shallows
+   Market — and shops.json is keyed by venue id (the shop route already
+   resolved by player.location, so it just worked). Doorways are free:
+   LOCAL_COST is 0 min / 0 energy — only district legs cost time. Street
+   encounters now roll only when the district changes (a free doorway
+   would've been a sighting farm; integrity test pins both). Buying still
+   takes its 30 browsing minutes — travel is instant, shopping isn't.
 3. **The Stacks** (Citadel Ring, 24h) — archive-library. House rates for
    Wit/Hacking (mirror of the Hold). Research desk: spend time+energy to
    pull a file on a known NPC (reveals one undiscovered preference; slower

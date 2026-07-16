@@ -32,6 +32,41 @@
       "blurb": "House rates: Agility and Courage train under coaching here \u2014 one hour, \u22128 energy, instead of two and \u221215."
     }
   },
+  "dockside_stalls": {
+    "id": "dockside_stalls",
+    "name": "Dockside Stalls",
+    "district": "docking_quarter",
+    "vibe": "Cargo pallets stacked into a maze of stalls between the cranes. Everything smells like rope and engine oil, half the stock is honestly salvaged, and prices drop the closer a shift-whistle gets.",
+    "enter_line": "You duck under a tarp between two container walls. A vendor nods without looking up from their soldering."
+  },
+  "static_bazaar": {
+    "id": "static_bazaar",
+    "name": "The Static Bazaar",
+    "district": "the_grid",
+    "vibe": "A dead broadcast hall re-wired into a market: shelves humming under scavenged transformers, price tags handwritten over corp barcodes, and a back hallway everyone pretends not to see until you've earned a name.",
+    "enter_line": "The door buzzes like a blown speaker. Inside, everything is cheap, everything is loud, and nothing has a warranty."
+  },
+  "triumvirate_exchange": {
+    "id": "triumvirate_exchange",
+    "name": "The Triumvirate Exchange",
+    "district": "citadel_ring",
+    "vibe": "Three corp storefronts fused into one gleaming atrium, staffed by people whose smiles are part of the uniform. The prices aren't high by accident — they're high so you know where you are.",
+    "enter_line": "Glass doors part with a chime pitched by a focus group. Someone offers you cucumber water you can't afford."
+  },
+  "bloom_bazaar": {
+    "id": "bloom_bazaar",
+    "name": "The Bloom Bazaar",
+    "district": "bloom_district",
+    "vibe": "A greenhouse arcade where the merchandise shares shelf space with orchids. Soft lighting, softer music, and price tags in cursive — the Bloom charges extra for the atmosphere and considers it a bargain.",
+    "enter_line": "Warm air, pollen, and commerce. A shopkeeper materializes at your elbow like condensation."
+  },
+  "shallows_market": {
+    "id": "shallows_market",
+    "name": "Shallows Market",
+    "district": "the_shallows",
+    "vibe": "Stalls on stilts over the waterline, boards slick with spray. Ferry crews trade here between runs, so the stock leans practical: boots that grip, gear that floats, and nothing that minds getting wet.",
+    "enter_line": "The walkway flexes under you. Somewhere below, the tide is doing inventory."
+  },
   "gantry_9": {
     "id": "gantry_9",
     "name": "Gantry 9",

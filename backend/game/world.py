@@ -24,8 +24,10 @@ TRAVEL_COST = {
     ("cross", "transit"): {"minutes": 18, "energy": -6, "credits": 18},
 }
 
-# Entering/leaving a venue, or moving between venues, within one district.
-LOCAL_COST = {"minutes": 5, "energy": -1, "credits": 0}
+# Entering/leaving a venue, or moving between venues, within one district:
+# free and instant — places are rooms off the street, not journeys. Only
+# district-to-district legs cost time.
+LOCAL_COST = {"minutes": 0, "energy": 0, "credits": 0}
 
 # Hovercab: door to door anywhere in the city, flat rate. Speed costs.
 CAB_COST = {"minutes": 6, "energy": -2, "credits": 30}
@@ -42,7 +44,7 @@ def are_adjacent(a, b):
 
 def travel_cost(from_id, to_id, mode):
     """Cost between two places. Cabs fly door to door at a flat rate; on the
-    ground, same-district moves (venue in/out) are a local hop regardless of
+    ground, same-district moves (venue in/out) are instant regardless of
     mode, and district legs price by adjacency."""
     if mode == "cab":
         return {"distance": "cab", **CAB_COST}

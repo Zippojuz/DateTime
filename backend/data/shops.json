@@ -1,5 +1,5 @@
 {
-  "docking_quarter": {
+  "dockside_stalls": {
     "name": "Dockside Stalls",
     "price_mod": 0.8,
     "stock": [
@@ -14,7 +14,7 @@
       "composure_spray"
     ]
   },
-  "the_grid": {
+  "static_bazaar": {
     "name": "The Static Bazaar",
     "blurb": "Black market. Everything fell off a truck; the truck also fell off a truck. Used chrome, honest prices, no receipts, no questions in either direction.",
     "price_mod": 0.55,
@@ -67,7 +67,7 @@
       }
     ]
   },
-  "citadel_ring": {
+  "triumvirate_exchange": {
     "name": "The Triumvirate Exchange",
     "blurb": "All three corps under one gleaming roof, at war everywhere but here. The cheap shelves are robbery; the top shelf is the best money can buy.",
     "price_mod": 1.7,
@@ -84,7 +84,7 @@
       "eastasia_ghostlace"
     ]
   },
-  "bloom_district": {
+  "bloom_bazaar": {
     "name": "The Bloom Bazaar",
     "price_mod": 1.3,
     "stock": [
@@ -99,7 +99,7 @@
       "composure_spray"
     ]
   },
-  "the_shallows": {
+  "shallows_market": {
     "name": "Shallows Market",
     "price_mod": 0.9,
     "stock": [

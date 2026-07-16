@@ -26,8 +26,9 @@ RARITY_PRICE_MULT = {"common": 1, "uncommon": 3, "rare": 8, "legendary": 20}
 SHOP_MINUTES = 30
 
 
-def _shop_for(district_id):
-    return data.load("shops").get(district_id)
+def _shop_for(place_id):
+    # Shops are venues now (see game/places.py); keyed by their venue id.
+    return data.load("shops").get(place_id)
 
 
 def price(item, price_mod=1.0):
@@ -67,11 +68,11 @@ def _effective_mod(shop, discount):
     return shop["price_mod"] * (1 - discount)
 
 
-def stock(district_id, cred=0, discount=0.0, day=None):
+def stock(place_id, cred=0, discount=0.0, day=None):
     """Items for sale at a place, with computed prices (tier stock is
     reported separately via ``tiers``). Rotating stalls are flagged
     ``tonight`` so the UI can badge them. Empty if no shop."""
-    shop = _shop_for(district_id)
+    shop = _shop_for(place_id)
     if not shop:
         return []
     mod = _effective_mod(shop, discount)
@@ -80,10 +81,10 @@ def stock(district_id, cred=0, discount=0.0, day=None):
     return listed
 
 
-def tiers(district_id, cred=0, discount=0.0):
+def tiers(place_id, cred=0, discount=0.0):
     """The shop's cred-gated back rooms: unlocked tiers carry priced stock,
     locked ones only their tease (and the cred the dealer expects)."""
-    shop = _shop_for(district_id)
+    shop = _shop_for(place_id)
     if not shop:
         return []
     result = []

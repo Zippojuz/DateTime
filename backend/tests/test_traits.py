@@ -93,12 +93,12 @@ def test_rooftop_lines_halve_walks_and_priced_in_rides_free():
 
 
 def test_priced_in_discounts_the_sticker():
-    suit, nobody = _traited("human", "the_grid"), _traited("", "the_grid")
+    suit, nobody = _traited("human", "static_bazaar"), _traited("", "static_bazaar")
     suit.credits = nobody.credits = 5000
     item = data.load("items")["reflex_splice"]
-    base_mod = data.load("shops")["the_grid"]["price_mod"]
+    base_mod = data.load("shops")["static_bazaar"]["price_mod"]
     full = shop.price(item, base_mod)
-    listed = {i["id"]: i["price"] for i in shop.stock("the_grid", discount=0.1)}
+    listed = {i["id"]: i["price"] for i in shop.stock("static_bazaar", discount=0.1)}
     assert listed["reflex_splice"] == round(full * 0.9) or listed["reflex_splice"] < full
     paid = shop.buy(suit, GameClock(), "reflex_splice")["cost"]
     sticker = shop.buy(nobody, GameClock(), "reflex_splice")["cost"]

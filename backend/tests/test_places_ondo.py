@@ -52,11 +52,31 @@ def test_stepping_into_a_venue_is_a_local_hop():
     p = _player("the_grid")
     cost = world.travel(p, _evening(), "the_pit", "walk")
     assert cost["distance"] == "local"
-    assert cost["minutes"] == 5
+    assert cost["minutes"] == 0  # doorways are free; only district legs cost time
     assert p.location == "the_pit"
     # Stepping back out is local too.
     assert world.travel(p, _evening(), "the_grid", "walk")["distance"] == "local"
     assert p.location == "the_grid"
+
+
+def test_every_shop_is_a_real_place():
+    """Stores are venues: every shops.json key must be a place you can stand in."""
+    from game import data
+
+    for shop_id in data.load("shops"):
+        assert places.is_venue(shop_id), shop_id
+
+
+def test_doorways_never_roll_street_encounters():
+    """Local hops are free and instant — if they rolled encounters, standing in
+    a doorway would be a sighting farm. Only district legs roll."""
+    client = create_app().test_client()
+    client.post("/api/game/new", json={"name": "Kai", "pronouns": "she/her"})
+    for _ in range(10):
+        into = client.post("/api/travel", json={"to": "dockside_stalls", "mode": "walk"}).get_json()
+        out = client.post("/api/travel", json={"to": "docking_quarter", "mode": "walk"}).get_json()
+        assert into["encounter"] is None and out["encounter"] is None
+        assert out["state"]["clock"]["time"] == "08:00"  # and no time passed
 
 
 def test_closed_venues_turn_you_away():

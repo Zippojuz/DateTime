@@ -63,23 +63,23 @@ def test_travel_can_serve_you_an_ad():
 
 def test_corpo_exchange_is_overpriced_with_exclusives():
     shops = data.load("shops")
-    exchange = shops["citadel_ring"]
+    exchange = shops["triumvirate_exchange"]
     assert exchange["price_mod"] > 1.5
     for flagship in ("oceania_panopt", "eurasia_atlas_frame", "eastasia_ghostlace"):
         assert flagship in exchange["stock"]
         # Exclusive: sold nowhere else.
-        others = [d for d, s in shops.items() if d != "citadel_ring"]
+        others = [d for d, s in shops.items() if d != "triumvirate_exchange"]
         assert all(flagship not in shops[d]["stock"] for d in others)
 
 
 def test_black_market_discounts_used_chrome():
     shops = data.load("shops")
-    bazaar = shops["the_grid"]
+    bazaar = shops["static_bazaar"]
     assert bazaar["price_mod"] < 0.7
     assert "reflex_splice" in bazaar["stock"]  # used augments, honest prices
     splice = data.load("items")["reflex_splice"]
     black = shop.price(splice, bazaar["price_mod"])
-    corpo = shop.price(splice, shops["citadel_ring"]["price_mod"])
+    corpo = shop.price(splice, shops["triumvirate_exchange"]["price_mod"])
     assert black < corpo // 2  # the same chrome, a third the sticker
 
 
@@ -88,14 +88,14 @@ def test_black_market_discounts_used_chrome():
 
 def _shopper(cred=0):
     p = Player.create({"name": "Kai", "pronouns": "she/her"})
-    p.location = "the_grid"
+    p.location = "static_bazaar"
     p.street_cred = cred
     p.credits = 5000
     return p
 
 
 def test_bazaar_tiers_track_the_cred_stages():
-    tiers = data.load("shops")["the_grid"]["cred_tiers"]
+    tiers = data.load("shops")["static_bazaar"]["cred_tiers"]
     assert [t["cred"] for t in tiers] == [10, 40, 100]
     assert [t["name"] for t in tiers] == ["The Back Shelf", "The Locked Case", "The Basement"]
     # Every tier's goods are black-market exclusives: sold in no base stock.
@@ -105,11 +105,11 @@ def test_bazaar_tiers_track_the_cred_stages():
 
 
 def test_locked_tiers_tease_without_showing_the_goods():
-    tiers = shop.tiers("the_grid", cred=0)
+    tiers = shop.tiers("static_bazaar", cred=0)
     assert all(not t["unlocked"] for t in tiers)
     assert all("stock" not in t and t["tease"] and t["count"] > 0 for t in tiers)
     # At 40 cred the first two rooms open; the Basement still only teases.
-    tiers = shop.tiers("the_grid", cred=40)
+    tiers = shop.tiers("static_bazaar", cred=40)
     assert [t["unlocked"] for t in tiers] == [True, True, False]
     assert any(i["id"] == "flechette_pistol" for i in tiers[1]["stock"])
 
@@ -138,6 +138,7 @@ def test_shop_api_reports_tiers(client):
     from game import save
 
     client.post("/api/travel", json={"to": "the_grid", "mode": "walk"})
+    client.post("/api/travel", json={"to": "static_bazaar", "mode": "walk"})
     body = client.get("/api/shop").get_json()
     assert [t["unlocked"] for t in body["tiers"]] == [False, False, False]
     assert client.post("/api/shop/buy", json={"item_id": "burner_blade"}).status_code == 400
