@@ -66,6 +66,22 @@ export const api = {
   dateLeave: () => request('/date/leave', { method: 'POST', body: '{}' }),
   salvage: () => request('/salvage', { method: 'POST', body: '{}' }),
   corps: () => request('/corps'),
+  authMe: () => request('/auth/me'),
+  authRegister: (username, password) =>
+    request('/auth/register', { method: 'POST', body: JSON.stringify({ username, password }) }),
+  authLogin: (username, password) =>
+    request('/auth/login', { method: 'POST', body: JSON.stringify({ username, password }) }),
+  authLogout: () => request('/auth/logout', { method: 'POST', body: '{}' }),
+  adminPlayers: () => request('/admin/players'),
+  adminPlayerDetail: (userId) => request(`/admin/players/${userId}`),
+  adminDelete: (userId) => request(`/admin/players/${userId}`, { method: 'DELETE' }),
+  adminComp: (userId, credits) =>
+    request(`/admin/players/${userId}/comp`, {
+      method: 'POST',
+      body: JSON.stringify({ credits }),
+    }),
+  adminUnstick: (userId) =>
+    request(`/admin/players/${userId}/unstick`, { method: 'POST', body: '{}' }),
   pawn: () => request('/pawn'),
   pawnSell: (itemId) =>
     request('/pawn/sell', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),

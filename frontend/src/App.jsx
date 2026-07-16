@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import { useGameStore } from './state/gameStore'
 import TitleScreen from './screens/TitleScreen.jsx'
+import LoginScreen from './screens/LoginScreen.jsx'
+import AdminScreen from './screens/AdminScreen.jsx'
 import CreationScreen from './screens/CreationScreen.jsx'
 import WorldMap from './screens/WorldMap.jsx'
 import DialogueScreen from './screens/DialogueScreen.jsx'
@@ -24,6 +26,8 @@ export default function App() {
     init()
   }, [init])
 
+  if (screen === 'login') return <LoginScreen />
+  if (screen === 'admin') return <AdminScreen />
   if (screen === 'creation') return <CreationScreen />
   if (screen === 'play') {
     return (

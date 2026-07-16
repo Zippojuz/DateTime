@@ -1,5 +1,6 @@
 Flask==3.0.3
 flask-cors==4.0.1
+flask-login==0.6.3
 
 # Dev / test
 pytest==8.3.2

@@ -15,17 +15,19 @@ from game.npc import NPC
 from game.player import Player
 
 
-def create_new_game(identity, species=None, trait=""):
-    """Start a fresh game, replacing any existing single save. Fires any
-    events already due (e.g. the day-1 arrival story beat) so they surface
+def create_new_game(identity, species=None, trait="", user_id=None):
+    """Start a fresh game for one account, replacing only *their* save. Fires
+    any events already due (e.g. the day-1 arrival story beat) so they surface
     immediately rather than waiting for the first action. Returns
     (state, fired_events)."""
     player = Player.create(identity, **({"species": species} if species else {}), trait=trait)
     clock = GameClock()
     with get_connection() as conn:
-        conn.execute("DELETE FROM player")
-        conn.execute("DELETE FROM save")  # cascades to relationships
-        cur = conn.execute("INSERT INTO save DEFAULT VALUES")
+        old = conn.execute("SELECT id FROM save WHERE user_id IS ?", (user_id,)).fetchone()
+        if old:
+            conn.execute("DELETE FROM player WHERE save_id=?", (old["id"],))
+            conn.execute("DELETE FROM save WHERE id=?", (old["id"],))  # cascades
+        cur = conn.execute("INSERT INTO save (user_id) VALUES (?)", (user_id,))
         save_id = cur.lastrowid
         _insert_player(conn, save_id, player, clock)
         # Seed each relationship at the NPC's starting disposition (neutral by
@@ -37,10 +39,22 @@ def create_new_game(identity, species=None, trait=""):
     return state_dict(player, clock), fired
 
 
-def load_models():
-    """Return (save_id, Player, GameClock) for the current save, or None."""
+def load_models(user_id=None):
+    """Return (save_id, Player, GameClock) for one account's save, or None.
+
+    With user_id=None, falls back to the *newest* save — engine tests and dev
+    scripts run effectively single-user, and the newest save is the one they
+    just created; the API always passes the session's user."""
     with get_connection() as conn:
-        row = conn.execute("SELECT * FROM player LIMIT 1").fetchone()
+        if user_id is None:
+            row = conn.execute("SELECT * FROM player ORDER BY save_id DESC LIMIT 1").fetchone()
+        else:
+            row = conn.execute(
+                """SELECT player.* FROM player
+                   JOIN save ON save.id = player.save_id
+                   WHERE save.user_id = ?""",
+                (user_id,),
+            ).fetchone()
     if row is None:
         return None
     player = Player(
@@ -85,9 +99,9 @@ def load_models():
     return row["save_id"], player, clock
 
 
-def get_state():
-    """Return the current save's state dict, or None if no game is in progress."""
-    models = load_models()
+def get_state(user_id=None):
+    """Return one account's state dict, or None if no game is in progress."""
+    models = load_models(user_id)
     if models is None:
         return None
     _, player, clock = models

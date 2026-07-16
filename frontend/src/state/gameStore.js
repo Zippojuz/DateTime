@@ -101,6 +101,10 @@ export const useGameStore = create((set, get) => ({
   busy: false,
   error: null,
 
+  // Accounts: {username, is_admin} once the session is live.
+  user: null,
+  admin: null, // the admin roster, when loaded
+
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
@@ -148,15 +152,110 @@ export const useGameStore = create((set, get) => ({
       return
     }
 
+    // Who's logged in? No session -> the door (login screen).
+    try {
+      const user = await api.authMe()
+      set({ user })
+    } catch {
+      set({ user: null, screen: 'login' })
+      return
+    }
+    await get()._loadSave()
+  },
+
+  _loadSave: async () => {
     try {
       const state = await api.getState()
       set({ state, hasSave: true, screen: 'title' })
     } catch (err) {
       if (err.status === 404) {
-        set({ hasSave: false, screen: 'title' })
+        set({ hasSave: false, state: null, screen: 'title' })
+      } else if (err.status === 401) {
+        set({ user: null, screen: 'login' })
       } else {
         set({ connection: 'error', connectionError: err.message, screen: 'title' })
       }
+    }
+  },
+
+  // --- Accounts ---
+
+  loginAccount: async (username, password) => {
+    set({ busy: true, error: null })
+    try {
+      const user = await api.authLogin(username, password)
+      set({ user, busy: false })
+      await get()._loadSave()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  registerAccount: async (username, password) => {
+    set({ busy: true, error: null })
+    try {
+      const user = await api.authRegister(username, password)
+      set({ user, busy: false, hasSave: false, state: null, screen: 'title' })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  logoutAccount: async () => {
+    try {
+      await api.authLogout()
+    } catch {
+      // Logging out of a dead session is still logging out.
+    }
+    set({ user: null, state: null, hasSave: false, admin: null, screen: 'login', error: null })
+  },
+
+  // --- Admin desk ---
+
+  openAdmin: async () => {
+    set({ screen: 'admin', error: null })
+    get().loadAdmin()
+  },
+  closeAdmin: () => set({ screen: 'title', error: null }),
+
+  loadAdmin: async () => {
+    try {
+      set({ admin: await api.adminPlayers() })
+    } catch (err) {
+      set({ error: err.message })
+    }
+  },
+
+  adminComp: async (userId, credits) => {
+    set({ busy: true, error: null })
+    try {
+      await api.adminComp(userId, credits)
+      set({ busy: false })
+      get().loadAdmin()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  adminUnstick: async (userId) => {
+    set({ busy: true, error: null })
+    try {
+      await api.adminUnstick(userId)
+      set({ busy: false })
+      get().loadAdmin()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  adminDelete: async (userId) => {
+    set({ busy: true, error: null })
+    try {
+      await api.adminDelete(userId)
+      set({ busy: false })
+      get().loadAdmin()
+    } catch (err) {
+      set({ error: err.message, busy: false })
     }
   },
 

@@ -840,6 +840,27 @@ the Shallows stay flavor. Priced In covers the Loop, not hovercabs.
 
 ---
 
+## Accounts & Admin (shipped)
+
+Login system (flask-login, migration 19: users + save.user_id): username +
+password only (no email — usernames are for the save file, identity lives in
+the creation screen), sessions via signed httpOnly cookie
+(NEXUS_SECRET_KEY in prod), first account ever registered holds the admin
+seat. Saves are per-account — `create_new_game` replaces only *your* save
+(the old single-save `DELETE FROM player` is gone). One `before_request`
+gate protects everything under /api except auth + the public content
+registries. `save.load_models(user_id=None)` falls back to the newest save
+for engine tests/dev scripts; tests auto-register a shared "tester" via a
+conftest hook on FlaskClient (opt out with `client.no_auto_login`).
+
+Admin desk (/api/admin/*, AdminScreen off the title bar, is_admin only):
+roster with save summaries + last seen, inspect full state, comp credits
+(1–10000), unstick (clear date/combat/dungeon state, send home rested),
+delete account (never yourself). Deferred: password resets (needs email),
+promote-admin UI (SQL for now), rate-limiting logins.
+
+---
+
 ## Open Questions to Resolve (from design doc)
 
 - How mechanically significant is species? (perception abilities, interactions)

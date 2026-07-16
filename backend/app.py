@@ -10,9 +10,11 @@ import config
 from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_login import LoginManager, current_user, login_user, logout_user
 from game import (
     almanac,
     arena,
+    auth,
     bathhouse,
     combat,
     corps,
@@ -67,15 +69,184 @@ def _grant_juno_unlocks(save_id, player, clock):
     return granted
 
 
+# Endpoints that need no session: health, the auth flow itself, and the
+# read-only content registries the title/creation screens render.
+PUBLIC_ENDPOINTS = {
+    "health",
+    "auth_register",
+    "auth_login",
+    "auth_logout",
+    "auth_me",
+    "attributes",
+    "actions",
+    "topics",
+    "districts",
+    "venues",
+    "species",
+    "link_tones",
+    "protocols",
+    "statuses",
+    "corps_view",
+    "items_list",
+    "date_venues",
+    "difficulty_options",
+}
+
+
 def create_app():
     app = Flask(__name__)
-    CORS(app, origins=[config.FRONTEND_ORIGIN])
+    app.secret_key = config.SECRET_KEY
+    CORS(app, origins=[config.FRONTEND_ORIGIN], supports_credentials=True)
+
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+    login_manager.user_loader(auth.load_user)
 
     init_db()
+
+    @app.before_request
+    def _require_session():
+        """One gate instead of sixty decorators: everything under /api is
+        yours-only unless it's on the public list."""
+        if request.method == "OPTIONS" or not request.path.startswith("/api"):
+            return None
+        if request.endpoint in PUBLIC_ENDPOINTS:
+            return None
+        if not current_user.is_authenticated:
+            return jsonify(error="Log in first — the city needs a name for the tab."), 401
+        return None
+
+    def _admin_only():
+        """Guard for /api/admin/*: returns an error response or None."""
+        if not getattr(current_user, "is_admin", False):
+            return jsonify(error="Admins only."), 403
+        return None
+
+    # --- Accounts ---
+
+    @app.post("/api/auth/register")
+    def auth_register():
+        body = request.get_json(silent=True) or {}
+        try:
+            user = auth.register(body.get("username"), body.get("password"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        login_user(user, remember=True)
+        return jsonify({"username": user.username, "is_admin": user.is_admin}), 201
+
+    @app.post("/api/auth/login")
+    def auth_login():
+        body = request.get_json(silent=True) or {}
+        try:
+            user = auth.login(body.get("username"), body.get("password"))
+        except GameError as err:
+            return jsonify(error=str(err)), 401
+        login_user(user, remember=True)
+        return jsonify({"username": user.username, "is_admin": user.is_admin})
+
+    @app.post("/api/auth/logout")
+    def auth_logout():
+        logout_user()
+        return jsonify({"ok": True})
+
+    @app.get("/api/auth/me")
+    def auth_me():
+        if not current_user.is_authenticated:
+            return jsonify(error="Not logged in."), 401
+        return jsonify({"username": current_user.username, "is_admin": current_user.is_admin})
 
     @app.get("/api/health")
     def health():
         return jsonify(status="ok", game="nexus-city", api="v0")
+
+    # --- Admin: manage players (is_admin accounts only) ---
+
+    @app.get("/api/admin/players")
+    def admin_players():
+        denied = _admin_only()
+        if denied:
+            return denied
+        roster = []
+        for row in auth.all_users():
+            models = save.load_models(row["id"])
+            entry = {
+                "user_id": row["id"],
+                "username": row["username"],
+                "is_admin": bool(row["is_admin"]),
+                "created_at": row["created_at"],
+                "last_seen": row["last_seen"],
+                "save": None,
+            }
+            if models:
+                _, player, clock = models
+                entry["save"] = {
+                    "name": player.current_identity.get("name", ""),
+                    "species": player.species,
+                    "week": clock.week,
+                    "day": clock.day,
+                    "time": clock.time_str,
+                    "credits": player.credits,
+                    "location": player.location,
+                    "energy": player.energy,
+                }
+            roster.append(entry)
+        return jsonify(roster)
+
+    @app.get("/api/admin/players/<int:user_id>")
+    def admin_player_detail(user_id):
+        denied = _admin_only()
+        if denied:
+            return denied
+        models = save.load_models(user_id)
+        if models is None:
+            return jsonify(error="No save for that account."), 404
+        _, player, clock = models
+        return jsonify(save.state_dict(player, clock))
+
+    @app.delete("/api/admin/players/<int:user_id>")
+    def admin_player_delete(user_id):
+        denied = _admin_only()
+        if denied:
+            return denied
+        if user_id == current_user.id:
+            return jsonify(error="Not from inside the chair. Ask another admin."), 400
+        auth.delete_user(user_id)
+        return jsonify({"ok": True})
+
+    @app.post("/api/admin/players/<int:user_id>/comp")
+    def admin_player_comp(user_id):
+        denied = _admin_only()
+        if denied:
+            return denied
+        body = request.get_json(silent=True) or {}
+        credits = body.get("credits")
+        if not isinstance(credits, int) or not (0 < credits <= 10000):
+            return jsonify(error="Comp 1–10000 credits."), 400
+        models = save.load_models(user_id)
+        if models is None:
+            return jsonify(error="No save for that account."), 404
+        save_id, player, clock = models
+        player.credits += credits
+        save.save_models(save_id, player, clock)
+        return jsonify({"ok": True, "credits": player.credits})
+
+    @app.post("/api/admin/players/<int:user_id>/unstick")
+    def admin_player_unstick(user_id):
+        """Live-ops rescue: clear any mid-date state, send them home rested."""
+        denied = _admin_only()
+        if denied:
+            return denied
+        models = save.load_models(user_id)
+        if models is None:
+            return jsonify(error="No save for that account."), 404
+        save_id, player, clock = models
+        player.date = {}
+        player.combat = {}
+        player.dungeon = {}
+        player.location = "docking_quarter"
+        player.energy = 100
+        save.save_models(save_id, player, clock)
+        return jsonify({"ok": True})
 
     # --- Content (read-only reference data the frontend renders generically) ---
 
@@ -119,7 +290,8 @@ def create_app():
 
     @app.get("/api/corps")
     def corps_view():
-        models = save.load_models()
+        # Public route: the war is week 1 to anyone without a save.
+        models = save.load_models(current_user.id) if current_user.is_authenticated else None
         week = models[2].week if models else 1
         return jsonify(corps.view(week))
 
@@ -144,12 +316,14 @@ def create_app():
                 return jsonify(error="Unknown trait."), 400
         else:
             trait = traits.default_for_species(species or DEFAULT_SPECIES)
-        state, fired = save.create_new_game(identity, species=species, trait=trait)
+        state, fired = save.create_new_game(
+            identity, species=species, trait=trait, user_id=current_user.id
+        )
         return jsonify({**state, "events": fired}), 201
 
     @app.get("/api/game/state")
     def game_state():
-        state = save.get_state()
+        state = save.get_state(current_user.id)
         if state is None:
             return jsonify(error="No game in progress."), 404
         return jsonify(state)
@@ -157,7 +331,7 @@ def create_app():
     @app.post("/api/action")
     def action():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -173,7 +347,7 @@ def create_app():
     @app.post("/api/player/transform")
     def transform():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -191,7 +365,7 @@ def create_app():
 
     @app.get("/api/characters")
     def characters():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -228,7 +402,7 @@ def create_app():
     @app.post("/api/travel")
     def travel():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -267,7 +441,7 @@ def create_app():
 
     @app.get("/api/jobs")
     def jobs_list():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, _clock = models
@@ -281,7 +455,7 @@ def create_app():
     @app.post("/api/job")
     def work_job():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -296,7 +470,7 @@ def create_app():
     @app.post("/api/debt/pay")
     def pay_debt():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -316,7 +490,7 @@ def create_app():
 
     @app.get("/api/gigs")
     def gigs_today():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -334,7 +508,7 @@ def create_app():
     @app.post("/api/gig")
     def work_gig():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -374,7 +548,7 @@ def create_app():
 
     @app.get("/api/shop")
     def shop_stock():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, clock = models
@@ -402,7 +576,7 @@ def create_app():
     @app.post("/api/shop/buy")
     def shop_buy():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -418,7 +592,7 @@ def create_app():
     def send_link_message():
         """Ping a known contact over the Cyberlink — anywhere, any hour."""
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -443,7 +617,7 @@ def create_app():
         """Ask around the Night Market: once a night, a vendor hints at one
         cast member's undiscovered preference. A rumor, not a fact — nothing
         is marked discovered; the night just points you somewhere."""
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -498,7 +672,7 @@ def create_app():
 
     @app.get("/api/teahouse")
     def teahouse_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, clock = models
@@ -518,7 +692,7 @@ def create_app():
     @app.post("/api/teahouse/sip")
     def teahouse_sip():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -533,7 +707,7 @@ def create_app():
 
     @app.post("/api/soak")
     def soak():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -557,7 +731,7 @@ def create_app():
     @app.post("/api/date/start")
     def date_start():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -581,7 +755,7 @@ def create_app():
     @app.post("/api/date/choose")
     def date_choose():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -596,7 +770,7 @@ def create_app():
 
     @app.post("/api/date/leave")
     def date_leave():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -611,7 +785,7 @@ def create_app():
 
     @app.get("/api/pawn")
     def pawn_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -631,7 +805,7 @@ def create_app():
     @app.post("/api/pawn/sell")
     def pawn_sell():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -645,7 +819,7 @@ def create_app():
     @app.post("/api/pawn/buyback")
     def pawn_buyback():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -660,7 +834,7 @@ def create_app():
 
     @app.post("/api/salvage")
     def salvage_run():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -675,7 +849,7 @@ def create_app():
 
     @app.get("/api/stacks")
     def stacks_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, clock = models
@@ -698,7 +872,7 @@ def create_app():
     @app.post("/api/research")
     def research():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -713,7 +887,7 @@ def create_app():
 
     @app.get("/api/lookout")
     def lookout():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, clock = models
@@ -726,7 +900,7 @@ def create_app():
     @app.post("/api/item/use")
     def item_use():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -740,7 +914,7 @@ def create_app():
     @app.post("/api/gift")
     def gift():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -808,7 +982,7 @@ def create_app():
 
     @app.get("/api/dungeon/state")
     def dungeon_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, _clock = models
@@ -816,7 +990,7 @@ def create_app():
 
     @app.post("/api/dungeon/enter")
     def dungeon_enter():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -828,7 +1002,7 @@ def create_app():
         return jsonify({**_dungeon_payload(player), "state": save.state_dict(player, clock)})
 
     def _dungeon_action(fn):
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -869,7 +1043,7 @@ def create_app():
     @app.post("/api/dungeon/event")
     def dungeon_event():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -884,7 +1058,7 @@ def create_app():
 
     @app.post("/api/dungeon/leave")
     def dungeon_leave():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -905,7 +1079,7 @@ def create_app():
     @app.post("/api/combat/action")
     def combat_action():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -950,7 +1124,7 @@ def create_app():
 
     @app.get("/api/arena")
     def arena_view():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, clock = models
@@ -958,7 +1132,7 @@ def create_app():
 
     @app.post("/api/arena/fight")
     def arena_fight():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -975,7 +1149,7 @@ def create_app():
 
     @app.get("/api/party")
     def party_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1013,7 +1187,7 @@ def create_app():
     @app.post("/api/party/recruit")
     def party_recruit():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1043,7 +1217,7 @@ def create_app():
 
     @app.post("/api/party/dismiss")
     def party_dismiss():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1069,14 +1243,14 @@ def create_app():
 
     @app.get("/api/equipment")
     def equipment_state():
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         _, player, _clock = models
         return jsonify(_equipment_payload(player))
 
     def _equipment_action(fn):
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1122,7 +1296,7 @@ def create_app():
     @app.post("/api/difficulty")
     def set_difficulty():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1136,7 +1310,7 @@ def create_app():
     @app.post("/api/dialogue/start")
     def dialogue_start():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models
@@ -1178,7 +1352,7 @@ def create_app():
     @app.post("/api/dialogue/choose")
     def dialogue_choose():
         body = request.get_json(silent=True) or {}
-        models = save.load_models()
+        models = save.load_models(current_user.id)
         if models is None:
             return jsonify(error="No game in progress."), 404
         save_id, player, clock = models

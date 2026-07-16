@@ -6,8 +6,11 @@ export default function TitleScreen() {
   const connection = useGameStore((s) => s.connection)
   const connectionError = useGameStore((s) => s.connectionError)
   const hasSave = useGameStore((s) => s.hasSave)
+  const user = useGameStore((s) => s.user)
   const startCreation = useGameStore((s) => s.startCreation)
   const continueGame = useGameStore((s) => s.continueGame)
+  const logoutAccount = useGameStore((s) => s.logoutAccount)
+  const openAdmin = useGameStore((s) => s.openAdmin)
 
   const ready = connection === 'ok'
 
@@ -32,6 +35,20 @@ export default function TitleScreen() {
           New Game
         </button>
       </div>
+
+      {user && (
+        <p className="title-account">
+          Logged in as <strong>{user.username}</strong>
+          {user.is_admin && (
+            <button className="chip" onClick={openAdmin}>
+              Admin
+            </button>
+          )}
+          <button className="chip" onClick={logoutAccount}>
+            Log out
+          </button>
+        </p>
+      )}
     </main>
   )
 }

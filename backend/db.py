@@ -193,6 +193,25 @@ def _m18_pawnshop(conn):
     _add_column(conn, "player", "pawned", "TEXT NOT NULL DEFAULT '[]'")
 
 
+def _m19_accounts(conn):
+    """Login system: user accounts, and saves owned by a user. Pre-account
+    saves keep user_id NULL — invisible to everyone, garbage by design
+    (pre-beta there's nothing worth migrating)."""
+    conn.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS users (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT,
+            username      TEXT NOT NULL UNIQUE COLLATE NOCASE,
+            password_hash TEXT NOT NULL,
+            is_admin      INTEGER NOT NULL DEFAULT 0,
+            created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+            last_seen     TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+        """
+    )
+    _add_column(conn, "save", "user_id", "INTEGER")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -212,6 +231,7 @@ MIGRATIONS = [
     _m16_research_desk,
     _m17_dating,
     _m18_pawnshop,
+    _m19_accounts,
 ]
 
 
