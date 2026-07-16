@@ -9,6 +9,7 @@ function StockList({ stock, credits, busy, buyItem }) {
           <div className="shop-info">
             <span className="shop-name">
               {item.name} <RarityTag rarity={item.rarity} />
+              {item.tonight && <span className="shop-tonight">✶ tonight only</span>}
             </span>
             <span className="shop-sub">{item.description}</span>
           </div>
@@ -32,6 +33,8 @@ function StockList({ stock, credits, busy, buyItem }) {
 export default function ShopPanel() {
   const shop = useGameStore((s) => s.shop)
   const buyItem = useGameStore((s) => s.buyItem)
+  const marketGossip = useGameStore((s) => s.marketGossip)
+  const lastGossip = useGameStore((s) => s.lastGossip)
   const credits = useGameStore((s) => s.state?.player?.credits ?? 0)
   const cred = useGameStore((s) => s.state?.player?.street_cred ?? 0)
   const busy = useGameStore((s) => s.busy)
@@ -42,6 +45,12 @@ export default function ShopPanel() {
     <section className="shop-panel">
       <h2>{shop.name ?? 'Shop'}</h2>
       {shop.blurb && <p className="shop-blurb">{shop.blurb}</p>}
+      {lastGossip && <p className="shop-gossip">{lastGossip.text}</p>}
+      {shop.gossip_available && (
+        <button className="btn-action shop-gossip-btn" disabled={busy} onClick={marketGossip}>
+          Ask around · 15m
+        </button>
+      )}
       <StockList stock={shop.stock} credits={credits} busy={busy} buyItem={buyItem} />
 
       {(shop.tiers ?? []).map((tier) =>

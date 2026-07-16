@@ -4,7 +4,10 @@
     "name": "The Pit",
     "district": "the_grid",
     "vibe": "A drained coolant cistern three levels under the Grid. Scaffold seating bolted to the tank walls, one ring of scavenged stadium light, and a brass ship's bell that decides everything. The crowd never forgets a name.",
-    "hours": { "open": "16:00", "close": "04:00" },
+    "hours": {
+      "open": "16:00",
+      "close": "04:00"
+    },
     "closed_line": "The hatch is chained and the tank below is dark. A hand-lettered sign: FIRST BELL AT 16:00.",
     "enter_line": "You climb down the service ladder into heat, noise, and the smell of ozone and old blood."
   },
@@ -13,14 +16,32 @@
     "name": "The Hold",
     "district": "docking_quarter",
     "vibe": "A gutted cargo hold refitted as a gym: crane-counterweight machines, chalk dust hanging in the lamplight, and a brine tank bolted to the aft wall with the head coach living in it.",
-    "hours": { "open": "06:00", "close": "23:00" },
-    "closed_line": "The Hold's shutter is down. Chalk-scrawled hours: 06:00–23:00.",
+    "hours": {
+      "open": "06:00",
+      "close": "23:00"
+    },
+    "closed_line": "The Hold's shutter is down. Chalk-scrawled hours: 06:00\u201323:00.",
     "enter_line": "The smell of chalk, salt, and honest effort. Somewhere aft, water sloshes approvingly.",
     "training": {
-      "attributes": ["agility", "courage"],
+      "attributes": [
+        "agility",
+        "courage"
+      ],
       "minutes": 60,
       "energy": -8,
-      "blurb": "House rates: Agility and Courage train under coaching here — one hour, −8 energy, instead of two and −15."
+      "blurb": "House rates: Agility and Courage train under coaching here \u2014 one hour, \u22128 energy, instead of two and \u221215."
     }
+  },
+  "night_market": {
+    "id": "night_market",
+    "name": "The Night Market",
+    "district": "bloom_district",
+    "vibe": "At dusk the empty lot blooms: stalls under strings of salvaged biolights, steam and static and six languages of haggling. Everything is fresh, nothing has a receipt.",
+    "hours": {
+      "open": "18:00",
+      "close": "04:00"
+    },
+    "closed_line": "By day it's chalk outlines of stalls and the smell of last night's smoke. Vendors drift back at 18:00.",
+    "enter_line": "Biolight and broth-steam. Somewhere to your left, someone is winning an argument about fish."
   }
 }

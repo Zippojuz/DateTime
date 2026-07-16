@@ -4,6 +4,8 @@ The backend is server-authoritative (see PLAN.md -> Architecture Decisions):
 all game state and rules live here; the React frontend is a thin view.
 """
 
+import random
+
 import config
 from db import init_db
 from flask import Flask, jsonify, request
@@ -354,18 +356,25 @@ def create_app():
         models = save.load_models()
         if models is None:
             return jsonify(error="No game in progress."), 404
-        _, player, _clock = models
+        _, player, clock = models
         shops = data.load("shops")
         here = shops.get(player.location)
         discount = traits.effect(player, "shop_discount", 0.0)
+        day = _day_index(clock)
         return jsonify(
             {
                 "district": player.location,
                 "name": here["name"] if here else None,
                 "blurb": here.get("blurb") if here else None,
-                "stock": shop.stock(player.location, discount=discount),
+                "stock": shop.stock(player.location, discount=discount, day=day),
                 "tiers": shop.tiers(player.location, player.street_cred, discount=discount),
                 "street_cred": player.street_cred,
+                # The Night Market talks: once a night, a vendor drops a hint.
+                "gossip_available": (
+                    player.location == "night_market"
+                    and places.is_open("night_market", clock)
+                    and player.gossip_day != day
+                ),
             }
         )
 
@@ -383,6 +392,62 @@ def create_app():
         fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
         return jsonify({"state": save.state_dict(player, clock), "bought": result, "events": fired})
+
+    @app.post("/api/market/gossip")
+    def market_gossip():
+        """Ask around the Night Market: once a night, a vendor hints at one
+        cast member's undiscovered preference. A rumor, not a fact — nothing
+        is marked discovered; the night just points you somewhere."""
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        if player.location != "night_market":
+            return jsonify(error="Gossip flows where the broth does — find the Night Market."), 400
+        if not places.is_open("night_market", clock):
+            return jsonify(error=data.load("venues")["night_market"]["closed_line"]), 400
+        day = _day_index(clock)
+        if player.gossip_day == day:
+            return jsonify(error="The vendors have told you all they'll tell you tonight."), 400
+
+        rels = social.all_relationships(save_id, day)
+        candidates = []
+        for cid, npc in sorted(NPC.load_unlocked(player).items()):
+            known = set(rels.get(cid, {}).get("known_npc_topics", []))
+            for topic in sorted(npc.preferences):
+                if topic not in known:
+                    sentiment = preferences.sentiment_of(npc.preferences, topic)
+                    candidates.append((npc.name, topic, sentiment))
+        if not candidates:
+            return jsonify(
+                {
+                    "text": (
+                        "Tonight the stalls only talk about the weather. "
+                        "You know everyone too well."
+                    )
+                }
+            )
+
+        rng = random.Random(f"gossip:{day}")
+        name, topic, sentiment = rng.choice(candidates)
+        topic_name = data.load("topics").get(topic, {}).get("name", topic)
+        leaning = "soft on" if sentiment in ("love", "like") else "sour on"
+        text = (
+            f"The broth vendor leans in, conspiratorial over the steam: "
+            f"“{name}? Word around the stalls is they're {leaning} {topic_name.lower()}. "
+            f"You didn't hear it from me.”"
+        )
+        player.gossip_day = day
+        clock.advance(15)
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {
+                "npc": name,
+                "topic": topic_name,
+                "text": text,
+                "state": save.state_dict(player, clock),
+            }
+        )
 
     @app.post("/api/item/use")
     def item_use():

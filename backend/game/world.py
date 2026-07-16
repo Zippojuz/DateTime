@@ -1,11 +1,16 @@
 """Districts, travel, and NPC availability. (Milestone 2 / 3)
 
 The city is a ring of five districts, plus venues nested inside them (see
-game/places.py). Travel between districts costs time and energy (and credits
-for fast transit); adjacent hops are cheaper than cross-city, and stepping
-into or out of a venue within the same district is a short local hop. NPC
-availability is resolved from schedules, and — as of Milestone 3 — you must be
-in the same place as an NPC to reach them.
+game/places.py). Three ways to move:
+- walk: free, slow (Rooftop Lines halves it)
+- transit — the Loop, a pneumatic mag-tube ring: cheap, station to station,
+  adjacent hops cheaper than cross-city (free for the Priced In)
+- cab — hovercab sky lanes: door to door, any place to any place including
+  straight to a venue, flat rate, never free for anyone
+
+Stepping into or out of a venue within the same district is a short local
+hop. NPC availability is resolved from schedules, and — as of Milestone 3 —
+you must be in the same place as an NPC to reach them.
 """
 
 from game import data, places, traits
@@ -22,6 +27,9 @@ TRAVEL_COST = {
 # Entering/leaving a venue, or moving between venues, within one district.
 LOCAL_COST = {"minutes": 5, "energy": -1, "credits": 0}
 
+# Hovercab: door to door anywhere in the city, flat rate. Speed costs.
+CAB_COST = {"minutes": 6, "energy": -2, "credits": 30}
+
 
 def districts():
     return data.load("districts")
@@ -33,8 +41,11 @@ def are_adjacent(a, b):
 
 
 def travel_cost(from_id, to_id, mode):
-    """Cost between two places. Same-district moves (venue in/out) are a
-    local hop regardless of mode; district legs price by adjacency."""
+    """Cost between two places. Cabs fly door to door at a flat rate; on the
+    ground, same-district moves (venue in/out) are a local hop regardless of
+    mode, and district legs price by adjacency."""
+    if mode == "cab":
+        return {"distance": "cab", **CAB_COST}
     from_district = places.district_of(from_id)
     to_district = places.district_of(to_id)
     if from_district == to_district:
@@ -145,6 +156,7 @@ def availability(npc, clock):
                 "tier": TIER_UNAVAILABLE,
                 "location": window.get("location"),
                 "district": district,
+                "activity": window.get("activity"),
                 "minutes_left": 0,
             }
         left = _minutes_left(now, end)
@@ -154,6 +166,7 @@ def availability(npc, clock):
             "tier": tier,
             "location": window.get("location"),
             "district": district,
+            "activity": window.get("activity"),
             "minutes_left": left,
         }
     return {
@@ -161,5 +174,6 @@ def availability(npc, clock):
         "tier": TIER_UNAVAILABLE,
         "location": None,
         "district": None,
+        "activity": None,
         "minutes_left": 0,
     }

@@ -1,14 +1,20 @@
 """Shops: spend credits to buy items. (Milestone 6)
 
-Each district's market (data/shops.json) stocks a subset of items at a district
-price modifier. Price scales with rarity — a legendary costs far more than a
-common of the same base value.
+Each place's market (data/shops.json, keyed by district or venue id) stocks a
+subset of items at a price modifier. Price scales with rarity — a legendary
+costs far more than a common of the same base value.
 
 A shop may also carry ``cred_tiers``: back-room stock gated by street cred
 (the Static Bazaar's Back Shelf / Locked Case / Basement). Locked tiers show
 as teasers; their goods can't be browsed or bought until the dealer knows
 your name.
+
+A shop may also ``rotate``: the Night Market draws a few extra stalls from a
+pool each night, deterministically by day — miss tonight's find and it's gone
+for a while.
 """
+
+import random as _random
 
 from game import data, inventory, traits
 from game.errors import GameError
@@ -38,9 +44,18 @@ def _priced(item_ids, price_mod):
     ]
 
 
-def _purchasable_ids(shop, cred):
-    """Every item id the player can actually buy here at their cred."""
-    ids = list(shop["stock"])
+def rotating_ids(shop, day):
+    """Tonight's rotating stalls (deterministic per absolute day)."""
+    spec = shop.get("rotates")
+    if not spec or day is None:
+        return []
+    rng = _random.Random(f"stalls:{day}")
+    return rng.sample(spec["pool"], min(spec["count"], len(spec["pool"])))
+
+
+def _purchasable_ids(shop, cred, day=None):
+    """Every item id the player can actually buy here at their cred, today."""
+    ids = list(shop["stock"]) + rotating_ids(shop, day)
     for tier in shop.get("cred_tiers", []):
         if cred >= tier["cred"]:
             ids.extend(tier["stock"])
@@ -52,13 +67,17 @@ def _effective_mod(shop, discount):
     return shop["price_mod"] * (1 - discount)
 
 
-def stock(district_id, cred=0, discount=0.0):
-    """Base items for sale in a district, with computed prices (tier stock is
-    reported separately via ``tiers``). Empty if no shop."""
+def stock(district_id, cred=0, discount=0.0, day=None):
+    """Items for sale at a place, with computed prices (tier stock is
+    reported separately via ``tiers``). Rotating stalls are flagged
+    ``tonight`` so the UI can badge them. Empty if no shop."""
     shop = _shop_for(district_id)
     if not shop:
         return []
-    return _priced(shop["stock"], _effective_mod(shop, discount))
+    mod = _effective_mod(shop, discount)
+    listed = _priced(shop["stock"], mod)
+    listed.extend({**entry, "tonight": True} for entry in _priced(rotating_ids(shop, day), mod))
+    return listed
 
 
 def tiers(district_id, cred=0, discount=0.0):
@@ -87,7 +106,8 @@ def buy(player, clock, item_id):
     shop = _shop_for(player.location)
     if not shop:
         raise GameError("That isn't sold here.")
-    if item_id not in _purchasable_ids(shop, player.street_cred):
+    day = (clock.week - 1) * 7 + clock.day
+    if item_id not in _purchasable_ids(shop, player.street_cred, day):
         # Distinguish "behind a locked tier" from "not sold at all".
         for tier in shop.get("cred_tiers", []):
             if item_id in tier["stock"]:

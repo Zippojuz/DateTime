@@ -46,6 +46,7 @@ export const api = {
   shop: () => request('/shop'),
   buy: (itemId) =>
     request('/shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  marketGossip: () => request('/market/gossip', { method: 'POST', body: '{}' }),
   useItem: (itemId) =>
     request('/item/use', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
   gift: (npcId, itemId) =>

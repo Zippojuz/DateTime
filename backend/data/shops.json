@@ -112,5 +112,33 @@
       "frost_gem",
       "venom_gem"
     ]
+  },
+  "night_market": {
+    "name": "The Night Market",
+    "blurb": "Whatever fell off a truck this week, and the best food in the city. Stalls change nightly.",
+    "price_mod": 0.9,
+    "stock": [
+      "skewered_something",
+      "glow_broth",
+      "static_floss",
+      "vendors_mercy"
+    ],
+    "rotates": {
+      "count": 3,
+      "pool": [
+        "ember_gem",
+        "frost_gem",
+        "volt_gem",
+        "venom_gem",
+        "aurora_pendant",
+        "rare_vinyl",
+        "sheet_music",
+        "first_edition",
+        "signal_ring",
+        "grip_gloves",
+        "stim_tea",
+        "star_ration"
+      ]
+    }
   }
 }

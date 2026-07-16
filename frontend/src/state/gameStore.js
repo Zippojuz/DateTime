@@ -23,8 +23,9 @@ export const useGameStore = create((set, get) => ({
   protocols: null, // registry: { id: {name, kind, heat|energy, ...} }
   statuses: null, // registry: { id: {name, side, color, hint} }
 
-  // Shop stock for the current district; gift flow + last reaction.
+  // Shop stock for the current place; gift flow + last reaction.
   shop: null,
+  lastGossip: null, // last Night Market rumor: { npc, topic, text }
   gifting: null, // { npcId, npcName } while picking a gift
   lastReaction: null, // last gift reaction toast
 
@@ -233,6 +234,21 @@ export const useGameStore = create((set, get) => ({
       set({ shop: await api.shop() })
     } catch {
       // Non-fatal.
+    }
+  },
+
+  marketGossip: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.marketGossip()
+      set({
+        lastGossip: res,
+        ...(res.state ? { state: res.state } : {}),
+        busy: false,
+      })
+      get().loadShop() // the ask-around button burns for the night
+    } catch (err) {
+      set({ error: err.message, busy: false })
     }
   },
 

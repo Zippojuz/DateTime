@@ -69,6 +69,7 @@ class Player(Character):
         last_gig_day=0,
         street_cred=0,
         arena_wins=0,
+        gossip_day=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -104,6 +105,8 @@ class Player(Character):
         self.street_cred = street_cred
         # Arena win ladder (losses don't advance it; every 10th win is a title).
         self.arena_wins = arena_wins
+        # Last absolute day Night Market gossip was picked up (one per night).
+        self.gossip_day = gossip_day
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)

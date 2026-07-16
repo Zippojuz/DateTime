@@ -1,13 +1,15 @@
 import { useGameStore } from '../state/gameStore'
 
-// Mirrors backend world.TRAVEL_COST / LOCAL_COST so the UI can show costs
-// before you commit. "local" is a hop within one district: stepping into or
-// out of a venue like the Pit.
+// Mirrors backend world.TRAVEL_COST / LOCAL_COST / CAB_COST so the UI can
+// show costs before you commit. "local" is a hop within one district
+// (stepping into or out of a venue); the Loop is the mag-tube ring; cabs fly
+// door to door at a flat rate.
 const COST = {
   adjacent: { walk: { minutes: 20, credits: 0 }, transit: { minutes: 8, credits: 8 } },
   cross: { walk: { minutes: 40, credits: 0 }, transit: { minutes: 18, credits: 18 } },
 }
 const LOCAL = { minutes: 5, credits: 0 }
+const CAB = { minutes: 6, credits: 30 }
 
 export default function TravelPanel() {
   const districts = useGameStore((s) => s.districts)
@@ -82,6 +84,7 @@ export default function TravelPanel() {
             const walk = COST[dist].walk
             const transit = COST[dist].transit
             const canTransit = player.credits >= transit.credits
+            const canCab = player.credits >= CAB.credits
             return (
               <li key={d.id} className="travel-dest">
                 <span className="travel-name">
@@ -99,10 +102,18 @@ export default function TravelPanel() {
                   <button
                     className="btn-action"
                     disabled={busy || !canTransit}
-                    title={canTransit ? '' : 'Not enough credits'}
+                    title={canTransit ? 'Ride the Loop — the mag-tube ring' : 'Not enough credits'}
                     onClick={() => travel(d.id, 'transit')}
                   >
-                    Transit · {transit.minutes}m · {transit.credits}cr
+                    Loop · {transit.minutes}m · {transit.credits}cr
+                  </button>
+                  <button
+                    className="btn-action travel-cab"
+                    disabled={busy || !canCab}
+                    title={canCab ? 'Hovercab — door to door, sky lanes' : 'Not enough credits'}
+                    onClick={() => travel(d.id, 'cab')}
+                  >
+                    Cab · {CAB.minutes}m · {CAB.credits}cr
                   </button>
                 </span>
               </li>

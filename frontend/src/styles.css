@@ -1770,6 +1770,27 @@ body {
   font-size: 0.8em;
 }
 
+.shop-tonight {
+  color: #ffe95a;
+  font-size: 0.7rem;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  margin-left: 0.4rem;
+}
+
+.shop-gossip {
+  color: #ffe95a;
+  font-size: 0.88rem;
+  font-style: italic;
+  border-left: 2px solid rgba(255, 233, 90, 0.5);
+  padding-left: 0.7rem;
+  line-height: 1.5;
+}
+
+.travel-cab {
+  border-color: rgba(255, 233, 90, 0.35);
+}
+
 .venue-perk {
   color: #ffe95a;
   font-size: 0.85rem;

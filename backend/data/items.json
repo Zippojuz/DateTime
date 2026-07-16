@@ -908,5 +908,49 @@
     },
     "sockets": 1,
     "description": "A brass ship's bell the size of a fist, cut from the Pit's rope the night the founder finally lost. It doesn't ring for anyone else. Ondo pressed it into your hands like it weighed fifteen years."
+  },
+  "skewered_something": {
+    "id": "skewered_something",
+    "name": "Skewered Something",
+    "type": "food",
+    "rarity": "common",
+    "description": "Nobody asks. It's char-sweet, it's hot, and the vendor's smile is completely sincere. Nyx has eaten four of these; being finite is delicious.",
+    "effects": {
+      "energy": 20
+    },
+    "value": 6
+  },
+  "glow_broth": {
+    "id": "glow_broth",
+    "name": "Glow Broth",
+    "type": "food",
+    "rarity": "common",
+    "description": "Server-coolant green and faintly luminous. Tastes like midnight and white pepper. The bowl is a deposit.",
+    "effects": {
+      "energy": 30
+    },
+    "value": 10
+  },
+  "static_floss": {
+    "id": "static_floss",
+    "name": "Static Floss",
+    "type": "food",
+    "rarity": "common",
+    "description": "Spun sugar that crackles against your teeth. Kids ask for double static.",
+    "effects": {
+      "energy": 10
+    },
+    "value": 3
+  },
+  "vendors_mercy": {
+    "id": "vendors_mercy",
+    "name": "Vendor's Mercy",
+    "type": "food",
+    "rarity": "uncommon",
+    "description": "The end-of-night box: whatever didn't sell, stacked with genuine tenderness. A whole meal for whoever needs one.",
+    "effects": {
+      "energy": 45
+    },
+    "value": 14
   }
 }

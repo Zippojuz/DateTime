@@ -160,6 +160,11 @@ def _m12_species_trait(conn):
     _add_column(conn, "player", "trait", "TEXT NOT NULL DEFAULT ''")
 
 
+def _m13_gossip(conn):
+    """Last absolute day the player picked up Night Market gossip (one/night)."""
+    _add_column(conn, "player", "gossip_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -173,6 +178,7 @@ MIGRATIONS = [
     _m10_gigs,
     _m11_arena_and_cred,
     _m12_species_trait,
+    _m13_gossip,
 ]
 
 

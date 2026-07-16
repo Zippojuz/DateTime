@@ -31,6 +31,7 @@ class NPC(Character):
         starting_disposition=0,
         companion=None,
         requires_defeat=None,
+        home=None,
     ):
         super().__init__(name, attributes, preferences)
         self.id = id
@@ -45,6 +46,9 @@ class NPC(Character):
         # If set, this NPC is hidden until the named dungeon boss is beaten
         # (the deep-floor bosses who surface as romanceables after the fight).
         self.requires_defeat = requires_defeat
+        # Where they live: {name, blurb}. Schedule windows with location
+        # "home" resolve here — everyone goes somewhere in the off hours.
+        self.home = dict(home) if home else {}
         # Where affection starts when the relationship is first seeded (0 =
         # neutral). Most NPCs start neutral; some may lean warm/cold.
         self.starting_disposition = starting_disposition
@@ -71,6 +75,7 @@ class NPC(Character):
             starting_disposition=entry.get("starting_disposition", 0),
             companion=entry.get("companion"),
             requires_defeat=entry.get("requires_defeat"),
+            home=entry.get("home"),
         )
 
     def unlocked_for(self, player):
@@ -111,6 +116,7 @@ class NPC(Character):
                 "arc_theme": self.arc_theme,
                 "romanceable": self.romanceable,
                 "schedule": self.schedule,
+                "home": self.home,
             }
         )
         return base

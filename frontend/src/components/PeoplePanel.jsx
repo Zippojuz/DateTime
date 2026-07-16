@@ -9,18 +9,20 @@ const TIER_LABEL = {
   unavailable: 'Not around',
 }
 
-// Who you can reach right now. You must be in the same district as an NPC to
-// talk to them; otherwise the panel tells you where to go.
+// Who you can reach right now. You must be in the same place as an NPC to
+// talk to them; otherwise the panel tells you where to go — or where they've
+// gone in the off hours (everyone lives somewhere).
 export default function PeoplePanel() {
   const characters = useGameStore((s) => s.characters)
   const districts = useGameStore((s) => s.districts)
+  const venues = useGameStore((s) => s.venues)
   const startDialogue = useGameStore((s) => s.startDialogue)
   const startGift = useGameStore((s) => s.startGift)
   const busy = useGameStore((s) => s.busy)
 
   if (!characters.length) return null
 
-  const districtName = (id) => districts?.[id]?.name ?? id
+  const placeName = (id) => districts?.[id]?.name ?? venues?.[id]?.name ?? id
 
   return (
     <section className="people-panel">
@@ -32,8 +34,12 @@ export default function PeoplePanel() {
           let status
           if (c.talked_today && c.reachable) status = 'already talked today'
           else if (c.reachable) status = TIER_LABEL[av.tier]
-          else if (av.available && av.district) status = `in ${districtName(av.district)}`
-          else status = `${TIER_LABEL[av.tier] ?? 'Not around'} · ${districtName(c.district)}`
+          else if (av.available && av.district) status = `in ${placeName(av.district)}`
+          else {
+            const home = av.location === 'home' && c.home?.name
+            const where = home || placeName(av.district ?? c.district)
+            status = `${av.activity ?? TIER_LABEL[av.tier] ?? 'Not around'} · ${where}`
+          }
 
           return (
             <li key={c.id} className="person">

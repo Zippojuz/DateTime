@@ -708,13 +708,26 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 Five venues approved 2026-07-15; detailed plans agreed in-session. Suggested
 order (each independently shippable):
 
-1. **The Night Market** (Bloom District, 18:00–04:00) — first night-only
-   venue. Venue-keyed shop (shops.json works for venues already), stock
-   rotating nightly from a pool (deterministic by day, gig-style), unique
-   street-food consumables (small buffs), gossip line per night (a random
-   undiscovered NPC preference hinted, not revealed). Nyx gets a post-unlock
-   schedule window here (her intro already lives at a night market).
-   Down-payment on the night-rhythm milestone.
+1. ✅ **The Night Market** (Bloom District, 18:00–04:00) — DONE. First
+   night-only venue: venue-keyed shop, 3 stalls rotating nightly from a
+   12-item pool (deterministic by absolute day — `shop.rotating_ids`,
+   "✶ tonight only" badges, buyable only on their night), four street foods
+   (Skewered Something / Glow Broth / Static Floss / Vendor's Mercy), and
+   **gossip**: once a night (migration 13: gossip_day), a vendor names a
+   cast member's real preference lean in rumor-speak — true, but never
+   marked discovered. Nyx's evening window moved to the market's stalls.
+   Loot integrity tests sweep rotation pools too.
+   **Shipped alongside (same commit): transportation + homes.**
+   - **Tubes AND cabs** (user decision): transit is canonically the Loop
+     (mag-tube ring; Priced In rides free); new third mode `cab` — hovercab,
+     door to door, any place incl. straight to a venue, flat 6 min /
+     −2 energy / 30 cr, never free. Night surge deferred to night-rhythm.
+   - **Homes + full schedules**: every NPC has a home block ({name, blurb};
+     Vex "Above the bar — nobody has ever seen the inside", Oona's brine
+     tank, Ondo's cot in the aft locker room…), availability now carries the
+     window's activity, and the People panel shows off-hours life ("Asleep ·
+     The Hideout Annex"). Integrity tests: everyone housed, every schedule
+     covers all 1440 minutes.
 2. **Gantry 9** (The Grid, always open) — rooftop-line terminus teahouse.
    The Lookout: a server-composed almanac (who's reachable where right now,
    what's open, this week's corp war, today's gig, tonight's Pit card). Tea

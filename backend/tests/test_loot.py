@@ -86,10 +86,12 @@ def test_victory_includes_drops_and_credit_variance():
 
 
 def _all_shop_stock(shop_def):
-    """Base stock plus every cred tier's stock (the whole sellable catalog)."""
+    """Base stock, every cred tier's stock, and the whole rotating pool (the
+    complete sellable catalog)."""
     ids = list(shop_def["stock"])
     for tier in shop_def.get("cred_tiers", []):
         ids.extend(tier["stock"])
+    ids.extend(shop_def.get("rotates", {}).get("pool", []))
     return ids
 
 

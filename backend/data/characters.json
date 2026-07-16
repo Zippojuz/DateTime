@@ -69,6 +69,10 @@
       "hp_mult": 1.5,
       "atk_mult": 0.7,
       "blurb": "Shield-line soldier. Steps between you and the worst of it."
+    },
+    "home": {
+      "name": "A capsule flat over the plaza",
+      "blurb": "The plaza lights reach her ceiling all night. She counts it as company."
     }
   },
   "zix": {
@@ -136,6 +140,10 @@
     "attributes": {
       "hacking": 12,
       "wit": 8
+    },
+    "home": {
+      "name": "The Hideout Annex",
+      "blurb": "Six bunks, one nameplate. The argument about whose turn it is to sleep is ongoing and beloved."
     }
   },
   "sora": {
@@ -199,6 +207,10 @@
       "hp_mult": 1.0,
       "atk_mult": 0.6,
       "blurb": "Restorative spores and a steady voice. Keeps you standing."
+    },
+    "home": {
+      "name": "A greenhouse loft",
+      "blurb": "The plants moved in first; Sora pays rent in pollination and gossip."
     }
   },
   "carro": {
@@ -263,6 +275,10 @@
       "atk_mult": 1.0,
       "credit_bonus": 0.25,
       "blurb": "Fights like a merchant: efficiently, and always finds the money."
+    },
+    "home": {
+      "name": "A houseboat that hasn't sailed in years",
+      "blurb": "Warm rocks on every sill, each one labeled with where it was stolen from."
     }
   },
   "miko": {
@@ -326,6 +342,10 @@
       "hp_mult": 0.9,
       "atk_mult": 0.8,
       "blurb": "Battle-rhythm. Keeps your charge meter singing."
+    },
+    "home": {
+      "name": "The cabinet over the venue",
+      "blurb": "A converted speaker enclosure. It hums in their sleep, or they hum in its. Unclear."
     }
   },
   "nyx": {
@@ -358,9 +378,9 @@
       {
         "start": "18:00",
         "end": "23:00",
-        "district": "the_shallows",
-        "location": "shallows_market",
-        "activity": "Tasting everything the surface sells",
+        "district": "night_market",
+        "location": "the_stalls",
+        "activity": "Eating her way down the row, one skewer at a time",
         "available": true
       },
       {
@@ -390,6 +410,10 @@
     "attributes": {
       "hacking": 10,
       "charm": 8
+    },
+    "home": {
+      "name": "A door that wasn't there last week",
+      "blurb": "Somewhere in the Shallows there's a stairwell that goes down further than the building does."
     }
   },
   "vex": {
@@ -438,7 +462,11 @@
         "activity": "Unreachable, on purpose",
         "available": false
       }
-    ]
+    ],
+    "home": {
+      "name": "Above the bar",
+      "blurb": "Nobody has ever seen the inside. There are theories. Vex collects the theories."
+    }
   },
   "juno": {
     "id": "juno",
@@ -495,7 +523,11 @@
         "activity": "Sleeping off other people's surgeries",
         "available": false
       }
-    ]
+    ],
+    "home": {
+      "name": "The flat behind the clinic",
+      "blurb": "Surgically clean, except for one ancient armchair she will not let herself reupholster."
+    }
   },
   "ondo": {
     "id": "ondo",
@@ -553,6 +585,10 @@
       "requires_event": "defeated:ondo_the_bell",
       "locked_blurb": "They won't stand beside anyone they haven't stood across from.",
       "blurb": "Fifteen years retired and still nobody's laid them down. The bell rings; they step in front of you like a door closing."
+    },
+    "home": {
+      "name": "A cot in the Pit's aft locker room",
+      "blurb": "A sea-chest at the foot, fifteen years of fight cards inside, in order."
     }
   },
   "oona": {
@@ -625,6 +661,10 @@
       "hp_mult": 1.0,
       "atk_mult": 1.1,
       "blurb": "Eight arms mean the enemy is always in a hold and you're always spotted. The coaching continues mid-fight, unfortunately."
+    },
+    "home": {
+      "name": "The brine tank aft of the Hold",
+      "blurb": "Bought, not issued. It matters. Do not knock on the glass."
     }
   }
 }
