@@ -64,6 +64,7 @@ export const api = {
       body: JSON.stringify({ choice_index: choiceIndex }),
     }),
   dateLeave: () => request('/date/leave', { method: 'POST', body: '{}' }),
+  salvage: () => request('/salvage', { method: 'POST', body: '{}' }),
   linkTones: () => request('/link/tones'),
   sendMessage: (npcId, tone) =>
     request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),

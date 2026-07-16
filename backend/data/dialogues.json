@@ -1092,5 +1092,154 @@
         "choices": []
       }
     }
+  },
+  "ondo_dawn_cold": {
+    "id": "ondo_dawn_cold",
+    "npc": "ondo",
+    "place": "the_tide_line",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "They don't startle \u2014 you suspect they heard you three ladders up. Ondo stands at the water line with their boots just dry, watching the black glass like it owes them a rematch. \u201cI said don't,\u201d they say, without turning. \u201cThat was the whole sentence.\u201d",
+        "choices": [
+          {
+            "text": "I wanted to see what was worth a 'don't.'",
+            "affection": 2,
+            "next": "n2"
+          },
+          {
+            "text": "Sorry. I'll head back up.",
+            "affection": 1,
+            "next": "n_end"
+          },
+          {
+            "text": "It's a free city. Free tide, too.",
+            "offense": {
+              "delta": -2,
+              "severity": "minor"
+            },
+            "next": "n_end"
+          }
+        ]
+      },
+      "n2": {
+        "text": "A long exhale through the nose \u2014 their version of a shrug. \u201cFair. Nothing down here but cold water and old arguments.\u201d They nod at the ladder. \u201cCome back when we know each other. The water line isn't for spectators.\u201d",
+        "choices": [
+          {
+            "text": "Then I'll earn the invitation.",
+            "affection": 2,
+            "next": "n_end"
+          },
+          {
+            "text": "Understood. Ringside it is.",
+            "affection": 1,
+            "next": "n_end"
+          }
+        ]
+      },
+      "n_end": {
+        "text": "They turn back to the water. The conversation is over the way a bell is over \u2014 cleanly, and with the sound still hanging.",
+        "choices": []
+      }
+    }
+  },
+  "ondo_dawn": {
+    "id": "ondo_dawn",
+    "npc": "ondo",
+    "place": "the_tide_line",
+    "requires_affection": 12,
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "They hear you coming and don't send you back \u2014 which, from Ondo, is a door standing open. The water line lies still as poured metal. \u201cSlack water,\u201d they say, as if that explains their presence. Then, quieter: \u201cYou're the first one who followed. Fifteen years of 'don't,' and it works on everybody but you.\u201d",
+        "choices": [
+          {
+            "text": "Why down here? The Pit's yours. This is just... cold.",
+            "affection": 3,
+            "next": "n2"
+          },
+          {
+            "text": "Walk. I'll keep the pace and my mouth shut.",
+            "affection": 4,
+            "next": "n3"
+          },
+          {
+            "text": "You come here every morning. That's not a habit, that's a debt.",
+            "affection": 3,
+            "next": "n2"
+          }
+        ]
+      },
+      "n2": {
+        "text": "They start walking; you fall in. \u201cThe Pit is loud on purpose. Bell, crowd, blood \u2014 noise you can win.\u201d Their light drags across a drowned doorway. \u201cThis is the opposite. Nobody cheers for the tide. It just comes back. Every day, no record, no belt, undefeated since before the city.\u201d A beat. \u201cI come down here to lose to something on purpose. Keeps the arithmetic honest.\u201d",
+        "choices": [
+          {
+            "text": "That might be the most honest thing anyone's said to me in this city.",
+            "affection": 4,
+            "next": "n4"
+          },
+          {
+            "text": "So the retirement wasn't about the fighting at all.",
+            "affection": 3,
+            "next": "n4"
+          },
+          {
+            "text": "You could just take up swimming like a normal person.",
+            "affection": 1,
+            "next": "n4"
+          }
+        ]
+      },
+      "n3": {
+        "text": "You walk. The water keeps its counsel and so do you, and somewhere in the third gallery Ondo starts talking anyway \u2014 not to you exactly, to the dark, with you in it. About the first bell they ever rang. About how quiet it was after. The tide listens. You listen. It's the same thing, this hour of the day.",
+        "choices": [
+          {
+            "text": "Keep walking beside them. The silence is the answer.",
+            "affection": 4,
+            "next": "n4"
+          },
+          {
+            "text": "\u201cThank you for letting me hear that.\u201d",
+            "affection": 3,
+            "next": "n4"
+          }
+        ]
+      },
+      "n4": {
+        "text": "At the far gallery they stop, where the walkway dips under and the walk ends whether you like it or not. \u201cSame time tomorrow,\u201d they say, and it isn't an invitation so much as a fact about the tide. Then, almost too quiet over the water: \u201cMost people want the Bell. You showed up for the low tide. Noted.\u201d",
+        "choices": [
+          {
+            "text": "[After the Founder's Bout] \u201cI've seen the other side of your bell. This side's better.\u201d",
+            "requires_event": "defeated:ondo_the_bell",
+            "affection": 5,
+            "next": "n_bell"
+          },
+          {
+            "text": "Same time tomorrow.",
+            "affection": 3,
+            "next": "n_end"
+          },
+          {
+            "text": "Low tide's where the good salvage is.",
+            "affection": 2,
+            "next": "n_end"
+          }
+        ]
+      },
+      "n_bell": {
+        "text": "They look at you the way they looked at the water \u2014 like something undefeated that finally lost on purpose. \u201cFifteen years I rang that bell for other people's endings,\u201d they say. \u201cYou're the only one who ever heard what it was asking.\u201d The tide turns under the walkway, right on schedule, and Ondo 'The Bell' Marr laughs \u2014 once, low, real. The sea gets to hear it. So do you.",
+        "choices": [
+          {
+            "text": "Then let it ask. I'll keep answering.",
+            "affection": 4,
+            "next": "n_end"
+          }
+        ]
+      },
+      "n_end": {
+        "text": "You climb toward the gray light with the cold in your boots and something warmer under it. Behind you, Ondo keeps walking the line between the city and the sea, undefeated at losing, exactly on time.",
+        "choices": []
+      }
+    }
   }
 }

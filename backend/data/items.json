@@ -970,5 +970,13 @@
     "rarity": "rare",
     "value": 0,
     "description": "Not a lens \u2014 a habit. Forty years of 'no fault found' distilled into knowing where not-quite-to-look. Somewhere in row nine, something is glad you learned."
+  },
+  "tide_glass": {
+    "id": "tide_glass",
+    "name": "Tide Glass",
+    "type": "curio",
+    "rarity": "rare",
+    "value": 60,
+    "description": "Sea-smoothed glass with a slow light inside, moving like something patient breathing. Found only in the flooded levels at slack water. Warm in the hand. Warmer when the tide is coming in."
   }
 }

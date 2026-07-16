@@ -1,0 +1,43 @@
+{
+  "venue": "the_tide_line",
+  "run": {
+    "minutes": 30,
+    "energy": -8
+  },
+  "events": [
+    {
+      "id": "flotsam",
+      "weight": 34,
+      "credits": [8, 24],
+      "text": "A mesh sack snagged on a ladder rung, heavy with honest salvage: connector housings, a coil of cable, somebody's lunchbox from a decade nobody misses. The scrapman upstairs pays without questions."
+    },
+    {
+      "id": "sealed_crate",
+      "weight": 14,
+      "items": ["star_ration", "stim_tea", "grip_gloves", "signal_ring"],
+      "text": "A crate wedged under the walkway, seals still good. The manifest sticker dissolved years ago, which legally makes it yours."
+    },
+    {
+      "id": "cold_surge",
+      "weight": 18,
+      "energy": -10,
+      "text": "The tide shoulders through a bulkhead seam without warning — knee-deep goes waist-deep and the cold walks straight through your clothes and into your schedule. You find the ladder. You find nothing else."
+    },
+    {
+      "id": "empty_water",
+      "weight": 24,
+      "text": "Dark water, patient and empty. Your light crosses a school of something small and silver that has learned to live in a drowned hallway, which is more than most manage. Not every walk pays in credits."
+    },
+    {
+      "id": "tide_glass",
+      "weight": 6,
+      "item": "tide_glass",
+      "text": "Wedged in a valve wheel: a fist of sea-smoothed glass with a slow light moving inside it, patient as a heartbeat. Nobody upstairs can tell you what it is. Nobody offers to take it off your hands twice."
+    },
+    {
+      "id": "the_far_figure",
+      "weight": 4,
+      "text": "Far down the flooded gallery, past where your light gives up, someone is walking the water line — unhurried, exact, like the tide keeps their appointment book. They don't look your way. The dark takes them back a step at a time."
+    }
+  ]
+}

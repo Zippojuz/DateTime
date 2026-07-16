@@ -2878,3 +2878,48 @@ body {
   color: var(--accent);
   font-size: 0.95rem;
 }
+
+/* --- The Tide Line: salvage at slack water --- */
+
+.tideline-view h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.salvage-offer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+
+.salvage-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.salvage-sub {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.salvage-result {
+  background: var(--bg-panel);
+  border-left: 2px solid #2a4a6b;
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0 0 0.5rem;
+}
+
+.salvage-find {
+  color: var(--neon);
+  font-style: normal;
+  font-weight: 600;
+  margin-left: 0.4rem;
+}

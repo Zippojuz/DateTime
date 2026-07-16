@@ -32,6 +32,21 @@
       "blurb": "House rates: Agility and Courage train under coaching here \u2014 one hour, \u22128 energy, instead of two and \u221215."
     }
   },
+  "the_tide_line": {
+    "id": "the_tide_line",
+    "name": "The Tide Line",
+    "district": "docking_quarter",
+    "vibe": "The docking quarter's flooded maintenance levels, passable only in the slack water before dawn. Ladders descend into black glass; the sea moves through the bones of the city and leaves things behind. Everything down here is either lost, waiting, or listening.",
+    "hours": {
+      "open": "04:00",
+      "close": "06:00"
+    },
+    "closed_line": "The hatch is dogged tight and the water behind it has opinions. Stenciled on the steel: SLACK WATER 04:00–06:00. DO NOT ARGUE WITH THE SEA.",
+    "enter_line": "Cold air, colder water, and a silence with a pulse to it. Your light finds the walkway; the tide finds your boots.",
+    "trait_lines": {
+      "uplift": "The water smells like home and reads like a newspaper. Every current down here is a sentence, and you were raised on this alphabet."
+    }
+  },
   "dockside_stalls": {
     "id": "dockside_stalls",
     "name": "Dockside Stalls",

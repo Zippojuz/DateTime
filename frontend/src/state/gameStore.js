@@ -88,6 +88,9 @@ export const useGameStore = create((set, get) => ({
   date: null, // the active beat / closing view from the server
   lastSoak: null,
 
+  // The Tide Line: the last salvage run's outcome.
+  lastSalvage: null,
+
   busy: false,
   error: null,
 
@@ -562,6 +565,17 @@ export const useGameStore = create((set, get) => ({
       const res = await api.soak()
       set({ state: res.state, lastSoak: res.soak, busy: false })
       get().loadCharacters() // ninety minutes pass
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  wadeIn: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.salvage()
+      set({ state: res.state, lastSalvage: res.salvage, busy: false })
+      get().loadCharacters() // thirty minutes pass; the window is narrow
     } catch (err) {
       set({ error: err.message, busy: false })
     }

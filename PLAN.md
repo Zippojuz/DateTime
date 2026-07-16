@@ -815,11 +815,21 @@ order (each independently shippable):
    soak** — 25 cr, 90 min, full energy (fast expensive sleep; no status
    system exists yet, so "cleanse" awaits one). Reptilian trait line on
    the door (warm rocks, important address).
-5. **The Tide Line** (Docking Quarter, open 04:00–06:00 only) — flooded
-   maintenance levels. Salvage-run venue (small event table: finds, hazards,
-   rare curio), and Ondo's dawn walk made real: meeting them down there
-   (they said "Don't") opens dialogue ringside can't — keyed to affection,
-   deepening their arc.
+5. ✅ **The Tide Line** (Docking Quarter, 04:00–06:00 only) — DONE. The
+   flooded maintenance levels, the hardest venue to even reach (be up
+   before dawn). **Salvage runs** (game/salvage.py, data/tide_line.json):
+   30m/−8 per wade, weighted event table — flotsam credits (34%), sealed
+   crate from an item pool (14%), cold-surge hazard −10 energy (18%),
+   empty water (24%), the rare **Tide Glass** curio (6%, value 60 —
+   pawnshop bait), and a 4% far-figure flavor sighting. **Ondo's dawn
+   walk is real**: their 04:00–06:00 window now lives at the_tide_line,
+   available — and dialogue trees gained an optional `place` key
+   (place-matched beats placeless in tree_for_npc): strangers get
+   ondo_dawn_cold ("I said don't. That was the whole sentence."),
+   affection 12+ gets ondo_dawn — why they walk (losing to the tide on
+   purpose), with the deepest branch behind defeated:ondo_the_bell.
+   Uplift trait line on the door (the water reads like a newspaper).
+   **The venue roadmap is complete** — all five approved venues shipped.
 
 **Transportation (decision pending):** proposal = make "transit" diegetically
 **the Loop** (pneumatic mag-tube ring; fits the ring-of-districts map) and add

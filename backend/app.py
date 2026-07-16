@@ -30,6 +30,7 @@ from game import (
     jobs,
     places,
     preferences,
+    salvage,
     save,
     shop,
     social,
@@ -605,6 +606,21 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({"date": result, "state": save.state_dict(player, clock)})
 
+    # --- The Tide Line: salvage runs at slack water ---
+
+    @app.post("/api/salvage")
+    def salvage_run():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = salvage.run(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"salvage": result, "state": save.state_dict(player, clock)})
+
     # --- The Stacks: the research desk ---
 
     @app.get("/api/stacks")
@@ -1088,7 +1104,7 @@ def create_app():
             return jsonify(error=f"You've already spent real time with {npc.name} today."), 400
 
         affection = social.get_affection(save_id, npc.id, _day_index(clock))
-        tree = dialogue.tree_for_npc(npc.id, affection)
+        tree = dialogue.tree_for_npc(npc.id, affection, location=player.location)
         if tree is None:
             return jsonify(error=f"{npc.name} has nothing to say yet."), 404
 

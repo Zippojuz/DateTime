@@ -570,10 +570,18 @@
       },
       {
         "start": "04:00",
+        "end": "06:00",
+        "district": "the_tide_line",
+        "location": "the_water_line",
+        "activity": "Walking the water line. They said don't",
+        "available": true
+      },
+      {
+        "start": "06:00",
         "end": "16:00",
-        "district": "the_grid",
-        "location": "tide_line",
-        "activity": "Walking the flooded maintenance levels. Don't.",
+        "district": "the_pit",
+        "location": "home",
+        "activity": "Asleep in the aft locker room. The bell can wait",
         "available": false
       }
     ],

@@ -76,20 +76,29 @@ def tree_by_id(dialogue_id):
     return data.load("dialogues").get(dialogue_id)
 
 
-def tree_for_npc(npc_id, affection=0):
-    """Return the best dialogue tree for an NPC given the current affection.
+def tree_for_npc(npc_id, affection=0, location=None):
+    """Return the best dialogue tree for an NPC given affection and place.
 
-    Among the NPC's trees, pick the highest `requires_affection` that the player
-    qualifies for (default requirement 0). This is how relationship arcs unlock:
-    a deeper scene supersedes the intro once you're close enough.
+    Among the NPC's trees, pick the highest `requires_affection` the player
+    qualifies for (default requirement 0) — this is how relationship arcs
+    unlock: a deeper scene supersedes the intro once you're close enough.
+    A tree may also carry a `place`: it's only eligible when the player is
+    standing there, and a place-matched tree beats any placeless one — some
+    conversations only happen at the water line.
     """
-    best = None
+    best, best_key = None, None
     for tree in data.load("dialogues").values():
         if tree.get("npc") != npc_id:
             continue
+        place = tree.get("place")
+        if place and place != location:
+            continue
         needed = tree.get("requires_affection", 0)
-        if affection >= needed and (best is None or needed > best.get("requires_affection", 0)):
-            best = tree
+        if affection < needed:
+            continue
+        key = (1 if place else 0, needed)
+        if best is None or key > best_key:
+            best, best_key = tree, key
     return best
 
 
