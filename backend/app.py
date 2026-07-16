@@ -31,6 +31,7 @@ from game import (
     save,
     shop,
     social,
+    stacks,
     teahouse,
     traits,
     world,
@@ -522,6 +523,42 @@ def create_app():
             return jsonify(error=str(err)), 400
         save.save_models(save_id, player, clock)
         return jsonify({"poured": poured, "state": save.state_dict(player, clock)})
+
+    # --- The Stacks: the research desk ---
+
+    @app.get("/api/stacks")
+    def stacks_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, clock = models
+        cfg = data.load("stacks")
+        return jsonify(
+            {
+                "venue": cfg["venue"],
+                "minutes": cfg["research"]["minutes"],
+                "energy": cfg["research"]["energy"],
+                "researched_today": player.research_day == _day_index(clock),
+                # The draft only files itself once — then you can see them.
+                "draft": None if NPC.load("index").unlocked_for(player) else cfg["draft"],
+            }
+        )
+
+    @app.post("/api/research")
+    def research():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = stacks.research(save_id, player, clock, body.get("subject"), _day_index(clock))
+        except KeyError:
+            return jsonify(error="The archive has no file under that name."), 404
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"research": result, "state": save.state_dict(player, clock)})
 
     @app.get("/api/lookout")
     def lookout():

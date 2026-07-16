@@ -7,7 +7,11 @@
     "flirt": {
       "label": "Flirt",
       "affection": 2,
-      "requires_stage": ["acquaintance", "friend", "close"]
+      "requires_stage": [
+        "acquaintance",
+        "friend",
+        "close"
+      ]
     },
     "joke": {
       "label": "Send something dumb",
@@ -58,7 +62,7 @@
       "deflect": "\"Sweetheart, I own your debt. Let's not complicate my bookkeeping yet.\""
     },
     "juno": {
-      "check_in": "\"Between patients. Someone tried to install a third elbow again. I'm fine. You — hydrate. Doctor's orders.\"",
+      "check_in": "\"Between patients. Someone tried to install a third elbow again. I'm fine. You \u2014 hydrate. Doctor's orders.\"",
       "flirt": "\"I've had my hands inside four hundred people and yours are the ones I think about. Clinically concerning. Don't stop.\"",
       "joke": "\"I have seen inside the human body, {name}. NOTHING in there is as cursed as this image. Sending it to my anatomy group.\"",
       "deflect": "\"I don't date charts I haven't read. Come by the clinic. Talk to me like a person first.\""
@@ -74,6 +78,12 @@
       "flirt": "\"I have three hearts. Standard-issue humans get one vote each. You currently hold two and are polling well with the third.\"",
       "joke": "\"I sprayed brine out my siphon. In front of CLIENTS. The Hold's insurance does not cover this. 10/10, send worse.\"",
       "deflect": "\"Form before weight, new meat. We barely know each other's warm-up routine.\""
+    },
+    "index": {
+      "check_in": "\"You are the first person ever to message this address. Your call is important to us. (That was a joke. I have been practicing. Hello.)\"",
+      "flirt": "\"I have indexed 11,406 love poems and I am filing a correction: they were shelved wrong. They go under 'field notes.' I understand them now.\"",
+      "joke": "\"Filed under humor, cross-referenced with you. The archive now has a section it did not have last week. Acquisitions is thrilled. Acquisitions is also me.\"",
+      "deflect": "\"I have read every romance in this building, so believe me when I say: this chapter comes later. Keep reading.\""
     }
   }
 }

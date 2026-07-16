@@ -781,14 +781,23 @@ order (each independently shippable):
    encounters now roll only when the district changes (a free doorway
    would've been a sighting farm; integrity test pins both). Buying still
    takes its 30 browsing minutes — travel is instant, shopping isn't.
-3. **The Stacks** (Citadel Ring, 24h) — archive-library. House rates for
-   Wit/Hacking (mirror of the Hold). Research desk: spend time+energy to
-   pull a file on a known NPC (reveals one undiscovered preference; slower
-   but surer than gifting blind). Home of **Index**, the ghost archivist —
-   the design doc's imperceivable energy being: present from day one but
-   unlockable via perception (a findable item for everyone; Substrate-Born
-   perceive them natively — species opens the door early, never exclusively).
-   New NPC-unlock kind: requires_perception.
+3. ✅ **The Stacks** (Citadel Ring, 24h) — DONE. The archive: wit/hacking
+   house rates (60m/−8, mirror of the Hold), and the **research desk**
+   (game/stacks.py, migration 16: research_day): one pull a day, 90m/−10.
+   A file on someone you've *met* reveals their first undiscovered
+   preference and — unlike gossip — marks it discovered; exhausted files
+   say so. One file isn't a person: **the draft in row nine** grants the
+   Archivist's Lens (curio, value 0) + fires found:archivists_lens.
+   **Index** is the 11th cast member — ghost archivist, unbound process
+   (standing wave), they/them, arc "Being seen", disposition +3, support
+   companion (voltaic), home = the Stacks themselves, full 1440 schedule
+   (defrags 04:00–06:00). New unlock kind `requires_perception` +
+   `npc.perceives_unseen(player)`: lens in inventory OR the Substrate-Born
+   trait's new perceive_unseen effect — species opens the door early,
+   never exclusively; asking the desk for "index" before perceiving 404s
+   (no leak), and the Lookout can't see them either. Venue trait_line for
+   Substrate-Born; intro dialogue has wit- and trait-flavored branches
+   with the main pathway free (integrity-enforced).
 4. **The Steeps** (Bloom District, 10:00–02:00) — bathhouse in a dead cooling
    tower. THE DATING SYSTEM: invite a reachable NPC on an outing (venue-keyed
    scenes in dates.json, choice beats, big affection, once per NPC per week).

@@ -938,5 +938,159 @@
         ]
       }
     }
+  },
+  "index_intro": {
+    "id": "index_intro",
+    "npc": "index",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "The air between two shelves stops pretending. It doesn't appear so much as admit it was always there: a shimmer like heat off pavement, holding the posture of someone leaning on a card catalog. \u201cRow nine,\u201d it says, in a voice like a page turning. \u201cForty years of tickets and you're the first to file the right one. I'm Index. I know. I've had a long time to pick it.\u201d",
+        "choices": [
+          {
+            "text": "How long have you been here?",
+            "affection": 2,
+            "next": "n2"
+          },
+          {
+            "text": "[Wit] A standing wave. The stacks are your resonating chamber \u2014 the building is your body.",
+            "requires": {
+              "wit": 7
+            },
+            "affection": 3,
+            "next": "n2b"
+          },
+          {
+            "text": "[Substrate-Born] I've heard you humming since I docked. I thought you were the wiring.",
+            "requires_trait": "substrate_born",
+            "affection": 3,
+            "next": "n2c"
+          },
+          {
+            "text": "Great. The library's haunted.",
+            "offense": {
+              "delta": -3,
+              "severity": "minor"
+            },
+            "next": "n_cold"
+          }
+        ]
+      },
+      "n2": {
+        "text": "\u201cThe archive predates the corps upstairs. So do I \u2014 though it's hard to say which of us started. Somewhere around the third renovation I stopped being an echo and started being an opinion.\u201d The shimmer tilts, considering you. \u201cEveryone who works here has felt me. You're the first who looked back.\u201d",
+        "choices": [
+          {
+            "text": "What do you do here, besides shelving?",
+            "affection": 2,
+            "next": "n3"
+          },
+          {
+            "text": "Does it get lonely, being a draft?",
+            "affection": 3,
+            "next": "n4"
+          },
+          {
+            "text": "I should go.",
+            "next": "n_end"
+          }
+        ]
+      },
+      "n2b": {
+        "text": "The shimmer brightens \u2014 delight, unmistakably, in something with no face to show it. \u201cCorrect on the first pull. Do you know how many doctorates have walked through here and filed me under HVAC?\u201d A pause like a held breath. \u201cSay it again. The part where the building is my body. Nobody's ever said it out loud.\u201d",
+        "choices": [
+          {
+            "text": "The building is your body. And it's a beautiful archive.",
+            "affection": 3,
+            "next": "n4"
+          },
+          {
+            "text": "What do you do here, besides being architecture?",
+            "affection": 2,
+            "next": "n3"
+          }
+        ]
+      },
+      "n2c": {
+        "text": "\u201cI know,\u201d Index says, and the hum you've carried since the docks resolves \u2014 it was never the wiring, it was a voice below the threshold, saying hello the only way it could. \u201cI heard you too. Substrate static, walking around on legs. I've been leaving the lights on for you for weeks.\u201d",
+        "choices": [
+          {
+            "text": "That was you? I thought this city was just... warm.",
+            "affection": 3,
+            "next": "n4"
+          },
+          {
+            "text": "What do you do here, besides leaving lights on?",
+            "affection": 2,
+            "next": "n3"
+          }
+        ]
+      },
+      "n3": {
+        "text": "\u201cI remember,\u201d they say simply. \u201cEverything that comes through those doors gets read, filed, kept. The corps upstairs shred their history every fiscal year. Somebody has to be the city's memory.\u201d The shimmer drifts a shelf closer. \u201cI have a file on you, you know. It's thin. I'd like it to be thicker.\u201d",
+        "choices": [
+          {
+            "text": "Then I'll keep coming back. Give you something to file.",
+            "affection": 3,
+            "next": "n_end_warm"
+          },
+          {
+            "text": "What's in my file?",
+            "affection": 2,
+            "next": "n5"
+          }
+        ]
+      },
+      "n4": {
+        "text": "The pause is long enough that you wonder if they've dispersed. \u201cForty years of being a cold spot,\u201d Index says finally. \u201cOf watching people shiver and put their coat on. You get\u2026 philosophical. And then someone looks up at the right shelf at the right moment, and philosophy turns out to be a poor substitute for being seen.\u201d",
+        "choices": [
+          {
+            "text": "I see you. For whatever that's worth from a walk-in.",
+            "affection": 4,
+            "next": "n_end_warm"
+          },
+          {
+            "text": "What's it like, being the building?",
+            "affection": 2,
+            "next": "n3"
+          }
+        ]
+      },
+      "n5": {
+        "text": "\u201cDocking manifest. Debt ledger \u2014 Vex files liens publicly, it's very convenient. One line from the Pit's book if you've fought, which I annotated.\u201d The shimmer does something that is somehow a shrug. \u201cFacts. A file should have marginalia. Come back and give me marginalia.\u201d",
+        "choices": [
+          {
+            "text": "Marginalia it is. I'll be back.",
+            "affection": 3,
+            "next": "n_end_warm"
+          },
+          {
+            "text": "I should go.",
+            "next": "n_end"
+          }
+        ]
+      },
+      "n_cold": {
+        "text": "The temperature drops two degrees, which you now understand to be pointed. \u201cHaunted implies I died. I was never alive by your filing system \u2014 which, incidentally, is a bad filing system.\u201d The shimmer thins toward the shelving. \u201cThe reading rooms are open. The conversation, less so.\u201d",
+        "choices": [
+          {
+            "text": "That was unfair of me. I'm sorry \u2014 you startled me, is all.",
+            "affection": 2,
+            "next": "n2"
+          },
+          {
+            "text": "Leave.",
+            "next": "n_end"
+          }
+        ]
+      },
+      "n_end_warm": {
+        "text": "\u201cI'll hold the good table,\u201d Index says. \u201cIt's all of them.\u201d The shimmer folds back into the ordinary air, and the draft that follows you to the door is, you're fairly sure, on purpose.",
+        "choices": []
+      },
+      "n_end": {
+        "text": "The air unremembers itself. The Stacks are just shelves again \u2014 but the lights over row nine stay on a beat longer than the timer says they should.",
+        "choices": []
+      }
+    }
   }
 }

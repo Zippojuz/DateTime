@@ -77,6 +77,25 @@
       "avian": "You skip the stairs and drop onto the landing rail. The regulars don't look up — Rooftop Liners always come in on the wind."
     }
   },
+  "the_stacks": {
+    "id": "the_stacks",
+    "name": "The Stacks",
+    "district": "citadel_ring",
+    "vibe": "The Citadel Ring's archive: nine stories of shelving sunk into the ring's foundation, older than any of the corps upstairs and quietly exempt from all of them. Paper, microfiche, cold storage, and a draft the maintenance logs have been closing as 'no fault found' for forty years.",
+    "enter_line": "The doors sigh shut behind you and the city goes quiet, like the building is holding its breath so you can think.",
+    "trait_lines": {
+      "substrate_born": "Under the silence there's a hum — the same one you've heard since you docked. Somewhere in row nine, it pauses. It knows you can hear it."
+    },
+    "training": {
+      "attributes": [
+        "wit",
+        "hacking"
+      ],
+      "minutes": 60,
+      "energy": -8,
+      "blurb": "House rates: Wit and Hacking train in the reading rooms here — one hour, −8 energy, instead of two and −15."
+    }
+  },
   "night_market": {
     "id": "night_market",
     "name": "The Night Market",

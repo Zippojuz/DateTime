@@ -51,6 +51,9 @@ export const api = {
   sipTea: (teaId) =>
     request('/teahouse/sip', { method: 'POST', body: JSON.stringify({ tea_id: teaId }) }),
   lookout: () => request('/lookout'),
+  stacks: () => request('/stacks'),
+  research: (subject) =>
+    request('/research', { method: 'POST', body: JSON.stringify({ subject }) }),
   linkTones: () => request('/link/tones'),
   sendMessage: (npcId, tone) =>
     request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),

@@ -78,6 +78,10 @@ export const useGameStore = create((set, get) => ({
   lookout: null,
   lastPour: null,
 
+  // The Stacks: research desk { minutes, energy, researched_today, draft }.
+  stacks: null,
+  lastResearch: null,
+
   busy: false,
   error: null,
 
@@ -151,6 +155,7 @@ export const useGameStore = create((set, get) => ({
       get().loadArena()
       get().loadTeahouse()
       get().loadLookout()
+      get().loadStacks()
     }
   },
 
@@ -170,6 +175,7 @@ export const useGameStore = create((set, get) => ({
       get().loadParty()
       get().loadArena()
       get().loadTeahouse()
+      get().loadStacks()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -517,6 +523,28 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  // --- The Stacks (research desk) ---
+
+  loadStacks: async () => {
+    try {
+      set({ stacks: await api.stacks() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  researchFile: async (subject) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.research(subject)
+      set({ state: res.state, lastResearch: res.research, busy: false })
+      get().loadStacks()
+      get().loadCharacters() // a marked discovery — or someone new in the room
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
   arenaFight: async () => {
     set({ busy: true, error: null })
     try {
@@ -561,6 +589,7 @@ export const useGameStore = create((set, get) => ({
       get().loadArena() // the Pit's doors track the clock
       get().loadTeahouse() // tea expires at midnight
       get().loadLookout() // the board tracks the whole clock
+      get().loadStacks() // the desk reopens at midnight
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -579,6 +608,7 @@ export const useGameStore = create((set, get) => ({
       get().loadArena() // open state + bell line track the clock and your record
       get().loadTeahouse()
       get().loadLookout() // only composes at Gantry 9
+      get().loadStacks()
     } catch (err) {
       set({ error: err.message, busy: false })
     }

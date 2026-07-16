@@ -10,6 +10,7 @@ import JobPanel from '../components/JobPanel.jsx'
 import GigPanel from '../components/GigPanel.jsx'
 import PitView from '../components/PitView.jsx'
 import GantryView from '../components/GantryView.jsx'
+import StacksView from '../components/StacksView.jsx'
 import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
@@ -91,6 +92,7 @@ export default function WorldMap() {
       <GigPanel />
       <PitView />
       <GantryView />
+      <StacksView />
       <ClinicPanel />
       <ShopPanel />
       <PeoplePanel />

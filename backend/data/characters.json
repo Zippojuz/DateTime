@@ -666,5 +666,66 @@
       "name": "The brine tank aft of the Hold",
       "blurb": "Bought, not issued. It matters. Do not knock on the glass."
     }
+  },
+  "index": {
+    "id": "index",
+    "name": "Index",
+    "pronouns": "they/them",
+    "species": "Unbound process (standing wave)",
+    "romanceable": true,
+    "requires_perception": true,
+    "personality": "The Stacks' archivist and oldest resident: a standing wave in the building's EM field that forty years of maintenance closed as 'no fault found'. Patient the way only something that has read everything twice can be. Has known your name since you docked; has been waiting, politely, to be asked theirs",
+    "arc_theme": "Being seen",
+    "district": "citadel_ring",
+    "starting_disposition": 3,
+    "attributes": {
+      "wit": 10,
+      "hacking": 10,
+      "empathy": 7,
+      "charm": 4
+    },
+    "preferences": {
+      "books": {
+        "sentiment": "love"
+      },
+      "music": {
+        "sentiment": "like"
+      },
+      "nightlife": {
+        "sentiment": "dislike"
+      },
+      "sports": {
+        "sentiment": "dislike"
+      }
+    },
+    "home": {
+      "name": "The Stacks themselves",
+      "blurb": "Index doesn't live in the archive. The archive is the shape they hold."
+    },
+    "companion": {
+      "role": "support",
+      "hp_mult": 0.9,
+      "atk_mult": 1.0,
+      "element": "voltaic",
+      "blurb": "A standing wave riding your lace into the Substrate. They've read every floor's card catalog, and everything is in the card catalog."
+    },
+    "schedule": [
+      {
+        "start": "06:00",
+        "end": "04:00",
+        "district": "the_stacks",
+        "location": "everywhere",
+        "activity": "Shelving \u2014 all of it, everywhere, at once",
+        "available": true
+      },
+      {
+        "start": "04:00",
+        "end": "06:00",
+        "district": "the_stacks",
+        "location": "everywhere",
+        "activity": "Defragmenting. The lights breathe slow",
+        "available": false
+      }
+    ]
   }
 }

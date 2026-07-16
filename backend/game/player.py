@@ -72,6 +72,7 @@ class Player(Character):
         gossip_day=0,
         tea_day=0,
         tea_id="",
+        research_day=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -113,6 +114,8 @@ class Player(Character):
         # poured — the effect expires at midnight (see game/teahouse.py).
         self.tea_day = tea_day
         self.tea_id = tea_id
+        # Last absolute day the Stacks' research desk was worked (one pull/day).
+        self.research_day = research_day
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)

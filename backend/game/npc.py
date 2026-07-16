@@ -10,8 +10,18 @@ Identity policy (see dtDesignDoc.md -> Identity Philosophy): an NPC's pronouns
 and identity are data, never gates. Every NPC is romanceable by default.
 """
 
-from game import data
+from game import data, traits
 from game.character import Character
+
+
+def perceives_unseen(player):
+    """Whether the player can perceive the imperceivable (Index, and whoever
+    comes after): a trained habit — the Archivist's Lens, findable by anyone
+    at the Stacks' research desk — or a native sense (Substrate-Born hear the
+    hum from day one). The species opens the door early, never exclusively."""
+    return bool(player.inventory.get("archivists_lens")) or bool(
+        traits.effect(player, "perceive_unseen", False)
+    )
 
 
 class NPC(Character):
@@ -31,6 +41,7 @@ class NPC(Character):
         starting_disposition=0,
         companion=None,
         requires_defeat=None,
+        requires_perception=False,
         home=None,
     ):
         super().__init__(name, attributes, preferences)
@@ -46,6 +57,9 @@ class NPC(Character):
         # If set, this NPC is hidden until the named dungeon boss is beaten
         # (the deep-floor bosses who surface as romanceables after the fight).
         self.requires_defeat = requires_defeat
+        # If True, this NPC is present from day one but imperceivable until
+        # the player can see the unseen (see perceives_unseen above).
+        self.requires_perception = requires_perception
         # Where they live: {name, blurb}. Schedule windows with location
         # "home" resolve here — everyone goes somewhere in the off hours.
         self.home = dict(home) if home else {}
@@ -75,15 +89,19 @@ class NPC(Character):
             starting_disposition=entry.get("starting_disposition", 0),
             companion=entry.get("companion"),
             requires_defeat=entry.get("requires_defeat"),
+            requires_perception=entry.get("requires_perception", False),
             home=entry.get("home"),
         )
 
     def unlocked_for(self, player):
         """Whether the player has met this NPC's unlock condition (always True
-        for the base cast; deep-floor bosses need their fight won first)."""
-        if not self.requires_defeat:
-            return True
-        return f"defeated:{self.requires_defeat}" in player.fired_events
+        for the base cast; deep-floor bosses need their fight won first, and
+        the imperceivable need to be perceived)."""
+        if self.requires_defeat and f"defeated:{self.requires_defeat}" not in player.fired_events:
+            return False
+        if self.requires_perception and not perceives_unseen(player):
+            return False
+        return True
 
     @classmethod
     def load(cls, npc_id):

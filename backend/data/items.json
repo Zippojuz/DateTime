@@ -962,5 +962,13 @@
     "description": "Standard-issue neural interface, activated with your docking paperwork (it's on your tab). Messages, inventory ledger, city settings \u2014 the free tier of being a person here. Everyone has one. Nobody reads the EULA.",
     "bonuses": {},
     "value": 0
+  },
+  "archivists_lens": {
+    "id": "archivists_lens",
+    "name": "Archivist's Lens",
+    "type": "curio",
+    "rarity": "rare",
+    "value": 0,
+    "description": "Not a lens \u2014 a habit. Forty years of 'no fault found' distilled into knowing where not-quite-to-look. Somewhere in row nine, something is glad you learned."
   }
 }

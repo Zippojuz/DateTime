@@ -120,7 +120,8 @@
       "blurb": "The basement dreams in your dialect. +15 heat capacity, and entering the Substrate costs half the energy.",
       "effects": {
         "heat_cap": 15,
-        "dungeon_enter_discount": 5
+        "dungeon_enter_discount": 5,
+        "perceive_unseen": true
       }
     }
   }

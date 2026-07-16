@@ -176,6 +176,11 @@ def _m15_teahouse(conn):
     _add_column(conn, "player", "tea_id", "TEXT NOT NULL DEFAULT ''")
 
 
+def _m16_research_desk(conn):
+    """The Stacks' research desk: one file pull per day."""
+    _add_column(conn, "player", "research_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -192,6 +197,7 @@ MIGRATIONS = [
     _m13_gossip,
     _m14_cyberlink_messages,
     _m15_teahouse,
+    _m16_research_desk,
 ]
 
 

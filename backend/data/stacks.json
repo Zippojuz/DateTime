@@ -1,0 +1,15 @@
+{
+  "venue": "the_stacks",
+  "research": {
+    "minutes": 90,
+    "energy": -10
+  },
+  "draft": {
+    "subject": "the_draft",
+    "label": "The draft in row nine",
+    "blurb": "Forty years of maintenance tickets, every one closed 'no fault found'. Somebody should cross-reference them. Nobody ever has.",
+    "item": "archivists_lens",
+    "event": "found:archivists_lens",
+    "text": "Ninety minutes of cold-spot reports, thermal surveys, and one janitor's increasingly personal margin notes ('it moved my cart AGAIN'). Plotted together, the anomalies aren't random — they trace the shelving rows like someone doing rounds. You learn the trick the janitor never did: where not-quite-to-look. Between one shelf and the next, the air is reading over your shoulder. It puts the file back for you."
+  }
+}
