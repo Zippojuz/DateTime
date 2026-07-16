@@ -755,11 +755,23 @@ order (each independently shippable):
      window's activity, and the People panel shows off-hours life ("Asleep ·
      The Hideout Annex"). Integrity tests: everyone housed, every schedule
      covers all 1440 minutes.
-2. **Gantry 9** (The Grid, always open) — rooftop-line terminus teahouse.
-   The Lookout: a server-composed almanac (who's reachable where right now,
-   what's open, this week's corp war, today's gig, tonight's Pit card). Tea
-   service = small timed buff. Avian trait flavors the entry line (never
-   gates). Mostly a read-model + panel; smallest build.
+2. ✅ **Gantry 9** (The Grid, always open) — DONE. Rooftop-line terminus
+   teahouse, the first always-open venue (no `hours` block = never closes).
+   **Tea service** (data/teahouse.json, migration 15: tea_day/tea_id): one
+   cup a day, 20 min / 14 cr / +5 energy, effect rides until midnight.
+   Effect keys reuse the trait vocabulary via `teahouse.effect(player,
+   clock, key, default)` — Overclock Oolong (train_bonus +1), Kettle
+   Lightning (walk_minutes_mult 0.5 — multiplies with Rooftop Lines: an
+   avian on tea crosses districts in 5 min), Petrichor Blend
+   (dialogue_affection_bonus +1, hooked beside The Tell). **The Lookout**
+   (game/almanac.py, GET /api/lookout, gated at the gantry): server-composed
+   board — whole cast's public whereabouts + activity, every venue's
+   lights/hours, today's gig off Vex's board, tonight's Pit card. Redaction
+   rule lives server-side: public schedules only, never private numbers.
+   Venues gained optional `trait_lines` (avian entry flavor, rendered under
+   the vibe — flavor only, integrity test pins ids to real traits). No corp
+   war on the board yet — that system doesn't exist; slot it in when the
+   corps-differentiation pass lands.
 3. **The Stacks** (Citadel Ring, 24h) — archive-library. House rates for
    Wit/Hacking (mirror of the Hold). Research desk: spend time+energy to
    pull a file on a known NPC (reveals one undiscovered preference; slower

@@ -170,6 +170,12 @@ def _m14_cyberlink_messages(conn):
     _add_column(conn, "relationships", "last_message_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m15_teahouse(conn):
+    """Gantry 9 tea service: one cup a day, its effect rides until midnight."""
+    _add_column(conn, "player", "tea_day", "INTEGER NOT NULL DEFAULT 0")
+    _add_column(conn, "player", "tea_id", "TEXT NOT NULL DEFAULT ''")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -185,6 +191,7 @@ MIGRATIONS = [
     _m12_species_trait,
     _m13_gossip,
     _m14_cyberlink_messages,
+    _m15_teahouse,
 ]
 
 

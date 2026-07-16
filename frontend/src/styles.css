@@ -2593,3 +2593,123 @@ body {
   color: var(--text-dim);
   font-size: 0.8rem;
 }
+
+/* --- Gantry 9: tea service + the Lookout --- */
+
+.gantry-view h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.gantry-view h3 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--text-dim);
+}
+
+.venue-trait-line {
+  color: var(--neon);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.tea-menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.tea-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+
+.tea-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tea-blurb {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.tea-active {
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.tea-pour-line {
+  color: var(--neon);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.lookout-sub {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin: 0 0 0.5rem;
+}
+
+.lookout-board {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .lookout-board {
+    grid-template-columns: 1fr;
+  }
+}
+
+.lookout-col h4 {
+  margin: 0.5rem 0 0.35rem;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--text-dim);
+}
+
+.lookout-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.lookout-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.85rem;
+}
+
+.lookout-row span {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+.lookout-row--off {
+  opacity: 0.6;
+}

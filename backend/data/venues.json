@@ -32,6 +32,16 @@
       "blurb": "House rates: Agility and Courage train under coaching here \u2014 one hour, \u22128 energy, instead of two and \u221215."
     }
   },
+  "gantry_9": {
+    "id": "gantry_9",
+    "name": "Gantry 9",
+    "district": "the_grid",
+    "vibe": "The rooftop-line terminus, nine floors above the Grid: a crane gantry glassed in against the wind, kettles riding induction coils, and the whole city spread out below like a live circuit diagram. It never closes; the tea just gets stronger after midnight.",
+    "enter_line": "Wind, then the door, then kettle-steam and quiet. Nine floors down, the Grid hums like it's thinking.",
+    "trait_lines": {
+      "avian": "You skip the stairs and drop onto the landing rail. The regulars don't look up — Rooftop Liners always come in on the wind."
+    }
+  },
   "night_market": {
     "id": "night_market",
     "name": "The Night Market",

@@ -9,6 +9,7 @@ import EncounterCard from '../components/EncounterCard.jsx'
 import JobPanel from '../components/JobPanel.jsx'
 import GigPanel from '../components/GigPanel.jsx'
 import PitView from '../components/PitView.jsx'
+import GantryView from '../components/GantryView.jsx'
 import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
@@ -27,6 +28,7 @@ export default function WorldMap() {
   const registry = useGameStore((s) => s.attributes)
   const districts = useGameStore((s) => s.districts)
   const venues = useGameStore((s) => s.venues)
+  const teahouse = useGameStore((s) => s.teahouse)
   const doAction = useGameStore((s) => s.doAction)
   const openLink = useGameStore((s) => s.openLink)
   const busy = useGameStore((s) => s.busy)
@@ -77,6 +79,9 @@ export default function WorldMap() {
       {here && (
         <section className="placeholder-world">
           <p>{here.vibe}</p>
+          {insideVenue?.trait_lines?.[player.trait] && (
+            <p className="venue-trait-line">{insideVenue.trait_lines[player.trait]}</p>
+          )}
         </section>
       )}
 
@@ -85,6 +90,7 @@ export default function WorldMap() {
       <JobPanel />
       <GigPanel />
       <PitView />
+      <GantryView />
       <ClinicPanel />
       <ShopPanel />
       <PeoplePanel />
@@ -98,6 +104,11 @@ export default function WorldMap() {
         <h2>What do you do?</h2>
         {insideVenue?.training && (
           <p className="venue-perk">{insideVenue.training.blurb}</p>
+        )}
+        {teahouse?.active && (
+          <p className="venue-perk">
+            ☕ {teahouse.active.name} — steeping until midnight.
+          </p>
         )}
         {error && <p className="form-error">{error}</p>}
         <div className="action-list">

@@ -70,6 +70,8 @@ class Player(Character):
         street_cred=0,
         arena_wins=0,
         gossip_day=0,
+        tea_day=0,
+        tea_id="",
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -107,6 +109,10 @@ class Player(Character):
         self.arena_wins = arena_wins
         # Last absolute day Night Market gossip was picked up (one per night).
         self.gossip_day = gossip_day
+        # Gantry 9 tea service: what's steeping (menu id) and the day it was
+        # poured — the effect expires at midnight (see game/teahouse.py).
+        self.tea_day = tea_day
+        self.tea_id = tea_id
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)

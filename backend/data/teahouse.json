@@ -1,0 +1,34 @@
+{
+  "venue": "gantry_9",
+  "minutes": 20,
+  "energy": 5,
+  "menu": {
+    "overclock_oolong": {
+      "name": "Overclock Oolong",
+      "cost": 14,
+      "blurb": "Smoked over salvaged heatsinks. Everything you practice today sticks a little harder — training sessions land +1 extra.",
+      "effects": {
+        "train_bonus": 1
+      },
+      "pour_line": "It tastes like focus and faintly of solder. Your hands stop asking questions."
+    },
+    "kettle_lightning": {
+      "name": "Kettle Lightning",
+      "cost": 14,
+      "blurb": "Green tea cut with something the chalkboard only calls \"hurry.\" Walks take half as long today.",
+      "effects": {
+        "walk_minutes_mult": 0.5
+      },
+      "pour_line": "The first sip lands like a starter pistol. The city feels suddenly small."
+    },
+    "petrichor_blend": {
+      "name": "Petrichor Blend",
+      "cost": 14,
+      "blurb": "Rain on hot concrete, steeped. Softens every room you walk into — heartfelt words land +1 all day.",
+      "effects": {
+        "dialogue_affection_bonus": 1
+      },
+      "pour_line": "It tastes like the hour after an argument ends well. You feel easier to talk to."
+    }
+  }
+}

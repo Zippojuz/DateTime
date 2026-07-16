@@ -73,6 +73,11 @@ export const useGameStore = create((set, get) => ({
   // The Pit: { name, wins, titles, street_cred, cred_stage, next } from the server.
   arena: null,
 
+  // Gantry 9: tea service { menu, active, sipped_today } + the Lookout board.
+  teahouse: null,
+  lookout: null,
+  lastPour: null,
+
   busy: false,
   error: null,
 
@@ -144,6 +149,8 @@ export const useGameStore = create((set, get) => ({
       get().loadEquipment()
       get().loadParty()
       get().loadArena()
+      get().loadTeahouse()
+      get().loadLookout()
     }
   },
 
@@ -162,6 +169,7 @@ export const useGameStore = create((set, get) => ({
       get().loadEquipment()
       get().loadParty()
       get().loadArena()
+      get().loadTeahouse()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -474,6 +482,41 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  // --- Gantry 9 (tea service + the Lookout) ---
+
+  loadTeahouse: async () => {
+    try {
+      set({ teahouse: await api.teahouse() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  loadLookout: async () => {
+    // The board hangs at the gantry — anywhere else there's nothing to fetch.
+    if (get().state?.player?.location !== 'gantry_9') {
+      set({ lookout: null })
+      return
+    }
+    try {
+      set({ lookout: await api.lookout() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  sipTea: async (teaId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.sipTea(teaId)
+      set({ state: res.state, lastPour: res.poured, busy: false })
+      get().loadTeahouse()
+      get().loadLookout() // twenty minutes pass; the board moves
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
   arenaFight: async () => {
     set({ busy: true, error: null })
     try {
@@ -516,6 +559,8 @@ export const useGameStore = create((set, get) => ({
       get().loadCharacters() // availability changes as the clock advances
       get().loadGigs()
       get().loadArena() // the Pit's doors track the clock
+      get().loadTeahouse() // tea expires at midnight
+      get().loadLookout() // the board tracks the whole clock
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -532,6 +577,8 @@ export const useGameStore = create((set, get) => ({
       get().loadGigs()
       get().loadShop()
       get().loadArena() // open state + bell line track the clock and your record
+      get().loadTeahouse()
+      get().loadLookout() // only composes at Gantry 9
     } catch (err) {
       set({ error: err.message, busy: false })
     }

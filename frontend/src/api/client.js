@@ -47,6 +47,10 @@ export const api = {
   buy: (itemId) =>
     request('/shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
   marketGossip: () => request('/market/gossip', { method: 'POST', body: '{}' }),
+  teahouse: () => request('/teahouse'),
+  sipTea: (teaId) =>
+    request('/teahouse/sip', { method: 'POST', body: JSON.stringify({ tea_id: teaId }) }),
+  lookout: () => request('/lookout'),
   linkTones: () => request('/link/tones'),
   sendMessage: (npcId, tone) =>
     request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),

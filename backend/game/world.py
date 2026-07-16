@@ -13,7 +13,7 @@ hop. NPC availability is resolved from schedules, and — as of Milestone 3 —
 you must be in the same place as an NPC to reach them.
 """
 
-from game import data, places, traits
+from game import data, places, teahouse, traits
 from game.errors import GameError
 
 # Travel cost by (distance, mode): distance is "adjacent" or "cross".
@@ -71,8 +71,11 @@ def travel(player, clock, to_id, mode):
 
     cost = dict(travel_cost(player.location, to_id, mode))
     # Species traits: Rooftop Lines halves walks; Priced In rides free.
+    # Kettle Lightning (Gantry 9 tea) also quickens walks until midnight.
     if mode == "walk":
-        cost["minutes"] = round(cost["minutes"] * traits.effect(player, "walk_minutes_mult", 1.0))
+        mult = traits.effect(player, "walk_minutes_mult", 1.0)
+        mult *= teahouse.effect(player, clock, "walk_minutes_mult", 1.0)
+        cost["minutes"] = round(cost["minutes"] * mult)
     if mode == "transit" and traits.effect(player, "transit_free", False):
         cost["credits"] = 0
     if player.credits < cost["credits"]:

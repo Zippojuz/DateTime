@@ -11,6 +11,7 @@ from db import init_db
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from game import (
+    almanac,
     arena,
     combat,
     corps,
@@ -30,6 +31,7 @@ from game import (
     save,
     shop,
     social,
+    teahouse,
     traits,
     world,
 )
@@ -480,6 +482,53 @@ def create_app():
                 "state": save.state_dict(player, clock),
             }
         )
+
+    # --- Gantry 9: tea service + the Lookout ---
+
+    @app.get("/api/teahouse")
+    def teahouse_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, clock = models
+        cfg = data.load("teahouse")
+        tea = teahouse.active(player, clock)
+        return jsonify(
+            {
+                "venue": cfg["venue"],
+                "minutes": cfg["minutes"],
+                "energy": cfg["energy"],
+                "menu": cfg["menu"],
+                "active": {"id": player.tea_id, **tea} if tea else None,
+                "sipped_today": player.tea_day == _day_index(clock),
+            }
+        )
+
+    @app.post("/api/teahouse/sip")
+    def teahouse_sip():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            poured = teahouse.sip(player, clock, body.get("tea_id"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"poured": poured, "state": save.state_dict(player, clock)})
+
+    @app.get("/api/lookout")
+    def lookout():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, clock = models
+        if player.location != "gantry_9":
+            return jsonify(
+                error="The Lookout board hangs at Gantry 9 — the view doesn't travel."
+            ), 400
+        return jsonify(almanac.compose(player, clock, _day_index(clock)))
 
     @app.post("/api/item/use")
     def item_use():
@@ -965,9 +1014,11 @@ def create_app():
 
         # Base affection from the choice, scaled by how late you arrived.
         # The Tell (luminal trait): heartfelt choices glow — and land harder.
+        # Petrichor Blend (Gantry 9 tea): same key, steeped instead of innate.
         base = round(choice.get("affection", 0) * world.TIER_MULTIPLIER.get(tier, 0))
         if base > 0:
             base += traits.effect(player, "dialogue_affection_bonus", 0)
+            base += teahouse.effect(player, clock, "dialogue_affection_bonus", 0)
         if base:
             social.add_opinion(save_id, npc.id, base, day)
 
