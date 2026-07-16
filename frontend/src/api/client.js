@@ -65,6 +65,7 @@ export const api = {
     }),
   dateLeave: () => request('/date/leave', { method: 'POST', body: '{}' }),
   salvage: () => request('/salvage', { method: 'POST', body: '{}' }),
+  corps: () => request('/corps'),
   pawn: () => request('/pawn'),
   pawnSell: (itemId) =>
     request('/pawn/sell', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),

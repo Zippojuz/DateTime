@@ -28,21 +28,21 @@ export default function StacksView() {
         </p>
       ) : (
         <ul className="research-list">
-          {stacks.draft && (
-            <li className="research-item research-item--draft">
+          {[stacks.draft, stacks.plant_7].filter(Boolean).map((file) => (
+            <li key={file.subject} className="research-item research-item--draft">
               <div className="research-info">
-                <span className="research-name">{stacks.draft.label}</span>
-                <span className="research-sub">{stacks.draft.blurb}</span>
+                <span className="research-name">{file.label}</span>
+                <span className="research-sub">{file.blurb}</span>
               </div>
               <button
                 className="btn-action"
                 disabled={busy}
-                onClick={() => researchFile(stacks.draft.subject)}
+                onClick={() => researchFile(file.subject)}
               >
                 Pull the file · {cost}
               </button>
             </li>
-          )}
+          ))}
           {met.map((c) => (
             <li key={c.id} className="research-item">
               <div className="research-info">
@@ -60,7 +60,7 @@ export default function StacksView() {
               </button>
             </li>
           ))}
-          {!stacks.draft && met.length === 0 && (
+          {!stacks.draft && !stacks.plant_7 && met.length === 0 && (
             <li className="research-item">
               <span className="research-sub">
                 The archive files people under who they are to you. Go meet someone.

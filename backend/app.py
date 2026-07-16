@@ -688,6 +688,10 @@ def create_app():
                 "researched_today": player.research_day == _day_index(clock),
                 # The draft only files itself once — then you can see them.
                 "draft": None if NPC.load("index").unlocked_for(player) else cfg["draft"],
+                # Plant 7 stays on the index until you've read what survives.
+                "plant_7": None
+                if cfg["plant_7"]["event"] in player.fired_events
+                else cfg["plant_7"],
             }
         )
 

@@ -95,6 +95,9 @@ export const useGameStore = create((set, get) => ({
   pawn: null,
   lastPawn: null,
 
+  // The Triumvirate: { corps, war } — the war rotates weekly. Always has.
+  corps: null,
+
   busy: false,
   error: null,
 
@@ -173,6 +176,7 @@ export const useGameStore = create((set, get) => ({
       get().loadLookout()
       get().loadStacks()
       get().loadPawn()
+      get().loadCorps()
     }
   },
 
@@ -575,6 +579,14 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  loadCorps: async () => {
+    try {
+      set({ corps: await api.corps() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
   // --- Forget-Me-Not (the pawnshop) ---
 
   loadPawn: async () => {
@@ -727,6 +739,7 @@ export const useGameStore = create((set, get) => ({
       get().loadLookout() // only composes at Gantry 9
       get().loadStacks()
       get().loadPawn() // the shelf's hold days tick with the calendar
+      get().loadCorps() // the war is weekly; the denials are eternal
     } catch (err) {
       set({ error: err.message, busy: false })
     }

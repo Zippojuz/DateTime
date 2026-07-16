@@ -94,6 +94,12 @@ export default function GantryView() {
                     {lookout.pit.next_title ? ` — ${lookout.pit.next_title}` : ''}
                   </span>
                 </li>
+                {lookout.war && (
+                  <li className="lookout-row">
+                    <strong>The war</strong>
+                    <span>{lookout.war.line}</span>
+                  </li>
+                )}
               </ul>
             </div>
           </div>

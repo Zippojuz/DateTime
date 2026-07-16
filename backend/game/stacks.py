@@ -48,6 +48,17 @@ def research(save_id, player, clock, subject, day):
         player.fired_events.append(draft["event"])
         return {"subject": draft["subject"], "text": draft["text"], "unlocked": "index"}
 
+    plant = cfg["plant_7"]
+    if subject == plant["subject"]:
+        if plant["event"] in player.fired_events:
+            raise GameError(
+                "The file is exactly as long as it was yesterday. "
+                "Someone is maintaining it. You've read what survives."
+            )
+        _spend(player, clock, day)
+        player.fired_events.append(plant["event"])
+        return {"subject": plant["subject"], "text": plant["text"]}
+
     npc = NPC.load(subject)  # KeyError -> the route's 404
     if not npc.unlocked_for(player):
         raise KeyError(subject)  # don't leak the imperceivable

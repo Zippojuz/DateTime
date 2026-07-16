@@ -41,9 +41,9 @@
   },
   "citadel_clerk": {
     "id": "citadel_clerk",
-    "name": "Records Clerk",
+    "name": "Records Correction Clerk",
     "district": "citadel_ring",
-    "description": "Sort Citadel bureaucracy for a shift. Mind-numbing, but it pays.",
+    "description": "Six hours in a Ministry Holdings annex, bringing old records into agreement with the present. The past was different this morning; by lunch it never was. Pays well enough not to ask.",
     "minutes": 360,
     "energy": -30,
     "pay": 55,

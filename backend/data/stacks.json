@@ -10,6 +10,13 @@
     "blurb": "Forty years of maintenance tickets, every one closed 'no fault found'. Somebody should cross-reference them. Nobody ever has.",
     "item": "archivists_lens",
     "event": "found:archivists_lens",
-    "text": "Ninety minutes of cold-spot reports, thermal surveys, and one janitor's increasingly personal margin notes ('it moved my cart AGAIN'). Plotted together, the anomalies aren't random — they trace the shelving rows like someone doing rounds. You learn the trick the janitor never did: where not-quite-to-look. Between one shelf and the next, the air is reading over your shoulder. It puts the file back for you."
+    "text": "Ninety minutes of cold-spot reports, thermal surveys, and one janitor's increasingly personal margin notes ('it moved my cart AGAIN'). Plotted together, the anomalies aren't random \u2014 they trace the shelving rows like someone doing rounds. You learn the trick the janitor never did: where not-quite-to-look. Between one shelf and the next, the air is reading over your shoulder. It puts the file back for you."
+  },
+  "plant_7": {
+    "subject": "plant_7",
+    "label": "Plant 7",
+    "blurb": "Three corps, three flagships, one factory stamp. The index lists a file. The file lists a file. Somebody's been here before you.",
+    "event": "found:plant_7",
+    "text": "Ninety minutes of cross-referencing and the folder is mostly holes \u2014 pages withdrawn, 'corrected,' re-filed under weather. What survives: a freight manifest routing Oceania optics, Eurasia chassis plate, and Eastasia lace substrate out of the same unmarked plant, invoiced to the same unlisted shell \u2014 Ministry Holdings, no address, no phone. Three enemies, one loading dock. The last surviving page is a staff memo, one line: THE WAR IS THE PRODUCT. Someone has underlined it twice, decades apart, in two different inks. The archive lets you put it back yourself. It feels like being trusted with a knife."
   }
 }

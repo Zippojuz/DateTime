@@ -7,7 +7,7 @@ redaction rule lives in one place: the board shows *public* whereabouts and
 schedules, never anyone's private numbers or undiscovered preferences.
 """
 
-from game import arena, fixer, places, world
+from game import arena, corps, fixer, places, world
 from game.npc import NPC
 
 
@@ -49,6 +49,7 @@ def compose(player, clock, day):
 
     gig = fixer.today_gig(day)
     bout = arena.next_bout(player)
+    war = corps.war_state(clock.week)
 
     return {
         "time": clock.time_str,
@@ -57,6 +58,8 @@ def compose(player, clock, day):
         "people": people,
         "venues": venue_rows,
         "gig": {"id": gig["id"], "name": gig["name"], "brief": gig["brief"]},
+        # This week's war, per the Triumvirate's own bulletins. Always.
+        "war": {"line": war["line"], "bulletin": war["bulletin"]},
         "pit": {
             "wins": player.arena_wins,
             "next_number": bout["number"],

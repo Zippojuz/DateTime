@@ -24,11 +24,12 @@ SIGHTING_AFFECTION = 1
 
 
 def _corp_ad(lines, week, rng):
-    """An intrusive Triumvirate ad, personalized in the worst way."""
+    """An intrusive Triumvirate ad — each corp advertises in its own voice
+    (corps.json "ads"), plus a small shared pool of street-level noise."""
     corp = rng.choice(sorted(data.load("corps").values(), key=lambda c: c["id"]))
     war = corps.war_state(week)
     text = (
-        rng.choice(lines["ad"])
+        rng.choice(corp["ads"] + lines["ad"])
         .replace("{name}", corp["name"])
         .replace("{slogan}", corp["slogan"])
         .replace("{sector}", corp["sector"])

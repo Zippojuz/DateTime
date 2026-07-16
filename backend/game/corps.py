@@ -27,6 +27,12 @@ def war_state(week):
             f"{corps[ally_a]['name']} and {corps[ally_b]['name']} have always "
             f"stood together against {corps[enemy]['name']}. Always."
         ),
+        # The joint communiqué, and the housekeeping that makes it true.
+        "bulletin": (
+            f"JOINT STATEMENT ({corps[ally_a]['name']} & {corps[ally_b]['name']}): "
+            f"{corps[enemy]['name']} has never manufactured a trustworthy product. "
+            f"Records indicating otherwise have been corrected."
+        ),
     }
 
 

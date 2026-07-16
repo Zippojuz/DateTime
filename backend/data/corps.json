@@ -6,7 +6,15 @@
     "sector": "Surveillance, optics, and public reassurance",
     "voice": "Warm. Paternal. It loves you, and it is watching, and those are the same thing.",
     "flagship": "oceania_panopt",
-    "blurb": "Every camera in Nexus City that isn't broken is an Oceania camera, and Oceania will fix the broken ones for free. Their ads know your name and use it kindly. Nobody remembers signing anything."
+    "blurb": "Every camera in Nexus City that isn't broken is an Oceania camera, and Oceania will fix the broken ones for free. Their ads know your name and use it kindly. Nobody remembers signing anything.",
+    "denial": "Oceania Consolidated has no parent company. Oceania Consolidated has never had a parent company. This statement is monitored for your comfort.",
+    "ads": [
+      "A telescreen turns to follow you and warms by two degrees. \"{name} is watching,\" it says, in your mother's voice, \"so you don't have to.\" You feel briefly, involuntarily, cared for.",
+      "An AR poster of a kind enormous face unfurls down a whole building. Its eyes find yours — specifically yours. Caption: NOTHING TO HIDE. NOTHING TO FEAR. NOTHING ELSE, EITHER.",
+      "\"You are one of the 98% of citizens with nothing to fear!\" chirps a passing drone, decaling a smile onto its camera housing. It does not say anything about the 2%. It circles back once, just to check.",
+      "A vending machine offers you Victory Chai (\"now with 40% more contentment\"). When you don't stop, it dispenses a cup anyway. \"{slogan},\" it calls after you, warmly. The cup has your name on it. Spelled right.",
+      "A street screen crackles: {war} Then, softer, just for you: \"{name} has always kept you safe. Always.\" The screen dims like a nightlight."
+    ]
   },
   "eurasia": {
     "id": "eurasia",
@@ -15,7 +23,15 @@
     "sector": "Structural chrome, labor frames, and the people's muscle",
     "voice": "Collective. Triumphant. The body is the people's engine and the people's engine must be maintained.",
     "flagship": "eurasia_atlas_frame",
-    "blurb": "Eurasia builds the bones — of towers, of dock cranes, of dockworkers. Their showrooms smell like machine oil and marching music. Employee of the Month is everyone, forever."
+    "blurb": "Eurasia builds the bones — of towers, of dock cranes, of dockworkers. Their showrooms smell like machine oil and marching music. Employee of the Month is everyone, forever.",
+    "denial": "Eurasia Heavy Industries is owned by its workers, who are owned by no one, who are managed by a holding entity we are not going to discuss during the parade.",
+    "ads": [
+      "A parade float of a fist the size of a bus rolls past, gears grinding triumphant brass. \"THE QUOTA HAS BEEN EXCEEDED,\" it announces. It does not say which quota. It has never said which quota.",
+      "A recruitment mural paints itself across a crane: a worker holding up the entire skyline, smiling. \"YOUR BODY IS 60% REPLACEABLE,\" it reads. \"{name} CAN DO BETTER.\"",
+      "Marching music from nowhere. A billboard of ten thousand identical workers, all waving, all you — flattering, really. \"EMPLOYEE OF THE MONTH,\" it thunders. \"EVERYONE. FOREVER. {slogan}.\"",
+      "A showroom window: the Atlas Frame, rotating on a plinth of honest concrete. \"CARRY THE CITY THAT CARRIES YOU.\" A clerk inside flexes, structurally.",
+      "A loudspeaker clears its throat, which takes a while. {war} \"PRODUCTION CONTINUES,\" it adds, against all evidence that it might not. Somewhere, a whistle. Shift change. It is always shift change."
+    ]
   },
   "eastasia": {
     "id": "eastasia",
@@ -24,6 +40,14 @@
     "sector": "Neural lace, dissolution therapy, and premium ego-loss",
     "voice": "Serene. Hollow. Why be someone when you could be everyone? Financing available.",
     "flagship": "eastasia_ghostlace",
-    "blurb": "Eastasia sells the exit from yourself, by the minute. Their clinics are very quiet. Their customers come out smiling, eventually, mostly."
+    "blurb": "Eastasia sells the exit from yourself, by the minute. Their clinics are very quiet. Their customers come out smiling, eventually, mostly.",
+    "denial": "Eastasia Transcendence has considered the question of its ownership and found the question to be an illusion, like the questioner. Namaste. No further inquiries.",
+    "ads": [
+      "An ad whispers directly into your lace, skipping your ears entirely: \"You are the only thing standing between you and everything.\" A lotus unfolds behind your eyes. Financing available.",
+      "A clinic doorway breathes cool air across the pavement. \"FORGET-YOUR-TROUBLES™ (patent pending),\" reads the frosted glass. \"Walk-ins welcome. Walk-outs gradual.\"",
+      "A serene voice from a passing tram: \"This advertisement will forget you watched it.\" A pause, exactly as long as a held breath. \"Will you?\" The tram is gone. You can't remember its color.",
+      "AR koi swim up out of the gutter and spell, briefly, {slogan}. Then they spell your name. Then they spell nothing, beautifully, for a long time. {name} thanks you for your attention. All of it.",
+      "A billboard states, with total calm: \"TWO PLUS TWO IS WHATEVER YOU NEED IT TO BE.\" Below, smaller: \"Believe better. {name}.\" Below that, smallest: {war}"
+    ]
   }
 }
