@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useGameStore } from '../state/gameStore'
 import InventoryPanel from './InventoryPanel.jsx'
+import EquipmentPanel from './EquipmentPanel.jsx'
 
-const TABS = ['Messages', 'Inventory', 'Settings']
+const TABS = ['Messages', 'Inventory', 'Loadout', 'Settings']
 
 // The Cyberlink — standard-issue neural interface. The game's device layer:
-// remote messages to known contacts, the inventory ledger, and settings all
-// live "on the link". Everyone has one. Nobody read the EULA.
+// remote messages to known contacts, the inventory ledger, the gear loadout,
+// and settings all live "on the link". Everyone has one. Nobody read the EULA.
 export default function CyberlinkModal() {
   const open = useGameStore((s) => s.linkOpen)
   const closeLink = useGameStore((s) => s.closeLink)
@@ -37,6 +38,7 @@ export default function CyberlinkModal() {
 
         {tab === 'Messages' && <MessagesTab />}
         {tab === 'Inventory' && <InventoryPanel />}
+        {tab === 'Loadout' && <EquipmentPanel />}
         {tab === 'Settings' && <SettingsTab />}
       </div>
     </div>
