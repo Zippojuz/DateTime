@@ -13,10 +13,12 @@ from flask_cors import CORS
 from game import (
     almanac,
     arena,
+    bathhouse,
     combat,
     corps,
     cyberlink,
     data,
+    dating,
     dialogue,
     dungeon,
     encounters,
@@ -216,6 +218,7 @@ def create_app():
                     # Cyberlink: contacts need a real handshake (one conversation).
                     "met": bool(rel.get("last_talked_day")),
                     "messaged_today": rel.get("last_message_day") == day,
+                    "dated_this_week": rel.get("last_date_week") == clock.week,
                 }
             )
         return jsonify(result)
@@ -523,6 +526,84 @@ def create_app():
             return jsonify(error=str(err)), 400
         save.save_models(save_id, player, clock)
         return jsonify({"poured": poured, "state": save.state_dict(player, clock)})
+
+    # --- The Steeps: the paid soak + THE DATING SYSTEM ---
+
+    @app.post("/api/soak")
+    def soak():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = bathhouse.soak(player, clock)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"soak": result, "state": save.state_dict(player, clock)})
+
+    @app.get("/api/date/venues")
+    def date_venues():
+        """Where the city dates: scene metadata without the scenes."""
+        return jsonify(
+            {
+                vid: {k: s[k] for k in ("venue", "title", "cost", "minutes", "energy")}
+                for vid, s in dating.scenes().items()
+            }
+        )
+
+    @app.post("/api/date/start")
+    def date_start():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            beat = dating.start(
+                save_id,
+                player,
+                clock,
+                body.get("npc_id"),
+                body.get("venue"),
+                _day_index(clock),
+                clock.week,
+            )
+        except KeyError:
+            return jsonify(error="No such person."), 404
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"date": beat, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/date/choose")
+    def date_choose():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            beat = dating.choose(
+                save_id, player, clock, body.get("choice_index"), _day_index(clock), clock.week
+            )
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"date": beat, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/date/leave")
+    def date_leave():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = dating.leave(save_id, player, clock, clock.week)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"date": result, "state": save.state_dict(player, clock)})
 
     # --- The Stacks: the research desk ---
 

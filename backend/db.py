@@ -181,6 +181,13 @@ def _m16_research_desk(conn):
     _add_column(conn, "player", "research_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m17_dating(conn):
+    """The dating system: a mid-outing scene rides on the player (JSON state),
+    and each relationship remembers its last outing's week (one per week)."""
+    _add_column(conn, "player", "date", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "relationships", "last_date_week", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -198,6 +205,7 @@ MIGRATIONS = [
     _m14_cyberlink_messages,
     _m15_teahouse,
     _m16_research_desk,
+    _m17_dating,
 ]
 
 

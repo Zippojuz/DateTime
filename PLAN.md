@@ -798,11 +798,23 @@ order (each independently shippable):
    (no leak), and the Lookout can't see them either. Venue trait_line for
    Substrate-Born; intro dialogue has wit- and trait-flavored branches
    with the main pathway free (integrity-enforced).
-4. **The Steeps** (Bloom District, 10:00–02:00) — bathhouse in a dead cooling
-   tower. THE DATING SYSTEM: invite a reachable NPC on an outing (venue-keyed
-   scenes in dates.json, choice beats, big affection, once per NPC per week).
-   Also: paid soak = full rest + status cleanse in 90 min. Dates generalize
-   to Night Market/Gantry 9 afterwards.
+4. ✅ **The Steeps** (Bloom District, 10:00–02:00) — DONE, and it brought
+   THE DATING SYSTEM (game/dating.py, data/dates.json, migration 17:
+   player.date state + relationships.last_date_week). Ask a reachable NPC
+   out in person ("Ask out" beside Talk/Gift): venue-keyed scenes with an
+   opening, three choice beats, reaction lines, and a closing that grades
+   the evening (good_threshold; completion bonus +4; once per NPC per
+   week — "Keep me rare"; you cover both, that's the custom). Scenes are
+   NPC-agnostic but topic-tagged choices land on real preferences (±2 —
+   Oona lights up at training talk, a nightlife-hater endures the
+   cannonball), every beat keeps a topic-free choice (integrity test),
+   and all text renders through the pronoun system. **Shipped with all
+   three venues playable**: the Steeps (150m, +15 energy — restful),
+   Neon & Broth at the Night Market (90m, −5), Tea at the Top (60m, +5).
+   Walking out early keeps gains but burns the week. Also: the **paid
+   soak** — 25 cr, 90 min, full energy (fast expensive sleep; no status
+   system exists yet, so "cleanse" awaits one). Reptilian trait line on
+   the door (warm rocks, important address).
 5. **The Tide Line** (Docking Quarter, open 04:00–06:00 only) — flooded
    maintenance levels. Salvage-run venue (small event table: finds, hazards,
    rare curio), and Ondo's dawn walk made real: meeting them down there

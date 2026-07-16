@@ -67,6 +67,27 @@
     "vibe": "Stalls on stilts over the waterline, boards slick with spray. Ferry crews trade here between runs, so the stock leans practical: boots that grip, gear that floats, and nothing that minds getting wet.",
     "enter_line": "The walkway flexes under you. Somewhere below, the tide is doing inventory."
   },
+  "the_steeps": {
+    "id": "the_steeps",
+    "name": "The Steeps",
+    "district": "bloom_district",
+    "vibe": "A bathhouse grown into a dead cooling tower: terraced pools rising into the dark, water warmed by geothermal taps the corps forgot to bill, ferns colonizing the catwalks. Steam does to sound what money does to trouble — softens it, then loses it entirely.",
+    "hours": {
+      "open": "10:00",
+      "close": "02:00"
+    },
+    "closed_line": "The tower door is barred and the steam vents stand quiet. Chalk on the jamb: POOLS OPEN AT 10:00.",
+    "enter_line": "Heat, mineral hush, and green light through the ferns. Somewhere above, water moves from pool to pool like a slow thought.",
+    "trait_lines": {
+      "reptilian": "The heat finds you before the attendant does. Every stone in this building is warm, and your whole body files the address under 'important'."
+    },
+    "soak": {
+      "cost": 25,
+      "minutes": 90,
+      "blurb": "A paid soak: ninety minutes in the terraces and you come out new — full energy, one-third the time sleep takes.",
+      "line": "You stop counting pools around the fourth terrace. When you surface, the city has changed shifts without you and your body has forgiven you for everything."
+    }
+  },
   "gantry_9": {
     "id": "gantry_9",
     "name": "Gantry 9",

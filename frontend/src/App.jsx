@@ -4,6 +4,8 @@ import TitleScreen from './screens/TitleScreen.jsx'
 import CreationScreen from './screens/CreationScreen.jsx'
 import WorldMap from './screens/WorldMap.jsx'
 import DialogueScreen from './screens/DialogueScreen.jsx'
+import DateScreen from './components/DateScreen.jsx'
+import AskOutPicker from './components/AskOutPicker.jsx'
 import DungeonScreen from './screens/DungeonScreen.jsx'
 import CombatOutcome from './components/CombatOutcome.jsx'
 import BattleView from './components/BattleView.jsx'
@@ -32,6 +34,8 @@ export default function App() {
           <>
             <WorldMap />
             {dialogue && <DialogueScreen />}
+            <AskOutPicker />
+            <DateScreen />
             {/* Arena bouts happen without a Substrate run — the battle modal
                 rides over the world map (it renders null unless a fight is on). */}
             <BattleView />

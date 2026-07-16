@@ -1,0 +1,234 @@
+{
+  "the_steeps": {
+    "venue": "the_steeps",
+    "title": "A soak at the Steeps",
+    "cost": 40,
+    "minutes": 150,
+    "energy": 15,
+    "good_threshold": 7,
+    "bonus": 4,
+    "opening": "You cover the door fee for two — that's the custom — and the attendant waves you both up the terraces. {name} tips {pos} head back to take in the tower: pools stacked into the dark, steam climbing like it has somewhere to be. “Okay,” {subj} says quietly. “Okay, this was a good call.”",
+    "beats": [
+      {
+        "text": "The first terrace is body-warm and green-lit. {name} sinks in to the collarbone and looks at you expectantly — your date, your move.",
+        "choices": [
+          {
+            "text": "Settle in beside them, shoulder to shoulder, and let the heat do the talking.",
+            "affection": 3,
+            "reply": "{Subj} exhales about a week's worth of tension. “You're quiet good company,” {subj} says, like {subj}'s deciding it right now."
+          },
+          {
+            "text": "Cannonball. This is a bathhouse, not a church.",
+            "affection": 1,
+            "topic": "nightlife",
+            "reply": "The wave hits {obj} square in the face. There's a silence with two possible endings — then {subj} laughs and starts planning revenge."
+          },
+          {
+            "text": "Give them the tour first — you know which pools run hottest.",
+            "affection": 2,
+            "reply": "“You've done your homework,” {subj} says, trailing a hand in each pool you name, cataloguing the temperatures like promises."
+          }
+        ]
+      },
+      {
+        "text": "Three terraces up, the steam thickens and the city noise gives out entirely. The conversation drifts loose and unhurried, the way it only does when nobody can see anybody clearly.",
+        "choices": [
+          {
+            "text": "Talk training — bodies, limits, the good ache of getting stronger.",
+            "affection": 2,
+            "topic": "fitness",
+            "reply": "{Subj} stretches, considering. The topic either lands like a shared language or like homework — you can hear which in {pos} answer."
+          },
+          {
+            "text": "Hum along with the pipes — the tower drones a low chord when the vents cycle.",
+            "affection": 2,
+            "topic": "music",
+            "reply": "{Subj} tilts {pos} head, catches the drone, and adds a fifth on top of your line — or doesn't. Either way {subj}'s watching you differently now."
+          },
+          {
+            "text": "Say nothing. Listen to the water and let them fill the quiet if they want it.",
+            "affection": 3,
+            "reply": "For a while there's just water moving. Then {name} starts talking — really talking — the way people only do when nobody's pulling on the thread."
+          }
+        ]
+      },
+      {
+        "text": "The top terrace ends at the cold plunge: a black pool fed straight from the tower's shadow side. House rules say you don't leave without going in. {name} looks at it, then at you.",
+        "choices": [
+          {
+            "text": "Take their hand. Count of three. Go.",
+            "affection": 3,
+            "reply": "The cold hits like a verdict and you both come up yelling. {Subj} doesn't let go of your hand until the shivering stops, and maybe a little after."
+          },
+          {
+            "text": "“You first. I'll judge your form.”",
+            "affection": 2,
+            "topic": "sports",
+            "reply": "{Subj} narrows {pos} eyes at the challenge, and the plunge becomes a competition with scoring, appeals, and at least one disputed ruling."
+          },
+          {
+            "text": "Pass. The warm pool has earned your loyalty.",
+            "affection": 1,
+            "reply": "{Subj} goes in alone, surfaces gasping, and paddles back to the warmth beside you. “Coward,” {subj} says, meaning something friendlier."
+          }
+        ]
+      }
+    ],
+    "closing_good": "You dry off slow, both of you pink and unhurried, hair curling in the heat. At the tower door {name} stops. “Next time,” {subj} says — not a question, an amendment to the schedule — and the walk back down through the Bloom feels shorter than the map says it is.",
+    "closing_flat": "It was warm, anyway. {name} thanks you at the door, polite as a receipt, and the steam lets go of you both the moment you step outside."
+  },
+  "night_market": {
+    "venue": "night_market",
+    "title": "Neon & broth at the Night Market",
+    "cost": 30,
+    "minutes": 90,
+    "energy": -5,
+    "good_threshold": 7,
+    "bonus": 4,
+    "opening": "The lot is in full bloom: biolights strung shoulder-high, six languages of haggling, steam ghosting off the stalls. {name} pockets {pos} hands and grins at the noise. “Feed me,” {subj} says, “and nobody gets hurt.”",
+    "beats": [
+      {
+        "text": "First stop is mandatory: food. The stalls offer skewered something, glow broth that lights from within, and the dare shelf — Vendor's Mercy, unlabeled, sold with a shrug.",
+        "choices": [
+          {
+            "text": "Glow broth for two — one bowl, two spoons, the vendor's knowing look for free.",
+            "affection": 3,
+            "reply": "The broth glows faint blue and so, briefly, do your teeth. {name} laughs at yours; you laugh at {pos}. The vendor has seen this exact scene a thousand times and still approves."
+          },
+          {
+            "text": "Split a skewered something and agree never to ask which something.",
+            "affection": 2,
+            "reply": "It's delicious. It's absolutely delicious and you will both take the mystery of it to your graves, {subj} declares, licking a thumb."
+          },
+          {
+            "text": "Vendor's Mercy. Two orders. Look them dead in the eye while you order.",
+            "affection": 2,
+            "topic": "nightlife",
+            "reply": "It arrives smoking. Whether {name} lights up or blanches at the dare tells you exactly what kind of night {subj} was hoping for."
+          }
+        ]
+      },
+      {
+        "text": "You drift down the stall rows, shoulder to shoulder in the crowd-current. Tonight's rotating stalls flash their one-night-only wares under the biolights.",
+        "choices": [
+          {
+            "text": "Hunt the stalls for something small and exactly them — a gift, tonight only.",
+            "affection": 3,
+            "reply": "You find it three stalls in — small, cheap, and so precisely {obj} that {subj} goes quiet for a second before pocketing it like contraband."
+          },
+          {
+            "text": "Invent lives for strangers in the crowd, trading chapters back and forth.",
+            "affection": 2,
+            "topic": "books",
+            "reply": "Your story about the ferry captain and the stolen orchid gets a sequel from {name} — or a bemused look. Either way the crowd becomes a library for a while."
+          },
+          {
+            "text": "Follow the music to the far end, where somebody's rigged speakers to a fish cart.",
+            "affection": 2,
+            "topic": "music",
+            "reply": "The bass is terrible and the cart smells like the sea. {name} either starts moving to it anyway or grants it exactly one raised eyebrow — both are answers."
+          }
+        ]
+      },
+      {
+        "text": "At the broth stall on the way out, the vendor leans over the steam, conspiratorial: “You two, eh? Word travels.” The whole row is suddenly, theatrically busy not listening.",
+        "choices": [
+          {
+            "text": "Lean in and own it. “Word's slow. This is our second stall.”",
+            "affection": 3,
+            "reply": "The vendor howls. {name} colors to the ears and doesn't correct you — and {subj} walks a half-step closer the rest of the way out."
+          },
+          {
+            "text": "Deflect it smoothly and steer the talk to the vendor's broth secrets.",
+            "affection": 2,
+            "reply": "The vendor, flattered, unveils exactly one secret (it's fish sauce). {name} watches you handle it and files something away, amused."
+          },
+          {
+            "text": "Buy a static floss and stuff it in the vendor's mouth. Diplomatically.",
+            "affection": 1,
+            "topic": "nightlife",
+            "reply": "The floss crackles. The vendor chews, electrified and delighted. {name} apologizes to the whole row on your behalf without meaning a word of it."
+          }
+        ]
+      }
+    ],
+    "closing_good": "The biolights thin out at the lot's edge and neither of you hurries. {name} is still glowing faintly from the broth, or possibly not from the broth. “Same time next rotation,” {subj} says, and takes the long way home.",
+    "closing_flat": "The market swallows the evening whole. {name} thanks you at the lot's edge and heads off through the neon — fed, at least, if not exactly won."
+  },
+  "gantry_9": {
+    "venue": "gantry_9",
+    "title": "Tea at the top of the city",
+    "cost": 20,
+    "minutes": 60,
+    "energy": 5,
+    "good_threshold": 7,
+    "bonus": 4,
+    "opening": "Nine floors of stairs and then the wind gives way to kettle-steam. {name} takes the rail-side table like it was reserved, the whole Grid laid out and blinking below. “So this is where you go,” {subj} says, deciding something about you.",
+    "beats": [
+      {
+        "text": "The chalkboard offers its usual conspiracies. The kettle-keeper waits, cloth over one shoulder, while {name} squints at tea names that explain nothing.",
+        "choices": [
+          {
+            "text": "Ask what they always order, then get it exactly right down to the honey.",
+            "affection": 3,
+            "reply": "{Subj} watches you relay the order — the little details {subj} didn't think anyone tracked — and forgets to look at the view for a while."
+          },
+          {
+            "text": "Order for both of you, no hesitation. Confidence is a flavor.",
+            "affection": 2,
+            "reply": "The cups arrive. {name} sips, considers, and grants you a slow nod — the kind that costs something to earn."
+          },
+          {
+            "text": "Two of whatever the chalkboard is calling 'hurry' tonight. Mystery builds character.",
+            "affection": 1,
+            "topic": "nightlife",
+            "reply": "The tea tastes like a starter pistol. {name} blinks hard, laughs once, and grips the table like the gantry might take off."
+          }
+        ]
+      },
+      {
+        "text": "Steam off two cups, and below you the city runs its errands: Loop capsules threading the ring, cranes bowing over the docks, the Pit's light bleeding up through a grate in the Grid.",
+        "choices": [
+          {
+            "text": "Point out the exact spot where the two of you first met.",
+            "affection": 3,
+            "reply": "{Subj} leans over the rail to sight along your arm, and the look {subj} gives the spot — and then you — has a bookmark in it."
+          },
+          {
+            "text": "Find their home from up here and learn what the neighborhood looks like small.",
+            "affection": 2,
+            "reply": "“That one,” {subj} says, tapping the air over a smudge of light, and tells you one thing about it {subj}'s never told anyone taller than this table."
+          },
+          {
+            "text": "Trade guesses about which light below is having the worst night.",
+            "affection": 2,
+            "topic": "books",
+            "reply": "You build the poor devil a whole biography. {name} adds the tragic twist — or vetoes yours on procedural grounds. The city is briefly a novel."
+          }
+        ]
+      },
+      {
+        "text": "The wind picks up the way it does nine floors over everything, and the glass panes hum their one low note. {name} pulls {pos} sleeves down over {pos} hands.",
+        "choices": [
+          {
+            "text": "Move around the table to the wind side and give them your warm-side seat.",
+            "affection": 3,
+            "reply": "{Subj} objects for exactly one second, then takes the seat. The wind gets you instead, and it is, on balance, an excellent trade."
+          },
+          {
+            "text": "Shoulder to shoulder, watch the city, and say absolutely nothing.",
+            "affection": 3,
+            "reply": "The kettles tick. The Grid blinks. {name} is warm along one whole side of you, and nobody ruins it by narrating."
+          },
+          {
+            "text": "Keep talking so neither of you has to admit it's cold.",
+            "affection": 1,
+            "reply": "Your teeth chatter mid-sentence. {name} watches you power through it with the fascination of someone observing a stubborn machine."
+          }
+        ]
+      }
+    ],
+    "closing_good": "The last of the tea goes cold and honorably unfinished. On the stairs down, {name} stops at the fourth landing. “I'm keeping this,” {subj} says — the evening, {subj} means, or possibly the warm-side seat — and the city takes you both back a degree warmer than it let you go.",
+    "closing_flat": "The tea was good; the wind was honest. {name} thanks you on the ground floor, already re-wrapped in the day {subj} stepped out of, and the gantry light clicks off its landing behind you."
+  }
+}

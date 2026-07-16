@@ -73,6 +73,7 @@ class Player(Character):
         tea_day=0,
         tea_id="",
         research_day=0,
+        date=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -116,6 +117,9 @@ class Player(Character):
         self.tea_id = tea_id
         # Last absolute day the Stacks' research desk was worked (one pull/day).
         self.research_day = research_day
+        # Mid-outing state ({} = not on a date): {npc, venue, beat, gained}.
+        # See game/dating.py — the scene spans several requests.
+        self.date = dict(date) if date else {}
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)

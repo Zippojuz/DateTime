@@ -18,6 +18,7 @@ export default function PeoplePanel() {
   const venues = useGameStore((s) => s.venues)
   const startDialogue = useGameStore((s) => s.startDialogue)
   const startGift = useGameStore((s) => s.startGift)
+  const openAskOut = useGameStore((s) => s.openAskOut)
   const busy = useGameStore((s) => s.busy)
 
   if (!characters.length) return null
@@ -61,6 +62,14 @@ export default function PeoplePanel() {
                   onClick={() => startGift(c.id, c.name)}
                 >
                   Gift
+                </button>
+                <button
+                  className="btn-action"
+                  disabled={!c.reachable || c.dated_this_week || busy}
+                  title={c.dated_this_week ? 'One outing a week — keep it rare' : 'Ask them out'}
+                  onClick={() => openAskOut(c.id, c.name)}
+                >
+                  Ask out
                 </button>
               </div>
             </li>

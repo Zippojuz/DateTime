@@ -82,6 +82,12 @@ export const useGameStore = create((set, get) => ({
   stacks: null,
   lastResearch: null,
 
+  // THE DATING SYSTEM: the venue menu, the ask-out picker, the live scene.
+  dateVenues: null,
+  askOut: null, // {npcId, name} while the venue picker is open
+  date: null, // the active beat / closing view from the server
+  lastSoak: null,
+
   busy: false,
   error: null,
 
@@ -99,6 +105,7 @@ export const useGameStore = create((set, get) => ({
         protocols,
         statuses,
         linkTones,
+        dateVenues,
       ] = await Promise.all([
         api.attributes(),
         api.actions(),
@@ -110,6 +117,7 @@ export const useGameStore = create((set, get) => ({
         api.protocols(),
         api.statuses(),
         api.linkTones(),
+        api.dateVenues(),
       ])
       set({
         attributes,
@@ -122,6 +130,7 @@ export const useGameStore = create((set, get) => ({
         protocols,
         statuses,
         linkTones,
+        dateVenues,
         connection: 'ok',
       })
     } catch (err) {
@@ -543,6 +552,62 @@ export const useGameStore = create((set, get) => ({
     } catch (err) {
       set({ error: err.message, busy: false })
     }
+  },
+
+  // --- The Steeps (soak) + THE DATING SYSTEM ---
+
+  takeSoak: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.soak()
+      set({ state: res.state, lastSoak: res.soak, busy: false })
+      get().loadCharacters() // ninety minutes pass
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  openAskOut: (npcId, name) => set({ askOut: { npcId, name }, error: null }),
+  closeAskOut: () => set({ askOut: null, error: null }),
+
+  startDate: async (npcId, venue) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dateStart(npcId, venue)
+      set({ date: res.date, state: res.state, askOut: null, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  chooseDateBeat: async (choiceIndex) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dateChoose(choiceIndex)
+      set({ date: res.date, state: res.state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  leaveDate: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.dateLeave()
+      set({ date: res.date, state: res.state, busy: false })
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  closeDate: () => {
+    set({ date: null })
+    get().loadCharacters() // the evening moved hearts and hands of the clock
+    get().loadShop()
+    get().loadArena()
+    get().loadTeahouse()
+    get().loadStacks()
+    get().loadLookout()
   },
 
   arenaFight: async () => {

@@ -54,6 +54,16 @@ export const api = {
   stacks: () => request('/stacks'),
   research: (subject) =>
     request('/research', { method: 'POST', body: JSON.stringify({ subject }) }),
+  soak: () => request('/soak', { method: 'POST', body: '{}' }),
+  dateVenues: () => request('/date/venues'),
+  dateStart: (npcId, venue) =>
+    request('/date/start', { method: 'POST', body: JSON.stringify({ npc_id: npcId, venue }) }),
+  dateChoose: (choiceIndex) =>
+    request('/date/choose', {
+      method: 'POST',
+      body: JSON.stringify({ choice_index: choiceIndex }),
+    }),
+  dateLeave: () => request('/date/leave', { method: 'POST', body: '{}' }),
   linkTones: () => request('/link/tones'),
   sendMessage: (npcId, tone) =>
     request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),
