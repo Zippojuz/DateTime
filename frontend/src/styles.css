@@ -2291,39 +2291,169 @@ body {
   font-variant-numeric: tabular-nums;
 }
 
-.equip-list {
+/* Loadout: pack on one side, paper-doll slot grid on the other. */
+.loadout {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(0, 1.4fr);
+  gap: 1rem;
+  align-items: start;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .loadout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.loadout-pack h3,
+.loadout-doll h3 {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--text-dim);
+}
+
+.pack-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  max-height: 26rem;
+  overflow-y: auto;
 }
 
-.equip-slot {
+.pack-item {
+  width: 100%;
+  text-align: left;
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  gap: 0.15rem;
   background: var(--bg-panel);
+  border: 1px solid transparent;
   border-radius: 6px;
-  padding: 0.45rem 0.9rem;
+  padding: 0.5rem 0.75rem;
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
   font-size: 0.9rem;
 }
 
-.equip-slot-name {
-  min-width: 5.5rem;
-  color: var(--text-dim);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06rem;
+.pack-item:hover {
+  border-color: #26304a;
 }
 
-.equip-gear {
+.pack-item--picked {
+  border-color: var(--neon);
+  box-shadow: 0 0 8px var(--neon-dim);
+}
+
+.pack-sub {
+  color: var(--text-dim);
+  font-size: 0.78rem;
+}
+
+/* The doll: a rough body shape. Head up top, rings on the hands' row ends. */
+.doll-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    '.      head   .'
+    'weapon torso  accessory'
+    'arms   legs   hands'
+    'ring1  feet   ring2';
+  gap: 0.4rem;
+}
+
+.aug-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+
+.equip-cell {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  flex: 1;
+  justify-content: center;
+  gap: 0.2rem;
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 6px;
+  padding: 0.45rem 0.3rem;
+  min-height: 3.6rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.8rem;
+}
+
+.equip-cell-slot {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  color: var(--text-dim);
+}
+
+.equip-cell-item {
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.equip-cell--filled {
+  color: var(--text);
+}
+
+.equip-cell-gems {
+  font-size: 0.7rem;
+  color: var(--neon);
+  letter-spacing: 0.15rem;
+}
+
+.equip-cell--valid {
+  border-color: var(--neon);
+  animation: cell-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes cell-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 4px var(--neon-dim);
+  }
+  50% {
+    box-shadow: 0 0 14px var(--neon-dim);
+  }
+}
+
+.equip-cell--active {
+  border-color: var(--accent);
+}
+
+.equip-cell--locked {
+  opacity: 0.45;
+  border-style: dashed;
+}
+
+.equip-detail {
+  margin-top: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.equip-hint {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin: 0.6rem 0 0;
 }
 
 .equip-sockets {
