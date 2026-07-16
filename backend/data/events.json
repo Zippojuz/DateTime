@@ -5,7 +5,7 @@
     "day": 1,
     "type": "story",
     "title": "Arrival at Nexus City",
-    "text": "Your ship settles into the Docking Quarter with a tired groan. Whatever you were running from, it's behind you now. The debt, though — that came with you."
+    "text": "Your ship settles into the Docking Quarter with a tired groan. Whatever you were running from, it's behind you now. The debt, though \u2014 that came with you. Behind your ear, something warm boots for the first time: a standard-issue Cyberlink, activated with the docking paperwork. Also on your tab."
   },
   "lumen_festival": {
     "id": "lumen_festival",
@@ -22,7 +22,7 @@
     "day": 3,
     "type": "birthday",
     "title": "Vael's Naming Day",
-    "text": "You overhear it's Vael's naming day. \"Soldiers don't mark the years,\" she'd say — but she'd remember who did.",
+    "text": "You overhear it's Vael's naming day. \"Soldiers don't mark the years,\" she'd say \u2014 but she'd remember who did.",
     "npc": "vael"
   },
   "debt_reminder": {
@@ -31,6 +31,6 @@
     "day": 1,
     "type": "story",
     "title": "A Reminder",
-    "text": "A courier drone finds you in a crowd and won't leave until you take the message. No words — just a number, and how much of the year is already gone."
+    "text": "A courier drone finds you in a crowd and won't leave until you take the message. No words \u2014 just a number, and how much of the year is already gone."
   }
 }

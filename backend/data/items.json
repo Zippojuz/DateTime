@@ -952,5 +952,15 @@
       "energy": 45
     },
     "value": 14
+  },
+  "cyberlink": {
+    "id": "cyberlink",
+    "name": "Cyberlink",
+    "type": "augment",
+    "slot": "integrated",
+    "rarity": "common",
+    "description": "Standard-issue neural interface, activated with your docking paperwork (it's on your tab). Messages, inventory ledger, city settings \u2014 the free tier of being a person here. Everyone has one. Nobody reads the EULA.",
+    "bonuses": {},
+    "value": 0
   }
 }

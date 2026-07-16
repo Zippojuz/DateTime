@@ -1,0 +1,79 @@
+{
+  "tones": {
+    "check_in": {
+      "label": "Check in",
+      "affection": 1
+    },
+    "flirt": {
+      "label": "Flirt",
+      "affection": 2,
+      "requires_stage": ["acquaintance", "friend", "close"]
+    },
+    "joke": {
+      "label": "Send something dumb",
+      "affection": 1
+    }
+  },
+  "voices": {
+    "vael": {
+      "check_in": "A long pause, then: \"Still standing. The plaza's loud tonight. You'd hate it. Or you wouldn't. I don't know you well enough yet, which is annoying.\"",
+      "flirt": "The reply is a photo of the plaza lights on her ceiling, and nothing else. A minute later: \"That's the view. There's room in it.\"",
+      "joke": "\"I showed this to no one at work because I have a reputation. I laughed in a stairwell like a criminal. Delete this.\"",
+      "deflect": "\"...I'm going to assume that was meant for someone else, {name}. For both our sakes.\""
+    },
+    "zix": {
+      "check_in": "Six replies arrive at once, from six bodies: \"busy\" \"fine\" \"who is this\" \"WE MISS YOU\" \"disregard #4\" \"do not disregard #4.\"",
+      "flirt": "\"the vote was 4-2 in favor of blushing. the two dissenters are jealous of the four. this is a hive crisis. hope ur happy\"",
+      "joke": "\"body #3 laughed so hard it fell off a railing. we are billing you for the railing. send another\"",
+      "deflect": "\"the vote was 6-0: too soon, new person. buy us a drink first. all six.\""
+    },
+    "sora": {
+      "check_in": "\"The garden says hello. Technically everything I say is the garden saying it, but this one was specifically hello.\"",
+      "flirt": "\"I pressed a flower for you today. It's in a book about soil acidity. That's the most romantic thing I know how to do over text.\"",
+      "joke": "\"I have shown the conservatory. The ferns are unmoved. The orchid liked it. The orchid likes everything, don't be flattered.\"",
+      "deflect": "\"Oh! Um. The garden and I need a moment. Water your intentions and see what grows, {name}.\""
+    },
+    "carro": {
+      "check_in": "\"Stall's slow. Rocks are warm. Life's alright. You eating enough? Don't answer, come by and I'll fix it either way.\"",
+      "flirt": "\"You know I read these twice when they're from you. Cold blood, slow heart. It gets there.\"",
+      "joke": "\"HA. Showing everyone at the dock. Taking full credit. This is mine now, legally.\"",
+      "deflect": "\"Easy, warmblood. I sun myself slow and I warm up slower. Stick around.\""
+    },
+    "miko": {
+      "check_in": "\"Rehearsal ran long, voice is gone, feathers everywhere. Here's a chord I can't stop playing.\" A four-second audio file. It's beautiful.",
+      "flirt": "\"I can't lie, you know that? Physically. So: I checked the link twice today hoping. There. Ruffled about it.\"",
+      "joke": "\"I laughed on stage. MID-SET. The band wants you banned from the link. The audience wants your number.\"",
+      "deflect": "\"My plumage just did something embarrassing and I need you to know it was involuntary and means NOTHING yet.\""
+    },
+    "nyx": {
+      "check_in": "\"I am eating something called a churro. Update: I have eaten four churros. Being checked on is nicer than ten thousand years of prayers, incidentally.\"",
+      "flirt": "\"Careful. I used to be worshipped for less than that sentence. ...Send another one anyway.\"",
+      "joke": "\"I do not understand this image. I have consulted the noise between stations. The noise laughed. Explain nothing.\"",
+      "deflect": "\"Bold, for someone whose signal I could wear like a coat. Feed me skewers first. Courtship has RULES up here, I've read about them.\""
+    },
+    "vex": {
+      "check_in": "\"You checking on me or checking your balance, line item? ...Either way. Noted. Fondly.\"",
+      "flirt": "\"Flirting with the woman who holds your debt. Bold portfolio strategy. I've seen worse returns.\"",
+      "joke": "\"I don't laugh on the record. Off the record: the back room heard me. This never happened.\"",
+      "deflect": "\"Sweetheart, I own your debt. Let's not complicate my bookkeeping yet.\""
+    },
+    "juno": {
+      "check_in": "\"Between patients. Someone tried to install a third elbow again. I'm fine. You — hydrate. Doctor's orders.\"",
+      "flirt": "\"I've had my hands inside four hundred people and yours are the ones I think about. Clinically concerning. Don't stop.\"",
+      "joke": "\"I have seen inside the human body, {name}. NOTHING in there is as cursed as this image. Sending it to my anatomy group.\"",
+      "deflect": "\"I don't date charts I haven't read. Come by the clinic. Talk to me like a person first.\""
+    },
+    "ondo": {
+      "check_in": "\"Card's thin tonight. Bell's polished. You're training, I assume. Don't make me assume twice.\"",
+      "flirt": "\"Fifteen years of fighters trying to get a rise out of me. One message from you and the bell rope's suddenly very interesting to stare at. Well struck.\"",
+      "joke": "\"I don't laugh. Ask anyone. ...The crowd is asking why I laughed. You owe me a reputation.\"",
+      "deflect": "\"Little bell, I've watched a thousand openers rush the first round. Pace. The card is long.\""
+    },
+    "oona": {
+      "check_in": "\"Three arms are spotting, two are chalking, one is holding a grudge, and now two are texting you back. You count that? That's affection math.\"",
+      "flirt": "\"I have three hearts. Standard-issue humans get one vote each. You currently hold two and are polling well with the third.\"",
+      "joke": "\"I sprayed brine out my siphon. In front of CLIENTS. The Hold's insurance does not cover this. 10/10, send worse.\"",
+      "deflect": "\"Form before weight, new meat. We barely know each other's warm-up routine.\""
+    }
+  }
+}

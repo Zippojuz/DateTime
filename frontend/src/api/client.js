@@ -47,6 +47,9 @@ export const api = {
   buy: (itemId) =>
     request('/shop/buy', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
   marketGossip: () => request('/market/gossip', { method: 'POST', body: '{}' }),
+  linkTones: () => request('/link/tones'),
+  sendMessage: (npcId, tone) =>
+    request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),
   useItem: (itemId) =>
     request('/item/use', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
   gift: (npcId, itemId) =>

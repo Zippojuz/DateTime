@@ -26,6 +26,11 @@ export const useGameStore = create((set, get) => ({
   // Shop stock for the current place; gift flow + last reaction.
   shop: null,
   lastGossip: null, // last Night Market rumor: { npc, topic, text }
+
+  // The Cyberlink (standard-issue neural interface): device modal + messages.
+  linkOpen: false,
+  linkTones: null, // { id: {label, affection, requires_stage?} }
+  lastMessage: null, // last reply: { npc, reply, landed, gained, affection }
   gifting: null, // { npcId, npcName } while picking a gift
   lastReaction: null, // last gift reaction toast
 
@@ -74,18 +79,29 @@ export const useGameStore = create((set, get) => ({
   // Load reference data + any existing save. Called once on mount.
   init: async () => {
     try {
-      const [attributes, actions, topics, districts, venues, species, items, protocols, statuses] =
-        await Promise.all([
-          api.attributes(),
-          api.actions(),
-          api.topics(),
-          api.districts(),
-          api.venues(),
-          api.species(),
-          api.items(),
-          api.protocols(),
-          api.statuses(),
-        ])
+      const [
+        attributes,
+        actions,
+        topics,
+        districts,
+        venues,
+        species,
+        items,
+        protocols,
+        statuses,
+        linkTones,
+      ] = await Promise.all([
+        api.attributes(),
+        api.actions(),
+        api.topics(),
+        api.districts(),
+        api.venues(),
+        api.species(),
+        api.items(),
+        api.protocols(),
+        api.statuses(),
+        api.linkTones(),
+      ])
       set({
         attributes,
         actions,
@@ -96,6 +112,7 @@ export const useGameStore = create((set, get) => ({
         items,
         protocols,
         statuses,
+        linkTones,
         connection: 'ok',
       })
     } catch (err) {
@@ -234,6 +251,20 @@ export const useGameStore = create((set, get) => ({
       set({ shop: await api.shop() })
     } catch {
       // Non-fatal.
+    }
+  },
+
+  openLink: () => set({ linkOpen: true, error: null }),
+  closeLink: () => set({ linkOpen: false, lastMessage: null }),
+
+  sendMessage: async (npcId, tone) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.sendMessage(npcId, tone)
+      set({ state: res.state, lastMessage: res.message, busy: false })
+      get().loadCharacters() // affection + the per-day ping gate moved
+    } catch (err) {
+      set({ error: err.message, busy: false })
     }
   },
 

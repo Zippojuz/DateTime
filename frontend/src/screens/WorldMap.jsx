@@ -13,7 +13,7 @@ import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
 import ShopPanel from '../components/ShopPanel.jsx'
-import InventoryPanel from '../components/InventoryPanel.jsx'
+import CyberlinkModal from '../components/CyberlinkModal.jsx'
 import GiftPicker from '../components/GiftPicker.jsx'
 import GiftReactionCard from '../components/GiftReactionCard.jsx'
 import SubstratePanel from '../components/SubstratePanel.jsx'
@@ -29,6 +29,7 @@ export default function WorldMap() {
   const districts = useGameStore((s) => s.districts)
   const venues = useGameStore((s) => s.venues)
   const doAction = useGameStore((s) => s.doAction)
+  const openLink = useGameStore((s) => s.openLink)
   const busy = useGameStore((s) => s.busy)
   const error = useGameStore((s) => s.error)
 
@@ -63,6 +64,9 @@ export default function WorldMap() {
             {player.identity.pronouns} · {player.species}
           </span>
         </div>
+        <button className="btn-action hud-link" onClick={openLink} title="Open your Cyberlink">
+          ⬡ Link
+        </button>
       </header>
 
       <EventLog />
@@ -84,13 +88,13 @@ export default function WorldMap() {
       <PitView />
       <ClinicPanel />
       <ShopPanel />
-      <InventoryPanel />
       <EquipmentPanel />
       <PeoplePanel />
       <DebtPanel />
       <RelationshipPanel />
 
       <GiftPicker />
+      <CyberlinkModal />
 
       <section className="action-panel">
         <h2>What do you do?</h2>

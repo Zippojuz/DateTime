@@ -148,6 +148,22 @@ def mark_talked(save_id, npc_id, day_index):
         )
 
 
+def has_messaged_today(save_id, npc_id, day_index):
+    row = _row(save_id, npc_id)
+    return bool(row) and row["last_message_day"] == day_index
+
+
+def mark_messaged(save_id, npc_id, day_index):
+    with get_connection() as conn:
+        conn.execute(
+            """INSERT INTO relationships (save_id, npc_id, last_message_day)
+                   VALUES (?, ?, ?)
+               ON CONFLICT(save_id, npc_id)
+                   DO UPDATE SET last_message_day=excluded.last_message_day""",
+            (save_id, npc_id, day_index),
+        )
+
+
 def has_gifted_today(save_id, npc_id, day_index):
     row = _row(save_id, npc_id)
     return bool(row) and row["last_gift_day"] == day_index
@@ -222,6 +238,7 @@ def all_relationships(save_id, today):
                 r["starting_disposition"], json.loads(r["memories"]), today
             ),
             "last_talked_day": r["last_talked_day"],
+            "last_message_day": r["last_message_day"],
             "known_npc_topics": json.loads(r["known_npc_topics"]),
             "known_player_topics": json.loads(r["known_player_topics"]),
         }

@@ -703,6 +703,33 @@ Singing Crystal, Voidglass Rose) never sold in shops; deep-floor treasure.
 | The Forget-Me-Not (pawnshop venue) | — | MAYBE: buys anything no questions (item selling), later the memory-economy storefront |
 | The Better Devil (gambling barge venue) | — | MAYBE: luck-stat sink (dice/cards/wheel), runs a book on Pit fights — friction with Ondo |
 
+### Follow-up: the Cyberlink (default integrated augment) ✅ DONE
+- **The Cyberlink**: standard-issue neural interface, activated with the
+  arrival paperwork ("also on your tab") — the diegetic home for the game's
+  device layer. items.json entry with slot "integrated" (below the augment
+  slots, uses no headroom, sold nowhere, value 0); shown on the equipment
+  panel as "⬡ Cyberlink — integrated, standard issue"; the arrival story
+  beat mentions it booting behind your ear.
+- **Remote messaging** (game/cyberlink.py + data/messages.json + migration
+  14: relationships.last_message_day): ping any cast member you've MET (one
+  real conversation = the handshake) from anywhere, any hour, one per NPC
+  per day, 5 min. Three tones — check in (+1), flirt (+2, needs
+  acquaintance+ or you get that NPC's bespoke deflection), send something
+  dumb (+1). Every cast member has a four-line authored texting voice (Zix
+  answers from six bodies at once; Miko sends a four-second chord; Vex
+  replies "checking on me or checking your balance, line item?"). Off-window
+  contacts answer late ("the link sits quiet a while"). /api/message +
+  /api/link/tones; characters payload gains met/messaged_today.
+- **The Link modal** (⬡ Link in the HUD): Messages (contact list by stage +
+  tone buttons + reply card), Inventory (panel moved off the map screen into
+  the device where it belongs), Settings (difficulty + unit summary:
+  name/pronouns/species/trait + the EULA nobody read). +9 pytest (356
+  total, incl. an every-NPC-has-a-voice integrity test); verified live
+  (handshake refusal, remote ping, per-day gate) + Playwright shots.
+- NOTE found while testing: Carro (disposition −5) has no dialogue tree
+  until affection ≥ 0 — talking to him day one 404s ("nothing to say yet").
+  Possibly intended (gift the grumpy lizard first); flagging for review.
+
 ## Venue Roadmap (approved, build one at a time)
 
 Five venues approved 2026-07-15; detailed plans agreed in-session. Suggested

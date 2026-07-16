@@ -14,6 +14,7 @@ from game import (
     arena,
     combat,
     corps,
+    cyberlink,
     data,
     dialogue,
     dungeon,
@@ -96,6 +97,10 @@ def create_app():
         # Suggestions for character creation — never a gate. Free text is
         # always accepted (see dtDesignDoc.md -> Identity Philosophy).
         return jsonify(data.load("species"))
+
+    @app.get("/api/link/tones")
+    def link_tones():
+        return jsonify(cyberlink.tones())
 
     @app.get("/api/protocols")
     def protocols():
@@ -205,6 +210,9 @@ def create_app():
                     "affection": affection,
                     "stage": social.stage(affection),
                     "talked_today": rel.get("last_talked_day") == day,
+                    # Cyberlink: contacts need a real handshake (one conversation).
+                    "met": bool(rel.get("last_talked_day")),
+                    "messaged_today": rel.get("last_message_day") == day,
                 }
             )
         return jsonify(result)
@@ -392,6 +400,30 @@ def create_app():
         fired = events.fire_due(player, clock)
         save.save_models(save_id, player, clock)
         return jsonify({"state": save.state_dict(player, clock), "bought": result, "events": fired})
+
+    @app.post("/api/message")
+    def send_link_message():
+        """Ping a known contact over the Cyberlink — anywhere, any hour."""
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        npc_id = body.get("npc_id")
+        try:
+            npc = NPC.load(npc_id)
+        except KeyError:
+            return jsonify(error="No such character."), 404
+        if not npc.unlocked_for(player):
+            return jsonify(error="No such character."), 404
+        try:
+            result = cyberlink.send_message(
+                save_id, player, clock, npc_id, body.get("tone"), _day_index(clock)
+            )
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"state": save.state_dict(player, clock), "message": result})
 
     @app.post("/api/market/gossip")
     def market_gossip():

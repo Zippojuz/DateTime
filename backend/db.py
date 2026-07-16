@@ -165,6 +165,11 @@ def _m13_gossip(conn):
     _add_column(conn, "player", "gossip_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m14_cyberlink_messages(conn):
+    """One Cyberlink message per NPC per day (like talks and gifts)."""
+    _add_column(conn, "relationships", "last_message_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -179,6 +184,7 @@ MIGRATIONS = [
     _m11_arena_and_cred,
     _m12_species_trait,
     _m13_gossip,
+    _m14_cyberlink_messages,
 ]
 
 

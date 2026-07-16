@@ -56,6 +56,9 @@ export default function EquipmentPanel() {
           <span className="equip-augcap-hint"> — hacking raises capacity (+1 per 5)</span>
         </p>
       )}
+      <p className="equip-integrated" title="Standard issue. Doesn't use a slot.">
+        ⬡ Cyberlink <span className="equip-augcap-hint">— integrated, standard issue</span>
+      </p>
       <ul className="equip-list">
         {order.map((slot) => {
           const entry = slots[slot]
