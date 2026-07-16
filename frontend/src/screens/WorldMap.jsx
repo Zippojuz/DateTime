@@ -13,6 +13,7 @@ import GantryView from '../components/GantryView.jsx'
 import StacksView from '../components/StacksView.jsx'
 import SteepsView from '../components/SteepsView.jsx'
 import TideLineView from '../components/TideLineView.jsx'
+import PawnshopView from '../components/PawnshopView.jsx'
 import ClinicPanel from '../components/ClinicPanel.jsx'
 import DebtPanel from '../components/DebtPanel.jsx'
 import EventLog from '../components/EventLog.jsx'
@@ -97,6 +98,7 @@ export default function WorldMap() {
       <StacksView />
       <SteepsView />
       <TideLineView />
+      <PawnshopView />
       <ClinicPanel />
       <ShopPanel />
       <PeoplePanel />

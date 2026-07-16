@@ -132,6 +132,21 @@
       "blurb": "House rates: Wit and Hacking train in the reading rooms here — one hour, −8 energy, instead of two and −15."
     }
   },
+  "forget_me_not": {
+    "id": "forget_me_not",
+    "name": "Forget-Me-Not",
+    "district": "the_shallows",
+    "vibe": "A pawnshop wedged between two stilt-pilings, everything in it rescued from somewhere: instruments, ring trays, one taxidermied thing nobody will identify. Behind the counter grate, the broker files each item under the story it came with. A locked back case reads MEMORIES — BY APPOINTMENT ONLY. Nobody has ever seen it open.",
+    "hours": {
+      "open": "06:00",
+      "close": "00:00"
+    },
+    "closed_line": "The grate is down and the window tray is covered with a cloth, gently, like something sleeping. Painted on the glass: WE REMEMBER SO YOU DON'T HAVE TO. BACK AT 06:00.",
+    "enter_line": "A bell over the door — a real one, brass, older than the district. The broker looks up from a ledger written in a shorthand you suspect is just names.",
+    "trait_lines": {
+      "chassis": "Half the parts in the window tray are compatible with you. You try not to take it personally. The broker, catching your look, turns the tray around."
+    }
+  },
   "night_market": {
     "id": "night_market",
     "name": "The Night Market",

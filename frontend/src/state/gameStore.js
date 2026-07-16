@@ -91,6 +91,10 @@ export const useGameStore = create((set, get) => ({
   // The Tide Line: the last salvage run's outcome.
   lastSalvage: null,
 
+  // Forget-Me-Not: the broker's offers + your shelf.
+  pawn: null,
+  lastPawn: null,
+
   busy: false,
   error: null,
 
@@ -168,6 +172,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse()
       get().loadLookout()
       get().loadStacks()
+      get().loadPawn()
     }
   },
 
@@ -570,6 +575,38 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  // --- Forget-Me-Not (the pawnshop) ---
+
+  loadPawn: async () => {
+    try {
+      set({ pawn: await api.pawn() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  sellItem: async (itemId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.pawnSell(itemId)
+      set({ state: res.state, lastPawn: res.pawn, busy: false })
+      get().loadPawn()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  buybackItem: async (index) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.pawnBuyback(index)
+      set({ state: res.state, lastPawn: res.pawn, busy: false })
+      get().loadPawn()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
   wadeIn: async () => {
     set({ busy: true, error: null })
     try {
@@ -669,6 +706,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse() // tea expires at midnight
       get().loadLookout() // the board tracks the whole clock
       get().loadStacks() // the desk reopens at midnight
+      get().loadPawn()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -688,6 +726,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse()
       get().loadLookout() // only composes at Gantry 9
       get().loadStacks()
+      get().loadPawn() // the shelf's hold days tick with the calendar
     } catch (err) {
       set({ error: err.message, busy: false })
     }

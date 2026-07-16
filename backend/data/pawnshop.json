@@ -1,0 +1,15 @@
+{
+  "venue": "forget_me_not",
+  "rate": 0.45,
+  "buyback_mult": 1.25,
+  "hold_days": 7,
+  "minutes": 10,
+  "shelf_cap": 12,
+  "sell_line": "The broker turns it over twice, writes one line in the ledger, and counts out your credits like they're apologizing.",
+  "buyback_line": "It comes off the shelf already wrapped, like they knew. \"Told you,\" the broker doesn't say, out loud.",
+  "refusals": {
+    "cyberlink": "The broker taps the grate twice. \"Integrated hardware. You'd be surprised how many ask. Read your EULA — it owns you slightly more than you own it.\"",
+    "archivists_lens": "The broker peers through it, then hands it back with unusual care. \"That's not an object, friend. That's a habit. Can't shelve a habit.\"",
+    "founders_bell": "The broker looks at the bell, then at you, for a long moment. \"Some things the shop won't hold. Whoever gave you that — that's where it goes back to, or nowhere.\""
+  }
+}

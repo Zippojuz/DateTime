@@ -74,6 +74,7 @@ class Player(Character):
         tea_id="",
         research_day=0,
         date=None,
+        pawned=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -120,6 +121,9 @@ class Player(Character):
         # Mid-outing state ({} = not on a date): {npc, venue, beat, gained}.
         # See game/dating.py — the scene spans several requests.
         self.date = dict(date) if date else {}
+        # Forget-Me-Not's shelf: pawned items awaiting buyback, oldest first.
+        # Each: {item, paid, buyback, day}. See game/pawnshop.py.
+        self.pawned = list(pawned or [])
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)

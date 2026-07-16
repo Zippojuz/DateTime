@@ -188,6 +188,11 @@ def _m17_dating(conn):
     _add_column(conn, "relationships", "last_date_week", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m18_pawnshop(conn):
+    """Forget-Me-Not: pawned items wait on the shelf (JSON list) for buyback."""
+    _add_column(conn, "player", "pawned", "TEXT NOT NULL DEFAULT '[]'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -206,6 +211,7 @@ MIGRATIONS = [
     _m15_teahouse,
     _m16_research_desk,
     _m17_dating,
+    _m18_pawnshop,
 ]
 
 

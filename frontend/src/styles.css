@@ -2923,3 +2923,71 @@ body {
   font-weight: 600;
   margin-left: 0.4rem;
 }
+
+/* --- Forget-Me-Not: the pawnshop --- */
+
+.pawnshop-view h2 {
+  font-size: 1.1rem;
+  letter-spacing: 0.05rem;
+}
+
+.pawnshop-view h3 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08rem;
+  color: var(--text-dim);
+}
+
+.pawn-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.pawn-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--bg-panel);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+}
+
+.pawn-item--held {
+  border: 1px dashed #2a4a6b;
+}
+
+.pawn-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pawn-sub {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.pawn-line {
+  color: var(--neon);
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.pawn-empty {
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.pawn-backcase {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-style: italic;
+  letter-spacing: 0.03rem;
+  margin-top: 0.75rem;
+}

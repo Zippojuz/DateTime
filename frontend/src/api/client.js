@@ -65,6 +65,11 @@ export const api = {
     }),
   dateLeave: () => request('/date/leave', { method: 'POST', body: '{}' }),
   salvage: () => request('/salvage', { method: 'POST', body: '{}' }),
+  pawn: () => request('/pawn'),
+  pawnSell: (itemId) =>
+    request('/pawn/sell', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  pawnBuyback: (index) =>
+    request('/pawn/buyback', { method: 'POST', body: JSON.stringify({ index }) }),
   linkTones: () => request('/link/tones'),
   sendMessage: (npcId, tone) =>
     request('/message', { method: 'POST', body: JSON.stringify({ npc_id: npcId, tone }) }),

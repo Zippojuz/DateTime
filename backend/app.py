@@ -28,6 +28,7 @@ from game import (
     gifts,
     inventory,
     jobs,
+    pawnshop,
     places,
     preferences,
     salvage,
@@ -605,6 +606,55 @@ def create_app():
             return jsonify(error=str(err)), 400
         save.save_models(save_id, player, clock)
         return jsonify({"date": result, "state": save.state_dict(player, clock)})
+
+    # --- Forget-Me-Not: the pawnshop ---
+
+    @app.get("/api/pawn")
+    def pawn_state():
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        cfg = data.load("pawnshop")
+        entries = pawnshop.shelf(player, _day_index(clock))  # prunes sold-on items
+        save.save_models(save_id, player, clock)
+        return jsonify(
+            {
+                "venue": cfg["venue"],
+                "minutes": cfg["minutes"],
+                "hold_days": cfg["hold_days"],
+                "offers": pawnshop.offers(player),
+                "shelf": entries,
+            }
+        )
+
+    @app.post("/api/pawn/sell")
+    def pawn_sell():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = pawnshop.sell(player, clock, body.get("item_id"), _day_index(clock))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"pawn": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/pawn/buyback")
+    def pawn_buyback():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models()
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = pawnshop.buyback(player, clock, body.get("index"), _day_index(clock))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"pawn": result, "state": save.state_dict(player, clock)})
 
     # --- The Tide Line: salvage runs at slack water ---
 
