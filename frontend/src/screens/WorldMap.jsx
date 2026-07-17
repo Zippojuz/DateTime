@@ -75,42 +75,47 @@ export default function WorldMap() {
         </button>
       </header>
 
-      <EventLog />
-      <EncounterCard />
-      <GiftReactionCard />
-      <StatBar />
-      <PlayerProfile />
+      <div className="world-feed">
+        <EventLog />
+        <EncounterCard />
+        <GiftReactionCard />
+        <StatBar />
+      </div>
 
-      {here && (
-        <section className="placeholder-world">
-          <p>{here.vibe}</p>
-          {insideVenue?.trait_lines?.[player.trait] && (
-            <p className="venue-trait-line">{insideVenue.trait_lines[player.trait]}</p>
-          )}
-        </section>
-      )}
+      {/* Widescreen: the panels flow into two height-balanced columns so a PC
+          screen fills across, not just down. Collapses to one column on
+          narrower screens. Which panels show depends on where you are, so a
+          masonry flow balances better than a fixed sidebar ever could. */}
+      <div className="world-grid">
+        <PlayerProfile />
 
-      <TravelPanel />
-      <SubstratePanel />
-      <JobPanel />
-      <GigPanel />
-      <PitView />
-      <GantryView />
-      <StacksView />
-      <SteepsView />
-      <TideLineView />
-      <PawnshopView />
-      <ExchangeView />
-      <ClinicPanel />
-      <ShopPanel />
-      <PeoplePanel />
-      <DebtPanel />
-      <RelationshipPanel />
+        {here && (
+          <section className="placeholder-world">
+            <p>{here.vibe}</p>
+            {insideVenue?.trait_lines?.[player.trait] && (
+              <p className="venue-trait-line">{insideVenue.trait_lines[player.trait]}</p>
+            )}
+          </section>
+        )}
 
-      <GiftPicker />
-      <CyberlinkModal />
+        <TravelPanel />
+        <SubstratePanel />
+        <JobPanel />
+        <GigPanel />
+        <PitView />
+        <GantryView />
+        <StacksView />
+        <SteepsView />
+        <TideLineView />
+        <PawnshopView />
+        <ExchangeView />
+        <ClinicPanel />
+        <ShopPanel />
+        <PeoplePanel />
+        <DebtPanel />
+        <RelationshipPanel />
 
-      <section className="action-panel">
+        <section className="action-panel">
         <h2>What do you do?</h2>
         {insideVenue?.training && (
           <p className="venue-perk">{insideVenue.training.blurb}</p>
@@ -155,8 +160,12 @@ export default function WorldMap() {
               </button>
             ),
           )}
-        </div>
-      </section>
+          </div>
+        </section>
+      </div>
+
+      <GiftPicker />
+      <CyberlinkModal />
     </main>
   )
 }

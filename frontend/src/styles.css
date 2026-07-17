@@ -191,12 +191,39 @@ body {
 /* --- World map / daily loop --- */
 
 .world-map {
-  max-width: 720px;
+  max-width: 1240px;
   margin: 0 auto;
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+}
+
+/* Full-width band above the split: feedback log, encounters, the stat bar. */
+.world-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Widescreen: panels flow into two height-balanced columns (masonry) so a PC
+   screen fills across, not just down. Which panels are present changes with
+   your location, so a balanced flow beats any fixed sidebar. Collapses to one
+   column on tablets and phones. */
+.world-grid {
+  columns: 2;
+  column-gap: 1.5rem;
+}
+
+.world-grid > * {
+  break-inside: avoid; /* keep a panel whole within its column */
+  margin: 0 0 1.25rem; /* column flow ignores flex gap — space panels with margin */
+}
+
+@media (max-width: 900px) {
+  .world-grid {
+    columns: 1;
+  }
 }
 
 .hud {
