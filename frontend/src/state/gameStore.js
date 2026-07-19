@@ -85,7 +85,8 @@ export const useGameStore = create((set, get) => ({
   // The Lyceum & reading rooms: { courses, transcript, enrollment, quests }.
   lyceum: null,
   lastClass: null, // result of attending a class (with any perk/points earned)
-  lastRead: null, // result of reading a book
+  lastRead: null, // result of reading a book (training outcome or lore passage)
+  lastBrowse: null, // result of browsing the shelves
 
   // THE DATING SYSTEM: the venue menu, the ask-out picker, the live scene.
   dateVenues: null,
@@ -716,7 +717,18 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
-  clearClassNews: () => set({ lastClass: null, lastRead: null }),
+  browseShelves: async () => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.lyceumBrowse()
+      set({ state: res.state, lastBrowse: res.result, busy: false })
+      get().loadLyceum()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  clearClassNews: () => set({ lastClass: null, lastRead: null, lastBrowse: null }),
 
   // --- The Steeps (soak) + THE DATING SYSTEM ---
 

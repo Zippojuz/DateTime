@@ -56,6 +56,7 @@ export const api = {
     request('/lyceum/attend', { method: 'POST', body: JSON.stringify({ subject }) }),
   lyceumRead: (itemId) =>
     request('/lyceum/read', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  lyceumBrowse: () => request('/lyceum/browse', { method: 'POST', body: '{}' }),
   lyceumTurnIn: (quest) =>
     request('/lyceum/turn-in', { method: 'POST', body: JSON.stringify({ quest }) }),
   stacks: () => request('/stacks'),

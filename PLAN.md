@@ -916,3 +916,16 @@ tests green.
 - Course perks are all wired, but a few (gift/luck) are subtle — could surface
   active perks somewhere in the UI (a "what you've learned" panel).
 - The professor's quests are systemic (a desk board), not dialogue-driven.
+
+### books.json — dedicated book catalog (shipped)
+Books moved to data/books.json (merged into the item registry via
+inventory.items()). 19 books: lore (keepers that file a one-time `lore:` flag,
+re-readable) and training (consumed; fixed stat, protocol, or a RANDOM stat
+rolled from a themed pool — study guides — for fresh playthroughs; rng
+injectable). Books gate on combat level and/or a minimum stat (you can hold one
+you can't read yet). Source-tagged: dungeon / library / both / quest. "Browse
+the shelves" (migration 21, one/day) gives library books a home, rarity-weighted;
+dungeon-exclusive and quest books never surface there. LyceumView shows the
+browse action, gated/lore/training reads, and lore passages. Built to expand:
+add books by dropping entries in books.json; per-playthrough stat seeding is the
+obvious next randomization layer. 435 backend + 54 frontend tests green.

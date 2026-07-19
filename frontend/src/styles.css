@@ -3461,3 +3461,65 @@ body {
   flex-direction: column;
   gap: 0.2rem;
 }
+
+/* --- Books: lore passages, shelf browsing, gated reads --- */
+
+.lore-passage {
+  border-left: 3px solid var(--accent);
+  padding: 0.25rem 0 0.25rem 0.75rem;
+  margin-bottom: 0.4rem;
+}
+
+.lore-title {
+  display: block;
+  color: var(--accent);
+  font-size: 0.9rem;
+  letter-spacing: 0.03rem;
+  margin-bottom: 0.2rem;
+}
+
+.lore-text {
+  margin: 0;
+  font-size: 0.88rem;
+  font-style: italic;
+  color: var(--text);
+}
+
+.shelf-browse {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.shelf-hint {
+  color: var(--text-dim);
+  font-size: 0.8rem;
+}
+
+.book-kind {
+  display: inline-block;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 0 0.35rem;
+  margin-right: 0.4rem;
+  vertical-align: middle;
+}
+
+.book-gate {
+  color: var(--error);
+  font-size: 0.8rem;
+}
+
+.book-read {
+  color: var(--neon);
+  font-size: 0.8rem;
+}
+
+.book-row--locked {
+  opacity: 0.7;
+}

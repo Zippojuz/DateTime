@@ -44,6 +44,21 @@ const LYCEUM = {
   ],
   transcript: [],
   enrollment: null,
+  can_browse: true,
+  browsed_today: false,
+  readable: [
+    { id: 'primer_lace', name: 'Cold Boot: A Field Manual', kind: 'training', hint: '+1 Hacking', qty: 1, locked: false },
+    {
+      id: 'masterwork_lace',
+      name: 'Ghostwriting the Citadel',
+      kind: 'training',
+      hint: '+2 Hacking',
+      qty: 1,
+      locked: true,
+      reason: 'needs level 6 (you’re 1)',
+    },
+    { id: 'lore_founding', name: 'The Founding of Nexus City', kind: 'lore', hint: 'Read', qty: 1, locked: false, known: false },
+  ],
   quests: [
     {
       id: 'founders_library',
@@ -54,7 +69,6 @@ const LYCEUM = {
       need: 4,
     },
   ],
-  readable: [{ id: 'primer_lace', name: 'Cold Boot: A Field Manual', hint: '+1 Hacking', qty: 1 }],
 }
 
 function seed(over = {}) {
@@ -106,5 +120,32 @@ describe('LyceumView', () => {
     render(<LyceumView />)
     fireEvent.click(screen.getByRole('button', { name: 'Hand them over' }))
     expect(turnInQuest).toHaveBeenCalledWith('founders_library')
+  })
+
+  it('browses the shelves', () => {
+    const browseShelves = vi.fn()
+    useGameStore.setState({ browseShelves })
+    render(<LyceumView />)
+    fireEvent.click(screen.getByRole('button', { name: 'Browse the shelves' }))
+    expect(browseShelves).toHaveBeenCalled()
+  })
+
+  it('shows a held-but-unreadable book with its gate, and disables reading it', () => {
+    render(<LyceumView />)
+    expect(screen.getByText(/needs level 6/)).toBeInTheDocument()
+    const btn = screen.getByRole('button', { name: 'Read · +2 Hacking' })
+    expect(btn).toBeDisabled()
+  })
+
+  it('reads a lore book and shows the passage', () => {
+    useGameStore.setState({
+      lastRead: {
+        item: 'The Founding of Nexus City',
+        lore: { title: 'The Founding of Nexus City', text: 'They built the city on a debt.' },
+        first_time: true,
+      },
+    })
+    render(<LyceumView />)
+    expect(screen.getByText('They built the city on a debt.')).toBeInTheDocument()
   })
 })

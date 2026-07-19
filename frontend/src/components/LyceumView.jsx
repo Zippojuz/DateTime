@@ -9,11 +9,15 @@ export default function LyceumView() {
   const lyceum = useGameStore((s) => s.lyceum)
   const lastClass = useGameStore((s) => s.lastClass)
   const lastRead = useGameStore((s) => s.lastRead)
+  const lastBrowse = useGameStore((s) => s.lastBrowse)
   const attendClass = useGameStore((s) => s.attendClass)
   const readBook = useGameStore((s) => s.readBook)
+  const browseShelves = useGameStore((s) => s.browseShelves)
   const turnInQuest = useGameStore((s) => s.turnInQuest)
   const clearClassNews = useGameStore((s) => s.clearClassNews)
   const busy = useGameStore((s) => s.busy)
+
+  const cap = (s) => (s ? s[0].toUpperCase() + s.slice(1) : s)
 
   const loc = state?.player?.location
   if ((loc !== 'the_lyceum' && loc !== 'the_stacks') || !lyceum) return null
@@ -31,14 +35,27 @@ export default function LyceumView() {
         </p>
       )}
 
-      {(lastClass || lastRead) && (
+      {(lastClass || lastRead || lastBrowse) && (
         <div className="lyceum-news" onClick={clearClassNews}>
-          {lastRead && (
+          {lastRead?.lore && (
+            <div className="lore-passage">
+              <span className="lore-title">{lastRead.lore.title}</span>
+              <p className="lore-text">{lastRead.lore.text}</p>
+            </div>
+          )}
+          {lastRead?.outcome && (
             <p>
               You read <strong>{lastRead.item}</strong>.{' '}
               {lastRead.outcome.stat
-                ? `${lastRead.outcome.stat[0].toUpperCase()}${lastRead.outcome.stat.slice(1)} is now ${lastRead.outcome.now}.`
+                ? `${cap(lastRead.outcome.stat)} is now ${lastRead.outcome.now}.`
                 : `You can run ${lastRead.outcome.name} now.`}
+            </p>
+          )}
+          {lastBrowse && (
+            <p>
+              {lastBrowse.found
+                ? `Something on the shelf finds you: ${lastBrowse.found.name}.`
+                : lastBrowse.text}
             </p>
           )}
           {lastClass?.turnIn && (
@@ -118,18 +135,38 @@ export default function LyceumView() {
         ))}
       </ul>
 
+      {lyceum.can_browse && (
+        <div className="shelf-browse">
+          <button
+            className="btn-action"
+            disabled={busy || lyceum.browsed_today}
+            onClick={browseShelves}
+          >
+            {lyceum.browsed_today ? "You've browsed today" : 'Browse the shelves'}
+          </button>
+          <span className="shelf-hint">A book turns up now and then — some only shelved here.</span>
+        </div>
+      )}
+
       {lyceum.readable?.length > 0 && (
         <>
           <h3>Read from your pack</h3>
           <ul className="book-list">
             {lyceum.readable.map((b) => (
-              <li key={b.id} className="book-row">
+              <li key={b.id} className={`book-row book-row--${b.kind}${b.locked ? ' book-row--locked' : ''}`}>
                 <span className="book-name">
+                  {b.kind === 'lore' && <span className="book-kind">lore</span>}
                   {b.name}
                   {b.qty > 1 && ` ×${b.qty}`}
+                  {b.locked && <span className="book-gate"> — {b.reason}</span>}
+                  {b.kind === 'lore' && b.known && <span className="book-read"> ✓ read</span>}
                 </span>
-                <button className="btn-action" disabled={busy} onClick={() => readBook(b.id)}>
-                  Read · {b.hint}
+                <button
+                  className="btn-action"
+                  disabled={busy || b.locked}
+                  onClick={() => readBook(b.id)}
+                >
+                  {b.kind === 'lore' ? (b.known ? 'Re-read' : 'Read') : `Read · ${b.hint}`}
                 </button>
               </li>
             ))}
