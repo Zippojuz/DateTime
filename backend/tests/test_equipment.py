@@ -214,7 +214,7 @@ def test_boss_jackpot_can_drop_super_rares():
 def test_loot_bonus_pool_items_exist():
     from game import data
 
-    items = data.load("items")
+    items = {**data.load("items"), **data.load("books")}  # books are items too
     bonus = data.load("loot")["boss"]["bonus"]
     for item_id in bonus["items"]:
         assert item_id in items

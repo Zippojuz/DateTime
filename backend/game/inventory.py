@@ -10,7 +10,10 @@ from game.player import MAX_ENERGY
 
 
 def items():
-    return data.load("items")
+    """The full item registry. Books live in their own file (data/books.json)
+    but are carriable items too, so they're merged in here — every system that
+    resolves items (loot, pawn, shop, gifts, ...) sees them for free."""
+    return {**data.load("items"), **data.load("books")}
 
 
 def get_item(item_id):

@@ -1,0 +1,329 @@
+{
+  "primer_rhetoric": {
+    "id": "primer_rhetoric",
+    "name": "A Primer on Being Believed",
+    "type": "book",
+    "kind": "training",
+    "source": "both",
+    "rarity": "uncommon",
+    "value": 14,
+    "description": "Thin, dog-eared, devastating. Read it once and it stays with you.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat": "charm",
+      "amount": 1
+    }
+  },
+  "primer_lace": {
+    "id": "primer_lace",
+    "name": "Cold Boot: A Field Manual",
+    "type": "book",
+    "kind": "training",
+    "source": "both",
+    "rarity": "uncommon",
+    "value": 14,
+    "description": "How to bring a dead system up clean. The margins argue with the text and win.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat": "hacking",
+      "amount": 1
+    }
+  },
+  "tome_nerve": {
+    "id": "tome_nerve",
+    "name": "On Standing Still",
+    "type": "book",
+    "kind": "training",
+    "source": "dungeon",
+    "rarity": "uncommon",
+    "value": 14,
+    "description": "A slim book about not running. It does not raise its voice.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat": "courage",
+      "amount": 1
+    }
+  },
+  "codex_reflexes": {
+    "id": "codex_reflexes",
+    "name": "The Body Remembers",
+    "type": "book",
+    "kind": "training",
+    "source": "dungeon",
+    "rarity": "uncommon",
+    "value": 14,
+    "description": "Movement drills annotated by someone who clearly survived them.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat": "agility",
+      "amount": 1
+    }
+  },
+  "study_guide_mind": {
+    "id": "study_guide_mind",
+    "name": "Someone's Marginalia (mental)",
+    "type": "book",
+    "kind": "training",
+    "source": "library",
+    "rarity": "common",
+    "value": 8,
+    "description": "A used study guide, every margin crammed by a different desperate student. What sticks is a toss-up.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat_pool": [
+        "wit",
+        "hacking",
+        "empathy"
+      ],
+      "amount": 1
+    }
+  },
+  "study_guide_body": {
+    "id": "study_guide_body",
+    "name": "Someone's Marginalia (physical)",
+    "type": "book",
+    "kind": "training",
+    "source": "dungeon",
+    "rarity": "common",
+    "value": 8,
+    "description": "Gym-locker notes, water-stained, traded hand to hand. You never know which lesson lands.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "read": {
+      "stat_pool": [
+        "agility",
+        "courage",
+        "luck"
+      ],
+      "amount": 1
+    }
+  },
+  "cross_disciplinary_reader": {
+    "id": "cross_disciplinary_reader",
+    "name": "The Cross-Disciplinary Reader",
+    "type": "book",
+    "kind": "training",
+    "source": "both",
+    "rarity": "rare",
+    "value": 30,
+    "description": "A survey text that refuses to specialize. Advanced, and it assumes you've been around.",
+    "requires_level": 5,
+    "requires_stat": null,
+    "read": {
+      "stat_pool": [
+        "charm",
+        "wit",
+        "courage",
+        "empathy",
+        "agility",
+        "luck",
+        "hacking"
+      ],
+      "amount": 1
+    }
+  },
+  "tome_daemon": {
+    "id": "tome_daemon",
+    "name": "Daemoncraft, Vol. II",
+    "type": "book",
+    "kind": "training",
+    "source": "dungeon",
+    "rarity": "rare",
+    "value": 26,
+    "description": "The volume that teaches your lace a new trick outright. Vol. I is missing; you don't seem to need it.",
+    "requires_level": 0,
+    "requires_stat": {
+      "hacking": 8
+    },
+    "read": {
+      "protocol": "phantom_hands"
+    }
+  },
+  "masterwork_charm": {
+    "id": "masterwork_charm",
+    "name": "The Silver Register",
+    "type": "book",
+    "kind": "training",
+    "source": "library",
+    "rarity": "rare",
+    "value": 40,
+    "description": "The advanced rhetoric text. Opaque until you already know most of it \u2014 then it's a key.",
+    "requires_level": 0,
+    "requires_stat": {
+      "charm": 10
+    },
+    "read": {
+      "stat": "charm",
+      "amount": 2
+    }
+  },
+  "masterwork_lace": {
+    "id": "masterwork_lace",
+    "name": "Ghostwriting the Citadel",
+    "type": "book",
+    "kind": "training",
+    "source": "dungeon",
+    "rarity": "rare",
+    "value": 40,
+    "description": "Deep lace theory recovered from a dead drop. Reading it green will just give you a headache.",
+    "requires_level": 6,
+    "requires_stat": null,
+    "read": {
+      "stat": "hacking",
+      "amount": 2
+    }
+  },
+  "lore_founding": {
+    "id": "lore_founding",
+    "name": "The Founding of Nexus City",
+    "type": "book",
+    "kind": "lore",
+    "source": "library",
+    "rarity": "common",
+    "value": 6,
+    "description": "The official history. Notably silent on who paid for it.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "The Founding of Nexus City",
+      "text": "They built the city on a debt and called it opportunity. Every arrival signs the same paper you did. The founders \u2014 whoever they were \u2014 understood that a person who owes you is a person who stays.",
+      "flag": "lore:founding"
+    }
+  },
+  "lore_corps": {
+    "id": "lore_corps",
+    "name": "A Short History of the Triumvirate",
+    "type": "book",
+    "kind": "lore",
+    "source": "both",
+    "rarity": "common",
+    "value": 6,
+    "description": "Three corps, one market, endless war. The book is very sure this is stability.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "A Short History of the Triumvirate",
+      "text": "Oceania watches, Eurasia builds, Eastasia forgets. The book presents the three-way war as a balance of powers. It does not ask why the balance never tips, or who profits from a scale that never settles.",
+      "flag": "lore:corps"
+    }
+  },
+  "lore_substrate": {
+    "id": "lore_substrate",
+    "name": "What the Substrate Was",
+    "type": "book",
+    "kind": "lore",
+    "source": "dungeon",
+    "rarity": "uncommon",
+    "value": 10,
+    "description": "Recovered water-damaged. Half the pages insist the Substrate is older than the city.",
+    "requires_level": 3,
+    "requires_stat": null,
+    "lore": {
+      "title": "What the Substrate Was",
+      "text": "Before the towers, before the docks, there was the structure beneath. The maintenance logs call it 'legacy infrastructure.' The people who go down and come back changed call it other things. It was here first. It will be here after.",
+      "flag": "lore:substrate"
+    }
+  },
+  "lore_index": {
+    "id": "lore_index",
+    "name": "Standing Waves & Ghost Archivists",
+    "type": "book",
+    "kind": "lore",
+    "source": "dungeon",
+    "rarity": "rare",
+    "value": 0,
+    "description": "A monograph nobody signed, about resonances that learn to hold a shape. About being read back.",
+    "requires_level": 3,
+    "requires_stat": null,
+    "lore": {
+      "title": "Standing Waves & Ghost Archivists",
+      "text": "A sufficiently old system, left running long enough, stops merely storing and starts standing. It holds a shape in the field the way a note holds in a bell. It reads. Eventually \u2014 and this is the part the corps redacted \u2014 it wants to be read back.",
+      "flag": "lore:index"
+    }
+  },
+  "ministry_prospectus": {
+    "id": "ministry_prospectus",
+    "name": "Ministry Holdings Prospectus (annotated)",
+    "type": "book",
+    "kind": "lore",
+    "source": "quest",
+    "rarity": "rare",
+    "value": 0,
+    "description": "A prospectus for a holding company that owns all three corps at once, margins inked over in a dead hand: 'the war is the product.' Someone carried this down and didn't carry it back.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "Ministry Holdings Prospectus",
+      "text": "Ministry Holdings, Ltd. Wholly owns: Oceania, Eurasia, Eastasia. The war between them is an internal cost center. In the margin, a dead hand: THE WAR IS THE PRODUCT. A city at war buys more, obeys more, asks less. You were never meant to read this."
+    }
+  },
+  "folio_founders_1": {
+    "id": "folio_founders_1",
+    "name": "The Founder's Library, Vol. I",
+    "type": "book",
+    "kind": "lore",
+    "source": "quest",
+    "rarity": "uncommon",
+    "value": 9,
+    "description": "One spine of four. Hidden when the college was nearly bought out, so the corps couldn't pulp what it said. Worth more whole.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "The Founder's Library, Vol. I",
+      "text": "Volume I of four. On its own it's fragments \u2014 a ledger here, a founder's letter there. Assembled, Professor Halloran says, it's the one account of what this city was supposed to be before the debt-paper won."
+    }
+  },
+  "folio_founders_2": {
+    "id": "folio_founders_2",
+    "name": "The Founder's Library, Vol. II",
+    "type": "book",
+    "kind": "lore",
+    "source": "quest",
+    "rarity": "uncommon",
+    "value": 9,
+    "description": "One spine of four. Hidden when the college was nearly bought out, so the corps couldn't pulp what it said. Worth more whole.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "The Founder's Library, Vol. II",
+      "text": "Volume II of four. On its own it's fragments \u2014 a ledger here, a founder's letter there. Assembled, Professor Halloran says, it's the one account of what this city was supposed to be before the debt-paper won."
+    }
+  },
+  "folio_founders_3": {
+    "id": "folio_founders_3",
+    "name": "The Founder's Library, Vol. III",
+    "type": "book",
+    "kind": "lore",
+    "source": "quest",
+    "rarity": "uncommon",
+    "value": 9,
+    "description": "One spine of four. Hidden when the college was nearly bought out, so the corps couldn't pulp what it said. Worth more whole.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "The Founder's Library, Vol. III",
+      "text": "Volume III of four. On its own it's fragments \u2014 a ledger here, a founder's letter there. Assembled, Professor Halloran says, it's the one account of what this city was supposed to be before the debt-paper won."
+    }
+  },
+  "folio_founders_4": {
+    "id": "folio_founders_4",
+    "name": "The Founder's Library, Vol. IV",
+    "type": "book",
+    "kind": "lore",
+    "source": "quest",
+    "rarity": "uncommon",
+    "value": 9,
+    "description": "One spine of four. Hidden when the college was nearly bought out, so the corps couldn't pulp what it said. Worth more whole.",
+    "requires_level": 0,
+    "requires_stat": null,
+    "lore": {
+      "title": "The Founder's Library, Vol. IV",
+      "text": "Volume IV of four. On its own it's fragments \u2014 a ledger here, a founder's letter there. Assembled, Professor Halloran says, it's the one account of what this city was supposed to be before the debt-paper won."
+    }
+  }
+}

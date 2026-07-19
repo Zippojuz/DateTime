@@ -15,7 +15,8 @@
         "star_ration",
         "stim_tea",
         "charge_cell",
-        "power_gem"
+        "power_gem",
+        "study_guide_body"
       ]
     },
     "3": {
@@ -28,7 +29,8 @@
         "aegis_gem",
         "vitality_gem",
         "primer_lace",
-        "codex_reflexes"
+        "codex_reflexes",
+        "lore_substrate"
       ]
     }
   },
@@ -47,7 +49,9 @@
       "primer_rhetoric",
       "tome_nerve",
       "folio_founders_1",
-      "folio_founders_3"
+      "folio_founders_3",
+      "cross_disciplinary_reader",
+      "lore_index"
     ]
   },
   "boss": {
@@ -68,7 +72,8 @@
       "shard_siren_overlay",
       "tome_daemon",
       "folio_founders_2",
-      "folio_founders_4"
+      "folio_founders_4",
+      "masterwork_lace"
     ],
     "bonus": {
       "chance": 0.12,

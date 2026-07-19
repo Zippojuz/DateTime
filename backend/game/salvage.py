@@ -51,11 +51,11 @@ def _resolve(player, event, rng):
         item_id = rng.choice(event["items"])
         inventory.add_item(player, item_id, 1)
         outcome["item"] = item_id
-        outcome["item_name"] = data.load("items")[item_id]["name"]
+        outcome["item_name"] = inventory.get_item(item_id)["name"]
     if "item" in event:
         inventory.add_item(player, event["item"], 1)
         outcome["item"] = event["item"]
-        outcome["item_name"] = data.load("items")[event["item"]]["name"]
+        outcome["item_name"] = inventory.get_item(event["item"])["name"]
     if "energy" in event:  # a hazard takes instead of gives
         player.energy = max(0, player.energy + event["energy"])
         outcome["energy"] = event["energy"]

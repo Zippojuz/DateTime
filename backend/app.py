@@ -950,6 +950,19 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({"result": result, "state": save.state_dict(player, clock)})
 
+    @app.post("/api/lyceum/browse")
+    def lyceum_browse():
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = university.browse_shelves(player, clock, _day_index(clock))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
     @app.post("/api/item/use")
     def item_use():
         body = request.get_json(silent=True) or {}

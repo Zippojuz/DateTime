@@ -78,6 +78,7 @@ class Player(Character):
         transcript=None,
         enrollment=None,
         class_day=0,
+        browse_day=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -134,6 +135,8 @@ class Player(Character):
         self.transcript = list(transcript or [])
         self.enrollment = dict(enrollment) if enrollment else {}
         self.class_day = class_day
+        # Last absolute day the library shelves were browsed (one book/day).
+        self.browse_day = browse_day
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -188,6 +191,7 @@ class Player(Character):
                 "arena_wins": self.arena_wins,
                 "transcript": list(self.transcript),
                 "enrollment": dict(self.enrollment),
+                "browse_day": self.browse_day,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

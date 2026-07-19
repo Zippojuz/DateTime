@@ -136,16 +136,90 @@ def test_reading_a_tome_grants_a_point():
 
 def test_a_tome_can_teach_a_protocol():
     p = _player()
+    p.attributes["hacking"] = 8  # Daemoncraft is gated on Hacking 8
     p.inventory["tome_daemon"] = 1
     university.read_book(p, _clock(), "tome_daemon")
     assert "phantom_hands" in p.protocols
 
 
-def test_evidence_is_not_a_lesson():
+def test_a_book_can_be_over_your_head():
+    """Level/stat gates: you can hold a book you can't read yet."""
+    p = _player()  # fresh: level 1, hacking 5
+    p.inventory["masterwork_lace"] = 1  # requires_level 6
+    with pytest.raises(GameError, match="over your head"):
+        university.read_book(p, _clock(), "masterwork_lace")
+    # A stat-gated one, too.
+    p.inventory["masterwork_charm"] = 1  # requires charm 10
+    with pytest.raises(GameError, match="over your head"):
+        university.read_book(p, _clock(), "masterwork_charm")
+
+
+def test_a_study_guide_rolls_a_random_stat():
+    """Randomized training: the stat is rolled from a themed pool (fresh runs).
+    A seeded rng makes it deterministic."""
+    import random
+
+    p = _player()
+    p.inventory["study_guide_mind"] = 1  # pool: wit, hacking, empathy
+    res = university.read_book(p, _clock(), "study_guide_mind", rng=random.Random(0))
+    assert res["outcome"]["stat"] in ("wit", "hacking", "empathy")
+    assert p.inventory.get("study_guide_mind", 0) == 0  # consumed
+
+
+def test_lore_books_are_keepers_that_file_a_flag():
+    p = _player()
+    p.inventory["lore_founding"] = 1
+    res = university.read_book(p, _clock(), "lore_founding")
+    assert res["lore"]["title"] == "The Founding of Nexus City"
+    assert res["first_time"] is True
+    assert "lore:founding" in p.fired_events
+    assert p.inventory.get("lore_founding", 0) == 1  # NOT consumed — it's a keeper
+    # Reading again is fine but no longer "first time".
+    assert university.read_book(p, _clock(), "lore_founding")["first_time"] is False
+
+
+def test_reading_the_prospectus_reveals_lore_without_spending_it():
+    """The quest book is readable for its lore, and stays in the pack — so it
+    still satisfies SYS 401's requires_book gate."""
     p = _player()
     p.inventory["ministry_prospectus"] = 1
-    with pytest.raises(GameError, match="evidence"):
-        university.read_book(p, _clock(), "ministry_prospectus")
+    res = university.read_book(p, _clock(), "ministry_prospectus")
+    assert "war is the product" in res["lore"]["text"].lower()
+    assert p.inventory.get("ministry_prospectus", 0) == 1
+
+
+# --- Browsing the shelves ----------------------------------------------------
+
+
+def test_browsing_turns_up_a_library_book_once_a_day():
+    import random
+
+    p = _player(location="the_stacks")
+    res = university.browse_shelves(p, _clock(), 1, rng=random.Random(1))
+    assert res["found"] is not None
+    found_id = res["found"]["id"]
+    assert found_id in p.inventory
+    # It's a library-sourced book, never a dungeon-exclusive one.
+    assert university.books()[found_id]["source"] in ("library", "both")
+    # One browse a day.
+    with pytest.raises(GameError, match="afternoon in the stacks"):
+        university.browse_shelves(p, _clock(), 1)
+
+
+def test_dungeon_exclusive_books_never_appear_on_the_shelves():
+    import random
+
+    p = _player(location="the_stacks")
+    seen = set()
+    day = 0
+    for _ in range(40):
+        day += 1
+        p.browse_day = 0  # reset the daily gate for the sweep
+        res = university.browse_shelves(p, _clock(day=day), day, rng=random.Random(day))
+        if res["found"]:
+            seen.add(res["found"]["id"])
+    assert "tome_nerve" not in seen  # dungeon-exclusive
+    assert "ministry_prospectus" not in seen  # quest-only
 
 
 # --- The Founder's Library quest ---------------------------------------------

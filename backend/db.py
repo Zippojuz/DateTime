@@ -221,6 +221,11 @@ def _m20_university(conn):
     _add_column(conn, "player", "class_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m21_shelf_browsing(conn):
+    """Browsing the library shelves for a book: one browse a day."""
+    _add_column(conn, "player", "browse_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -242,6 +247,7 @@ MIGRATIONS = [
     _m18_pawnshop,
     _m19_accounts,
     _m20_university,
+    _m21_shelf_browsing,
 ]
 
 

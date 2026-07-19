@@ -53,7 +53,7 @@ def test_boss_drops_twice_guaranteed():
 
 
 def test_all_loot_table_items_exist():
-    items = data.load("items")
+    items = {**data.load("items"), **data.load("books")}  # books are items too
     tables = data.load("loot")
     listed = list(tables["miniboss"]["items"]) + list(tables["boss"]["items"])
     for tier_table in tables["normal"].values():
