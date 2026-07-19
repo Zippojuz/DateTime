@@ -41,7 +41,7 @@
       "open": "04:00",
       "close": "06:00"
     },
-    "closed_line": "The hatch is dogged tight and the water behind it has opinions. Stenciled on the steel: SLACK WATER 04:00–06:00. DO NOT ARGUE WITH THE SEA.",
+    "closed_line": "The hatch is dogged tight and the water behind it has opinions. Stenciled on the steel: SLACK WATER 04:00\u201306:00. DO NOT ARGUE WITH THE SEA.",
     "enter_line": "Cold air, colder water, and a silence with a pulse to it. Your light finds the walkway; the tide finds your boots.",
     "trait_lines": {
       "uplift": "The water smells like home and reads like a newspaper. Every current down here is a sentence, and you were raised on this alphabet."
@@ -65,14 +65,14 @@
     "id": "triumvirate_exchange",
     "name": "The Triumvirate Exchange",
     "district": "citadel_ring",
-    "vibe": "Three corp storefronts fused into one gleaming atrium, staffed by people whose smiles are part of the uniform. The prices aren't high by accident — they're high so you know where you are.",
+    "vibe": "Three corp storefronts fused into one gleaming atrium, staffed by people whose smiles are part of the uniform. The prices aren't high by accident \u2014 they're high so you know where you are.",
     "enter_line": "Glass doors part with a chime pitched by a focus group. Someone offers you cucumber water you can't afford."
   },
   "bloom_bazaar": {
     "id": "bloom_bazaar",
     "name": "The Bloom Bazaar",
     "district": "bloom_district",
-    "vibe": "A greenhouse arcade where the merchandise shares shelf space with orchids. Soft lighting, softer music, and price tags in cursive — the Bloom charges extra for the atmosphere and considers it a bargain.",
+    "vibe": "A greenhouse arcade where the merchandise shares shelf space with orchids. Soft lighting, softer music, and price tags in cursive \u2014 the Bloom charges extra for the atmosphere and considers it a bargain.",
     "enter_line": "Warm air, pollen, and commerce. A shopkeeper materializes at your elbow like condensation."
   },
   "shallows_market": {
@@ -86,7 +86,7 @@
     "id": "the_steeps",
     "name": "The Steeps",
     "district": "bloom_district",
-    "vibe": "A bathhouse grown into a dead cooling tower: terraced pools rising into the dark, water warmed by geothermal taps the corps forgot to bill, ferns colonizing the catwalks. Steam does to sound what money does to trouble — softens it, then loses it entirely.",
+    "vibe": "A bathhouse grown into a dead cooling tower: terraced pools rising into the dark, water warmed by geothermal taps the corps forgot to bill, ferns colonizing the catwalks. Steam does to sound what money does to trouble \u2014 softens it, then loses it entirely.",
     "hours": {
       "open": "10:00",
       "close": "02:00"
@@ -99,7 +99,7 @@
     "soak": {
       "cost": 25,
       "minutes": 90,
-      "blurb": "A paid soak: ninety minutes in the terraces and you come out new — full energy, one-third the time sleep takes.",
+      "blurb": "A paid soak: ninety minutes in the terraces and you come out new \u2014 full energy, one-third the time sleep takes.",
       "line": "You stop counting pools around the fourth terrace. When you surface, the city has changed shifts without you and your body has forgiven you for everything."
     }
   },
@@ -110,7 +110,7 @@
     "vibe": "The rooftop-line terminus, nine floors above the Grid: a crane gantry glassed in against the wind, kettles riding induction coils, and the whole city spread out below like a live circuit diagram. It never closes; the tea just gets stronger after midnight.",
     "enter_line": "Wind, then the door, then kettle-steam and quiet. Nine floors down, the Grid hums like it's thinking.",
     "trait_lines": {
-      "avian": "You skip the stairs and drop onto the landing rail. The regulars don't look up — Rooftop Liners always come in on the wind."
+      "avian": "You skip the stairs and drop onto the landing rail. The regulars don't look up \u2014 Rooftop Liners always come in on the wind."
     }
   },
   "the_stacks": {
@@ -120,7 +120,7 @@
     "vibe": "The Citadel Ring's archive: nine stories of shelving sunk into the ring's foundation, older than any of the corps upstairs and quietly exempt from all of them. Paper, microfiche, cold storage, and a draft the maintenance logs have been closing as 'no fault found' for forty years.",
     "enter_line": "The doors sigh shut behind you and the city goes quiet, like the building is holding its breath so you can think.",
     "trait_lines": {
-      "substrate_born": "Under the silence there's a hum — the same one you've heard since you docked. Somewhere in row nine, it pauses. It knows you can hear it."
+      "substrate_born": "Under the silence there's a hum \u2014 the same one you've heard since you docked. Somewhere in row nine, it pauses. It knows you can hear it."
     },
     "training": {
       "attributes": [
@@ -129,20 +129,20 @@
       ],
       "minutes": 60,
       "energy": -8,
-      "blurb": "House rates: Wit and Hacking train in the reading rooms here — one hour, −8 energy, instead of two and −15."
+      "blurb": "House rates: Wit and Hacking train in the reading rooms here \u2014 one hour, \u22128 energy, instead of two and \u221215."
     }
   },
   "forget_me_not": {
     "id": "forget_me_not",
     "name": "Forget-Me-Not",
     "district": "the_shallows",
-    "vibe": "A pawnshop wedged between two stilt-pilings, everything in it rescued from somewhere: instruments, ring trays, one taxidermied thing nobody will identify. Behind the counter grate, the broker files each item under the story it came with. A locked back case reads MEMORIES — BY APPOINTMENT ONLY. Nobody has ever seen it open.",
+    "vibe": "A pawnshop wedged between two stilt-pilings, everything in it rescued from somewhere: instruments, ring trays, one taxidermied thing nobody will identify. Behind the counter grate, the broker files each item under the story it came with. A locked back case reads MEMORIES \u2014 BY APPOINTMENT ONLY. Nobody has ever seen it open.",
     "hours": {
       "open": "06:00",
       "close": "00:00"
     },
     "closed_line": "The grate is down and the window tray is covered with a cloth, gently, like something sleeping. Painted on the glass: WE REMEMBER SO YOU DON'T HAVE TO. BACK AT 06:00.",
-    "enter_line": "A bell over the door — a real one, brass, older than the district. The broker looks up from a ledger written in a shorthand you suspect is just names.",
+    "enter_line": "A bell over the door \u2014 a real one, brass, older than the district. The broker looks up from a ledger written in a shorthand you suspect is just names.",
     "trait_lines": {
       "chassis": "Half the parts in the window tray are compatible with you. You try not to take it personally. The broker, catching your look, turns the tray around."
     }
@@ -158,5 +158,16 @@
     },
     "closed_line": "By day it's chalk outlines of stalls and the smell of last night's smoke. Vendors drift back at 18:00.",
     "enter_line": "Biolight and broth-steam. Somewhere to your left, someone is winning an argument about fish."
+  },
+  "the_lyceum": {
+    "id": "the_lyceum",
+    "name": "The Lyceum",
+    "district": "citadel_ring",
+    "vibe": "A teaching college wedged between two corp towers and beholden to neither \u2014 endowed a century ago and never quite bought out. Chalk still, actual chalk, and reading carrels worn smooth. The Citadel calls it quaint. The Citadel keeps sending its children.",
+    "enter_line": "A bell you can't see rings the hour. Somewhere a seminar lets out and the stairwell fills with argument.",
+    "trait_lines": {
+      "uplift": "The enrollment desk doesn't blink at your paperwork. A first, here. The registrar just asks what you want to learn.",
+      "substrate_born": "The lecture hall's PA carries a hum under the professor's voice. You could sit an exam on that hum."
+    }
   }
 }

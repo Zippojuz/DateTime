@@ -75,6 +75,9 @@ class Player(Character):
         research_day=0,
         date=None,
         pawned=None,
+        transcript=None,
+        enrollment=None,
+        class_day=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -124,6 +127,13 @@ class Player(Character):
         # Forget-Me-Not's shelf: pawned items awaiting buyback, oldest first.
         # Each: {item, paid, buyback, day}. See game/pawnshop.py.
         self.pawned = list(pawned or [])
+        # The Lyceum & library reading rooms (see game/university.py):
+        #   transcript — completed course ids; capstone perks resolve from it.
+        #   enrollment — the active 300/400 term: {course, sessions_done} ({} = none).
+        #   class_day  — last absolute day a class was attended (one/day).
+        self.transcript = list(transcript or [])
+        self.enrollment = dict(enrollment) if enrollment else {}
+        self.class_day = class_day
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -176,6 +186,8 @@ class Player(Character):
                 "last_gig_day": self.last_gig_day,
                 "street_cred": self.street_cred,
                 "arena_wins": self.arena_wins,
+                "transcript": list(self.transcript),
+                "enrollment": dict(self.enrollment),
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

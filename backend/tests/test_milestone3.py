@@ -134,7 +134,7 @@ def test_characters_report_reachability(client):
 def test_all_five_characters_load_with_schedules_and_prefs():
     npcs = NPC.load_all()
     # The base cast, Nyx (locked behind her floor-10 fight), the fixer, the
-    # doc, the pit master, the coach, and the ghost archivist.
+    # doc, the pit master, the coach, the ghost archivist, and the professor.
     assert set(npcs) == {
         "vael",
         "zix",
@@ -147,6 +147,7 @@ def test_all_five_characters_load_with_schedules_and_prefs():
         "ondo",
         "oona",
         "index",
+        "ines",
     }
     assert npcs["nyx"].requires_defeat == "nyx_deep_signal"
     assert npcs["index"].requires_perception is True

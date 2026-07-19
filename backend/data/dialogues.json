@@ -1241,5 +1241,110 @@
         "choices": []
       }
     }
+  },
+  "ines_intro": {
+    "id": "ines_intro",
+    "npc": "ines",
+    "start": "n1",
+    "nodes": {
+      "n1": {
+        "text": "She doesn't look up from the folio she's annotating until she's finished the sentence. Then she does, and takes you in the way a placement exam takes you in. \u201cNew face. Good. The Lyceum runs on new faces and old grudges, and I'm short on the first.\u201d She caps her pen. \u201cInes Halloran. I teach the things the towers upstairs pay to forget. You here to learn, or to audit me?\u201d",
+        "choices": [
+          {
+            "text": "To learn. What do you teach?",
+            "affection": 2,
+            "next": "n2"
+          },
+          {
+            "text": "[Wit] You annotate in three hands. You're not one professor \u2014 you're a department pretending to have a quorum.",
+            "requires": {
+              "wit": 8
+            },
+            "affection": 3,
+            "next": "n2b"
+          },
+          {
+            "text": "[Hacking] That folio's a corp prospectus. Ministry Holdings. That name isn't supposed to exist.",
+            "requires": {
+              "hacking": 9
+            },
+            "affection": 3,
+            "next": "n2c"
+          },
+          {
+            "text": "An audit sounds fun, actually.",
+            "offense": {
+              "delta": -2,
+              "severity": "minor"
+            },
+            "next": "n_cold"
+          }
+        ]
+      },
+      "n2": {
+        "text": "\u201cRhetoric, cognition, nerve, care, movement, probability, and the lace \u2014 the seven things a person is made of, if you're honest about it. The reading rooms downstairs will teach you the first hundred of any of them for free. Everything past that, you take here, from me.\u201d A dry almost-smile. \u201cThe city calls that quaint. The city keeps enrolling.\u201d",
+        "choices": [
+          {
+            "text": "What's past the free classes?",
+            "affection": 1,
+            "next": "n3"
+          },
+          {
+            "text": "Seven things. You left out love.",
+            "affection": 2,
+            "next": "n3b"
+          }
+        ]
+      },
+      "n2b": {
+        "text": "That gets a real laugh, short and surprised. \u201cA quorum of one, quorate by stubbornness. Yes. Registrar, dean, and the night janitor, all Halloran. It's cheaper than it sounds and lonelier than it looks.\u201d She studies you again, revising upward. \u201cYou notice things. Come take a seminar before I have to grade you on it.\u201d",
+        "choices": [
+          {
+            "text": "I'd like that.",
+            "affection": 2,
+            "next": "n3"
+          }
+        ]
+      },
+      "n2c": {
+        "text": "The almost-smile goes away. \u201cIt isn't supposed to, no. Which is exactly why someone should teach it.\u201d She sets the folio down, squared to the desk edge. \u201cThe person who annotated this took it into the Substrate forty years ago and didn't bring it back. I've wanted it a long time. Perhaps you're the sort who goes down there.\u201d",
+        "choices": [
+          {
+            "text": "Perhaps I am.",
+            "affection": 2,
+            "next": "n3"
+          }
+        ]
+      },
+      "n3": {
+        "text": "\u201cThe two-hundreds and up. Prerequisites, minimum aptitude, a tuition that keeps the lamps on. The three-hundreds run as seminars \u2014 you show up across a term, not in an afternoon, and you leave changed in a way that lasts.\u201d She slides a course list across the desk. \u201cRead it. Come back when a title makes you want something.\u201d",
+        "choices": [
+          {
+            "text": "I will.",
+            "affection": 1,
+            "next": null
+          }
+        ]
+      },
+      "n3b": {
+        "text": "\u201cI didn't leave it out. Love's not a subject \u2014 it's the final. Everything I teach, you sit it eventually, on someone.\u201d She holds your eye a beat too long to be only pedagogy, then looks back to her folio. \u201cCourse list's on the desk. Go on.\u201d",
+        "choices": [
+          {
+            "text": "(Take the list.)",
+            "affection": 2,
+            "next": null
+          }
+        ]
+      },
+      "n_cold": {
+        "text": "\u201cAuditors sit in the back and leave before questions. The door's there.\u201d She's already back in her folio. You've been graded.",
+        "choices": [
+          {
+            "text": "(Go.)",
+            "next": null
+          }
+        ]
+      }
+    }
   }
 }

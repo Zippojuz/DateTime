@@ -26,7 +26,9 @@
         "charge_cell",
         "nano_patch",
         "aegis_gem",
-        "vitality_gem"
+        "vitality_gem",
+        "primer_lace",
+        "codex_reflexes"
       ]
     }
   },
@@ -41,7 +43,11 @@
       "voidglass_edge",
       "band_of_the_deep",
       "shard_mirror_ghost",
-      "shard_phantom_hands"
+      "shard_phantom_hands",
+      "primer_rhetoric",
+      "tome_nerve",
+      "folio_founders_1",
+      "folio_founders_3"
     ]
   },
   "boss": {
@@ -59,13 +65,17 @@
       "shard_time_stutter",
       "shard_gravity_snap",
       "myofiber_graft",
-      "shard_siren_overlay"
+      "shard_siren_overlay",
+      "tome_daemon",
+      "folio_founders_2",
+      "folio_founders_4"
     ],
     "bonus": {
       "chance": 0.12,
       "items": [
         "prisma_gem",
-        "empress_heart"
+        "empress_heart",
+        "ministry_prospectus"
       ]
     }
   }

@@ -13,7 +13,7 @@ hop. NPC availability is resolved from schedules, and — as of Milestone 3 —
 you must be in the same place as an NPC to reach them.
 """
 
-from game import data, places, teahouse, traits
+from game import data, places, teahouse, traits, university
 from game.errors import GameError
 
 # Travel cost by (distance, mode): distance is "adjacent" or "cross".
@@ -77,6 +77,7 @@ def travel(player, clock, to_id, mode):
     if mode == "walk":
         mult = traits.effect(player, "walk_minutes_mult", 1.0)
         mult *= teahouse.effect(player, clock, "walk_minutes_mult", 1.0)
+        mult *= university.mult(player, "walk_minutes_mult")  # Rooftop Lines (KIN 301)
         cost["minutes"] = round(cost["minutes"] * mult)
     if mode == "transit" and traits.effect(player, "transit_free", False):
         cost["credits"] = 0

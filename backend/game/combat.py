@@ -12,7 +12,7 @@ hit, banks +1 charge), item (food heals HP in combat), flee (never from bosses).
 
 import random as _random
 
-from game import data, equipment, inventory, traits
+from game import data, equipment, inventory, traits, university
 from game.errors import GameError
 
 CHARGE_START = 2
@@ -92,12 +92,14 @@ def player_stats(player):
     courage = player.attributes.get("courage", 5)
     wit = player.attributes.get("wit", 5)
     agility = player.attributes.get("agility", 5)
-    luck = player.attributes.get("luck", 5)
+    # Lyceum's The Long Tail (PRB 301) tips the rare outcomes — crits, dodges, drops.
+    luck = player.attributes.get("luck", 5) + university.bonus(player, "luck_bonus")
     hacking = player.attributes.get("hacking", 5)
     eq = equipment.bonuses(player)
     speed = 5 + level + wit + eq["speed"]
     # Species traits (game/traits.py): Built For It, Escape Artist, Native Signal.
-    hp_mult = traits.effect(player, "max_hp_mult", 1.0)
+    # The Founder's Nerve (NRV 301) multiplies here too.
+    hp_mult = traits.effect(player, "max_hp_mult", 1.0) * university.mult(player, "max_hp_mult")
     return {
         "level": level,
         "max_hp": round((30 + level * 10 + courage * 2 + eq["max_hp"]) * hp_mult),
@@ -112,9 +114,16 @@ def player_stats(player):
         "luck": luck,
         # Hacking is the casting stat: strike protocols swing with lace power
         # (not your weapon arm), and a disciplined lace runs cooler per cast.
-        "protocol_power": 6 + level * 2 + hacking * 2,
+        # Ghost in the Citadel (SYS 301) / Root Access (SYS 401) add to both.
+        "protocol_power": 6
+        + level * 2
+        + hacking * 2
+        + university.bonus(player, "protocol_power_bonus"),
         "heat_discount": hacking // 2,
-        "heat_cap": HEAT_CAP + eq["heat_cap"] + traits.effect(player, "heat_cap", 0),
+        "heat_cap": HEAT_CAP
+        + eq["heat_cap"]
+        + traits.effect(player, "heat_cap", 0)
+        + university.bonus(player, "heat_cap"),
         "heat_vent": HEAT_VENT + eq["heat_vent"],
     }
 
@@ -471,7 +480,9 @@ def _win(state, player, rng):
     ups = grant_xp(player, xp)
     player.credits += credits
 
-    drops = roll_drops(enemy, rng, luck=player.attributes.get("luck", 0))
+    drops = roll_drops(
+        enemy, rng, luck=player.attributes.get("luck", 0) + university.bonus(player, "luck_bonus")
+    )
     for item_id in drops:
         inventory.add_item(player, item_id, 1)
     drop_names = [inventory.get_item(i)["name"] for i in drops]

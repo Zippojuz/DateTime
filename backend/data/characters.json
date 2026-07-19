@@ -735,5 +735,67 @@
         "available": false
       }
     ]
+  },
+  "ines": {
+    "id": "ines",
+    "name": "Ines Halloran",
+    "pronouns": "she/they",
+    "species": "Human",
+    "romanceable": true,
+    "personality": "The Lyceum's last tenured professor of Lace Studies and, unofficially, its dean, registrar, and night janitor. Defected from a corp research division a career ago and has been teaching the thing they tried to bury ever since. Exacting in the seminar, unguarded over tea. Assigns you reading you have to survive a dungeon to finish.",
+    "arc_theme": "The cost of knowing",
+    "district": "citadel_ring",
+    "title": "Professor of Lace Studies",
+    "starting_disposition": 1,
+    "attributes": {
+      "wit": 11,
+      "hacking": 10,
+      "empathy": 8,
+      "charm": 7
+    },
+    "preferences": {
+      "books": {
+        "sentiment": "love"
+      },
+      "music": {
+        "sentiment": "like"
+      },
+      "fitness": {
+        "sentiment": "like"
+      },
+      "nightlife": {
+        "sentiment": "dislike"
+      }
+    },
+    "home": {
+      "name": "A carrel on the Lyceum's fourth floor",
+      "blurb": "Not an office. A carrel, like a student's \u2014 she gave the office back years ago. The lamp is always on."
+    },
+    "schedule": [
+      {
+        "start": "09:00",
+        "end": "17:00",
+        "district": "the_lyceum",
+        "location": "the lecture hall",
+        "activity": "Teaching \u2014 seminars back to back",
+        "available": true
+      },
+      {
+        "start": "17:00",
+        "end": "21:00",
+        "district": "the_lyceum",
+        "location": "her carrel",
+        "activity": "Office hours, door open",
+        "available": true
+      },
+      {
+        "start": "21:00",
+        "end": "09:00",
+        "district": "the_lyceum",
+        "location": "her carrel",
+        "activity": "Reading what the corps would rather she didn't",
+        "available": false
+      }
+    ]
   }
 }

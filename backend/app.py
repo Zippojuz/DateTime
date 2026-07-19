@@ -40,6 +40,7 @@ from game import (
     stacks,
     teahouse,
     traits,
+    university,
     world,
 )
 from game.actions import ACTIONS, apply_action
@@ -897,6 +898,58 @@ def create_app():
             ), 400
         return jsonify(almanac.compose(player, clock, _day_index(clock)))
 
+    @app.get("/api/lyceum")
+    def lyceum_state():
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        _, player, clock = models
+        return jsonify(university.catalog(player, clock))
+
+    @app.post("/api/lyceum/attend")
+    def lyceum_attend():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = university.attend(player, clock, body.get("subject"), _day_index(clock))
+        except KeyError:
+            return jsonify(error="No such course."), 404
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/lyceum/read")
+    def lyceum_read():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = university.read_book(player, clock, body.get("item_id"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/lyceum/turn-in")
+    def lyceum_turn_in():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = university.turn_in(player, clock, body.get("quest"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
     @app.post("/api/item/use")
     def item_use():
         body = request.get_json(silent=True) or {}
@@ -941,6 +994,8 @@ def create_app():
 
         react = gifts.reaction(item, npc)
         if react["delta"] >= 0:
+            # Radical Attention (EMP 301): a warmly-received gift lands warmer.
+            react["delta"] += university.bonus(player, "gift_affection_bonus")
             social.add_opinion(save_id, npc.id, react["delta"], day)
         else:
             social.record_offense(save_id, npc.id, react["delta"], day, "minor")
@@ -1386,6 +1441,7 @@ def create_app():
         if base > 0:
             base += traits.effect(player, "dialogue_affection_bonus", 0)
             base += teahouse.effect(player, clock, "dialogue_affection_bonus", 0)
+            base += university.bonus(player, "dialogue_affection_bonus")  # Silver Tongue (RHET 301)
         if base:
             social.add_opinion(save_id, npc.id, base, day)
 

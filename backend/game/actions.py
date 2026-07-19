@@ -7,7 +7,7 @@ milestones and their own data. Time/energy costs follow the design doc.
 `energy` is an int delta, or the string "full" to restore to max.
 """
 
-from game import data, teahouse, traits
+from game import data, teahouse, traits, university
 from game.errors import GameError
 from game.player import MAX_ENERGY
 
@@ -82,6 +82,11 @@ def _train(player, attribute, clock):
     if attribute not in registry:
         raise GameError("Choose a valid attribute to train.")
     spec = registry[attribute]
-    # Overclock Oolong (Gantry 9): today's sessions stick a little harder.
-    gain = 1 + teahouse.effect(player, clock, "train_bonus", 0)
+    # Overclock Oolong (Gantry 9) and The Founder's Hand (FND 401) both make
+    # today's sessions stick a little harder.
+    gain = (
+        1
+        + teahouse.effect(player, clock, "train_bonus", 0)
+        + university.bonus(player, "train_bonus")
+    )
     player.attributes[attribute] = min(spec["max"], player.attributes[attribute] + gain)

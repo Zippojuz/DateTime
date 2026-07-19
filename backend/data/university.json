@@ -1,0 +1,644 @@
+{
+  "venue": "the_lyceum",
+  "library": "the_stacks",
+  "professor": "ines",
+  "class_minutes_default": 90,
+  "courses": {
+    "rhet_101": {
+      "id": "rhet_101",
+      "code": "RHET 101",
+      "name": "First Impressions",
+      "dept": "Rhetoric & Presence",
+      "stat": "charm",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "The first four seconds, and how to own them.",
+      "perk": null
+    },
+    "rhet_201": {
+      "id": "rhet_201",
+      "code": "RHET 201",
+      "name": "The Long Con of Being Liked",
+      "dept": "Rhetoric & Presence",
+      "stat": "charm",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "rhet_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Being liked on purpose, over the long haul.",
+      "perk": null
+    },
+    "rhet_301": {
+      "id": "rhet_301",
+      "code": "RHET 301",
+      "name": "Command of the Room",
+      "dept": "Rhetoric & Presence",
+      "stat": "charm",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "rhet_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Walk in and the room reorganizes around you.",
+      "perk": {
+        "id": "silver_tongue",
+        "name": "Silver Tongue",
+        "effects": {
+          "dialogue_affection_bonus": 1
+        },
+        "blurb": "People warm to you a half-step faster in conversation."
+      }
+    },
+    "cog_101": {
+      "id": "cog_101",
+      "code": "COG 101",
+      "name": "Pattern Recognition",
+      "dept": "Cognition",
+      "stat": "wit",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "Find the pattern before it finds you.",
+      "perk": null
+    },
+    "cog_201": {
+      "id": "cog_201",
+      "code": "COG 201",
+      "name": "Signal & Noise",
+      "dept": "Cognition",
+      "stat": "wit",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "cog_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Pull the signal out of a screaming channel.",
+      "perk": null
+    },
+    "cog_301": {
+      "id": "cog_301",
+      "code": "COG 301",
+      "name": "Adversarial Reasoning",
+      "dept": "Cognition",
+      "stat": "wit",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "cog_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Think like the thing that's lying to you.",
+      "perk": {
+        "id": "adversarial_reasoning",
+        "name": "Adversarial Reasoning",
+        "effects": {
+          "research_topics_bonus": 1
+        },
+        "blurb": "You pull an extra thread from every file at the research desk."
+      }
+    },
+    "nrv_101": {
+      "id": "nrv_101",
+      "code": "NRV 101",
+      "name": "Standing Your Ground",
+      "dept": "Applied Nerve",
+      "stat": "courage",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "Hold the line when your legs vote to leave.",
+      "perk": null
+    },
+    "nrv_201": {
+      "id": "nrv_201",
+      "code": "NRV 201",
+      "name": "Under Fire",
+      "dept": "Applied Nerve",
+      "stat": "courage",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "nrv_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Function with the alarms going.",
+      "perk": null
+    },
+    "nrv_301": {
+      "id": "nrv_301",
+      "code": "NRV 301",
+      "name": "The Founder's Nerve",
+      "dept": "Applied Nerve",
+      "stat": "courage",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "nrv_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "The nerve the founders are named for.",
+      "perk": {
+        "id": "founders_nerve",
+        "name": "The Founder's Nerve",
+        "effects": {
+          "max_hp_mult": 1.15
+        },
+        "blurb": "You carry more punishment in the Substrate before you fold."
+      }
+    },
+    "care_101": {
+      "id": "care_101",
+      "code": "CARE 101",
+      "name": "Reading a Room",
+      "dept": "Care",
+      "stat": "empathy",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "What a room needs before it says so.",
+      "perk": null
+    },
+    "care_201": {
+      "id": "care_201",
+      "code": "CARE 201",
+      "name": "The Weight of Others",
+      "dept": "Care",
+      "stat": "empathy",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "care_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Carry what others carry, and not drop it.",
+      "perk": null
+    },
+    "care_301": {
+      "id": "care_301",
+      "code": "CARE 301",
+      "name": "Radical Attention",
+      "dept": "Care",
+      "stat": "empathy",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "care_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Attention as a discipline, not a mood.",
+      "perk": {
+        "id": "radical_attention",
+        "name": "Radical Attention",
+        "effects": {
+          "gift_affection_bonus": 1
+        },
+        "blurb": "Your gifts land warmer \u2014 you noticed what they wanted."
+      }
+    },
+    "kin_101": {
+      "id": "kin_101",
+      "code": "KIN 101",
+      "name": "Bodywork",
+      "dept": "Kinesthetics",
+      "stat": "agility",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "Move like you've read the manual on your own body.",
+      "perk": null
+    },
+    "kin_201": {
+      "id": "kin_201",
+      "code": "KIN 201",
+      "name": "Freerunning",
+      "dept": "Kinesthetics",
+      "stat": "agility",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "kin_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "The city is handholds if you're quick.",
+      "perk": null
+    },
+    "kin_301": {
+      "id": "kin_301",
+      "code": "KIN 301",
+      "name": "Rooftop Lines",
+      "dept": "Kinesthetics",
+      "stat": "agility",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "kin_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "The gantries are a second street. Take it.",
+      "perk": {
+        "id": "rooftop_lines",
+        "name": "Rooftop Lines",
+        "effects": {
+          "walk_minutes_mult": 0.9
+        },
+        "blurb": "You take the gantries. Walking across the city runs quicker."
+      }
+    },
+    "prb_101": {
+      "id": "prb_101",
+      "code": "PRB 101",
+      "name": "Reading the Odds",
+      "dept": "Probability",
+      "stat": "luck",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "The odds are talking. Learn the accent.",
+      "perk": null
+    },
+    "prb_201": {
+      "id": "prb_201",
+      "code": "PRB 201",
+      "name": "Advantage Play",
+      "dept": "Probability",
+      "stat": "luck",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "prb_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Turn a thin edge into a living.",
+      "perk": null
+    },
+    "prb_301": {
+      "id": "prb_301",
+      "code": "PRB 301",
+      "name": "The Long Tail",
+      "dept": "Probability",
+      "stat": "luck",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "prb_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Where the rare payoff actually lives.",
+      "perk": {
+        "id": "long_tail",
+        "name": "The Long Tail",
+        "effects": {
+          "luck_bonus": 3
+        },
+        "blurb": "The rare outcome finds you more often \u2014 crits, dodges, drops."
+      }
+    },
+    "sys_101": {
+      "id": "sys_101",
+      "code": "SYS 101",
+      "name": "Cold Boot",
+      "dept": "Lace Studies",
+      "stat": "hacking",
+      "tier": 100,
+      "grants": 2,
+      "tuition": 0,
+      "minutes": 60,
+      "energy": -8,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_stacks",
+        "the_lyceum"
+      ],
+      "blurb": "Bring a dead system up clean.",
+      "perk": null
+    },
+    "sys_201": {
+      "id": "sys_201",
+      "code": "SYS 201",
+      "name": "Daemon Craft",
+      "dept": "Lace Studies",
+      "stat": "hacking",
+      "tier": 200,
+      "grants": 3,
+      "tuition": 40,
+      "minutes": 90,
+      "energy": -10,
+      "prereq": [
+        "sys_101"
+      ],
+      "min_stat": 8,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 1,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Write a daemon that behaves.",
+      "perk": null
+    },
+    "sys_301": {
+      "id": "sys_301",
+      "code": "SYS 301",
+      "name": "Ghost in the Citadel",
+      "dept": "Lace Studies",
+      "stat": "hacking",
+      "tier": 300,
+      "grants": 4,
+      "tuition": 90,
+      "minutes": 90,
+      "energy": -12,
+      "prereq": [
+        "sys_201"
+      ],
+      "min_stat": 12,
+      "requires_book": null,
+      "requires_quest": null,
+      "sessions": 3,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "Move through the Citadel's records unlogged.",
+      "perk": {
+        "id": "ghost_in_the_citadel",
+        "name": "Ghost in the Citadel",
+        "effects": {
+          "protocol_power_bonus": 8
+        },
+        "blurb": "Your strike protocols hit noticeably harder."
+      }
+    },
+    "sys_401": {
+      "id": "sys_401",
+      "code": "SYS 401",
+      "name": "The Plant 7 Seminar",
+      "dept": "Lace Studies",
+      "stat": "hacking",
+      "tier": 400,
+      "grants": 4,
+      "tuition": 150,
+      "minutes": 120,
+      "energy": -15,
+      "prereq": [
+        "sys_301"
+      ],
+      "min_stat": 15,
+      "requires_book": "ministry_prospectus",
+      "requires_quest": null,
+      "sessions": 4,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "A reading of what Ministry Holdings is, closed each year for 'lack of enrollment'. Professor Halloran runs it anyway, for one student at a time.",
+      "perk": {
+        "id": "root_access",
+        "name": "Root Access",
+        "effects": {
+          "protocol_power_bonus": 12,
+          "heat_cap": 2
+        },
+        "blurb": "You run cooler and hit harder in the Substrate \u2014 the lace does what you mean."
+      }
+    },
+    "fnd_401": {
+      "id": "fnd_401",
+      "code": "FND 401",
+      "name": "The Founder's Seminar",
+      "dept": "Founder's Studies",
+      "stat": null,
+      "tier": 400,
+      "grants": 0,
+      "tuition": 150,
+      "minutes": 120,
+      "energy": -15,
+      "prereq": [],
+      "min_stat": 0,
+      "requires_book": null,
+      "requires_quest": "founders_library",
+      "sessions": 4,
+      "venues": [
+        "the_lyceum"
+      ],
+      "blurb": "You found the library the founders hid. Now read it, with the one person left who can teach it.",
+      "perk": {
+        "id": "the_founders_hand",
+        "name": "The Founder's Hand",
+        "effects": {
+          "train_bonus": 1
+        },
+        "blurb": "A scholar's discipline: every future training session sticks a little harder."
+      }
+    }
+  },
+  "quests": {
+    "prospectus": {
+      "id": "prospectus",
+      "giver": "ines",
+      "name": "No Fault Found, Redux",
+      "book": "ministry_prospectus",
+      "unlocks": "sys_401",
+      "brief": "Professor Halloran wants the annotated Ministry Holdings prospectus \u2014 the real one, not the sanitized reissue. It went into the Substrate with the person who wrote it. Bring it up.",
+      "turn_in": "She weighs the folio like it might be warm. \"Forty years. Alright. Sit down \u2014 you've earned the seminar no one's allowed to take.\"",
+      "flag": "quest:prospectus:done",
+      "reward_credits": 0
+    },
+    "founders_library": {
+      "id": "founders_library",
+      "giver": "ines",
+      "name": "The Founder's Library",
+      "set": [
+        "folio_founders_1",
+        "folio_founders_2",
+        "folio_founders_3",
+        "folio_founders_4"
+      ],
+      "unlocks": "fnd_401",
+      "brief": "Four volumes, scattered when the college was nearly bought out: a founder hid them across the city rather than let the corps pulp them. Halloran has spent a career tracing where. Assemble the set.",
+      "turn_in": "She sets the four spines together and exhales like she's been holding it since before you were born. \"There. Whole. Come \u2014 let me show you what they were so afraid of.\"",
+      "flag": "quest:founders_library:done",
+      "reward_credits": 200
+    }
+  }
+}

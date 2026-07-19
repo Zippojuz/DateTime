@@ -212,6 +212,15 @@ def _m19_accounts(conn):
     _add_column(conn, "save", "user_id", "INTEGER")
 
 
+def _m20_university(conn):
+    """The Lyceum & the library's reading rooms: a transcript of completed
+    courses, the active term enrollment (for 300/400 seminars that run over
+    several days), and a one-class-a-day gate."""
+    _add_column(conn, "player", "transcript", "TEXT NOT NULL DEFAULT '[]'")
+    _add_column(conn, "player", "enrollment", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "player", "class_day", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -232,6 +241,7 @@ MIGRATIONS = [
     _m17_dating,
     _m18_pawnshop,
     _m19_accounts,
+    _m20_university,
 ]
 
 

@@ -90,6 +90,9 @@ def load_models(user_id=None):
         research_day=row["research_day"],
         date=json.loads(row["date"]),
         pawned=json.loads(row["pawned"]),
+        transcript=json.loads(row["transcript"]),
+        enrollment=json.loads(row["enrollment"]),
+        class_day=row["class_day"],
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -119,6 +122,7 @@ def save_models(save_id, player, clock):
                    dungeon=?, combat=?, equipment=?, companion=?, protocols=?,
                    last_gig_day=?, street_cred=?, arena_wins=?, gossip_day=?,
                    tea_day=?, tea_id=?, research_day=?, date=?, pawned=?,
+                   transcript=?, enrollment=?, class_day=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
@@ -152,6 +156,9 @@ def save_models(save_id, player, clock):
                 player.research_day,
                 json.dumps(player.date),
                 json.dumps(player.pawned),
+                json.dumps(player.transcript),
+                json.dumps(player.enrollment),
+                player.class_day,
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
                 json.dumps(player.unlocked_transformations),
@@ -175,10 +182,11 @@ def _insert_player(conn, save_id, player, clock):
                combat_level, combat_xp, difficulty, max_floor, dungeon, combat, equipment,
                companion, protocols, last_gig_day, street_cred, arena_wins,
                gossip_day, tea_day, tea_id, research_day, date, pawned,
+               transcript, enrollment, class_day,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
@@ -210,6 +218,9 @@ def _insert_player(conn, save_id, player, clock):
             player.research_day,
             json.dumps(player.date),
             json.dumps(player.pawned),
+            json.dumps(player.transcript),
+            json.dumps(player.enrollment),
+            player.class_day,
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),
             json.dumps(player.unlocked_transformations),
