@@ -885,3 +885,34 @@ promote-admin UI (SQL for now), rate-limiting logins.
 Execute **Milestone 1** — the attribute registry + shared `Character` model,
 player creation (human), the daily action loop (clock + energy), and save/load
 persistence. Milestone 0 (scaffolding) and the Docker dev container are done.
+
+## The Lyceum & the reading rooms (shipped)
+
+A course system that makes training mean something. Two venues, one catalog:
+the Stacks' reading rooms teach the free 100-level courses; **The Lyceum** (new
+citadel_ring venue) teaches the whole ladder (100→400) for tuition. One class a
+day; **300/400 run as multi-session terms** you attend across days
+(player.enrollment). 300/400 capstones grant a **perk** resolved through the
+shared trait/tea effect vocabulary — Silver Tongue (dialogue), Rooftop Lines
+(travel), The Founder's Nerve (combat HP), Adversarial Reasoning (research),
+Radical Attention (gifts), The Long Tail (luck), Ghost in the Citadel / Root
+Access (protocols), The Founder's Hand (training). Migration 20 (transcript,
+enrollment, class_day); game/university.py; data/university.json.
+
+**Books** (new item type, three roles): textbook prereqs (SYS 401 needs the
+Ministry Holdings prospectus, recovered from the Substrate), standalone tomes
+read for a one-time stat/protocol (dropped in dungeon loot), and the
+collectible **Founder's Library** (4 volumes) assembled and turned in to unlock
+the Founder's Seminar. **Professor Ines Halloran** (romanceable) anchors it —
+full dialogue tree, Cyberlink voice, quest desk.
+
+Frontend: LyceumView (course ladder with gates/perks, book reading, quest
+board, transcript) in the widescreen world map. 447 backend + 51 frontend
+tests green.
+
+### Deferred / possible follow-ups
+- Book distribution is dungeon-loot + turn-in; no library "browse the shelves"
+  find yet (the returns-cart idea).
+- Course perks are all wired, but a few (gift/luck) are subtle — could surface
+  active perks somewhere in the UI (a "what you've learned" panel).
+- The professor's quests are systemic (a desk board), not dialogue-driven.

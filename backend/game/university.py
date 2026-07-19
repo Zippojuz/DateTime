@@ -168,7 +168,28 @@ def catalog(player, clock):
         ],
         "enrollment": _active_term(player),
         "quests": _quest_board(player),
+        "readable": _readable_books(player),
     }
+
+
+def _readable_books(player):
+    """Tomes in the pack that can be read for a one-time gain."""
+    items = data.load("items")
+    out = []
+    for item_id, qty in player.inventory.items():
+        item = items.get(item_id, {})
+        read = item.get("read") if item.get("type") == "book" else None
+        if not read or qty <= 0:
+            continue
+        if "stat" in read:
+            hint = f"+{read.get('amount', 1)} {read['stat'].title()}"
+        elif "protocol" in read:
+            proto = data.load("protocols").get(read["protocol"], {})
+            hint = f"Learn {proto.get('name', read['protocol'])}"
+        else:
+            hint = "Read"
+        out.append({"id": item_id, "name": item["name"], "hint": hint, "qty": qty})
+    return out
 
 
 def _active_term(player):

@@ -82,6 +82,11 @@ export const useGameStore = create((set, get) => ({
   stacks: null,
   lastResearch: null,
 
+  // The Lyceum & reading rooms: { courses, transcript, enrollment, quests }.
+  lyceum: null,
+  lastClass: null, // result of attending a class (with any perk/points earned)
+  lastRead: null, // result of reading a book
+
   // THE DATING SYSTEM: the venue menu, the ask-out picker, the live scene.
   dateVenues: null,
   askOut: null, // {npcId, name} while the venue picker is open
@@ -274,6 +279,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse()
       get().loadLookout()
       get().loadStacks()
+      get().loadLyceum()
       get().loadPawn()
       get().loadCorps()
     }
@@ -296,6 +302,7 @@ export const useGameStore = create((set, get) => ({
       get().loadArena()
       get().loadTeahouse()
       get().loadStacks()
+      get().loadLyceum()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -665,6 +672,52 @@ export const useGameStore = create((set, get) => ({
     }
   },
 
+  // --- The Lyceum & the reading rooms (courses, books, quests) ---
+
+  loadLyceum: async () => {
+    try {
+      set({ lyceum: await api.lyceum() })
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  attendClass: async (subject) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.lyceumAttend(subject)
+      set({ state: res.state, lastClass: res.result, busy: false })
+      get().loadLyceum()
+      get().loadCharacters() // a class costs the better part of the day
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  readBook: async (itemId) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.lyceumRead(itemId)
+      set({ state: res.state, lastRead: res.result, busy: false })
+      get().loadLyceum()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  turnInQuest: async (quest) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.lyceumTurnIn(quest)
+      set({ state: res.state, lastClass: { turnIn: res.result }, busy: false })
+      get().loadLyceum()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  clearClassNews: () => set({ lastClass: null, lastRead: null }),
+
   // --- The Steeps (soak) + THE DATING SYSTEM ---
 
   takeSoak: async () => {
@@ -769,6 +822,7 @@ export const useGameStore = create((set, get) => ({
     get().loadArena()
     get().loadTeahouse()
     get().loadStacks()
+    get().loadLyceum()
     get().loadLookout()
   },
 
@@ -817,6 +871,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse() // tea expires at midnight
       get().loadLookout() // the board tracks the whole clock
       get().loadStacks() // the desk reopens at midnight
+      get().loadLyceum()
       get().loadPawn()
     } catch (err) {
       set({ error: err.message, busy: false })
@@ -837,6 +892,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse()
       get().loadLookout() // only composes at Gantry 9
       get().loadStacks()
+      get().loadLyceum()
       get().loadPawn() // the shelf's hold days tick with the calendar
       get().loadCorps() // the war is weekly; the denials are eternal
     } catch (err) {

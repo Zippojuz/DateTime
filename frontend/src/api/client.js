@@ -51,6 +51,13 @@ export const api = {
   sipTea: (teaId) =>
     request('/teahouse/sip', { method: 'POST', body: JSON.stringify({ tea_id: teaId }) }),
   lookout: () => request('/lookout'),
+  lyceum: () => request('/lyceum'),
+  lyceumAttend: (subject) =>
+    request('/lyceum/attend', { method: 'POST', body: JSON.stringify({ subject }) }),
+  lyceumRead: (itemId) =>
+    request('/lyceum/read', { method: 'POST', body: JSON.stringify({ item_id: itemId }) }),
+  lyceumTurnIn: (quest) =>
+    request('/lyceum/turn-in', { method: 'POST', body: JSON.stringify({ quest }) }),
   stacks: () => request('/stacks'),
   research: (subject) =>
     request('/research', { method: 'POST', body: JSON.stringify({ subject }) }),

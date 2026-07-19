@@ -3249,3 +3249,215 @@ body {
 .admin-empty {
   color: var(--text-dim);
 }
+
+/* --- The Lyceum & the reading rooms (courses, books, quests) --- */
+
+.lyceum-view {
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.lyceum-view h2 {
+  margin: 0;
+  color: var(--neon);
+  letter-spacing: 0.08rem;
+}
+
+.lyceum-view h3 {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  color: var(--text-dim);
+}
+
+.lyceum-sub {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.lyceum-news {
+  border-left: 3px solid var(--neon);
+  background: rgba(33, 230, 193, 0.08);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lyceum-news p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+}
+
+.lyceum-term {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.lyceum-closed {
+  margin: 0;
+  color: var(--text-dim);
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.course-list,
+.book-list,
+.quest-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.course {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #222c44;
+  border-left: 3px solid #38507a;
+  border-radius: 6px;
+}
+
+.course--t100 { border-left-color: #38507a; }
+.course--t200 { border-left-color: #4a6db0; }
+.course--t300 { border-left-color: var(--neon); }
+.course--t400 { border-left-color: var(--accent); }
+
+.course--completed { opacity: 0.6; }
+.course--locked { opacity: 0.8; }
+
+.course-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.course-head {
+  font-size: 0.95rem;
+}
+
+.course-code {
+  color: var(--neon);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  letter-spacing: 0.03rem;
+}
+
+.course-sub {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.course-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.1rem;
+}
+
+.course-tag {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  color: var(--text-dim);
+  border: 1px solid #2c3a58;
+  border-radius: 999px;
+  padding: 0.05rem 0.5rem;
+}
+
+.course-tag--perk {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.course-locked {
+  color: var(--error);
+  font-size: 0.78rem;
+  margin-top: 0.1rem;
+}
+
+.course-action {
+  flex-shrink: 0;
+}
+
+.course-done {
+  color: var(--neon);
+  font-size: 0.85rem;
+}
+
+.course-lock {
+  opacity: 0.5;
+}
+
+.book-row,
+.quest {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid #222c44;
+  border-radius: 6px;
+}
+
+.book-name {
+  font-size: 0.9rem;
+}
+
+.quest-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.quest-name {
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+.quest-brief {
+  color: var(--text-dim);
+  font-size: 0.82rem;
+}
+
+.quest-progress {
+  color: var(--neon);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.transcript {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: var(--text-dim);
+}
+
+.transcript summary {
+  cursor: pointer;
+  color: var(--text-dim);
+}
+
+.transcript ul {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
