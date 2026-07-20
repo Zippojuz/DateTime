@@ -9,7 +9,7 @@ import json
 
 from db import get_connection
 
-from game import events, social
+from game import events, social, university
 from game.calendar import GameClock
 from game.npc import NPC
 from game.player import Player
@@ -21,6 +21,8 @@ def create_new_game(identity, species=None, trait="", user_id=None):
     immediately rather than waiting for the first action. Returns
     (state, fired_events)."""
     player = Player.create(identity, **({"species": species} if species else {}), trait=trait)
+    # Pin each randomized study guide to one stat for this playthrough.
+    player.book_seeds = university.roll_book_seeds()
     clock = GameClock()
     with get_connection() as conn:
         old = conn.execute("SELECT id FROM save WHERE user_id IS ?", (user_id,)).fetchone()
@@ -94,6 +96,7 @@ def load_models(user_id=None):
         enrollment=json.loads(row["enrollment"]),
         class_day=row["class_day"],
         browse_day=row["browse_day"],
+        book_seeds=json.loads(row["book_seeds"]),
     )
     clock = GameClock(
         week=row["clock_week"],
@@ -123,7 +126,7 @@ def save_models(save_id, player, clock):
                    dungeon=?, combat=?, equipment=?, companion=?, protocols=?,
                    last_gig_day=?, street_cred=?, arena_wins=?, gossip_day=?,
                    tea_day=?, tea_id=?, research_day=?, date=?, pawned=?,
-                   transcript=?, enrollment=?, class_day=?, browse_day=?,
+                   transcript=?, enrollment=?, class_day=?, browse_day=?, book_seeds=?,
                    created_identity=?, current_identity=?, unlocked_transformations=?,
                    clock_week=?, clock_day=?, clock_minute=?
                WHERE save_id=?""",
@@ -161,6 +164,7 @@ def save_models(save_id, player, clock):
                 json.dumps(player.enrollment),
                 player.class_day,
                 player.browse_day,
+                json.dumps(player.book_seeds),
                 json.dumps(player.created_identity),
                 json.dumps(player.current_identity),
                 json.dumps(player.unlocked_transformations),
@@ -184,11 +188,11 @@ def _insert_player(conn, save_id, player, clock):
                combat_level, combat_xp, difficulty, max_floor, dungeon, combat, equipment,
                companion, protocols, last_gig_day, street_cred, arena_wins,
                gossip_day, tea_day, tea_id, research_day, date, pawned,
-               transcript, enrollment, class_day, browse_day,
+               transcript, enrollment, class_day, browse_day, book_seeds,
                created_identity, current_identity, unlocked_transformations,
                clock_week, clock_day, clock_minute)
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (
             save_id,
             player.species,
@@ -224,6 +228,7 @@ def _insert_player(conn, save_id, player, clock):
             json.dumps(player.enrollment),
             player.class_day,
             player.browse_day,
+            json.dumps(player.book_seeds),
             json.dumps(player.created_identity),
             json.dumps(player.current_identity),
             json.dumps(player.unlocked_transformations),

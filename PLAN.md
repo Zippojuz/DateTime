@@ -929,3 +929,11 @@ dungeon-exclusive and quest books never surface there. LyceumView shows the
 browse action, gated/lore/training reads, and lore passages. Built to expand:
 add books by dropping entries in books.json; per-playthrough stat seeding is the
 obvious next randomization layer. 435 backend + 54 frontend tests green.
+
+### Per-playthrough study-guide seeding (shipped)
+Migration 22 (player.book_seeds). At new game, university.roll_book_seeds pins
+each randomized study guide (stat_pool books) to ONE stat for the whole save,
+so a guide teaches the same thing all run but differs between playthroughs.
+read_book uses the seed (lazy-seeds pre-migration saves on first read); the pack
+hint reveals the seeded subject ("+1 Wit"). 438 backend tests green; frontend
+needed no change (hint is backend-driven).

@@ -226,6 +226,13 @@ def _m21_shelf_browsing(conn):
     _add_column(conn, "player", "browse_day", "INTEGER NOT NULL DEFAULT 0")
 
 
+def _m22_book_seeds(conn):
+    """Per-playthrough study-guide seeding: each randomized training book is
+    pinned to one stat for the whole save (rolled at new game), so a guide
+    teaches the same thing all run but differs between playthroughs."""
+    _add_column(conn, "player", "book_seeds", "TEXT NOT NULL DEFAULT '{}'")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -248,6 +255,7 @@ MIGRATIONS = [
     _m19_accounts,
     _m20_university,
     _m21_shelf_browsing,
+    _m22_book_seeds,
 ]
 
 

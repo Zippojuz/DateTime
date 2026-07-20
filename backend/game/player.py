@@ -79,6 +79,7 @@ class Player(Character):
         enrollment=None,
         class_day=0,
         browse_day=0,
+        book_seeds=None,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -137,6 +138,9 @@ class Player(Character):
         self.class_day = class_day
         # Last absolute day the library shelves were browsed (one book/day).
         self.browse_day = browse_day
+        # Per-playthrough study-guide seeding {book_id: stat}: a randomized
+        # training book teaches a fixed stat all run, rolled at new game.
+        self.book_seeds = dict(book_seeds) if book_seeds else {}
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -192,6 +196,7 @@ class Player(Character):
                 "transcript": list(self.transcript),
                 "enrollment": dict(self.enrollment),
                 "browse_day": self.browse_day,
+                "book_seeds": dict(self.book_seeds),
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

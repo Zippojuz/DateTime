@@ -45,6 +45,19 @@ def books():
     return data.load("books")
 
 
+def roll_book_seeds(rng=None):
+    """Pin each randomized study guide to one stat for a playthrough. Called at
+    new game; the mapping {book_id: stat} lives on the save so a guide teaches
+    the same thing all run but differs between runs. rng injectable for tests."""
+    rng = rng or _random
+    seeds = {}
+    for bid, book in books().items():
+        pool = (book.get("read") or {}).get("stat_pool")
+        if pool:
+            seeds[bid] = rng.choice(sorted(pool))
+    return seeds
+
+
 def day_index(clock):
     """Absolute in-game day (mirrors teahouse.day_index / app._day_index)."""
     return (clock.week - 1) * 7 + clock.day
@@ -184,7 +197,7 @@ def catalog(player, clock):
     }
 
 
-def _book_hint(book):
+def _book_hint(book, player):
     if book.get("kind") == "lore":
         return "Read"
     read = book.get("read") or {}
@@ -192,6 +205,10 @@ def _book_hint(book):
         proto = data.load("protocols").get(read["protocol"], {})
         return f"Learn {proto.get('name', read['protocol'])}"
     if "stat_pool" in read:
+        # This run's seed pins the guide to one stat — skimming reveals which.
+        seed = player.book_seeds.get(book["id"])
+        if seed:
+            return f"+{read.get('amount', 1)} {seed.title()}"
         return f"+{read.get('amount', 1)} to a random stat"
     if "stat" in read:
         return f"+{read.get('amount', 1)} {read['stat'].title()}"
@@ -214,7 +231,7 @@ def _readable_books(player):
             "qty": qty,
             "kind": book.get("kind"),
             "rarity": book.get("rarity"),
-            "hint": _book_hint(book),
+            "hint": _book_hint(book, player),
             "locked": bool(gates),
             "reason": gates[0] if gates else None,
         }
@@ -409,12 +426,12 @@ def read_book(player, clock, item_id, rng=None):
     else:
         specs = data.attributes()
         if "stat_pool" in read:
-            # Roll among the pooled stats that aren't already maxed — this is the
-            # "somewhat randomized" training that keeps playthroughs fresh.
-            pool = [s for s in read["stat_pool"] if player.attributes.get(s, 0) < specs[s]["max"]]
-            if not pool:
-                raise GameError("You've already maxed everything this could teach.")
-            stat = rng.choice(sorted(pool))
+            # Per-playthrough seeding: this study guide teaches one fixed stat all
+            # run, pinned at new game (or lazily here for pre-seeding saves).
+            stat = player.book_seeds.get(item_id)
+            if not stat:
+                stat = rng.choice(sorted(read["stat_pool"]))
+                player.book_seeds[item_id] = stat
         else:
             stat = read.get("stat")
         spec = specs[stat]

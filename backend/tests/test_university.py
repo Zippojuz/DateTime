@@ -166,6 +166,51 @@ def test_a_study_guide_rolls_a_random_stat():
     assert p.inventory.get("study_guide_mind", 0) == 0  # consumed
 
 
+def test_study_guides_are_seeded_per_playthrough():
+    """A guide teaches ONE fixed stat all run (pinned at new game), and the
+    mapping differs between playthroughs."""
+    import random
+
+    seeds_a = university.roll_book_seeds(rng=random.Random(1))
+    seeds_b = university.roll_book_seeds(rng=random.Random(4))
+    # Every randomized guide is pinned to a stat from its own pool.
+    reg = university.books()
+    for bid, stat in seeds_a.items():
+        assert stat in reg[bid]["read"]["stat_pool"]
+    # Across enough guides, two different seeds produce different mappings.
+    assert seeds_a != seeds_b
+
+    # A seeded guide reads to the SAME stat every time, no rng involved.
+    p = _player()
+    p.book_seeds = {"study_guide_mind": "empathy"}
+    p.inventory["study_guide_mind"] = 3
+    first = university.read_book(p, _clock(), "study_guide_mind")
+    second = university.read_book(p, _clock(), "study_guide_mind")
+    assert first["outcome"]["stat"] == "empathy"
+    assert second["outcome"]["stat"] == "empathy"
+
+
+def test_new_game_seeds_the_study_guides():
+    """create_new_game pins every randomized guide for the save."""
+    from game import save
+
+    state, _ = save.create_new_game({"name": "Kai", "pronouns": "they/them"})
+    seeds = state["player"]["book_seeds"]
+    reg = university.books()
+    randomized = [b for b in reg if (reg[b].get("read") or {}).get("stat_pool")]
+    assert set(seeds) == set(randomized)
+    for bid, stat in seeds.items():
+        assert stat in reg[bid]["read"]["stat_pool"]
+
+
+def test_the_pack_hint_reveals_the_seeded_subject():
+    p = _player(location="the_lyceum")
+    p.book_seeds = {"study_guide_mind": "wit"}
+    p.inventory["study_guide_mind"] = 1
+    readable = {b["id"]: b for b in university.catalog(p, _clock())["readable"]}
+    assert readable["study_guide_mind"]["hint"] == "+1 Wit"
+
+
 def test_lore_books_are_keepers_that_file_a_flag():
     p = _player()
     p.inventory["lore_founding"] = 1
