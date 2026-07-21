@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useGameStore } from '../state/gameStore'
 import StatBar from '../components/StatBar.jsx'
 import PeoplePanel from '../components/PeoplePanel.jsx'
-import RelationshipPanel from '../components/RelationshipPanel.jsx'
 import PlayerProfile from '../components/PlayerProfile.jsx'
 import TravelPanel from '../components/TravelPanel.jsx'
 import EncounterCard from '../components/EncounterCard.jsx'
@@ -115,7 +114,6 @@ export default function WorldMap() {
         <ShopPanel />
         <PeoplePanel />
         <DebtPanel />
-        <RelationshipPanel />
 
         <section className="action-panel">
         <h2>What do you do?</h2>

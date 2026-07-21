@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { useGameStore } from '../state/gameStore'
 import InventoryPanel from './InventoryPanel.jsx'
 import EquipmentPanel from './EquipmentPanel.jsx'
+import RelationshipPanel from './RelationshipPanel.jsx'
 
-const TABS = ['Messages', 'Inventory', 'Loadout', 'Settings']
+const TABS = ['Messages', 'Relationships', 'Inventory', 'Loadout', 'Settings']
 
 // The Cyberlink — standard-issue neural interface. The game's device layer:
 // remote messages to known contacts, the inventory ledger, the gear loadout,
@@ -37,6 +38,7 @@ export default function CyberlinkModal() {
         </header>
 
         {tab === 'Messages' && <MessagesTab />}
+        {tab === 'Relationships' && <RelationshipPanel />}
         {tab === 'Inventory' && <InventoryPanel />}
         {tab === 'Loadout' && <EquipmentPanel />}
         {tab === 'Settings' && <SettingsTab />}

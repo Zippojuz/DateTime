@@ -1,19 +1,27 @@
 import { useGameStore } from '../state/gameStore'
 import PreferenceTags from './PreferenceTags.jsx'
 
-// Affection is signed (−100…+100, 0 = neutral). The meter fills from the centre:
-// left of centre = negative, right = positive. The stage label comes from the
-// backend (stranger → acquaintance → friend → close).
+// Your bonds ledger — lives on the Cyberlink now. Affection is signed
+// (−100…+100, 0 = neutral); the meter fills from the centre. Only people
+// you've actually met in person appear here (the link needs a handshake).
 export default function RelationshipPanel() {
   const characters = useGameStore((s) => s.characters)
 
-  if (!characters.length) return null
+  const met = characters.filter((c) => c.met)
+
+  if (!met.length) {
+    return (
+      <p className="link-empty">
+        You haven&apos;t met anyone yet. Bonds show up here once you&apos;ve talked to someone in
+        person.
+      </p>
+    )
+  }
 
   return (
     <section className="relationship-panel">
-      <h2>Relationships</h2>
       <ul className="relationship-list">
-        {characters.map((c) => {
+        {met.map((c) => {
           const pct = (c.affection + 100) / 2 // −100..100 → 0..100
           const positive = c.affection >= 0
           return (
