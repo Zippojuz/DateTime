@@ -13,6 +13,7 @@ const CAB = { minutes: 6, credits: 30 }
 export default function TravelPanel() {
   const districts = useGameStore((s) => s.districts)
   const venues = useGameStore((s) => s.venues)
+  const homes = useGameStore((s) => s.homes)
   const player = useGameStore((s) => s.state?.player)
   const travel = useGameStore((s) => s.travel)
   const busy = useGameStore((s) => s.busy)
@@ -27,6 +28,18 @@ export default function TravelPanel() {
     (v) => v.district === hereDistrict && v.id !== player.location,
   )
 
+  // Your home is a place you travel to, but it lives in its own registry (not
+  // venues) — surface it as a dedicated destination. Only your *current* home;
+  // other doors don't open. Home cost prices like any venue: a free local hop
+  // when it's in this district, otherwise the district leg.
+  const homeId = homes?.current
+  const homeRow = homes?.homes?.find((h) => h.id === homeId)
+  const homeDistrict = homeRow?.district
+  const atHome = player.location === homeId
+  const homeLocal = homeDistrict === hereDistrict
+  const showHome = homeId && homeRow && !atHome
+  const homeDist = adjacent.has(homeDistrict) ? 'adjacent' : 'cross'
+
   return (
     <section className="travel-panel">
       <h2>Travel</h2>
@@ -35,6 +48,49 @@ export default function TravelPanel() {
         {insideVenue && <span className="travel-under"> · under {districts[hereDistrict]?.name}</span>}
         {' '}· {player.credits} cr
       </p>
+      {showHome && (
+        <ul className="travel-list travel-list--home">
+          <li className="travel-dest travel-dest--home">
+            <span className="travel-name">
+              🏠 {homes.current_name}
+              <span className="travel-dist">
+                {homeLocal ? 'go home' : homeDist === 'cross' ? 'cross-city' : 'nearby'}
+              </span>
+            </span>
+            <span className="travel-modes">
+              {homeLocal ? (
+                <button className="btn-action" disabled={busy} onClick={() => travel(homeId, 'walk')}>
+                  Go home
+                </button>
+              ) : (
+                <>
+                  <button
+                    className="btn-action"
+                    disabled={busy}
+                    onClick={() => travel(homeId, 'walk')}
+                  >
+                    Walk · {COST[homeDist].walk.minutes}m
+                  </button>
+                  <button
+                    className="btn-action"
+                    disabled={busy || player.credits < COST[homeDist].transit.credits}
+                    onClick={() => travel(homeId, 'transit')}
+                  >
+                    Loop · {COST[homeDist].transit.minutes}m · {COST[homeDist].transit.credits}cr
+                  </button>
+                  <button
+                    className="btn-action travel-cab"
+                    disabled={busy || player.credits < CAB.credits}
+                    onClick={() => travel(homeId, 'cab')}
+                  >
+                    Cab · {CAB.minutes}m · {CAB.credits}cr
+                  </button>
+                </>
+              )}
+            </span>
+          </li>
+        </ul>
+      )}
       {(localVenues.length > 0 || insideVenue) && (
         <ul className="travel-list travel-list--local">
           {insideVenue && (

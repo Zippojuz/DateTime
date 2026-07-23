@@ -3710,3 +3710,7 @@ body {
   align-items: flex-end;
   white-space: nowrap;
 }
+
+.travel-dest--home .travel-name {
+  color: var(--neon);
+}
