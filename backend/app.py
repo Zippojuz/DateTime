@@ -28,6 +28,7 @@ from game import (
     events,
     fixer,
     gifts,
+    house,
     inventory,
     jobs,
     pawnshop,
@@ -965,6 +966,82 @@ def create_app():
         save.save_models(save_id, player, clock)
         return jsonify({"result": result, "state": save.state_dict(player, clock)})
 
+    # --- Housing (a place to live) ---
+
+    @app.get("/api/homes")
+    def homes_list():
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        board = house.listings(player, clock)  # settles any rent owed
+        save.save_models(save_id, player, clock)
+        return jsonify({"board": board, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/homes/rent")
+    def homes_rent():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = house.rent(player, clock, body.get("home"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/homes/buy")
+    def homes_buy():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = house.buy(player, clock, body.get("home"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/homes/move-in")
+    def homes_move_in():
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        try:
+            result = house.move_in(player, body.get("home"))
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
+    @app.post("/api/homes/stash")
+    def homes_stash():
+        """Deposit or withdraw an item from the home stash. body: {item, qty,
+        direction: 'in'|'out'}."""
+        body = request.get_json(silent=True) or {}
+        models = save.load_models(current_user.id)
+        if models is None:
+            return jsonify(error="No game in progress."), 404
+        save_id, player, clock = models
+        item_id = body.get("item")
+        qty = body.get("qty", 1)
+        direction = body.get("direction", "in")
+        try:
+            if direction == "out":
+                result = house.stash_withdraw(player, item_id, qty)
+            else:
+                result = house.stash_deposit(player, item_id, qty)
+        except GameError as err:
+            return jsonify(error=str(err)), 400
+        save.save_models(save_id, player, clock)
+        return jsonify({"result": result, "state": save.state_dict(player, clock)})
+
     @app.post("/api/item/use")
     def item_use():
         body = request.get_json(silent=True) or {}
@@ -1009,8 +1086,10 @@ def create_app():
 
         react = gifts.reaction(item, npc)
         if react["delta"] >= 0:
-            # Radical Attention (EMP 301): a warmly-received gift lands warmer.
+            # Radical Attention (EMP 301) and a home you grow gifts in (the
+            # Conservatory Flat) both make a warmly-received gift land warmer.
             react["delta"] += university.bonus(player, "gift_affection_bonus")
+            react["delta"] += house.bonus(player, "gift_affection_bonus")
             social.add_opinion(save_id, npc.id, react["delta"], day)
         else:
             social.record_offense(save_id, npc.id, react["delta"], day, "minor")

@@ -86,10 +86,23 @@ def test_explore_costs_energy_and_time(client):
 def test_rest_restores_energy_and_rolls_the_day(client):
     _new(client)
     client.post("/api/action", json={"action": "explore"})  # drop to 90
+    # A full night's sleep only happens at home — bed down in the ship's berth
+    # (a free local hop from the docking quarter).
+    client.post("/api/travel", json={"to": "berth"})
     state = client.post("/api/action", json={"action": "rest"}).get_json()
     assert state["player"]["energy"] == 100
-    # 09:00 + 8h = 17:00, same day.
-    assert state["clock"]["time"] == "17:00"
+    # 09:00 + the berth's slow 9h sleep = 18:00, same day.
+    assert state["clock"]["time"] == "18:00"
+
+
+def test_rest_away_from_home_is_refused(client):
+    _new(client)
+    # Standing in the docking quarter (not your berth) — no full sleep here.
+    state = client.post("/api/action", json={"action": "rest"}).get_json()
+    assert "error" in state
+    # A catnap, however, works anywhere.
+    nap = client.post("/api/action", json={"action": "nap"}).get_json()
+    assert "error" not in nap
 
 
 def test_train_raises_the_chosen_attribute(client):

@@ -233,6 +233,18 @@ def _m22_book_seeds(conn):
     _add_column(conn, "player", "book_seeds", "TEXT NOT NULL DEFAULT '{}'")
 
 
+def _m23_homes(conn):
+    """A place to live (see game/house.py). ``home`` is the current residence
+    (a data/homes.json id; 'berth' = your ship's bunk, the free fallback);
+    ``owned_homes`` are the ones you've bought outright; ``stash`` is the item
+    chest kept there; ``rent_paid_week`` is the last week rent was settled
+    through (0 for owned/berth)."""
+    _add_column(conn, "player", "home", "TEXT NOT NULL DEFAULT 'berth'")
+    _add_column(conn, "player", "owned_homes", "TEXT NOT NULL DEFAULT '[]'")
+    _add_column(conn, "player", "stash", "TEXT NOT NULL DEFAULT '{}'")
+    _add_column(conn, "player", "rent_paid_week", "INTEGER NOT NULL DEFAULT 0")
+
+
 MIGRATIONS = [
     _m1_base_schema,
     _m2_preferences_and_memory,
@@ -256,6 +268,7 @@ MIGRATIONS = [
     _m20_university,
     _m21_shelf_browsing,
     _m22_book_seeds,
+    _m23_homes,
 ]
 
 

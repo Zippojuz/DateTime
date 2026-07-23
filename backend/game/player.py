@@ -80,6 +80,10 @@ class Player(Character):
         class_day=0,
         browse_day=0,
         book_seeds=None,
+        home="berth",
+        owned_homes=None,
+        stash=None,
+        rent_paid_week=0,
     ):
         # Character base handles name + registry attributes + preferences. The
         # player's name is their identity name (never changeable via transform).
@@ -141,6 +145,13 @@ class Player(Character):
         # Per-playthrough study-guide seeding {book_id: stat}: a randomized
         # training book teaches a fixed stat all run, rolled at new game.
         self.book_seeds = dict(book_seeds) if book_seeds else {}
+        # Where you live (see game/house.py): the current residence id, the
+        # homes you've bought outright, the item chest kept there, and the last
+        # week rent was settled through. 'berth' is your ship's free fallback bunk.
+        self.home = home or "berth"
+        self.owned_homes = list(owned_homes or [])
+        self.stash = dict(stash) if stash else {}
+        self.rent_paid_week = rent_paid_week
         self.current_identity = dict(identity)
         # Locked snapshot — never mutated after creation.
         self.created_identity = dict(created_identity or identity)
@@ -197,6 +208,10 @@ class Player(Character):
                 "enrollment": dict(self.enrollment),
                 "browse_day": self.browse_day,
                 "book_seeds": dict(self.book_seeds),
+                "home": self.home,
+                "owned_homes": list(self.owned_homes),
+                "stash": dict(self.stash),
+                "rent_paid_week": self.rent_paid_week,
                 "identity": dict(self.current_identity),
                 "created_identity": dict(self.created_identity),
                 "unlocked_transformations": list(self.unlocked_transformations),

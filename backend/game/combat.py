@@ -12,7 +12,7 @@ hit, banks +1 charge), item (food heals HP in combat), flee (never from bosses).
 
 import random as _random
 
-from game import data, equipment, inventory, traits, university
+from game import data, equipment, house, inventory, traits, university
 from game.errors import GameError
 
 CHARGE_START = 2
@@ -92,8 +92,13 @@ def player_stats(player):
     courage = player.attributes.get("courage", 5)
     wit = player.attributes.get("wit", 5)
     agility = player.attributes.get("agility", 5)
-    # Lyceum's The Long Tail (PRB 301) tips the rare outcomes — crits, dodges, drops.
-    luck = player.attributes.get("luck", 5) + university.bonus(player, "luck_bonus")
+    # Lyceum's The Long Tail (PRB 301) tips the rare outcomes — crits, dodges,
+    # drops — as does a home the sea keeps lucky (the Salt Wren houseboat).
+    luck = (
+        player.attributes.get("luck", 5)
+        + university.bonus(player, "luck_bonus")
+        + house.bonus(player, "luck_bonus")
+    )
     hacking = player.attributes.get("hacking", 5)
     eq = equipment.bonuses(player)
     speed = 5 + level + wit + eq["speed"]
@@ -481,7 +486,13 @@ def _win(state, player, rng):
     player.credits += credits
 
     drops = roll_drops(
-        enemy, rng, luck=player.attributes.get("luck", 0) + university.bonus(player, "luck_bonus")
+        enemy,
+        rng,
+        luck=(
+            player.attributes.get("luck", 0)
+            + university.bonus(player, "luck_bonus")
+            + house.bonus(player, "luck_bonus")
+        ),
     )
     for item_id in drops:
         inventory.add_item(player, item_id, 1)

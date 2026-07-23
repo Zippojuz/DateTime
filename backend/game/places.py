@@ -26,19 +26,25 @@ def venues():
     return data.load("venues")
 
 
+def homes():
+    # Residences (data/homes.json) are places too — you travel to your home to
+    # sleep. Loaded directly (not via game.house) to avoid an import cycle.
+    return data.load("homes")
+
+
 def is_venue(place_id):
     return place_id in venues()
 
 
 def get(place_id):
-    """The district or venue entry for a place id (None if neither)."""
-    return districts().get(place_id) or venues().get(place_id)
+    """The district, venue, or home entry for a place id (None if none)."""
+    return districts().get(place_id) or venues().get(place_id) or homes().get(place_id)
 
 
 def district_of(place_id):
     """The district a place belongs to (a district is its own district)."""
-    venue = venues().get(place_id)
-    return venue["district"] if venue else place_id
+    place = venues().get(place_id) or homes().get(place_id)
+    return place["district"] if place else place_id
 
 
 def venues_in(district_id):

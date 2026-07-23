@@ -50,11 +50,15 @@ def test_trait_effect_resolution():
 
 def test_maintenance_cycle_rests_in_four_hours():
     chassis, meat = _traited("chassis"), _traited("")
+    # Sleep happens at home; bed them both down in the ship's berth (base 9h).
+    chassis.location = meat.location = "berth"
     c1, c2 = GameClock(), GameClock()
     apply_action(chassis, c1, "rest")
     apply_action(meat, c2, "rest")
+    # Maintenance Cycle overrides the home's rest time flat to 4h; unmodded
+    # meat sleeps the berth's slow 9h.
     assert c1.minute_of_day == 8 * 60 + 240
-    assert c2.minute_of_day == 8 * 60 + 480
+    assert c2.minute_of_day == 8 * 60 + 540
     assert chassis.energy == meat.energy == 100
 
 

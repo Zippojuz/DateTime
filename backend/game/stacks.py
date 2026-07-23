@@ -12,7 +12,7 @@ perceiving Index. Substrate-Born hear them natively: the species opens the
 door early, never exclusively (dtDesignDoc.md -> Identity Philosophy).
 """
 
-from game import data, inventory, preferences, social, university
+from game import data, house, inventory, preferences, social, university
 from game.errors import GameError
 from game.npc import NPC, perceives_unseen
 
@@ -74,7 +74,11 @@ def research(save_id, player, clock, subject, day):
 
     _spend(player, clock, day)
     # Adversarial Reasoning (COG 301) pulls extra threads from the same folder.
-    reveal = undiscovered[: 1 + university.bonus(player, "research_topics_bonus")]
+    reveal = undiscovered[
+        : 1
+        + university.bonus(player, "research_topics_bonus")
+        + house.bonus(player, "research_topics_bonus")
+    ]
     for extra in reveal[1:]:
         social.discover_npc_topic(save_id, subject, extra)
     topic = undiscovered[0]

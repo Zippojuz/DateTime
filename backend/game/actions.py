@@ -7,7 +7,7 @@ milestones and their own data. Time/energy costs follow the design doc.
 `energy` is an int delta, or the string "full" to restore to max.
 """
 
-from game import data, teahouse, traits, university
+from game import data, house, teahouse, traits, university
 from game.errors import GameError
 from game.player import MAX_ENERGY
 
@@ -15,7 +15,7 @@ DAYLIGHT = (6 * 60, 18 * 60)  # photosynthesis window
 
 ACTIONS = {
     "rest": {"label": "Rest (full sleep)", "minutes": 480, "energy": "full"},
-    "nap": {"label": "Nap", "minutes": 120, "energy": 30},
+    "nap": {"label": "Catnap", "minutes": 120, "energy": 30},
     "explore": {"label": "Explore", "minutes": 60, "energy": -10},
     "train": {"label": "Train a stat", "minutes": 120, "energy": -15, "trains": True},
     "wait": {"label": "Wait", "minutes": 60, "energy": 0},
@@ -34,6 +34,14 @@ def apply_action(player, clock, action_id, attribute=None):
         rates = house_rates(player, attribute)
         if rates:
             minutes, energy = rates["minutes"], rates["energy"]
+
+    # A full night's sleep only happens in your own bed; away from home a
+    # catnap is the best you'll manage (see game/house.py). Settle any rent
+    # owed first — you might get evicted before you can lie down.
+    if action_id == "rest":
+        house.settle_rent(player, clock)
+        house.require_home_to_sleep(player)
+        minutes = house.rest_minutes(player)
 
     # Species traits reshape the daily loop (see game/traits.py).
     if action_id == "rest":

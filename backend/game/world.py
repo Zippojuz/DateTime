@@ -13,7 +13,7 @@ hop. NPC availability is resolved from schedules, and — as of Milestone 3 —
 you must be in the same place as an NPC to reach them.
 """
 
-from game import data, places, teahouse, traits, university
+from game import data, house, places, teahouse, traits, university
 from game.errors import GameError
 
 # Travel cost by (distance, mode): distance is "adjacent" or "cross".
@@ -68,6 +68,9 @@ def travel(player, clock, to_id, mode):
         raise GameError("There's no such place.")
     if to_id == player.location:
         raise GameError("You're already there.")
+    # Homes are private: you can only step into the one you currently live in.
+    if house.is_home_place(to_id) and not house.can_enter(player, to_id):
+        raise GameError("That's someone else's door — not a place you can walk into.")
     if not places.is_open(to_id, clock):
         raise GameError(place.get("closed_line", f"{place['name']} is closed right now."))
 
