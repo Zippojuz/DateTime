@@ -59,6 +59,18 @@ export const api = {
   lyceumBrowse: () => request('/lyceum/browse', { method: 'POST', body: '{}' }),
   lyceumTurnIn: (quest) =>
     request('/lyceum/turn-in', { method: 'POST', body: JSON.stringify({ quest }) }),
+  homes: () => request('/homes'),
+  homesRent: (home) =>
+    request('/homes/rent', { method: 'POST', body: JSON.stringify({ home }) }),
+  homesBuy: (home) =>
+    request('/homes/buy', { method: 'POST', body: JSON.stringify({ home }) }),
+  homesMoveIn: (home) =>
+    request('/homes/move-in', { method: 'POST', body: JSON.stringify({ home }) }),
+  homesStash: (item, direction, qty = 1) =>
+    request('/homes/stash', {
+      method: 'POST',
+      body: JSON.stringify({ item, direction, qty }),
+    }),
   stacks: () => request('/stacks'),
   research: (subject) =>
     request('/research', { method: 'POST', body: JSON.stringify({ subject }) }),

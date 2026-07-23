@@ -88,6 +88,10 @@ export const useGameStore = create((set, get) => ({
   lastRead: null, // result of reading a book (training outcome or lore passage)
   lastBrowse: null, // result of browsing the shelves
 
+  // Housing: { homes, current, at_home, rent_event } from /api/homes.
+  homes: null,
+  lastHomeEvent: null, // last rent/buy/move-in/eviction notice to surface
+
   // THE DATING SYSTEM: the venue menu, the ask-out picker, the live scene.
   dateVenues: null,
   askOut: null, // {npcId, name} while the venue picker is open
@@ -281,6 +285,7 @@ export const useGameStore = create((set, get) => ({
       get().loadLookout()
       get().loadStacks()
       get().loadLyceum()
+      get().loadHomes() // rent settles on the week rollover; the board may shift
       get().loadPawn()
       get().loadCorps()
     }
@@ -304,6 +309,7 @@ export const useGameStore = create((set, get) => ({
       get().loadTeahouse()
       get().loadStacks()
       get().loadLyceum()
+      get().loadHomes()
     } catch (err) {
       set({ error: err.message, busy: false })
     }
@@ -730,6 +736,67 @@ export const useGameStore = create((set, get) => ({
 
   clearClassNews: () => set({ lastClass: null, lastRead: null, lastBrowse: null }),
 
+  // --- Housing (a place to live) ---
+
+  loadHomes: async () => {
+    try {
+      const res = await api.homes()
+      set({ homes: res.board, state: res.state })
+      // Surface an eviction the moment rent settlement discovers it.
+      if (res.board?.rent_event?.evicted) {
+        set({ lastHomeEvent: { evicted: true, home: res.board.rent_event.home } })
+      }
+    } catch {
+      // Non-fatal.
+    }
+  },
+
+  rentHome: async (home) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.homesRent(home)
+      set({ state: res.state, lastHomeEvent: res.result, busy: false })
+      get().loadHomes()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  buyHome: async (home) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.homesBuy(home)
+      set({ state: res.state, lastHomeEvent: res.result, busy: false })
+      get().loadHomes()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  moveInHome: async (home) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.homesMoveIn(home)
+      set({ state: res.state, lastHomeEvent: res.result, busy: false })
+      get().loadHomes()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  stashItem: async (item, direction) => {
+    set({ busy: true, error: null })
+    try {
+      const res = await api.homesStash(item, direction)
+      set({ state: res.state, busy: false })
+      get().loadHomes()
+    } catch (err) {
+      set({ error: err.message, busy: false })
+    }
+  },
+
+  clearHomeNews: () => set({ lastHomeEvent: null }),
+
   // --- The Steeps (soak) + THE DATING SYSTEM ---
 
   takeSoak: async () => {
@@ -836,6 +903,7 @@ export const useGameStore = create((set, get) => ({
     get().loadStacks()
     get().loadLyceum()
     get().loadLookout()
+    get().loadHomes()
   },
 
   arenaFight: async () => {
@@ -884,6 +952,7 @@ export const useGameStore = create((set, get) => ({
       get().loadLookout() // the board tracks the whole clock
       get().loadStacks() // the desk reopens at midnight
       get().loadLyceum()
+      get().loadHomes() // sleeping settles rent; a lapse could evict you
       get().loadPawn()
     } catch (err) {
       set({ error: err.message, busy: false })
@@ -905,6 +974,7 @@ export const useGameStore = create((set, get) => ({
       get().loadLookout() // only composes at Gantry 9
       get().loadStacks()
       get().loadLyceum()
+      get().loadHomes() // your door is a place now; rent settles as time passes
       get().loadPawn() // the shelf's hold days tick with the calendar
       get().loadCorps() // the war is weekly; the denials are eternal
     } catch (err) {

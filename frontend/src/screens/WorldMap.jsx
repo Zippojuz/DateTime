@@ -11,6 +11,7 @@ import PitView from '../components/PitView.jsx'
 import GantryView from '../components/GantryView.jsx'
 import StacksView from '../components/StacksView.jsx'
 import LyceumView from '../components/LyceumView.jsx'
+import HomeView from '../components/HomeView.jsx'
 import SteepsView from '../components/SteepsView.jsx'
 import TideLineView from '../components/TideLineView.jsx'
 import PawnshopView from '../components/PawnshopView.jsx'
@@ -106,6 +107,7 @@ export default function WorldMap() {
         <GantryView />
         <StacksView />
         <LyceumView />
+        <HomeView />
         <SteepsView />
         <TideLineView />
         <PawnshopView />

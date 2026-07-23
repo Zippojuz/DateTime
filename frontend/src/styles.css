@@ -3524,3 +3524,189 @@ body {
 .book-row--locked {
   opacity: 0.7;
 }
+
+/* --- Housing (a place to live) --------------------------------------------- */
+.home-view {
+  background: var(--bg-panel);
+  border: 1px solid #26304a;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.home-view h2 {
+  margin: 0;
+  color: var(--neon);
+  letter-spacing: 0.08rem;
+}
+
+.home-view h3 {
+  margin: 0.3rem 0 0.2rem;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.home-news {
+  border-left: 2px solid var(--accent);
+  padding: 0.3rem 0.7rem;
+  background: rgba(255, 93, 162, 0.08);
+  cursor: pointer;
+  font-size: 0.88rem;
+}
+
+.home-current {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.home-athome {
+  color: var(--neon);
+}
+
+.home-away {
+  color: var(--text-dim);
+}
+
+.home-stash {
+  border: 1px solid #26304a;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+}
+
+.stash-cap {
+  color: var(--text-dim);
+  font-weight: normal;
+  font-size: 0.8rem;
+}
+
+.stash-list {
+  list-style: none;
+  margin: 0 0 0.4rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stash-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.stash-deposit {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.stash-deposit select {
+  flex: 1;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid #26304a;
+  border-radius: 4px;
+  padding: 0.25rem;
+}
+
+.home-board summary {
+  cursor: pointer;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  padding: 0.2rem 0;
+}
+
+.home-list {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.home-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.6rem;
+  border: 1px solid #26304a;
+  border-radius: 6px;
+  padding: 0.5rem 0.7rem;
+}
+
+.home-row--current {
+  border-color: var(--neon-dim);
+  background: rgba(33, 230, 193, 0.05);
+}
+
+.home-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.home-head {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.home-tag {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+  color: var(--text-dim);
+  border: 1px solid var(--text-dim);
+  border-radius: 3px;
+  padding: 0 0.25rem;
+}
+
+.home-tag--current {
+  color: var(--neon);
+  border-color: var(--neon-dim);
+}
+
+.home-place {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.04rem;
+}
+
+.home-vibe {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+
+.home-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.2rem;
+}
+
+.home-chip {
+  font-size: 0.7rem;
+  background: var(--bg);
+  border: 1px solid #26304a;
+  border-radius: 3px;
+  padding: 0.05rem 0.35rem;
+  color: var(--text-dim);
+}
+
+.home-chip--perk {
+  color: var(--accent);
+  border-color: rgba(255, 93, 162, 0.4);
+}
+
+.home-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  align-items: flex-end;
+  white-space: nowrap;
+}
