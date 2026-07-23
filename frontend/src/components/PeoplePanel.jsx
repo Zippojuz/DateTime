@@ -25,11 +25,15 @@ export default function PeoplePanel() {
 
   const placeName = (id) => districts?.[id]?.name ?? venues?.[id]?.name ?? id
 
+  // Only the people actually in this area — not the whole city's roster.
+  const here = characters.filter((c) => c.here)
+
   return (
     <section className="people-panel">
       <h2>People</h2>
+      {here.length === 0 && <p className="people-empty">No one's around here right now.</p>}
       <ul className="people-list">
-        {characters.map((c) => {
+        {here.map((c) => {
           const av = c.availability
           const canTalk = c.reachable && !c.talked_today
           let status

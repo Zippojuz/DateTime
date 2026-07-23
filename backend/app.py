@@ -387,7 +387,9 @@ def create_app():
                 {
                     **payload,
                     "availability": avail,
-                    # Reachable only if available AND in your current district.
+                    # Present if their current window places them in your
+                    # district at all; reachable narrows that to available AND here.
+                    "here": avail.get("district") == player.location,
                     "reachable": avail["available"] and avail.get("district") == player.location,
                     "affection": affection,
                     "stage": social.stage(affection),
